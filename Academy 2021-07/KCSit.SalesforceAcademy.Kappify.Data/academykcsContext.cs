@@ -41,8 +41,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<Album>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.CoverUrl)
                     .IsRequired()
                     .HasMaxLength(45)
@@ -85,8 +83,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<CartItem>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CartItems)
                     .HasForeignKey(d => d.CustomerId)
@@ -102,8 +98,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Country)
                     .IsRequired()
                     .HasMaxLength(40)
@@ -132,8 +126,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<Label>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Country)
                     .IsRequired()
                     .HasMaxLength(40)
@@ -150,8 +142,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.DateOfOrder).HasColumnType("date");
 
                 entity.Property(e => e.Total).HasColumnType("money");
@@ -165,8 +155,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderItems)
                     .HasForeignKey(d => d.OrderId)
@@ -182,8 +170,6 @@ namespace KCSit.SalesforceAcademy.Kappify.Data
 
             modelBuilder.Entity<Song>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(40);
