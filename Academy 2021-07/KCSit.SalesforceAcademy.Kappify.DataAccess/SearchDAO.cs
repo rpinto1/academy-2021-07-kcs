@@ -48,5 +48,31 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             
             }
         }
+
+
+        public List<Order> HardQuery(int userId, DateTime date, string labelString)
+        {
+            using (var context = new academykcsContext())
+            {
+                return (from order in context.Orders
+                             join customer in context.Customers
+                             on order.CustomerId equals customer.Id
+                             join orderItem in context.OrderItems
+                             on order.Id equals orderItem.OrderId
+                             join song in context.Songs
+                             on orderItem.SongId equals song.Id
+                             join album in context.Albums
+                             on song.AlbumId equals album.Id
+                             join label in context.Labels
+                             on album.LabelId equals label.Id
+                             where label.Name.ToLower() == labelString.ToLower() && 
+                                   customer.Id == userId && 
+                                   order.DateOfOrder < date
+                            select order
+                    ).ToList();
+            }
+        }
+
+
     }
 }
