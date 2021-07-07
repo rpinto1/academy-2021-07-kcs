@@ -24,9 +24,13 @@ namespace ConsoleApp1
 
             var dao = new SearchDAO();
             var results = dao.SearchSongByName("nothing");
+            var songByLabel = dao.SearchSongsByLabel("KUAlq");
 
             foreach (var result in results)
                 Print(result);
+
+            foreach (var songByLabel1 in songByLabel)
+                Print(songByLabel1);
 
             Console.ReadLine();
         }

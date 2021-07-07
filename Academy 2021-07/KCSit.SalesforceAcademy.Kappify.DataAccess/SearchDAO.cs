@@ -31,5 +31,22 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
                 return results.Select(r => (r.Song, r.ArtistName)).ToList();
             }
         }
+
+        public List<Song> SearchSongsByLabel(string labelString)
+        {
+            using (var context = new academykcsContext())
+            {
+                var query = (from song in context.Songs
+                             join album in context.Albums
+                             on song.AlbumId equals album.Id
+                             join label in context.Labels
+                             on album.LabelId equals label.Id
+                             where label.Name.ToLower().Contains(labelString.ToLower())
+                             select song
+                             );
+                return query.ToList(); 
+            
+            }
+        }
     }
 }
