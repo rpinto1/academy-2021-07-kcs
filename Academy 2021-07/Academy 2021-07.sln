@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{1C9DD6E5-9480-4E76-BBA5-8317AB286D25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Kappify.Data", "KCSit.SalesforceAcademy.Kappify.Data\KCSit.SalesforceAcademy.Kappify.Data.csproj", "{11B1F191-CD3C-4F8C-A6FC-CA9914A5DE93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Kappify.Data", "KCSit.SalesforceAcademy.Kappify.Data\KCSit.SalesforceAcademy.Kappify.Data.csproj", "{11B1F191-CD3C-4F8C-A6FC-CA9914A5DE93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Kappify.DataAccess", "KCSit.SalesforceAcademy.Kappify.DataAccess\KCSit.SalesforceAcademy.Kappify.DataAccess.csproj", "{CF1D44C2-C34C-4FED-A494-07A08CFF4C75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Kappify.DataAccess", "KCSit.SalesforceAcademy.Kappify.DataAccess\KCSit.SalesforceAcademy.Kappify.DataAccess.csproj", "{CF1D44C2-C34C-4FED-A494-07A08CFF4C75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Kappify.Logic", "KCSit.SalesforceAcademy.Kappify.Logic\KCSit.SalesforceAcademy.Kappify.Logic.csproj", "{DAFE5A65-3A79-4CB2-94CA-383B46300351}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{CF1D44C2-C34C-4FED-A494-07A08CFF4C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF1D44C2-C34C-4FED-A494-07A08CFF4C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF1D44C2-C34C-4FED-A494-07A08CFF4C75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

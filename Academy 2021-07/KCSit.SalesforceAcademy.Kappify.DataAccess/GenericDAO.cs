@@ -17,6 +17,17 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             }
         }
 
+        public void AddRange<T>(List<T> generic) where T : class
+        {
+            using (var context = new academykcsContext())
+            {
+                context.Set<T>().AddRange(generic);
+
+                context.SaveChanges();
+            }
+        }
+
+
         public void Update<T>(T generic) where T : class
         {
             using (var context = new academykcsContext())
