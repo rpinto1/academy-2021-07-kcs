@@ -5,9 +5,9 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Kappify.Logic
 {
-    public class ReturnOrderMessageLogic
+    public class GenericReturn<T>
     {
-        public Order Order { get; set; }
+        public T Result { get; set; }
         public string Message { get; set; }
 
 
