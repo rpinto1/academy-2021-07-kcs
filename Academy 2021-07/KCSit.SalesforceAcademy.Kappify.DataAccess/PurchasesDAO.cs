@@ -7,16 +7,19 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
 {
     public class PurchasesDAO
     {
-        public List<CartItem> GetCartItems(Guid customerId)
+        public List<(CartItem cart, decimal songPrice)> GetCartItems(Guid customerId)
         {
             using (var context = new academykcsContext())
             {
-                return (from cartItem in context.CartItems
+                var results = (from cartItem in context.CartItems
                              join customer in context.Customers
                              on cartItem.CustomerId equals customer.Id
+                             join song in context.Songs
+                             on cartItem.SongId equals song.Id
                              where customer.Uuid == customerId
-                             select cartItem
+                             select new { CartItem = cartItem, SongPrice = song.Price }
                              ).ToList();
+                return results.Select(r => (r.CartItem, r.SongPrice)).ToList();
             }
         }
     }

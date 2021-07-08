@@ -26,6 +26,7 @@ namespace KCSit.SalesforceAcademy.Kappify.Logic
                 
 
                 var cartItems = purchaseDao.GetCartItems(customerId);
+
                 if (cartItems.Count == 0)
                 {
                     throw new Exception("Cart empty...");
@@ -40,18 +41,24 @@ namespace KCSit.SalesforceAcademy.Kappify.Logic
                 //genericDao.Add(order);
 
                 //abordagem 2
-                //var order = new Order();
-                //var orderItems = new List<OrderItem>();
+                var totalPrice = cartItems.Sum(c => c.songPrice);
 
-                //foreach (var item in cartItems)
-                //    orderItems.Add(new OrderItem { });
+                var order = new Order() { Total = totalPrice, CustomerId = customer.Id, DateOfOrder = DateTime.UtcNow };
 
-                //genericDao.Add(order);
-                //genericDao.AddRange(orderItems);
+                genericDao.Add(order);
 
-                
+                var orderItems = new List<OrderItem>();
 
+                foreach (var item in cartItems)
+                    orderItems.Add(new OrderItem { SongId = item.cart.SongId , OrderId = order.Id});
 
+         
+                genericDao.AddRange(orderItems);
+
+                genericDao.DeleteRange(cartItems.Select(r=> r.cart).ToList());
+
+                result.Order = order;
+                result.Message = "Order Successful...";
 
                 //1
                 //adicionas os orderitems à order

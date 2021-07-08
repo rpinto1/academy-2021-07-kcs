@@ -7,13 +7,15 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
 {
     public class GenericDAO
     {
-        public void Add<T>(T generic) where T : class
+        public T Add<T>(T generic) where T : class
         {
             using (var context = new academykcsContext())
             {
                 context.Set<T>().Add(generic);
 
                 context.SaveChanges();
+
+                return generic;
             }
         }
 
@@ -43,6 +45,15 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             using (var context = new academykcsContext())
             {
                 context.Set<T>().Remove(generic);
+
+                context.SaveChanges();
+            }
+        }
+        public void DeleteRange<T>(List<T> generic) where T : class
+        {
+            using (var context = new academykcsContext())
+            {
+                context.Set<T>().RemoveRange(generic);
 
                 context.SaveChanges();
             }
