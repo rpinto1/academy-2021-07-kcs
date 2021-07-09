@@ -1,5 +1,6 @@
 ﻿using KCSit.SalesforceAcademy.Kappify.Data;
 using KCSit.SalesforceAcademy.Kappify.Logic;
+using KCSit.SalesforceAcademy.Kappify.WebApp.ViewModels.Artists;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -92,7 +93,14 @@ namespace KCSit.SalesforceAcademy.Kappify.WebApp.Controllers
             {
                 return NotFound();
             }
-            return View(artist);
+
+            var editViewModel = new EditViewModel();
+            editViewModel.Bio = artist.Bio;
+            editViewModel.Genre = artist.Genre;
+            editViewModel.Name = artist.Name;
+
+
+            return View(editViewModel);
         }
 
         // POST: Artists/Edit/5
@@ -100,34 +108,35 @@ namespace KCSit.SalesforceAcademy.Kappify.WebApp.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Bio,Genre,Id,Uuid,ImageUrl")] Artist artist)
+        public async Task<IActionResult> Edit(Guid uuid, EditViewModel editViewModel)
         {
-            if (id != artist.Id)
+
+            if (uuid != editViewModel.Uuid)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(artist);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ArtistExists(artist.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                //try
+                //{
+                //    _context.Update(editViewModel);
+                //    await _context.SaveChangesAsync();
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    if (!ArtistExists(editViewModel.Id))
+                //    {
+                //        return NotFound();
+                //    }
+                //    else
+                //    {
+                //        throw;
+                //    }
+                //}
                 return RedirectToAction(nameof(Index));
             }
-            return View(artist);
+            return View(editViewModel);
         }
 
         // GET: Artists/Delete/5

@@ -1,4 +1,4 @@
-﻿@model KCSit.SalesforceAcademy.Kappify.Data.Artist
+﻿@model KCSit.SalesforceAcademy.Kappify.WebApp.ViewModels.Artists.EditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -27,17 +27,8 @@
                 <input asp-for="Genre" class="form-control" />
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Uuid" class="control-label"></label>
-                <input asp-for="Uuid" class="form-control" />
-                <span asp-validation-for="Uuid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="Uuid" />
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
