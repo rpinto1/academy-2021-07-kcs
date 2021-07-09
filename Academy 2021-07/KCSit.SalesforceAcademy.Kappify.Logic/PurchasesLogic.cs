@@ -3,18 +3,17 @@ using KCSit.SalesforceAcademy.Kappify.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Transactions;
+using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Kappify.Logic
 {
     public class PurchasesLogic
     {
-        public GenericReturn<Order> Purchase(Guid customerId)
+        public async Task<GenericReturn<Order>> Purchase(Guid customerId)
         {
             var transaction = new GenericBusinessLogic();
 
-            var result = transaction.GenericTransaction(() =>
+            var result = await transaction.GenericTransaction(async () =>
             {
                 var genericDao = new GenericDAO();
                 var purchaseDao = new PurchasesDAO();
@@ -48,7 +47,7 @@ namespace KCSit.SalesforceAcademy.Kappify.Logic
 
                 genericDao.AddRange(orderItems);
 
-                genericDao.DeleteRange(cartItems.Select(r => r.cart).ToList());
+                await genericDao.DeleteRangeAsync(cartItems.Select(r => r.cart).ToList());
 
                 return order;
 

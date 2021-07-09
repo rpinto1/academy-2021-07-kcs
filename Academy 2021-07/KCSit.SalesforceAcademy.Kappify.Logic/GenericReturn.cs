@@ -1,16 +1,14 @@
-﻿using KCSit.SalesforceAcademy.Kappify.Data;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KCSit.SalesforceAcademy.Kappify.Logic
+﻿namespace KCSit.SalesforceAcademy.Kappify.Logic
 {
-    public class GenericReturn<T>
+    public class GenericReturn
+    {
+        public bool Succeeded { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class GenericReturn<T> : GenericReturn
     {
         public T Result { get; set; }
-        public string Message { get; set; }
-
-
-
+        
     }
 }

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Kap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Kappify.DataAccess", "KCSit.SalesforceAcademy.Kappify.DataAccess\KCSit.SalesforceAcademy.Kappify.DataAccess.csproj", "{CF1D44C2-C34C-4FED-A494-07A08CFF4C75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Kappify.Logic", "KCSit.SalesforceAcademy.Kappify.Logic\KCSit.SalesforceAcademy.Kappify.Logic.csproj", "{DAFE5A65-3A79-4CB2-94CA-383B46300351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Kappify.Logic", "KCSit.SalesforceAcademy.Kappify.Logic\KCSit.SalesforceAcademy.Kappify.Logic.csproj", "{DAFE5A65-3A79-4CB2-94CA-383B46300351}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Kappify.WebApp", "KCSit.SalesforceAcademy.Kappify.WebApp\KCSit.SalesforceAcademy.Kappify.WebApp.csproj", "{05C22CB1-C3F8-4946-9D07-09D3370AE805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAFE5A65-3A79-4CB2-94CA-383B46300351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05C22CB1-C3F8-4946-9D07-09D3370AE805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05C22CB1-C3F8-4946-9D07-09D3370AE805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05C22CB1-C3F8-4946-9D07-09D3370AE805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05C22CB1-C3F8-4946-9D07-09D3370AE805}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
