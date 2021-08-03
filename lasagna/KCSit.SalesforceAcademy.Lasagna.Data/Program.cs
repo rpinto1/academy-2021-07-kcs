@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace lasagna
+namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
     class Program
     {
