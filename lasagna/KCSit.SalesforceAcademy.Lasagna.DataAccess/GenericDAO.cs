@@ -15,9 +15,17 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
         {
             using (var context = new lasagnakcsContext())
             {
+                try
+                {
                 context.Set<T>().Add(generic);
-
+                
                 context.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+
+                }
+
 
                 return generic;
             }
@@ -122,6 +130,29 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             using (var context = new lasagnakcsContext())
             {
                 return context.Set<T>().Find(id);
+
+            }
+        }
+
+        /// <summary>
+        /// Get Subindystry or Industry
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Industry Get(string name)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return context.Set<Industry>().Where(item => item.Name == name).SingleOrDefault();
+
+            }
+        }
+
+        public SubIndustry GetSub(string name)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
 
             }
         }
