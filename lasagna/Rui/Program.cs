@@ -11,55 +11,45 @@ namespace Rui
     {
         static void Main(string[] args)
         {
-            var client2 = new RestClient("https://public-api.quickfs.net/v1/companies?api_key=d4089a95fc589f2d804c241f4f23b9732ff9ab6e");
-            var request2 = new RestRequest(Method.GET);
-            //request.AddHeader("x-rapidapi-key", "239cfb2611mshae42117f6fb66dfp13439djsn1beb14b99b16");
-            //request.AddHeader("x-rapidapi-host", "yahoo-finance15.p.rapidapi.com");
-            IRestResponse responseList = client2.Execute(request2);
+            Console.WriteLine("Enter user api Key");
+            string apiKey = Console.ReadLine();
+
+            var clientClass = new Client();
+
+            IRestResponse responseList = clientClass.GetAll("https://public-api.quickfs.net/v1/companies?api_key="+apiKey);
 
             var responseCompanyList = JObject.Parse(responseList.Content)["data"];
+            var genericDao = new GenericDAO();
 
-            for (int i = 700; i < responseCompanyList.ToObject<string[]>().Length; i++)
+            for (int i = 1; i < responseCompanyList.ToObject<string[]>().Length; i++)
             {
 
 
-                
-
-                var quota = new RestClient("https://public-api.quickfs.net/v1/usage?api_key=d4089a95fc589f2d804c241f4f23b9732ff9ab6e");
-                var requestQuota = new RestRequest(Method.GET);
-                //request.AddHeader("x-rapidapi-key", "239cfb2611mshae42117f6fb66dfp13439djsn1beb14b99b16");
-                //request.AddHeader("x-rapidapi-host", "yahoo-finance15.p.rapidapi.com");
-                IRestResponse responseQuota = quota.Execute(requestQuota);
-
-                var responseQuotaNumber = JObject.Parse(responseQuota.Content)["usage"]["quota"]["remaining"];
-
-                Console.WriteLine(responseQuotaNumber.ToString());
-
-                if (int.Parse(responseQuotaNumber.ToString()) <= 2000)
+                if (clientClass.CheckQuota() < 2000)
                 {
                     
                     Environment.Exit(0);
                 }
 
-
-                var client = new RestClient("https://public-api.quickfs.net/v1/data/all-data/" + responseCompanyList[i].ToString() + "?api_key=d4089a95fc589f2d804c241f4f23b9732ff9ab6e");
-                var request = new RestRequest(Method.GET);
-                //request.AddHeader("x-rapidapi-key", "239cfb2611mshae42117f6fb66dfp13439djsn1beb14b99b16");
-                //request.AddHeader("x-rapidapi-host", "yahoo-finance15.p.rapidapi.com");
-                IRestResponse response = client.Execute(request);
+                IRestResponse response = clientClass.GetAll("https://public-api.quickfs.net/v1/data/all-data/" + responseCompanyList[i].ToString() + "?api_key=" + apiKey);
 
                 var responseJson = JObject.Parse(response.Content);
                 var metadata = responseJson["data"]["metadata"];
                 Console.WriteLine(metadata["name"].ToString());
 
-                Console.WriteLine(metadata["industry"].ToString());
+                Console.WriteLine(metadata["sector"].ToString());
                 int industryId = 0;
-                var genericDao = new GenericDAO();
-                if (genericDao.Get(metadata["industry"].ToString()) == null)
+
+                if (metadata["sector"] == null)
+                {
+                    continue;
+                }
+
+                if (genericDao.Get(metadata["sector"].ToString()) == null)
                 {
                     var index = genericDao.Add<Industry>(new Industry
                     {
-                        Name = metadata["industry"].ToString(),
+                        Name = metadata["sector"].ToString(),
                         Uuid = Guid.NewGuid()
                     });
 
@@ -68,19 +58,19 @@ namespace Rui
                 }
                 else
                 {
-                    industryId = int.Parse(genericDao.Get(metadata["industry"].ToString()).Id.ToString());
+                    industryId = int.Parse(genericDao.Get(metadata["sector"].ToString()).Id.ToString());
                 }
 
-                if(metadata["subindustry"] == null)
+                if(metadata["industry"] == null)
                 {
                     continue;
                 }
-                if (genericDao.GetSub(metadata["subindustry"].ToString()) == null)
+                if (genericDao.GetSub(metadata["industry"].ToString()) == null)
                 {
                     genericDao.Add<SubIndustry>(new SubIndustry
                     {
                         IndustryId = industryId,
-                        Name = metadata["subindustry"].ToString(),
+                        Name = metadata["sindustry"].ToString(),
                         Uuid = Guid.NewGuid()
                     });
                     Console.WriteLine("Insert Sub");
