@@ -8,13 +8,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
     public partial class YearlyReport
     {
         public int Id { get; set; }
-        public int Year { get; set; }
+        public int? Year { get; set; }
         public int CompanyId { get; set; }
-        public int IncomeStatementId { get; set; }
-        public int BalanceSheetId { get; set; }
-        public int CashFlowStatementId { get; set; }
-        public int KeyRatioId { get; set; }
-        public int KeyStatisticId { get; set; }
+        public int? IncomeStatementId { get; set; }
+        public int? BalanceSheetId { get; set; }
+        public int? CashFlowStatementId { get; set; }
+        public int? KeyRatioId { get; set; }
+        public int? KeyStatisticId { get; set; }
         public Guid Uuid { get; set; }
 
         public virtual BalanceSheet BalanceSheet { get; set; }

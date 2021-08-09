@@ -107,43 +107,47 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.TotalLiabilitiesAndEquity)
                     .HasMaxLength(10)
                     .IsFixedLength(true);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<CashFlowStatement>(entity =>
             {
-                entity.Property(e => e.Acquisitions).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.Acquisitions).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.CashFinancing).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.CashFinancing).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.CashFromInvesting).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.CashFromInvesting).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.CashFromOperations).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.CashFromOperations).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.CashPaidForDividends).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.CashPaidForDividends).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.ChangeInDeferredTax).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.ChangeInDeferredTax).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.ChangeInWorkingCapital).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.ChangeInWorkingCapital).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.DepreciationAmortization).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.DepreciationAmortization).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.Investements).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.Investements).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.NetIncome).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.NetIncome).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.NetIssuanceOfCommonStock).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.NetIssuanceOfCommonStock).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.NetIssuanceOfDebt).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.NetIssuanceOfDebt).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.OtherFinancing).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OtherFinancing).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.OtherInvesting).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OtherInvesting).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.OtherOperations).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OtherOperations).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.PropertyPlantEquipment).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.PropertyPlantEquipment).HasColumnType("numeric(18, 2)");
 
-                entity.Property(e => e.StockBasedCompensation).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.StockBasedCompensation).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<Company>(entity =>
@@ -167,22 +171,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Qfssymbol)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("QFSSymbol");
-
-                entity.Property(e => e.Qfsticker)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("QFSTicker");
-
                 entity.Property(e => e.Symbol)
                     .IsRequired()
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Ticker)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
 
                 entity.HasOne(d => d.Country)
                     .WithMany(p => p.Companies)
@@ -212,6 +211,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.ToTable("CompanyIndex");
 
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
+
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.CompanyIndices)
                     .HasForeignKey(d => d.CompanyId)
@@ -229,6 +230,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<DailyInfo>(entity =>
@@ -238,6 +241,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.PreviousClose).HasColumnType("decimal(10, 2)");
 
                 entity.Property(e => e.StockPrice).HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<Exchange>(entity =>
@@ -246,6 +251,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<IncomeStatement>(entity =>
@@ -283,6 +290,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.SharesBasic).HasColumnType("numeric(18, 0)");
 
                 entity.Property(e => e.SharesDiluted).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<Index>(entity =>
@@ -293,14 +302,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<Industry>(entity =>
             {
+                entity.HasIndex(e => e.Name, "IX_Industries")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<KeyRatio>(entity =>
@@ -402,87 +418,91 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.TangibleBookValuePerShare).HasColumnType("numeric(18, 0)");
 
                 entity.Property(e => e.TotalAssetsGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<KeyStatistic>(entity =>
             {
                 entity.Property(e => e.AssetsCagr)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("AssetsCAGR");
 
-                entity.Property(e => e.AssetsEquityMedian).HasColumnType("decimal(4, 2)");
+                entity.Property(e => e.AssetsEquityMedian).HasColumnType("decimal(8, 2)");
 
-                entity.Property(e => e.DebtAssetsMedian).HasColumnType("decimal(4, 2)");
+                entity.Property(e => e.DebtAssetsMedian).HasColumnType("decimal(8, 2)");
 
-                entity.Property(e => e.DebtEquityMedian).HasColumnType("decimal(4, 2)");
+                entity.Property(e => e.DebtEquityMedian).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.Ebitmedian)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EBITMedian");
 
                 entity.Property(e => e.Epscagr)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EPSCAGR");
 
                 entity.Property(e => e.Evebit)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EVEBIT");
 
                 entity.Property(e => e.Evebitda)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EVEBITDA");
 
                 entity.Property(e => e.Evfcf)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EVFCF");
 
                 entity.Property(e => e.Evpretax)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EVPretax");
 
                 entity.Property(e => e.Evs)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EVS");
 
                 entity.Property(e => e.Fcfcagr)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("FCFCAGR");
 
                 entity.Property(e => e.Fcfmedian)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("FCFMedian");
 
-                entity.Property(e => e.GrossProfitMedian).HasColumnType("decimal(4, 2)");
+                entity.Property(e => e.GrossProfitMedian).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.Pb)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("PB");
 
                 entity.Property(e => e.Pe)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("PE");
 
-                entity.Property(e => e.PreTaxIncomeMedian).HasColumnType("decimal(4, 2)");
+                entity.Property(e => e.PreTaxIncomeMedian).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.Ps)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("PS");
 
                 entity.Property(e => e.RevenueCagr)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("RevenueCAGR");
 
                 entity.Property(e => e.Roamedian)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("ROAMedian");
 
                 entity.Property(e => e.Roemedian)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("ROEMedian");
 
                 entity.Property(e => e.Roicmedian)
-                    .HasColumnType("decimal(4, 2)")
+                    .HasColumnType("decimal(8, 2)")
                     .HasColumnName("ROICMedian");
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<Score>(entity =>
@@ -497,6 +517,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.StickerPrice).HasColumnType("decimal(10, 2)");
 
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
+
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.CompanyId)
@@ -507,10 +529,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.ToTable("Sub_Industries");
 
+                entity.HasIndex(e => e.Name, "IX_Sub_Industries")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
 
                 entity.HasOne(d => d.Industry)
                     .WithMany(p => p.SubIndustries)
@@ -521,16 +548,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
             modelBuilder.Entity<YearlyReport>(entity =>
             {
+                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
+
                 entity.HasOne(d => d.BalanceSheet)
                     .WithMany(p => p.YearlyReports)
                     .HasForeignKey(d => d.BalanceSheetId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_YearlyReports_BalanceSheets1");
 
                 entity.HasOne(d => d.CashFlowStatement)
                     .WithMany(p => p.YearlyReports)
                     .HasForeignKey(d => d.CashFlowStatementId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_YearlyReports_CashFlowStatements");
 
                 entity.HasOne(d => d.Company)
@@ -542,19 +569,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.HasOne(d => d.IncomeStatement)
                     .WithMany(p => p.YearlyReports)
                     .HasForeignKey(d => d.IncomeStatementId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_YearlyReports_IncomeStatements");
 
                 entity.HasOne(d => d.KeyRatio)
                     .WithMany(p => p.YearlyReports)
                     .HasForeignKey(d => d.KeyRatioId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_YearlyReports_KeyRatios");
 
                 entity.HasOne(d => d.KeyStatistic)
                     .WithMany(p => p.YearlyReports)
                     .HasForeignKey(d => d.KeyStatisticId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_YearlyReports_KeyStatistics");
             });
 

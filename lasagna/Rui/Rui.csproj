@@ -14,4 +14,8 @@
     <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.DataAccess\KCSit.SalesforceAcademy.Lasagna.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="JsonFiles\" />
+  </ItemGroup>
+
 </Project>

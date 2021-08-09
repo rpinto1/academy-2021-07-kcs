@@ -21,7 +21,7 @@ namespace Rui
 
         }
 
-        public int CheckQuota()
+        public int CheckQuota(string apiKey)
         {
             IRestResponse responseQuota = GetAll("https://public-api.quickfs.net/v1/usage?api_key=" + apiKey);
 
