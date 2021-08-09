@@ -30,7 +30,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public virtual DbSet<KeyRatio> KeyRatios { get; set; }
         public virtual DbSet<KeyStatistic> KeyStatistics { get; set; }
         public virtual DbSet<Score> Scores { get; set; }
-        public virtual DbSet<SubIndustry> SubIndustries { get; set; }
+        public virtual DbSet<Sector> Sectors { get; set; }
         public virtual DbSet<YearlyReport> YearlyReports { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -203,6 +203,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.HasOne(d => d.Industry)
                     .WithMany(p => p.Companies)
                     .HasForeignKey(d => d.IndustryId)
+                    .HasConstraintName("FK_Companies_Industries1");
+
+                entity.HasOne(d => d.Sector)
+                    .WithMany(p => p.Companies)
+                    .HasForeignKey(d => d.SectorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Companies_Industries");
             });
@@ -308,7 +313,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
             modelBuilder.Entity<Industry>(entity =>
             {
-                entity.HasIndex(e => e.Name, "IX_Industries")
+                entity.HasIndex(e => e.Name, "IX_Sub_Industries")
                     .IsUnique();
 
                 entity.Property(e => e.Name)
@@ -317,6 +322,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .IsUnicode(false);
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
+
+                entity.HasOne(d => d.Sector)
+                    .WithMany(p => p.Industries)
+                    .HasForeignKey(d => d.SectorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Sub_Industries_Industries");
             });
 
             modelBuilder.Entity<KeyRatio>(entity =>
@@ -525,25 +536,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasConstraintName("FK_Scores_Companies");
             });
 
-            modelBuilder.Entity<SubIndustry>(entity =>
+            modelBuilder.Entity<Sector>(entity =>
             {
-                entity.ToTable("Sub_Industries");
-
-                entity.HasIndex(e => e.Name, "IX_Sub_Industries")
+                entity.HasIndex(e => e.Name, "IX_Industries")
                     .IsUnique();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50)
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
-
-                entity.HasOne(d => d.Industry)
-                    .WithMany(p => p.SubIndustries)
-                    .HasForeignKey(d => d.IndustryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Sub_Industries_Industries");
             });
 
             modelBuilder.Entity<YearlyReport>(entity =>

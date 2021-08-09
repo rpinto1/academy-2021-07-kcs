@@ -9,9 +9,13 @@ namespace Rui
         {
             var genericDao = new GenericDAO();
 
-            
 
+            var industries = new Industries();
 
+            //industries.insertIndustries(genericDao);
+            var companies = new CompaniesCode();
+
+            companies.insertCompanies(genericDao);
 
 
 

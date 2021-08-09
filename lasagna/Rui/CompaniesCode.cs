@@ -22,7 +22,7 @@ namespace Rui
             {
 
 
-                var companyListFile = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Rui\JsonFiles\" + file + ".txt");
+                   var companyListFile = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Rui\JsonFiles\" + file + ".txt");
                 var jsonCompanyList = JObject.Parse(companyListFile);
                 var companyArray = jsonCompanyList["Sheet1"];
                 var companyList = companyArray.Children().ToList();
@@ -34,6 +34,7 @@ namespace Rui
                     Console.WriteLine(item["Name"]);
                     Console.WriteLine(item["Ticker"]);
                     Console.WriteLine(item["SectorId"]);
+                    Console.WriteLine(item["IndustryId"]);
                     Console.WriteLine(item["Currency"]);
                     Console.WriteLine(item["Description"]);
                     Console.WriteLine(item["CountryId"]);
@@ -44,7 +45,8 @@ namespace Rui
                     {
                         Name = item["Name"].ToString(),
                         Ticker = item["Ticker"].ToString(),
-                        IndustryId = int.Parse(item["SectorId"].ToString()),
+                        SectorId = int.Parse(item["SectorId"].ToString()),
+                        IndustryId = int.Parse(item["IndustryId"].ToString()),
                         Currency = item["Currency"].ToString(),
                         Description = item["Description"].ToString(),
                         CountryId = int.Parse(item["CountryId"].ToString()),
