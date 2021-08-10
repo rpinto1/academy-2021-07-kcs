@@ -216,8 +216,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.ToTable("CompanyIndex");
 
-                entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
-
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.CompanyIndices)
                     .HasForeignKey(d => d.CompanyId)

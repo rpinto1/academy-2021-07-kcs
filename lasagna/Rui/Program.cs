@@ -15,8 +15,10 @@ namespace Rui
             //industries.insertIndustries(genericDao);
             var companies = new CompaniesCode();
 
-            companies.insertCompanies(genericDao);
+            //companies.insertCompanies(genericDao);
+            var index = new CompanyIndexCode();
 
+            index.insertCompanies(genericDao);
 
 
 
