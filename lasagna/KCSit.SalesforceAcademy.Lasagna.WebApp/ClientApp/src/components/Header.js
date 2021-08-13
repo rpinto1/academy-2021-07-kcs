@@ -1,6 +1,7 @@
 ﻿import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
+import HPGuest from '../Views/HPGuest';
 
 
 export default function Header() {
@@ -27,11 +28,9 @@ export default function Header() {
                     <Link to='/createaccount'> <Button className='ui small right floated blue button'>Sign up</Button> </Link>
 
                 </div>
-
-
-
-
             </div>
+
+            <Route path='/' component={HPGuest} />
         </header>
 
     )

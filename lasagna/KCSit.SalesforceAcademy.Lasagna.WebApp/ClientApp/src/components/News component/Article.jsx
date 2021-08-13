@@ -1,9 +1,22 @@
-﻿import React from 'react'
+﻿import React from 'react';
 
-export default function Article() {
+
+function Article({ article }) {
+
+    const { title, url, urlToImage } = article;
+
     return (
-        <div>
 
-        </div>
-    )
+        <section className='news-container'>
+            {/*  <picture id = 'news-img'>
+          <img src={urlToImage} />
+          </picture>
+           */}
+
+            <a href={url} target='_blank' id='underlined'>{title}</a>
+        </section>
+
+    );
 }
+
+export default Article

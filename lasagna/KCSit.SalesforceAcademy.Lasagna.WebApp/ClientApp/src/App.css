@@ -13,18 +13,20 @@ header {
 }
 
 
-
 .content {
-    padding: 27vh;
+    padding: 2vh;
+    margin: 10px auto 20px;
+    text-align: center;
 }
+
 
 footer {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    display: flex-column;
     position: absolute;
     bottom: -28%;
-    display: flex-column;
 }
 
 
@@ -35,7 +37,7 @@ footer {
 
 #underlined {
     text-decoration: none;
-    color: darkblue;
+    color: rgb(255, 72, 0);
 }
 
 .total-top {

@@ -8,7 +8,7 @@ import HPGuest from './Views/HPGuest';
 function App() {
 
     return (
-        <div className='everything'>
+        <div>
 
             
 
