@@ -1,5 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Kappify.DataAccess;
-
+using RestSharp;
+using Rui.tables;
+using System;
 
 namespace Rui
 {
@@ -7,6 +9,12 @@ namespace Rui
     {
         static void Main(string[] args)
         {
+
+            Console.WriteLine("Enter user api Key");
+            string apiKey = Console.ReadLine();
+
+            var clientClass = new Client();
+
             var genericDao = new GenericDAO();
 
 
@@ -18,8 +26,11 @@ namespace Rui
             //companies.insertCompanies(genericDao);
             var index = new CompanyIndexCode();
 
-            index.insertCompanies(genericDao);
+            //index.insertCompanies(genericDao);
 
+            var income = new IncomeStatements(genericDao);
+            IRestResponse response = clientClass.GetAll("https://public-api.quickfs.net/v1/data/all-data/KO:US?api_key=" + apiKey);
+            income.insertIncomeStatements(response.Content, 0);
 
 
 

@@ -113,39 +113,39 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
             modelBuilder.Entity<CashFlowStatement>(entity =>
             {
-                entity.Property(e => e.Acquisitions).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.Acquisitions).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.CashFinancing).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.CashFinancing).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.CashFromInvesting).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.CashFromInvesting).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.CashFromOperations).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.CashFromOperations).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.CashPaidForDividends).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.CashPaidForDividends).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.ChangeInDeferredTax).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.ChangeInDeferredTax).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.ChangeInWorkingCapital).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.ChangeInWorkingCapital).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.DepreciationAmortization).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.DepreciationAmortization).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.Investements).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.Investements).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.NetIncome).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.NetIncome).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.NetIssuanceOfCommonStock).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.NetIssuanceOfCommonStock).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.NetIssuanceOfDebt).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.NetIssuanceOfDebt).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OtherFinancing).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.OtherFinancing).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OtherInvesting).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.OtherInvesting).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OtherOperations).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.OtherOperations).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.PropertyPlantEquipment).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.PropertyPlantEquipment).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.StockBasedCompensation).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.StockBasedCompensation).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -260,7 +260,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
             modelBuilder.Entity<IncomeStatement>(entity =>
             {
-                entity.Property(e => e.CostOfGoodsSold).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.CostOfGoodsSold).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Development).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Epsbasic)
                     .HasColumnType("decimal(18, 2)")
@@ -270,29 +272,29 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("EPSDiluted");
 
-                entity.Property(e => e.GrossProfit).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.GrossProfit).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.IncomeTax).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.IncomeTax).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.NetIncome).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.NetIncome).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.NetInterestIncome).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.NetInterestIncome).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OperatingProfit).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OperatingProfit).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OtherNonOperatingIncome).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OtherNonOperatingIncome).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OtherOperatingExpense).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OtherOperatingExpense).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.PreTaxIncome).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.PreTaxIncome).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.Revenue).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.Revenue).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.SalesGeneralAdministrative).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.SalesGeneralAdministrative).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.SharesBasic).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.SharesBasic).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.SharesDiluted).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.SharesDiluted).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });

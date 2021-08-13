@@ -29,6 +29,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? SharesBasic { get; set; }
         public decimal? SharesDiluted { get; set; }
         public Guid Uuid { get; set; }
+        public decimal? Development { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
     }
