@@ -30,7 +30,7 @@ export default function Header() {
                 </div>
             </div>
 
-            <Route path='/' component={HPGuest} />
+            {/* <Route path='/' component={HPGuest} /> */}
         </header>
 
     )
