@@ -19,6 +19,40 @@ header {
     text-align: center;
 }
 
+/* Gain + Lose */
+
+
+.gain-items, .lose-items {
+    padding: 0 5%;
+}
+
+.gain-items span.item-symbol, .gain-items h1 {
+    color: rgb(20, 180, 100);
+}
+
+.lose-items span.item-symbol, .lose-items h1 {
+    color: rgb(180, 20, 100);
+}
+
+.gainlose-data {
+    display: flex;
+    align-self:center;
+    justify-content: center;
+    max-height: 40vh;
+    overflow-y: scroll;
+    
+}
+
+.item-symbol{
+    font-weight: bold;
+}
+
+.item-name {
+    color:darkgray;
+    font-size: smaller;
+}
+
+
 
 footer {
     list-style-type: none;
