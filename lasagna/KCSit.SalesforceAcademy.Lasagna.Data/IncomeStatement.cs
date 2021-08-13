@@ -30,6 +30,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? SharesDiluted { get; set; }
         public Guid Uuid { get; set; }
         public decimal? Development { get; set; }
+        public decimal? TotalOperatingExpenses { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
     }

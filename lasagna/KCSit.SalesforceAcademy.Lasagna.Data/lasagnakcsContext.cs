@@ -1,4 +1,4 @@
-﻿using System;
+﻿dusing System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -295,6 +295,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.SharesBasic).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.SharesDiluted).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalOperatingExpenses).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
