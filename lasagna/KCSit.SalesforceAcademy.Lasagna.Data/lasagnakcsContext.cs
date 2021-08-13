@@ -104,9 +104,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.TotalLiabilities).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.TotalLiabilitiesAndEquity)
-                    .HasMaxLength(10)
-                    .IsFixedLength(true);
+                entity.Property(e => e.TotalLiabilitiesAndEquity).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -295,6 +293,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.SharesBasic).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.SharesDiluted).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalOperatingExpenses).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });

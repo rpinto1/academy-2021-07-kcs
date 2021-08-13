@@ -40,7 +40,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? TotalAssets { get; set; }
         public decimal? TotalCurrentLiabilities { get; set; }
         public decimal? TotalLiabilities { get; set; }
-        public string TotalLiabilitiesAndEquity { get; set; }
+        public decimal? TotalLiabilitiesAndEquity { get; set; }
         public Guid Uuid { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }

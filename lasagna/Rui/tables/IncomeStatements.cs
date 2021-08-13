@@ -20,10 +20,10 @@ namespace Rui.tables
     {
             genericDao = genericDaoOut;
     }
-        public int insertIncomeStatements(String IncomeStatements, int index)
+        public int insertIncomeStatements(String incomeStatements, int index)
         {
 
-            var jsonCompanyList = JObject.Parse(IncomeStatements);
+            var jsonCompanyList = JObject.Parse(incomeStatements);
             var companyArray = jsonCompanyList["data"];
 
             //criar keyStatistic
@@ -35,32 +35,27 @@ namespace Rui.tables
             var income = new IncomeStatement
             {
 
-                Revenue = System.Convert.ToDecimal(item["pe"][index].ToString()),
-                CostOfGoodsSold = System.Convert.ToDecimal(item["pb"][index].ToString()),
-                GrossProfit = System.Convert.ToDecimal(item["ps"][index].ToString()),
-                SalesGeneralAdministrative = System.Convert.ToDecimal(item["ev_s"][index].ToString()),
-                // = System.Convert.ToDecimal(item["ev_ebitda"][index].ToString()),
-                //Evebit = System.Convert.ToDecimal(item["ev_ebit"].ToString()),
-                //Evpretax = System.Convert.ToDecimal(item["ev_pretax_inc"].ToString()),
-                //Evfcf = System.Convert.ToDecimal(item["ev_fcf"].ToString()),
-                //Roamedian = System.Convert.ToDecimal(item["roa_median"].ToString()),
-                //Roemedian = System.Convert.ToDecimal(item["roe_median"].ToString()),
-                //Roicmedian = System.Convert.ToDecimal(item["roic_median"].ToString()),
-                //RevenueCagr = System.Convert.ToDecimal(item["revenue_cagr_10"].ToString()),
-                //AssetsCagr = System.Convert.ToDecimal(item["total_assets_cagr_10"].ToString()),
-                //Fcfcagr = System.Convert.ToDecimal(item["fcf_cagr_10"].ToString()),
-                //Epscagr = System.Convert.ToDecimal(item["eps_diluted_cagr_10"].ToString()),
-                //GrossProfitMedian = System.Convert.ToDecimal(item["gross_margin_median"].ToString()),
-                //Ebitmedian = System.Convert.ToDecimal(item["operating_income_margin_median"].ToString()),
-                //PreTaxIncomeMedian = System.Convert.ToDecimal(item["pretax_margin_median"].ToString()),
-                //Fcfmedian = System.Convert.ToDecimal(item["fcf_margin_median"].ToString()),
-                //AssetsEquityMedian = System.Convert.ToDecimal(item["assets_to_equity_median"].ToString()),
-                //DebtEquityMedian = System.Convert.ToDecimal(item["debt_to_equity_median"].ToString()),
-                //DebtAssetsMedian = System.Convert.ToDecimal(item["debt_to_assets_median"].ToString()),
+                Revenue = System.Convert.ToDecimal(item["revenue"][index].ToString()),
+                CostOfGoodsSold = System.Convert.ToDecimal(item["cogs"][index].ToString()),
+                GrossProfit = System.Convert.ToDecimal(item["gross_profit"][index].ToString()),
+                SalesGeneralAdministrative = System.Convert.ToDecimal(item["sga"][index].ToString()),
+                Development = System.Convert.ToDecimal(item["rnd"][index].ToString()),
+                OtherOperatingExpense = System.Convert.ToDecimal(item["other_opex"].ToString()),
+                TotalOperatingExpenses = System.Convert.ToDecimal(item["total_opex"].ToString()),
+                OperatingProfit = System.Convert.ToDecimal(item["operating_income"].ToString()),
+                NetInterestIncome = System.Convert.ToDecimal(item["interest_income"].ToString()),
+                OtherNonOperatingIncome = System.Convert.ToDecimal(item["other_nonoperating_income"].ToString()),
+                PreTaxIncome = System.Convert.ToDecimal(item["pretax_income"].ToString()),
+                IncomeTax = System.Convert.ToDecimal(item["income_tax"].ToString()),
+                NetIncome = System.Convert.ToDecimal(item["net_income"].ToString()),
+                Epsbasic = System.Convert.ToDecimal(item["eps_basic"].ToString()),
+                Epsdiluted = System.Convert.ToDecimal(item["eps_diluted"].ToString()),
+                SharesBasic = System.Convert.ToDecimal(item["shares_basic"].ToString()),
+                SharesDiluted = System.Convert.ToDecimal(item["shares_diluted"].ToString()),
                 Uuid = Guid.NewGuid()
             };
 
-            //var incomeAdded = genericDao.Add<KeyStatistic>(keyStatistic);
+            //var incomeAdded = genericDao.Add<IncomeStatement>(income);
 
             return 1; //incomeAdded.Id;
 
