@@ -25,6 +25,13 @@ namespace Pedro
         static double[] yearWeigth = new double[20];
         static double roicAggregate, equityAggregate, epsAggregate, salesAggregate, cashAggregate;
         static double roicPartialScore, equityPartialScore, epsPartialScore, salesPartialScore, cashPartialScore;
+        
+        // Variables needed for Sticker Price
+        const double rate = 0.15;
+        const int nper = 10;
+        static double pe, epsFY0;
+
+
 
         public static double GetScore(string ticker)
         {
@@ -60,6 +67,60 @@ namespace Pedro
             PrintToScreen(false);
 
             return roicPartialScore + equityPartialScore + epsPartialScore + salesPartialScore + cashPartialScore;
+        }
+
+        public static double GetStickerPrice(string ticker)
+        {
+            //------------------------------------------------------------------------------------------------------------------------------------------
+            //-------------------------------- MOCKS for testing only ----------------------------------------------------------------------------------
+            GetPEAndEPSFromMocks(ticker);
+            //-------------------------------- MOCKS for testing only ----------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------------------------------------------------------------------
+
+            double feps = epsFY0 * (Math.Pow( (1 + rate), nper) );
+            
+            double fv = feps * pe;
+
+            return fv / (Math.Pow((1 + rate), nper));
+        }
+
+        public static double GetMarginOfSafety(string ticker)
+        {
+            return GetStickerPrice(ticker) / 2;
+        }
+
+        private static void GetPEAndEPSFromMocks(string ticker)
+        {
+            switch (ticker)
+            {
+                case ("MSFT:US"):
+                    pe = 35.5;
+                    epsFY0 = 8.12;
+                    break;
+
+                case ("AMZN:US"):
+                    pe = 57.1;
+                    epsFY0 = 42.64;
+                    break;
+
+                case ("AAPL:US"):
+                    pe = 27.8;
+                    epsFY0 = 3.31;
+                    break;
+
+                case ("BAC:US"):
+                    pe = 12.6;
+                    epsFY0 = 1.88;
+                    break;
+
+                case ("FB:US"):
+                    pe = 26.1;
+                    epsFY0 = 10.22;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
 
@@ -176,8 +237,9 @@ namespace Pedro
 
         private static void PrintArray(string desc, double[] array)
         {
-            Console.WriteLine(desc);
+            Console.WriteLine("\t" + desc);
 
+            Console.Write("\t");
             foreach (var item in array)
             {
                 Console.Write((item * 100).ToString("n2") + "%, ");
@@ -196,18 +258,18 @@ namespace Pedro
                 PrintArray("Delta Cash", deltaCash);
                 PrintArray("Year Weights", yearWeigth);
 
-                Console.WriteLine("Roic Aggregate: " + (roicAggregate * 100).ToString("n2"));
-                Console.WriteLine("Equity Aggregate: " + (equityAggregate * 100).ToString("n2"));
-                Console.WriteLine("EPS Aggregate: " + (epsAggregate * 100).ToString("n2"));
-                Console.WriteLine("Sales Aggregate: " + (salesAggregate * 100).ToString("n2"));
-                Console.WriteLine("Cash Aggregate: " + (cashAggregate * 100).ToString("n2"));
+                Console.WriteLine("\tRoic Aggregate: " + (roicAggregate * 100).ToString("n2"));
+                Console.WriteLine("\tEquity Aggregate: " + (equityAggregate * 100).ToString("n2"));
+                Console.WriteLine("\tEPS Aggregate: " + (epsAggregate * 100).ToString("n2"));
+                Console.WriteLine("\tSales Aggregate: " + (salesAggregate * 100).ToString("n2"));
+                Console.WriteLine("\tCash Aggregate: " + (cashAggregate * 100).ToString("n2"));
                 Console.WriteLine("");
 
-                Console.WriteLine("Roic Partial Score: " + (roicPartialScore * 100).ToString("n2"));
-                Console.WriteLine("Equity Partial Score: " + (equityPartialScore * 100).ToString("n2"));
-                Console.WriteLine("Eps Partial Score: " + (epsPartialScore * 100).ToString("n2"));
-                Console.WriteLine("Sales Partial Score: " + (salesPartialScore * 100).ToString("n2"));
-                Console.WriteLine("Cash Partial Score: " + (cashPartialScore * 100).ToString("n2"));
+                Console.WriteLine("\tRoic Partial Score: " + (roicPartialScore * 100).ToString("n2"));
+                Console.WriteLine("\tEquity Partial Score: " + (equityPartialScore * 100).ToString("n2"));
+                Console.WriteLine("\tEps Partial Score: " + (epsPartialScore * 100).ToString("n2"));
+                Console.WriteLine("\tSales Partial Score: " + (salesPartialScore * 100).ToString("n2"));
+                Console.WriteLine("\tCash Partial Score: " + (cashPartialScore * 100).ToString("n2"));
                 Console.WriteLine("");
             }
         }

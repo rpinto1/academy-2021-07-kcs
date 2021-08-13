@@ -6,22 +6,42 @@ namespace Pedro
     {
         static void Main(string[] args)
         {
-            double scoreMSFT = Rule1.GetScore("MSFT:US");
-            Console.WriteLine("Rule #1 score for MSFT:US is = " + (scoreMSFT * 100).ToString("n2") + " %\n\n");
+            string ticker;
 
-            double scoreAMZN = Rule1.GetScore("AMZN:US");
-            Console.WriteLine("Rule #1 score for AMZN:US is = " + (scoreAMZN * 100).ToString("n2") + " %\n\n");
+            ticker = "MSFT:US";
+            Console.WriteLine("Rule #1 method for " + ticker + "\n");
+            Console.WriteLine("\tScore is = " + (Rule1.GetScore(ticker) * 100).ToString("n2") + " %");
+            Console.WriteLine("\tSticker Price is: " + Rule1.GetStickerPrice(ticker).ToString("n2"));
+            Console.WriteLine("\tMargin of Safety is: " + Rule1.GetMarginOfSafety(ticker).ToString("n2"));
+            Console.WriteLine("\n\n\n");
 
-            double scoreAAPL = Rule1.GetScore("AAPL:US");
-            Console.WriteLine("Rule #1 score for AAPL:US is = " + (scoreAAPL * 100).ToString("n2") + " %\n\n");
+            ticker = "AMZN:US";
+            Console.WriteLine("Rule #1 method for " + ticker + "\n");
+            Console.WriteLine("\tScore is = " + (Rule1.GetScore(ticker) * 100).ToString("n2") + " %");
+            Console.WriteLine("\tSticker Price is: " + Rule1.GetStickerPrice(ticker).ToString("n2"));
+            Console.WriteLine("\tMargin of Safety is: " + Rule1.GetMarginOfSafety(ticker).ToString("n2"));
+            Console.WriteLine("\n\n\n");
 
-            double scoreBAC = Rule1.GetScore("BAC:US");
-            Console.WriteLine("Rule #1 score for BAC:US is = " + (scoreBAC * 100).ToString("n2") + " %\n\n");
+            ticker = "AAPL:US";
+            Console.WriteLine("Rule #1 method for " + ticker + "\n");
+            Console.WriteLine("\tScore is = " + (Rule1.GetScore(ticker) * 100).ToString("n2") + " %");
+            Console.WriteLine("\tSticker Price is: " + Rule1.GetStickerPrice(ticker).ToString("n2"));
+            Console.WriteLine("\tMargin of Safety is: " + Rule1.GetMarginOfSafety(ticker).ToString("n2"));
+            Console.WriteLine("\n\n\n");
 
-            double scoreFB = Rule1.GetScore("FB:US");
-            Console.WriteLine("Rule #1 score for FB:US is = " + (scoreFB * 100).ToString("n2") + " %\n\n");
+            ticker = "BAC:US";
+            Console.WriteLine("Rule #1 method for " + ticker + "\n");
+            Console.WriteLine("\tScore is = " + (Rule1.GetScore(ticker) * 100).ToString("n2") + " %");
+            Console.WriteLine("\tSticker Price is: " + Rule1.GetStickerPrice(ticker).ToString("n2"));
+            Console.WriteLine("\tMargin of Safety is: " + Rule1.GetMarginOfSafety(ticker).ToString("n2"));
+            Console.WriteLine("\n\n\n");
 
-            Console.WriteLine("\n\n");
+            ticker = "FB:US";
+            Console.WriteLine("Rule #1 method for " + ticker + "\n");
+            Console.WriteLine("\tScore is = " + (Rule1.GetScore(ticker) * 100).ToString("n2") + " %");
+            Console.WriteLine("\tSticker Price is: " + Rule1.GetStickerPrice(ticker).ToString("n2"));
+            Console.WriteLine("\tMargin of Safety is: " + Rule1.GetMarginOfSafety(ticker).ToString("n2"));
+            Console.WriteLine("\n\n\n\n");
         }
     }
 }
