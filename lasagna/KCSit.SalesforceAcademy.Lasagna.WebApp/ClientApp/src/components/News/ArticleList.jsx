@@ -1,12 +1,12 @@
 ﻿import React, { useState, useEffect } from 'react';
 import Article from './Article';
-
+import NoNewsError from './NoNewsError';
 
 function ArticleList() {
 
     const [articles, setArticles] = useState([]);
 
-    const [query, setQuery] = useState('stocks');
+    const [location, setLocation] = useState('us'); 
 
     const NEWS_API_KEY = "1d46c2ebccbd48e597c869e5881a2d87";
 
@@ -14,12 +14,13 @@ function ArticleList() {
         const fetchArticles = async () => {
             try {
                 const response = await fetch(
-                    `https://newsapi.org/v2/everything?q=${query}&language=en&sortBy=publishedAt&pageSize=5&apiKey=${NEWS_API_KEY}`
+                `https://newsapi.org/v2/top-headlines?country=${location}&category=business&pageSize=5&apiKey=${NEWS_API_KEY}`
                 );
                 const json = await response.json();
                 setArticles(json.articles);
 
             } catch (e) {
+                <NoNewsError />
                 console.error(e);
             }
         }
@@ -29,7 +30,7 @@ function ArticleList() {
 
 
 
-
+/* if(articles){ */
     return (
             <table className='ui table'>
                 <tr><th id='news-title'>Latest News</th></tr>
@@ -47,8 +48,12 @@ function ArticleList() {
            
       
     );
+/* }
 
-
+return (
+    <NoNewsError />
+);
+ */
 }
 
-export default ArticleList
+export default ArticleList;

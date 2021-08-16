@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import ArticleList from './News component/ArticleList';
+import ArticleList from './News/ArticleList';
 import { Link, Route } from 'react-router-dom';
 import AboutUsView from '../Views/AboutUsView';
 import ContactUsView from '../Views/ContactUsView';
@@ -17,8 +17,7 @@ export default function Footer() {
             </section>
 
             
-            <Route path='/aboutus' component={AboutUsView} />
-            <Route path='/bookdetails/:id' component={ContactUsView} />
+    
         </footer>
     )
 }

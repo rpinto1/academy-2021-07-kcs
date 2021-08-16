@@ -13,10 +13,10 @@ function Article({ article }) {
           </picture>
            */}
 
-            <a href={url} target='_blank' id='underlined'>{title}</a>
+            <a href={url} target='_blank' id='underlined'> {title}</a>
         </section>
 
     );
 }
 
-export default Article
+export default Article;

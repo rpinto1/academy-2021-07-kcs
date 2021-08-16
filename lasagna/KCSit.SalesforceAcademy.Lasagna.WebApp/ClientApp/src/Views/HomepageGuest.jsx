@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 
-export default function HPGuest() {
+export default function HomepageGuest() {
     return (
         <div className= 'everything'>
             <div>

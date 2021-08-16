@@ -1,26 +1,36 @@
 import React from 'react';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css';
-import HPGuest from './Views/HPGuest';
+import HomepageGuest from './Views/HomepageGuest';
+import { Route } from 'react-router-dom';
 
 
 
 function App() {
+    <>
+    <Route exact path ='/' component={HomepageGuest} />  
+   
+    </>
 
     return (
+             
+        
+                
         <div>
 
             
 
 
-            <HPGuest />
+            <HomepageGuest />
 
 
            
 
 
         </div>
+      
     )
+
 }
 
 export default App;
