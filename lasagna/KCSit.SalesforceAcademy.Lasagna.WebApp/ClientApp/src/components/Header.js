@@ -1,16 +1,14 @@
 ﻿import React from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
-import HPGuest from '../Views/HPGuest';
+import Logo from './Logo';
 
 
 export default function Header() {
     return (
         <header>
             <div className="total-top">
-                <div className='logo'>
-                    <Link exact to='/'> <img src='../logo.jpg' /> </Link>
-                </div>
+                <Logo />
 
                 <div className='search-bar'>
 
@@ -30,7 +28,6 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* <Route path='/' component={HPGuest} /> */}
         </header>
 
     )
