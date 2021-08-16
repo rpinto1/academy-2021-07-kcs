@@ -16,7 +16,7 @@ namespace Rui
 {
     class CompanyIndexCode
     {
-        public void insertCompanies(GenericDAO genericDao)
+        public void InsertCompanies(GenericDAO genericDao)
         {
             var file = "dataCompanyIndex";
 

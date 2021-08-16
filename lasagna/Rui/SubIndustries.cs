@@ -16,7 +16,7 @@ namespace Rui
     class SubIndustries
     {
 
-        public void getSubIndustries(GenericDAO genericDao)
+        public void GetSubIndustries(GenericDAO genericDao)
         {
 
 

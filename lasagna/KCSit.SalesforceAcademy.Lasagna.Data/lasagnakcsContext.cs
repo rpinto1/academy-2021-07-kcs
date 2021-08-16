@@ -30,6 +30,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public virtual DbSet<KeyRatio> KeyRatios { get; set; }
         public virtual DbSet<KeyStatistic> KeyStatistics { get; set; }
         public virtual DbSet<Score> Scores { get; set; }
+        public virtual DbSet<ScoringMethod> ScoringMethods { get; set; }
         public virtual DbSet<Sector> Sectors { get; set; }
         public virtual DbSet<YearlyReport> YearlyReports { get; set; }
 
@@ -522,10 +523,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.Property(e => e.MarginOfSafety).HasColumnType("decimal(10, 2)");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Score1).HasColumnName("Score");
 
                 entity.Property(e => e.StickerPrice).HasColumnType("decimal(10, 2)");
@@ -536,6 +533,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_Scores_Companies");
+
+                entity.HasOne(d => d.ScoringMethod)
+                    .WithMany(p => p.Scores)
+                    .HasForeignKey(d => d.ScoringMethodId)
+                    .HasConstraintName("FK_Scores_ScoringMethods");
+            });
+
+            modelBuilder.Entity<ScoringMethod>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Sector>(entity =>

@@ -18,7 +18,7 @@ namespace Rui
 {
     class Industries
     {
-        public void insertIndustries(GenericDAO genericDao)
+        public void InsertIndustries(GenericDAO genericDao)
         {
 
             var files = new string[] { "dataMM", "dataAU", "dataCA", "dataLN", "dataNZ", "dataUS" };
