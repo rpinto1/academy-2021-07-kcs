@@ -60,7 +60,7 @@ namespace Rui.tables
                 CommonStock = System.Convert.ToDecimal(item["shares_basic"].ToString()),
                 Aoci = System.Convert.ToDecimal(item["shares_diluted"].ToString()),
                 ShareholdersEquity = System.Convert.ToDecimal(item["shares_basic"].ToString()),
-                //TotalLiabilitiesAndEquity = System.Convert.ToDecimal(item["shares_diluted"].ToString()),
+                TotalLiabilitiesAndEquity = System.Convert.ToDecimal(item["shares_diluted"].ToString()),
                 Uuid = Guid.NewGuid()
             };
 

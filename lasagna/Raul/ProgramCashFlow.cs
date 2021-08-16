@@ -11,7 +11,7 @@ namespace Raul
 {
     class ProgramCashFlow
     {
-        static void Main(string[] args)
+        static void Main2(string[] args)
         {
             var genericDao = new GenericDAO();
 
