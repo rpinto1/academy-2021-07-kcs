@@ -32,7 +32,7 @@ export default function GainLose() {
 
     return (
         <div>
-            <GainLoseFetcher options={options} urlSet={localURLSet} />
+            <GainLoseFetcher options={options} urlSet={yahooURLSet} />
         </div>
     )
 }
