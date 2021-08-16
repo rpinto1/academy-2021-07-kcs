@@ -14,8 +14,8 @@ export default function Header() {
 
                 <div className='search-bar'>
 
-                    <div class="ui disabled icon input">
-                        <i class="search icon"></i>
+                    <div className="ui disabled icon input">
+                        <i className="search icon"></i>
                         <input type="text" placeholder="Search..." />
                     </div>
 

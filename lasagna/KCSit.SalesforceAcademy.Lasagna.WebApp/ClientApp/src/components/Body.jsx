@@ -1,11 +1,11 @@
 ﻿import React from 'react'
-import GainLoseFetcher from './GainLose/GainLoseFetcher'
+import GainLose from './GainLose/GainLose'
 
 
 export default function Body() {
     return (
         <div className='content'>
-            <GainLoseFetcher />
+            <GainLose />
             <img src='../mockupbody.jpg' />
         </div>
     )

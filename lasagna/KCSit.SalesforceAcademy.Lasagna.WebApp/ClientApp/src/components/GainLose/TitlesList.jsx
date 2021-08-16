@@ -6,7 +6,7 @@ export default function TitlesList({ quotes: {quotes}, className}) {
     let title = className === 'gain-items' ? 'Gainers' : 'Losers';
 
     if (quotes) {
-        //console.log('componente: ', quotes)
+        
         return (
             <section className={className}>
                 <h1>{ title }</h1>
