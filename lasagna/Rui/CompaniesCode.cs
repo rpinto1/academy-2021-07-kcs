@@ -15,14 +15,14 @@ namespace Rui
 {
     class CompaniesCode
     {
-        public void insertCompanies(GenericDAO genericDao)
+        public void InsertCompanies(GenericDAO genericDao)
         {
             var files = new string[] { "dataMM", "dataAU", "dataCA", "dataLN", "dataNZ", "dataUS" };
             foreach (var file in files)
             {
 
 
-                   var companyListFile = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Rui\JsonFiles\" + file + ".txt");
+                var companyListFile = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Rui\JsonFiles\" + file + ".txt");
                 var jsonCompanyList = JObject.Parse(companyListFile);
                 var companyArray = jsonCompanyList["Sheet1"];
                 var companyList = companyArray.Children().ToList();

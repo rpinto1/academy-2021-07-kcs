@@ -20,15 +20,19 @@ namespace Rui
 
             var industries = new Industries();
 
-            //industries.insertIndustries(genericDao);
+            //industries.InsertIndustries(genericDao);
             var companies = new CompaniesCode();
 
-            //companies.insertCompanies(genericDao);
+            //companies.InsertCompanies(genericDao);
             var index = new CompanyIndexCode();
 
-            //index.insertCompanies(genericDao);
+            //index.InsertCompanies(genericDao);
 
             var income = new IncomeStatements(genericDao);
+            var balance = new BalanceSheets(genericDao);
+            var keyStatistics = new KeyStatistics(genericDao);
+            //var cash = new programCashFlow(genericDao);
+            //var cashFlow = new ProgramCashFlow(genericDao);
             IRestResponse response = clientClass.GetAll("https://public-api.quickfs.net/v1/data/all-data/KO:US?api_key=" + apiKey);
             income.insertIncomeStatements(response.Content, 0);
 

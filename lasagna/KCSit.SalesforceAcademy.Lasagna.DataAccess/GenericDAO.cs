@@ -134,7 +134,7 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             }
         }
 
-        /// <summary>
+        /// <summary> nao devia testar aqui
         /// Get Subindystry or Industry
         /// </summary>
         /// <param name="name"></param>

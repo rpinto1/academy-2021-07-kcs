@@ -57,6 +57,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? DividendsPerShare { get; set; }
         public decimal? PayoutRatio { get; set; }
         public Guid Uuid { get; set; }
+        public decimal? ReturnOnTangibleCapitalEmployed { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
     }

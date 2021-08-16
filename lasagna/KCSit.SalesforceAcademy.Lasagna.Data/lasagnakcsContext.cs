@@ -30,6 +30,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public virtual DbSet<KeyRatio> KeyRatios { get; set; }
         public virtual DbSet<KeyStatistic> KeyStatistics { get; set; }
         public virtual DbSet<Score> Scores { get; set; }
+        public virtual DbSet<ScoringMethod> ScoringMethods { get; set; }
         public virtual DbSet<Sector> Sectors { get; set; }
         public virtual DbSet<YearlyReport> YearlyReports { get; set; }
 
@@ -336,9 +337,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.AssetsToEquity).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.BookValue).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.BookValue).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.BookValuePerShare).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.BookValuePerShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.CapitalExpendituresGrowth).HasColumnType("decimal(18, 2)");
 
@@ -354,7 +355,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.DilutedSharesGrowth).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.DividendsPerShare).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.DividendsPerShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Ebidtagrowth)
                     .HasColumnType("decimal(18, 2)")
@@ -365,18 +366,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasColumnName("EBIDTAMargin");
 
                 entity.Property(e => e.EbidtaperShare)
-                    .HasColumnType("numeric(18, 0)")
+                    .HasColumnType("decimal(18, 2)")
                     .HasColumnName("EBIDTAPerShare");
 
                 entity.Property(e => e.EquityGrowth).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.EquityToAssets).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.FreeCashFlow).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.FreeCashFlow).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.FreeCashFlowGrowth).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.FreeCashFlowPerShare).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.FreeCashFlowPerShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.FreeCashMargin).HasColumnType("decimal(18, 2)");
 
@@ -384,7 +385,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.GrossProfitGrowth).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.MarketCapitalization).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.MarketCapitalization).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.NetIncomeGrowth).HasColumnType("decimal(18, 2)");
 
@@ -392,7 +393,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.OperatingIncomeGrowth).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.OperatingIncomePerShare).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.OperatingIncomePerShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.OperatingMargin).HasColumnType("decimal(18, 2)");
 
@@ -406,11 +407,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.PretaxMargin).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.PriceToBook).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.PriceToBook).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.PriceToEarnings).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.PriceToEarnings).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.PriceToSales).HasColumnType("numeric(18, 2)");
+                entity.Property(e => e.PriceToSales).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.ReturnOnAssets).HasColumnType("decimal(18, 2)");
 
@@ -420,13 +421,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.ReturnOnInvestedCapital).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.ReturnOnTangibleCapitalEmployed).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.RevenueGrowth).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.RevenuePerShare).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.RevenuePerShare).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.TangibleBookValue).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.TangibleBookValue).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.TangibleBookValuePerShare).HasColumnType("numeric(18, 0)");
+                entity.Property(e => e.TangibleBookValuePerShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.TotalAssetsGrowth).HasColumnType("decimal(18, 2)");
 
@@ -520,10 +523,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.Property(e => e.MarginOfSafety).HasColumnType("decimal(10, 2)");
 
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Score1).HasColumnName("Score");
 
                 entity.Property(e => e.StickerPrice).HasColumnType("decimal(10, 2)");
@@ -534,6 +533,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_Scores_Companies");
+
+                entity.HasOne(d => d.ScoringMethod)
+                    .WithMany(p => p.Scores)
+                    .HasForeignKey(d => d.ScoringMethodId)
+                    .HasConstraintName("FK_Scores_ScoringMethods");
+            });
+
+            modelBuilder.Entity<ScoringMethod>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Sector>(entity =>
