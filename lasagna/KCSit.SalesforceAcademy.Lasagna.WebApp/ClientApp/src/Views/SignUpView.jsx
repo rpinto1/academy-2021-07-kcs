@@ -1,9 +1,16 @@
-﻿import React from 'react'
+﻿import React from 'react';
+import SignUpForm from '../components/SignUp/SignUpForm';
+import Header from '../components/Header';
+
 
 export default function SignUpView() {
     return (
         <div>
-            <h1> Join our user base </h1>
-        </div>
+        <Header />
+       
+        <SignUpForm />
+
+    
+       </div>
     )
 }
