@@ -7,20 +7,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
     public partial class KeyStatistic
     {
-        public KeyStatistic()
-        {
-            YearlyReports = new HashSet<YearlyReport>();
-        }
-
         public int Id { get; set; }
-        public decimal? Pe { get; set; }
-        public decimal? Pb { get; set; }
-        public decimal? Ps { get; set; }
-        public decimal? Evs { get; set; }
-        public decimal? Evebitda { get; set; }
-        public decimal? Evebit { get; set; }
-        public decimal? Evpretax { get; set; }
-        public decimal? Evfcf { get; set; }
+        public int CompanyId { get; set; }
         public decimal? Roamedian { get; set; }
         public decimal? Roemedian { get; set; }
         public decimal? Roicmedian { get; set; }
@@ -37,6 +25,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? DebtAssetsMedian { get; set; }
         public Guid Uuid { get; set; }
 
-        public virtual ICollection<YearlyReport> YearlyReports { get; set; }
+        public virtual Company Company { get; set; }
     }
 }

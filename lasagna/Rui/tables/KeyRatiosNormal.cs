@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Raul
+namespace Rui.tables
 {
-    class ProgramKeyRatios
+    class KeyRatiosNormal
     {
         GenericDAO genericDao;
-        public ProgramKeyRatios(GenericDAO genericDaoOut)
+        public KeyRatiosNormal(GenericDAO genericDaoOut)
         {
             genericDao = genericDaoOut;
         }

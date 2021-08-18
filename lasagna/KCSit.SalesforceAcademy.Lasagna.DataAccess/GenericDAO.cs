@@ -139,23 +139,7 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Industry Get(string name)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return context.Set<Industry>().Where(item => item.Name == name).SingleOrDefault();
 
-            }
-        }
-
-        public SubIndustry GetSub(string name)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
-
-            }
-        }
 
         public T Get<T>(Guid guid) where T : class,IEntity
         {
@@ -181,6 +165,15 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             using (var context = new lasagnakcsContext())
             {
                 return await context.Set<T>().ToListAsync();
+
+            }
+        }
+
+        public List<T> GetAll<T>() where T : class
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return context.Set<T>().ToList();
 
             }
         }

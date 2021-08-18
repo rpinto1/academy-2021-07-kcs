@@ -16,7 +16,7 @@ namespace Rui
     class SubIndustries
     {
 
-        public void GetSubIndustries(GenericDAO genericDao)
+        public void GetSubIndustries(SearchDAO searchDao, GenericDAO genericDao)
         {
 
 
@@ -56,7 +56,7 @@ namespace Rui
                     continue;
                 }
 
-                if (genericDao.Get(metadata["sector"].ToString()) == null)
+                if (searchDao.Get(metadata["sector"].ToString()) == null)
                 {
                     var index = genericDao.Add<Industry>(new Industry
                     {
@@ -69,19 +69,19 @@ namespace Rui
                 }
                 else
                 {
-                    industryId = int.Parse(genericDao.Get(metadata["sector"].ToString()).Id.ToString());
+                    industryId = int.Parse(searchDao.GetIndustry(metadata["sector"].ToString()).Id.ToString());
                 }
 
                 if (metadata["industry"] == null)
                 {
                     continue;
                 }
-                if (genericDao.GetSub(metadata["industry"].ToString()) == null)
+                if (searchDao.GetSub(metadata["industry"].ToString()) == null)
                 {
                     genericDao.Add<SubIndustry>(new SubIndustry
                     {
                         IndustryId = industryId,
-                        Name = metadata["sindustry"].ToString(),
+                        Name = metadata["subindustry"].ToString(),
                         Uuid = Guid.NewGuid()
                     });
                     Console.WriteLine("Insert Sub");
