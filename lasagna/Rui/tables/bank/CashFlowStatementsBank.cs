@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Raul
+namespace Rui.tables.bank
 {
-    class ProgramCashFlow
+    class CashFlowStatementsBank
     {
         GenericDAO genericDao;
-        public ProgramCashFlow(GenericDAO genericDaoOut)
+        public CashFlowStatementsBank(GenericDAO genericDaoOut)
         {
             genericDao = genericDaoOut;
         }

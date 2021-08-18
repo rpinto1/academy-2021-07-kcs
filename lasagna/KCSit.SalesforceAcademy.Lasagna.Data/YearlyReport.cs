@@ -14,7 +14,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public int? BalanceSheetId { get; set; }
         public int? CashFlowStatementId { get; set; }
         public int? KeyRatioId { get; set; }
-        public int? KeyStatisticId { get; set; }
         public Guid Uuid { get; set; }
 
         public virtual BalanceSheet BalanceSheet { get; set; }
@@ -22,6 +21,5 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public virtual Company Company { get; set; }
         public virtual IncomeStatement IncomeStatement { get; set; }
         public virtual KeyRatio KeyRatio { get; set; }
-        public virtual KeyStatistic KeyStatistic { get; set; }
     }
 }

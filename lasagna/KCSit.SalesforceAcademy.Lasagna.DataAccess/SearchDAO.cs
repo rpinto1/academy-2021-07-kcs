@@ -1,4 +1,4 @@
-﻿using KCSit.SalesforceAcademy.Kappify.Data;
+﻿using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,34 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
 {
     public class SearchDAO
     {
+
+        public int Get(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return context.Set<Company>().Where(item => item.Ticker == ticker).SingleOrDefault().Id;
+
+            }
+        }
+
+        public Industry GetIndustry(string name)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return context.Set<Industry>().Where(item => item.Name == name).SingleOrDefault();
+
+            }
+        }
+
+        public SubIndustry GetSub(string name)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
+
+            }
+        }
+
         //public List<(Song song, string artist)> SearchSongByName(string songName)
         //{
         //    using( var context = new academykcsContext())
@@ -22,9 +50,9 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
 
 
         //                     where song.Name.ToLower().Contains(songName.ToLower())
-                             
+
         //                     select new { Song = song, ArtistName = artist.Name });
-                
+
 
         //        var results = query.ToList();
 
@@ -45,7 +73,7 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
         //                     select song
         //                     );
         //        return query.ToList(); 
-            
+
         //    }
         //}
 

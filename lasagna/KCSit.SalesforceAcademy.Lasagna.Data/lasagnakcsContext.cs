@@ -456,26 +456,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EPSCAGR");
 
-                entity.Property(e => e.Evebit)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("EVEBIT");
-
-                entity.Property(e => e.Evebitda)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("EVEBITDA");
-
-                entity.Property(e => e.Evfcf)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("EVFCF");
-
-                entity.Property(e => e.Evpretax)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("EVPretax");
-
-                entity.Property(e => e.Evs)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("EVS");
-
                 entity.Property(e => e.Fcfcagr)
                     .HasColumnType("decimal(8, 2)")
                     .HasColumnName("FCFCAGR");
@@ -486,19 +466,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.GrossProfitMedian).HasColumnType("decimal(8, 2)");
 
-                entity.Property(e => e.Pb)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("PB");
-
-                entity.Property(e => e.Pe)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("PE");
-
                 entity.Property(e => e.PreTaxIncomeMedian).HasColumnType("decimal(8, 2)");
-
-                entity.Property(e => e.Ps)
-                    .HasColumnType("decimal(8, 2)")
-                    .HasColumnName("PS");
 
                 entity.Property(e => e.RevenueCagr)
                     .HasColumnType("decimal(8, 2)")
@@ -517,6 +485,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasColumnName("ROICMedian");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.KeyStatistics)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_KeyStatistics_Companies");
             });
 
             modelBuilder.Entity<Score>(entity =>
@@ -589,11 +563,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .WithMany(p => p.YearlyReports)
                     .HasForeignKey(d => d.KeyRatioId)
                     .HasConstraintName("FK_YearlyReports_KeyRatios");
-
-                entity.HasOne(d => d.KeyStatistic)
-                    .WithMany(p => p.YearlyReports)
-                    .HasForeignKey(d => d.KeyStatisticId)
-                    .HasConstraintName("FK_YearlyReports_KeyStatistics");
             });
 
             OnModelCreatingPartial(modelBuilder);

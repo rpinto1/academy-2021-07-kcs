@@ -11,12 +11,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Rui.tables
+namespace Rui.tables.bank
 {
-    class IncomeStatements
+    class IncomeStatementsBank
     {
         GenericDAO genericDao;
-        public IncomeStatements(GenericDAO genericDaoOut)
+        public IncomeStatementsBank(GenericDAO genericDaoOut)
     {
             genericDao = genericDaoOut;
     }
@@ -28,9 +28,8 @@ namespace Rui.tables
 
             //criar keyStatistic
             var item = companyArray["financials"]["annual"];
-            var CompanyObject = new List<KeyStatistic>();
 
-            Console.WriteLine(item["revenue"][index]);
+            //Console.WriteLine(item["revenue"][index]);
 
             var income = new IncomeStatement
             {
@@ -40,18 +39,18 @@ namespace Rui.tables
                 GrossProfit = System.Convert.ToDecimal(item["gross_profit"][index].ToString()),
                 SalesGeneralAdministrative = System.Convert.ToDecimal(item["sga"][index].ToString()),
                 Development = System.Convert.ToDecimal(item["rnd"][index].ToString()),
-                OtherOperatingExpense = System.Convert.ToDecimal(item["other_opex"].ToString()),
-                TotalOperatingExpenses = System.Convert.ToDecimal(item["total_opex"].ToString()),
-                OperatingProfit = System.Convert.ToDecimal(item["operating_income"].ToString()),
-                NetInterestIncome = System.Convert.ToDecimal(item["interest_income"].ToString()),
-                OtherNonOperatingIncome = System.Convert.ToDecimal(item["other_nonoperating_income"].ToString()),
-                PreTaxIncome = System.Convert.ToDecimal(item["pretax_income"].ToString()),
-                IncomeTax = System.Convert.ToDecimal(item["income_tax"].ToString()),
-                NetIncome = System.Convert.ToDecimal(item["net_income"].ToString()),
-                Epsbasic = System.Convert.ToDecimal(item["eps_basic"].ToString()),
-                Epsdiluted = System.Convert.ToDecimal(item["eps_diluted"].ToString()),
-                SharesBasic = System.Convert.ToDecimal(item["shares_basic"].ToString()),
-                SharesDiluted = System.Convert.ToDecimal(item["shares_diluted"].ToString()),
+                OtherOperatingExpense = System.Convert.ToDecimal(item["other_opex"][index].ToString()),
+                TotalOperatingExpenses = System.Convert.ToDecimal(item["total_opex"][index].ToString()),
+                OperatingProfit = System.Convert.ToDecimal(item["operating_income"][index].ToString()),
+                NetInterestIncome = System.Convert.ToDecimal(item["interest_income"][index].ToString()),
+                OtherNonOperatingIncome = System.Convert.ToDecimal(item["other_nonoperating_income"][index].ToString()),
+                PreTaxIncome = System.Convert.ToDecimal(item["pretax_income"][index].ToString()),
+                IncomeTax = System.Convert.ToDecimal(item["income_tax"][index].ToString()),
+                NetIncome = System.Convert.ToDecimal(item["net_income"][index].ToString()),
+                Epsbasic = System.Convert.ToDecimal(item["eps_basic"][index].ToString()),
+                Epsdiluted = System.Convert.ToDecimal(item["eps_diluted"][index].ToString()),
+                SharesBasic = System.Convert.ToDecimal(item["shares_basic"][index].ToString()),
+                SharesDiluted = System.Convert.ToDecimal(item["shares_diluted"][index].ToString()),
                 Uuid = Guid.NewGuid()
             };
 
