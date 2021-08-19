@@ -16,8 +16,22 @@ header {
 .content {
     padding: 2vh;
     margin: 10px auto 20px;
-    text-align: center;
+    /* text-align: center; */
 }
+
+/* List */
+
+.segment {
+    height:300px;
+
+}
+
+.list {
+    height: 70%;
+    overflow-y: scroll;   
+}
+
+
 
 /* Gain + Lose */
 
