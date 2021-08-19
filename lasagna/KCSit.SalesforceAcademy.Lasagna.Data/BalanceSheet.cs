@@ -42,6 +42,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? TotalLiabilities { get; set; }
         public decimal? TotalLiabilitiesAndEquity { get; set; }
         public Guid Uuid { get; set; }
+        public decimal? DeferredPolicyCost { get; set; }
+        public decimal? UnearnedPremiums { get; set; }
+        public decimal? FuturePolicyBenefits { get; set; }
+        public decimal? TotalInvestments { get; set; }
+        public decimal? GrossLoans { get; set; }
+        public decimal? AllowanceLoanLosses { get; set; }
+        public decimal? UnearnedIncome { get; set; }
+        public decimal? NetLoans { get; set; }
+        public decimal? DepositsLiability { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
     }

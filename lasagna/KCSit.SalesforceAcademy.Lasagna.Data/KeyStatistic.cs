@@ -23,7 +23,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? AssetsEquityMedian { get; set; }
         public decimal? DebtEquityMedian { get; set; }
         public decimal? DebtAssetsMedian { get; set; }
+        public decimal? PermiumCagr { get; set; }
+        public decimal? UnderwritingMedian { get; set; }
+        public decimal? Roimedian { get; set; }
         public Guid Uuid { get; set; }
+        public decimal? NetInterestIncomeCagr { get; set; }
+        public decimal? GrossLoansCagr { get; set; }
+        public decimal? EarningAssetsCagr { get; set; }
+        public decimal? DepositsCagr { get; set; }
+        public decimal? Nimmedian { get; set; }
+        public decimal? EarningAemedian { get; set; }
+        public decimal? LoanLossRtlmedian { get; set; }
+        public decimal? EquityAssetsMedian { get; set; }
 
         public virtual Company Company { get; set; }
     }

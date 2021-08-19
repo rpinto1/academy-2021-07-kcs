@@ -31,6 +31,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public Guid Uuid { get; set; }
         public decimal? Development { get; set; }
         public decimal? TotalOperatingExpenses { get; set; }
+        public decimal? TotalInterestIncome { get; set; }
+        public decimal? TotalInterestExpense { get; set; }
+        public decimal? NetInterestIncomeBank { get; set; }
+        public decimal? TotalNoninterestRevenue { get; set; }
+        public decimal? CreditLossesProvision { get; set; }
+        public decimal? NetInterestAclp { get; set; }
+        public decimal? TotalNonInterestExpense { get; set; }
+        public decimal? TotalPremiums { get; set; }
+        public decimal? NetIvestmentIncome { get; set; }
+        public decimal? FeesOtherIncome { get; set; }
+        public decimal? PolicyClaims { get; set; }
+        public decimal? PolicyExpense { get; set; }
+        public decimal? InterestExpense { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
     }

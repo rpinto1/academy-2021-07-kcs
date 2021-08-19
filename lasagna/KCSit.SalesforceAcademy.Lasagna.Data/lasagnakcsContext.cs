@@ -53,6 +53,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.AccountsReceivable).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.AllowanceLoanLosses).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Aoci)
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("AOCI");
@@ -65,13 +67,23 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.CurrentDeferredRevenue).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.DeferredPolicyCost).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.DepositsLiability).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.FuturePolicyBenefits).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Goodwill).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.GrossLoans).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Inventories).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Investments).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.LongTermDebt).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NetLoans).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.NonCurrentDeferredRevenue).HasColumnType("decimal(18, 2)");
 
@@ -103,9 +115,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.TotalCurrentLiabilities).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.TotalInvestments).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.TotalLiabilities).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.TotalLiabilitiesAndEquity).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UnearnedIncome).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UnearnedPremiums).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -261,6 +279,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.Property(e => e.CostOfGoodsSold).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.CreditLossesProvision).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Development).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Epsbasic)
@@ -271,19 +291,35 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("EPSDiluted");
 
+                entity.Property(e => e.FeesOtherIncome).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.GrossProfit).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.IncomeTax).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.InterestExpense).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.NetIncome).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.NetInterestAclp)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("NetInterestACLP");
+
                 entity.Property(e => e.NetInterestIncome).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NetInterestIncomeBank).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NetIvestmentIncome).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.OperatingProfit).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.OtherNonOperatingIncome).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.OtherOperatingExpense).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.PolicyClaims).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.PolicyExpense).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.PreTaxIncome).HasColumnType("decimal(18, 2)");
 
@@ -295,7 +331,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.SharesDiluted).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.TotalInterestExpense).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalInterestIncome).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalNonInterestExpense).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalNoninterestRevenue).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.TotalOperatingExpenses).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalPremiums).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -357,6 +403,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.DividendsPerShare).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.EarningAssets).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.EarningAssetsGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.EarningAssetsToEquity).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Ebidtagrowth)
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("EBIDTAGrowth");
@@ -381,13 +433,25 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.FreeCashMargin).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.GrossLoansGrowth).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.GrossMargin).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.GrossProfitGrowth).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.LoanDeposit).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.LoanLossReverseLoans).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.MarketCapitalization).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.NetIncomeGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NetInterestIncomeGrowthBank).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NetInterestMargin).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.NetLoansGrowth).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.NetMargin).HasColumnType("decimal(18, 2)");
 
@@ -399,9 +463,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.PayoutRatio).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.PolicyRevenue).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.PolicyRevenueGrowth).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.Ppegrowth)
                     .HasColumnType("decimal(18, 2)")
                     .HasColumnName("PPEGrowth");
+
+                entity.Property(e => e.PremiumGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.PremiumShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.PretaxIncomeGrowth).HasColumnType("decimal(18, 2)");
 
@@ -427,11 +499,23 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.RevenuePerShare).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.Roi)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("ROI");
+
                 entity.Property(e => e.TangibleBookValue).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.TangibleBookValuePerShare).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.TotalAssetsGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalDepositGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.TotalInvestmentsGrowth).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UnderwritingMargin).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UnderwritingProfit).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -448,6 +532,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
                 entity.Property(e => e.DebtEquityMedian).HasColumnType("decimal(8, 2)");
 
+                entity.Property(e => e.DepositsCagr)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("DepositsCAGR");
+
+                entity.Property(e => e.EarningAemedian)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("EarningAEMedian");
+
+                entity.Property(e => e.EarningAssetsCagr)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("EarningAssetsCAGR");
+
                 entity.Property(e => e.Ebitmedian)
                     .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EBITMedian");
@@ -455,6 +551,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.Epscagr)
                     .HasColumnType("decimal(8, 2)")
                     .HasColumnName("EPSCAGR");
+
+                entity.Property(e => e.EquityAssetsMedian).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.Fcfcagr)
                     .HasColumnType("decimal(8, 2)")
@@ -464,7 +562,27 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasColumnType("decimal(8, 2)")
                     .HasColumnName("FCFMedian");
 
+                entity.Property(e => e.GrossLoansCagr)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("GrossLoansCAGR");
+
                 entity.Property(e => e.GrossProfitMedian).HasColumnType("decimal(8, 2)");
+
+                entity.Property(e => e.LoanLossRtlmedian)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("LoanLossRTLMedian");
+
+                entity.Property(e => e.NetInterestIncomeCagr)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("NetInterestIncomeCAGR");
+
+                entity.Property(e => e.Nimmedian)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("NIMMedian");
+
+                entity.Property(e => e.PermiumCagr)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("PermiumCAGR");
 
                 entity.Property(e => e.PreTaxIncomeMedian).HasColumnType("decimal(8, 2)");
 
@@ -483,6 +601,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                 entity.Property(e => e.Roicmedian)
                     .HasColumnType("decimal(8, 2)")
                     .HasColumnName("ROICMedian");
+
+                entity.Property(e => e.Roimedian)
+                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnName("ROIMedian");
+
+                entity.Property(e => e.UnderwritingMedian).HasColumnType("decimal(8, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
 

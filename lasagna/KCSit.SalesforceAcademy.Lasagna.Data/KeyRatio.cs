@@ -58,6 +58,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? PayoutRatio { get; set; }
         public Guid Uuid { get; set; }
         public decimal? ReturnOnTangibleCapitalEmployed { get; set; }
+        public decimal? PolicyRevenue { get; set; }
+        public decimal? UnderwritingProfit { get; set; }
+        public decimal? UnderwritingMargin { get; set; }
+        public decimal? Roi { get; set; }
+        public decimal? PremiumShare { get; set; }
+        public decimal? PremiumGrowth { get; set; }
+        public decimal? PolicyRevenueGrowth { get; set; }
+        public decimal? TotalInvestmentsGrowth { get; set; }
+        public decimal? EarningAssets { get; set; }
+        public decimal? NetInterestMargin { get; set; }
+        public decimal? EarningAssetsToEquity { get; set; }
+        public decimal? LoanDeposit { get; set; }
+        public decimal? LoanLossReverseLoans { get; set; }
+        public decimal? NetInterestIncomeGrowthBank { get; set; }
+        public decimal? GrossLoansGrowth { get; set; }
+        public decimal? NetLoansGrowth { get; set; }
+        public decimal? TotalDepositGrowth { get; set; }
+        public decimal? EarningAssetsGrowth { get; set; }
 
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
     }
