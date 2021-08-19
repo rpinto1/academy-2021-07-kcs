@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Checkbox, Container } from 'semantic-ui-react';
-import Header from '../Header';
+import Test from '../Test';
 
 export default function SignUpForm() {
 
@@ -10,12 +10,14 @@ export default function SignUpForm() {
         password: '',
         email:'',
         isRobot: 'false'    
-    })
+    });
 
+    const confirmPassword = '';
+
+    const alert= 'insert message here';
 
     return (
        
-    
     <Container className= 'form'> 
          <h1> Create an account with us </h1>
         <Form onSubmit={console.log(newUser)}>
@@ -29,12 +31,11 @@ export default function SignUpForm() {
         </Form.Field>
         <Form.Field>
             <label>Password</label>
-            <input placeholder='Create a password' />
+            <input placeholder='Create a password' value = {newUser.password} />
         </Form.Field>
         <Form.Field>
             <label>Repeat_password</label>
-            {/* /* value = {validation == 'true' ? {newUser.password} : {error}} */}
-            <input placeholder='Rewrite your password' onChange={e => setNewUser({ password: e.target.value})}  />
+            <input typeplaceholder='Rewrite your password' onChange={e => {newUser.password == newUser.confirmPassword ? setNewUser({password: e.target.value}) : alert}}  />
         </Form.Field>
         <Form.Field>
             <label>E-mail</label>
@@ -45,7 +46,11 @@ export default function SignUpForm() {
         </Form.Field>
         <Button type='submit'>Submit</Button>
         </Form>
+
+        <Test newUser={newUser}/>
+
         </Container>
+        
         
     ) 
 
