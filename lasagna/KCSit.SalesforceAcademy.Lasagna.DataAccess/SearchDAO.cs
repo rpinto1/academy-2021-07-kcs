@@ -19,6 +19,8 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             }
         }
 
+        
+
         public Industry GetIndustry(string name)
         {
             using (var context = new lasagnakcsContext())
@@ -36,8 +38,24 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
 
             }
         }
+        public List<Industry> SearchIndustiesBySector(string sectorName)
+        {
+            using (var context = new lasagnakcsContext())
+            {
 
-        public List<Company> SearchCompaniesByIndex(string? indexName, string? sectorName,string? industryName)
+                var query = (from sector in context.Sectors
+                             join industry in context.Industries
+                             on sector.Id equals industry.SectorId
+                             where sector.Name.ToLower().Contains(sectorName.ToLower())
+                             select industry);
+
+
+                var results = query.ToList();
+
+                return results;
+            }
+        }
+        public async Task<List<Company>> SearchCompaniesByIndex(string? indexName, string? sectorName,string? industryName)
         {
             using (var context = new lasagnakcsContext())
             {
@@ -70,9 +88,9 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
                              select company);
 
 
-                var results = query.ToList();
+                var results = query.ToListAsync();
 
-                return results;
+                return await results;
             }
         }
 

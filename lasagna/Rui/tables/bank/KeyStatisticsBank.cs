@@ -35,16 +35,16 @@ namespace Rui.tables.bank
                     var keyStatistic = new KeyStatistic
                     {
                         CompanyId = companyId,
-                        Roamedian = System.Convert.ToDecimal(item["roa_median"].ToString()),
-                        Roemedian = System.Convert.ToDecimal(item["roe_median"].ToString()),
-                        NetInterestIncomeCagr = System.Convert.ToDecimal(item["net_interest_income_cagr_10"][index].ToString()),
-                        GrossLoansCagr = System.Convert.ToDecimal(item["loans_gross_cagr_10"][index].ToString()),
-                        EarningAssetsCagr = System.Convert.ToDecimal(item["earning_assets_cagr_10"][index].ToString()),
-                        DepositsCagr = System.Convert.ToDecimal(item["deposits_cagr_10"][index].ToString()),
-                        Nimmedian = System.Convert.ToDecimal(item["nim_median"].ToString()),
-                        AssetsEquityMedian = System.Convert.ToDecimal(item["assets_to_equity_median"].ToString()),
-                        EarningAemedian = System.Convert.ToDecimal(item["earning_assets_to_equity_median"].ToString()),
-                        LoanLossRtlmedian = System.Convert.ToDecimal(item["loan_loss_reserve_to_loans_median"].ToString()),
+                        Roamedian = Decimal.Parse(item["roa_median"].ToString(), System.Globalization.NumberStyles.Float),
+                        Roemedian = Decimal.Parse(item["roe_median"].ToString(), System.Globalization.NumberStyles.Float),
+                        NetInterestIncomeCagr = Decimal.Parse(item["net_interest_income_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        GrossLoansCagr = Decimal.Parse(item["loans_gross_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        EarningAssetsCagr = Decimal.Parse(item["earning_assets_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        DepositsCagr = Decimal.Parse(item["deposits_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        Nimmedian = Decimal.Parse(item["nim_median"].ToString(), System.Globalization.NumberStyles.Float),
+                        AssetsEquityMedian = Decimal.Parse(item["assets_to_equity_median"].ToString(), System.Globalization.NumberStyles.Float),
+                        EarningAemedian = Decimal.Parse(item["earning_assets_to_equity_median"].ToString(), System.Globalization.NumberStyles.Float),
+                        LoanLossRtlmedian = Decimal.Parse(item["loan_loss_reserve_to_loans_median"].ToString(), System.Globalization.NumberStyles.Float),
                         Uuid = Guid.NewGuid()
                     };
 

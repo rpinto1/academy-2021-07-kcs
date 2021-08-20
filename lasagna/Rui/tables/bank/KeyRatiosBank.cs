@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.IO;
 using System.Linq;
 
@@ -16,7 +17,7 @@ namespace Rui.tables.bank
         {
             genericDao = genericDaoOut;
         }
-        public int InsertKeyRatios(String keyRatios, int index)
+        public Task<KeyRatio> InsertKeyRatios(String keyRatios, int index)
         {
 
 
@@ -73,37 +74,37 @@ namespace Rui.tables.bank
 
                     var KeyRatioObject =  new KeyRatio
                     {
-                        ReturnOnAssets = System.Convert.ToDecimal(item["roa"][index].ToString()),
-                        ReturnOnEquity = System.Convert.ToDecimal(item["roe"][index].ToString()),
-                        ReturnOnInvestedCapital = System.Convert.ToDecimal(item["roic"][index].ToString()),
-                        ReturnOnCapitalEmployed = System.Convert.ToDecimal(item["roce"][index].ToString()),
-                        NetMargin = System.Convert.ToDecimal(item["net_income_margin"][index].ToString()),
-                        AssetsToEquity = System.Convert.ToDecimal(item["assets_to_equity"][index].ToString()),
-                        EquityToAssets = System.Convert.ToDecimal(item["equity_to_assets"][index].ToString()),
-                        EarningAssetsToEquity = System.Convert.ToDecimal(item["earning_assets_to_equity"][index].ToString()),
-                        DebtToEquity = System.Convert.ToDecimal(item["debt_to_equity"][index].ToString()),
-                        RevenuePerShare = System.Convert.ToDecimal(item["revenue_per_share"][index].ToString()),
-                        EbidtaperShare = System.Convert.ToDecimal(item["ebitda_per_share"][index].ToString()),                       
-                        BookValuePerShare = System.Convert.ToDecimal(item["book_value_per_share"][index].ToString()),
-                        TangibleBookValuePerShare = System.Convert.ToDecimal(item["tangible_book_per_share"][index].ToString()),
-                        RevenueGrowth = System.Convert.ToDecimal(item["revenue_growth"][index].ToString()),
-                        Ebidtagrowth = System.Convert.ToDecimal(item["ebitda_growth"][index].ToString()),
-                        NetInterestIncomeGrowthBank = System.Convert.ToDecimal(item["net_interest_income_growth"][index].ToString()),
-                        NetIncomeGrowth = System.Convert.ToDecimal(item["net_income_growth"][index].ToString()),
-                        DilutedEpsgrowth = System.Convert.ToDecimal(item["eps_diluted_growth"][index].ToString()),
-                        DilutedSharesGrowth = System.Convert.ToDecimal(item["shares_diluted_growth"][index].ToString()),
-                        CashFromOperationsGrowth = System.Convert.ToDecimal(item["cash_and_equiv_growth"][index].ToString()),
-                        GrossLoansGrowth = System.Convert.ToDecimal(item["loans_gross_growth"][index].ToString()),
-                        EarningAssetsGrowth = System.Convert.ToDecimal(item["earning_assets_growth"][index].ToString()),
-                        TotalAssetsGrowth = System.Convert.ToDecimal(item["total_assets_growth"][index].ToString()),
-                        EquityGrowth = System.Convert.ToDecimal(item["total_equity_growth"][index].ToString()),
-                        TotalDepositGrowth = System.Convert.ToDecimal(item["deposits_growth"][index].ToString()),
-                        MarketCapitalization = System.Convert.ToDecimal(item["market_cap"][index].ToString()),
-                        PriceToEarnings = System.Convert.ToDecimal(item["price_to_earnings"][index].ToString()),
-                        PriceToBook = System.Convert.ToDecimal(item["price_to_book"][index].ToString()),
-                        PriceToSales = System.Convert.ToDecimal(item["price_to_sales"][index].ToString()),
-                        DividendsPerShare = System.Convert.ToDecimal(item["dividends"][index].ToString()),
-                        PayoutRatio = System.Convert.ToDecimal(item["payout_ratio"][index].ToString()),
+                        ReturnOnAssets = Decimal.Parse(item["roa"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        ReturnOnEquity = Decimal.Parse(item["roe"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        ReturnOnInvestedCapital = Decimal.Parse(item["roic"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        ReturnOnCapitalEmployed = Decimal.Parse(item["roce"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        NetMargin = Decimal.Parse(item["net_income_margin"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        AssetsToEquity = Decimal.Parse(item["assets_to_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        EquityToAssets = Decimal.Parse(item["equity_to_assets"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        EarningAssetsToEquity = Decimal.Parse(item["earning_assets_to_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        DebtToEquity = Decimal.Parse(item["debt_to_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        RevenuePerShare = Decimal.Parse(item["revenue_per_share"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        EbidtaperShare = Decimal.Parse(item["ebitda_per_share"][index].ToString(), System.Globalization.NumberStyles.Float),                       
+                        BookValuePerShare = Decimal.Parse(item["book_value_per_share"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        TangibleBookValuePerShare = Decimal.Parse(item["tangible_book_per_share"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        RevenueGrowth = Decimal.Parse(item["revenue_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        Ebidtagrowth = Decimal.Parse(item["ebitda_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        NetInterestIncomeGrowthBank = Decimal.Parse(item["net_interest_income_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        NetIncomeGrowth = Decimal.Parse(item["net_income_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        DilutedEpsgrowth = Decimal.Parse(item["eps_diluted_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        DilutedSharesGrowth = Decimal.Parse(item["shares_diluted_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        CashFromOperationsGrowth = Decimal.Parse(item["cash_and_equiv_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        GrossLoansGrowth = Decimal.Parse(item["loans_gross_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        EarningAssetsGrowth = Decimal.Parse(item["earning_assets_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        TotalAssetsGrowth = Decimal.Parse(item["total_assets_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        EquityGrowth = Decimal.Parse(item["total_equity_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        TotalDepositGrowth = Decimal.Parse(item["deposits_growth"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        MarketCapitalization = Decimal.Parse(item["market_cap"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        PriceToEarnings = Decimal.Parse(item["price_to_earnings"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        PriceToBook = Decimal.Parse(item["price_to_book"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        PriceToSales = Decimal.Parse(item["price_to_sales"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        DividendsPerShare = Decimal.Parse(item["dividends"][index].ToString(), System.Globalization.NumberStyles.Float),
+                        PayoutRatio = Decimal.Parse(item["payout_ratio"][index].ToString(), System.Globalization.NumberStyles.Float),
                         Uuid = Guid.NewGuid()
                     };
 
@@ -111,9 +112,8 @@ namespace Rui.tables.bank
 
 
 
-            var keyRatio = genericDao.Add<KeyRatio>(KeyRatioObject);
+           return genericDao.AddAsync<KeyRatio>(KeyRatioObject);
 
-            return keyRatio.Id;
         }
     }
 }
