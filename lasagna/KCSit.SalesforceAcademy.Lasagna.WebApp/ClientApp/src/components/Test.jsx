@@ -7,6 +7,7 @@ export default function Test({newUser}) {
     return (
         <div>
             <h1>eu sou{firstName}</h1>
+            
         </div>
     )
 }
