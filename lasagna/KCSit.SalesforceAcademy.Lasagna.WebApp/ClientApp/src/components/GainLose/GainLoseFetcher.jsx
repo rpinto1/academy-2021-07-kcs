@@ -5,8 +5,7 @@ import TitlesList from './TitlesList';
 
 export default function GainLoseFetcher(props) {
 
-    const options = props.config;
-    const urlSet = props.urlSet;
+    const {options, urlSet} = props;
 
     
     const [gainersData, setGainersData] = useState({});
@@ -20,6 +19,7 @@ export default function GainLoseFetcher(props) {
 
         response = await response.json();
         setterFunc(response);
+        console.log(response)
 
     };
 
