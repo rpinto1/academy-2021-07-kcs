@@ -8,6 +8,7 @@ import SignInView from './Views/SignInView';
 import SignUpView from './Views/SignUpView';
 import ContactUsView from './Views/ContactUsView';
 
+
 function App() {
 
     return (
@@ -15,13 +16,15 @@ function App() {
         
                 
         <div>
+         
+            
             <Switch>
                 <Route exact path ='/' component={HomepageGuest} />  
                 <Route path ='/createaccount' component = {SignUpView} /> 
-                <Route path ='signin' component ={SignInView} />
+                <Route path ='/signin' component ={SignInView} />
                 <Route path ='/contactus' component={ContactUsView} />
-                <Route path ='aboutus' component ={AboutUsView} />
-            </Switch>
+                <Route path ='/aboutus' component ={AboutUsView} />
+            </Switch> 
            
         
            

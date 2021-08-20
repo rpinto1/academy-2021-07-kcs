@@ -23,23 +23,40 @@ export default function SignUpForm() {
         <Form onSubmit={console.log(newUser)}>
         <Form.Field>
             <label>First Name</label>
-            <input type= 'text' placeholder='Write your First Name' value={newUser.firstName} onChange={e => setNewUser({ firstName: e.target.value})}/>
+            <input 
+            type= 'text' 
+            placeholder='Write your First Name' 
+            value={newUser.firstName} 
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, firstName: target.value,}))}/>
         </Form.Field>
         <Form.Field>
             <label>Last Name</label>
-            <input type= 'text' placeholder='Write your Last Name' value={newUser.lastName} onChange={e => setNewUser({ lastName: e.target.value})}/>
+            <input 
+            type= 'text' 
+            placeholder='Write your Last Name' 
+            value={newUser.lastName} 
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, lastName: target.value,}))}/>
         </Form.Field>
         <Form.Field>
             <label>Password</label>
-            <input placeholder='Create a password' value = {newUser.password} />
+            <input
+            type= 'password' 
+            placeholder='Create your password' 
+            value = {newUser.password} />
         </Form.Field>
         <Form.Field>
-            <label>Repeat_password</label>
-            <input typeplaceholder='Rewrite your password' onChange={e => {newUser.password == newUser.confirmPassword ? setNewUser({password: e.target.value}) : alert}}  />
+            <label>Repeat password</label>
+            <input 
+            type ='password'
+            placeholder='Rewrite your password' 
+            onChange= {({ target }) => setNewUser({password: target.value})}  />
         </Form.Field>
         <Form.Field>
             <label>E-mail</label>
-            <input type= 'text' placeholder='Write your e-mail address' value = {newUser.email} onChange={e => setNewUser({ emailAddress: e.target.value})} />
+            <input 
+            type= 'email' 
+            placeholder='Write your e-mail address' 
+            value = {newUser.email} onChange={({ target }) => setNewUser({emailAddress: target.value})} />
         </Form.Field>
         <Form.Field>
             <Checkbox type='checkbox' name='isRobot' label='Are you a robot?' />
