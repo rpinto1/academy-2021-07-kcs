@@ -1,3 +1,5 @@
+using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +30,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+
+            services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

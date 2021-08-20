@@ -39,12 +39,12 @@ export default function TitlesList({ quotes: {quotes}, className}) {
                     </tbody>
                 </table>
             </section>
-        )
+        );
     }
 
     return (
         <div>
             <h3>Loading...</h3>
         </div>
-    )
+    );
 }
