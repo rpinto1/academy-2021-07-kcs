@@ -70,9 +70,9 @@ namespace Rui.tables
                 genericDao.Add<CashFlowStatement>(CashFlowObject);
 
 
-            //var cashFlowAdded = genericDao.Add<CashFlowStatement>(CashFlowObject);
+            var cashFlowAdded = genericDao.Add<CashFlowStatement>(CashFlowObject);
 
-            return 1; //cashFlowAdded.Id;
+            return cashFlowAdded.Id;
         }
 
             

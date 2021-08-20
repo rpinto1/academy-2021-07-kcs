@@ -54,9 +54,9 @@ namespace Rui.tables
                 Uuid = Guid.NewGuid()
             };
 
-            //var incomeAdded = genericDao.Add<IncomeStatement>(income);
+            var incomeAdded = genericDao.Add<IncomeStatement>(income);
 
-            return 1; //incomeAdded.Id;
+            return incomeAdded.Id;
 
         }
     }

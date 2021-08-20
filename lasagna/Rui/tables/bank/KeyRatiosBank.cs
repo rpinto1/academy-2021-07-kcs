@@ -77,40 +77,27 @@ namespace Rui.tables.bank
                         ReturnOnEquity = System.Convert.ToDecimal(item["roe"][index].ToString()),
                         ReturnOnInvestedCapital = System.Convert.ToDecimal(item["roic"][index].ToString()),
                         ReturnOnCapitalEmployed = System.Convert.ToDecimal(item["roce"][index].ToString()),
-                        ReturnOnTangibleCapitalEmployed = System.Convert.ToDecimal(item["rotce"][index].ToString()),
-                        GrossMargin = System.Convert.ToDecimal(item["gross_margin"][index].ToString()),
-                        Ebidtamargin = System.Convert.ToDecimal(item["ebitda_margin"][index].ToString()),
-                        OperatingMargin = System.Convert.ToDecimal(item["operating_margin"][index].ToString()),
-                        PretaxMargin = System.Convert.ToDecimal(item["pretax_margin"][index].ToString()),
                         NetMargin = System.Convert.ToDecimal(item["net_income_margin"][index].ToString()),
-                        FreeCashMargin = System.Convert.ToDecimal(item["fcf_margin"][index].ToString()),
                         AssetsToEquity = System.Convert.ToDecimal(item["assets_to_equity"][index].ToString()),
                         EquityToAssets = System.Convert.ToDecimal(item["equity_to_assets"][index].ToString()),
+                        EarningAssetsToEquity = System.Convert.ToDecimal(item["earning_assets_to_equity"][index].ToString()),
                         DebtToEquity = System.Convert.ToDecimal(item["debt_to_equity"][index].ToString()),
-                        DebtToAssets = System.Convert.ToDecimal(item["debt_to_assets"][index].ToString()),
+                        RevenuePerShare = System.Convert.ToDecimal(item["revenue_per_share"][index].ToString()),
+                        EbidtaperShare = System.Convert.ToDecimal(item["ebitda_per_share"][index].ToString()),                       
+                        BookValuePerShare = System.Convert.ToDecimal(item["book_value_per_share"][index].ToString()),
+                        TangibleBookValuePerShare = System.Convert.ToDecimal(item["tangible_book_per_share"][index].ToString()),
                         RevenueGrowth = System.Convert.ToDecimal(item["revenue_growth"][index].ToString()),
-                        GrossProfitGrowth = System.Convert.ToDecimal(item["gross_profit_growth"][index].ToString()),
                         Ebidtagrowth = System.Convert.ToDecimal(item["ebitda_growth"][index].ToString()),
-                        OperatingIncomeGrowth = System.Convert.ToDecimal(item["operating_income_growth"][index].ToString()),
-                        PretaxIncomeGrowth = System.Convert.ToDecimal(item["pretax_income_growth"][index].ToString()),
+                        NetInterestIncomeGrowthBank = System.Convert.ToDecimal(item["net_interest_income_growth"][index].ToString()),
                         NetIncomeGrowth = System.Convert.ToDecimal(item["net_income_growth"][index].ToString()),
                         DilutedEpsgrowth = System.Convert.ToDecimal(item["eps_diluted_growth"][index].ToString()),
                         DilutedSharesGrowth = System.Convert.ToDecimal(item["shares_diluted_growth"][index].ToString()),
-                        Ppegrowth = System.Convert.ToDecimal(item["ppe_growth"][index].ToString()),
+                        CashFromOperationsGrowth = System.Convert.ToDecimal(item["cash_and_equiv_growth"][index].ToString()),
+                        GrossLoansGrowth = System.Convert.ToDecimal(item["loans_gross_growth"][index].ToString()),
+                        EarningAssetsGrowth = System.Convert.ToDecimal(item["earning_assets_growth"][index].ToString()),
                         TotalAssetsGrowth = System.Convert.ToDecimal(item["total_assets_growth"][index].ToString()),
                         EquityGrowth = System.Convert.ToDecimal(item["total_equity_growth"][index].ToString()),
-                        CashFromOperationsGrowth = System.Convert.ToDecimal(item["cfo_growth"][index].ToString()),
-                        CapitalExpendituresGrowth = System.Convert.ToDecimal(item["capex_growth"][index].ToString()),
-                        FreeCashFlowGrowth = System.Convert.ToDecimal(item["fcf_growth"][index].ToString()),
-                        FreeCashFlow = System.Convert.ToDecimal(item["fcf"][index].ToString()),
-                        BookValue = System.Convert.ToDecimal(item["book_value"][index].ToString()),
-                        TangibleBookValue = System.Convert.ToDecimal(item["tangible_book_value"][index].ToString()),
-                        RevenuePerShare = System.Convert.ToDecimal(item["revenue_per_share"][index].ToString()),
-                        EbidtaperShare = System.Convert.ToDecimal(item["ebitda_per_share"][index].ToString()),
-                        OperatingIncomePerShare = System.Convert.ToDecimal(item["operating_income_per_share"][index].ToString()),
-                        FreeCashFlowPerShare = System.Convert.ToDecimal(item["fcf_per_share"][index].ToString()),
-                        BookValuePerShare = System.Convert.ToDecimal(item["book_value_per_share"][index].ToString()),
-                        TangibleBookValuePerShare = System.Convert.ToDecimal(item["tangible_book_per_share"][index].ToString()),
+                        TotalDepositGrowth = System.Convert.ToDecimal(item["deposits_growth"][index].ToString()),
                         MarketCapitalization = System.Convert.ToDecimal(item["market_cap"][index].ToString()),
                         PriceToEarnings = System.Convert.ToDecimal(item["price_to_earnings"][index].ToString()),
                         PriceToBook = System.Convert.ToDecimal(item["price_to_book"][index].ToString()),
@@ -124,9 +111,9 @@ namespace Rui.tables.bank
 
 
 
-            //var keyRatio = genericDao.Add<KeyRatio>(KeyRatioObject);
+            var keyRatio = genericDao.Add<KeyRatio>(KeyRatioObject);
 
-            return 1; //keyRatio.Id;
+            return keyRatio.Id;
         }
     }
 }

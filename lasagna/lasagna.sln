@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Las
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pedro", "Pedro\Pedro.csproj", "{99132220-D382-485F-941C-794E7801D136}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raul", "Raul\Raul.csproj", "{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raul", "Raul\Raul.csproj", "{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Lasagna.Business", "KCSit.SalesforceAcademy.Lasagna.Business\KCSit.SalesforceAcademy.Lasagna.Business.csproj", "{B8CA0B4C-9AEF-4258-A657-60707E5647EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

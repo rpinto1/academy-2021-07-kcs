@@ -65,9 +65,9 @@ namespace Rui.tables
                 Uuid = Guid.NewGuid()
             };
 
-            //var balanceAdded = genericDao.Add<BalanceSheet>(balance);
+            var balanceAdded = genericDao.Add<BalanceSheet>(balance);
 
-            return 1; //balanceAdded.Id;
+            return balanceAdded.Id;
 
         }
     }

@@ -51,9 +51,9 @@ namespace Rui.tables
                         Uuid = Guid.NewGuid()
                     };
 
-            //var statisticAdded = genericDao.Add<KeyStatistic>(keyStatistic);
+            var statisticAdded = genericDao.Add<KeyStatistic>(keyStatistic);
 
-            return 1; //statisticAdded.Id;
+            return statisticAdded.Id;
             
         }
     }

@@ -37,6 +37,45 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             }
         }
 
+        public List<Company> SearchCompaniesByIndex(string? indexName, string? sectorName,string? industryName)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                if (indexName==null)
+                {
+                    indexName = "";
+                }
+                if (sectorName==null)
+                {
+                    sectorName = "";
+                }
+                if (industryName==null)
+                {
+                    industryName = "";
+                }
+
+
+                var query = (from company in context.Companies
+                             join companyIndice in context.CompanyIndices
+                             on company.Id equals companyIndice.CompanyId
+                             join indice in context.Indices
+                             on companyIndice.IndexId equals indice.Id
+                             join sector in context.Sectors
+                             on company.SectorId equals sector.Id
+                             join industry in context.Industries
+                             on company.IndustryId equals industry.Id
+                             where indice.Name.ToLower().Contains(indexName.ToLower()) &&
+                             sector.Name.ToLower().Contains(sectorName.ToLower()) &&
+                             industry.Name.ToLower().Contains(industryName.ToLower())
+                             select company);
+
+
+                var results = query.ToList();
+
+                return results;
+            }
+        }
+
         //public List<(Song song, string artist)> SearchSongByName(string songName)
         //{
         //    using( var context = new academykcsContext())

@@ -124,9 +124,9 @@ namespace Rui.tables
 
 
 
-            //var keyRatio = genericDao.Add<KeyRatio>(KeyRatioObject);
+            var keyRatio = genericDao.Add<KeyRatio>(KeyRatioObject);
 
-            return 1; //keyRatio.Id;
+            return keyRatio.Id;
         }
     }
 }

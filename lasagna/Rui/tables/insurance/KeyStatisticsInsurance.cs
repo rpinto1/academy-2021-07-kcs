@@ -11,12 +11,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Rui.tables
+namespace Rui.tables.insurance
 {
-    class KeyStatistics
+    class KeyStatisticsInsurance
     {
         GenericDAO genericDao;
-        public KeyStatistics(GenericDAO genericDaoOut)
+        public KeyStatisticsInsurance(GenericDAO genericDaoOut)
         {
             genericDao = genericDaoOut;
         }
@@ -36,24 +36,21 @@ namespace Rui.tables
                         CompanyId = companyId,
                         Roamedian = System.Convert.ToDecimal(item["roa_median"].ToString()),
                         Roemedian = System.Convert.ToDecimal(item["roe_median"].ToString()),
-                        Roicmedian = System.Convert.ToDecimal(item["roic_median"].ToString()),
+                        Roimedian = System.Convert.ToDecimal(item["roi_median"].ToString()),
                         RevenueCagr = System.Convert.ToDecimal(item["revenue_cagr_10"][index].ToString()),
+                        PermiumCagr = System.Convert.ToDecimal(item["premiums_cagr_10"][index].ToString()),
                         AssetsCagr = System.Convert.ToDecimal(item["total_assets_cagr_10"][index].ToString()),
-                        Fcfcagr = System.Convert.ToDecimal(item["fcf_cagr_10"][index].ToString()),
                         Epscagr = System.Convert.ToDecimal(item["eps_diluted_cagr_10"][index].ToString()),
-                        GrossProfitMedian = System.Convert.ToDecimal(item["gross_margin_median"].ToString()),
-                        Ebitmedian = System.Convert.ToDecimal(item["operating_income_margin_median"].ToString()),
+                        UnderwritingMedian = System.Convert.ToDecimal(item["underwriting_margin_median"].ToString()),
                         PreTaxIncomeMedian = System.Convert.ToDecimal(item["pretax_margin_median"].ToString()),
-                        Fcfmedian = System.Convert.ToDecimal(item["fcf_margin_median"].ToString()),
                         AssetsEquityMedian = System.Convert.ToDecimal(item["assets_to_equity_median"].ToString()),
-                        DebtEquityMedian = System.Convert.ToDecimal(item["debt_to_equity_median"].ToString()),
-                        DebtAssetsMedian = System.Convert.ToDecimal(item["debt_to_assets_median"].ToString()),
+                        EquityAssetsMedian = System.Convert.ToDecimal(item["equity_to_assets_median"].ToString()),
                         Uuid = Guid.NewGuid()
                     };
 
-            //var statisticAdded = genericDao.Add<KeyStatistic>(keyStatistic);
+            var statisticAdded = genericDao.Add<KeyStatistic>(keyStatistic);
 
-            return 1; //statisticAdded.Id;
+            return statisticAdded.Id;
             
         }
     }
