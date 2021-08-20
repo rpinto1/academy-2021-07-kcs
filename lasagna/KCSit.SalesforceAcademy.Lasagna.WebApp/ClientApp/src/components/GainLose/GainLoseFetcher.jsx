@@ -18,7 +18,7 @@ export default function GainLoseFetcher(props) {
         let response = await fetch(url, options)
             .catch(err => console.error(err));
 
-        response = await response.json()
+        response = await response.json();
         setterFunc(response);
 
     };

@@ -7,7 +7,7 @@ export default function Body() {
     return (
         <div className='content'>
             <GainLose />
-            <img src='../mockupbody.jpg' />
+            
             <IISList />
         </div>
     )
