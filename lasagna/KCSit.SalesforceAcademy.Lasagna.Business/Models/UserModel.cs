@@ -12,12 +12,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(maximumLength: 15, ErrorMessage = "First Name maximum length is 15 characters")]
+        [StringLength(maximumLength: 15, MinimumLength = 2, ErrorMessage = "First Name must have 2 to 15 characters")]
         public string FirstName { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
-        [StringLength(maximumLength: 15, ErrorMessage = "Last Name maximum length is 15 characters")]
+        [StringLength(maximumLength: 15, MinimumLength = 2, ErrorMessage = "Last Name must have 2 to 15 characters")]
         public string LastName { get; set; }
 
         [Required]

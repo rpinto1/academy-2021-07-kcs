@@ -74,25 +74,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public UserServiceResultMessage AddUser(UserModel model)
         {
-            // check if emailAddress already exist
+            // check if EmailAddress already exist
             foreach (UserModel user in _users)
             {
                 if (user.EmailAdress == model.EmailAdress)
                     return new UserServiceResultMessage { Success = false, Message = "User already exists" };
             }
 
-            // check if password is valid (length, alpha-numeric, numbers, Capitals...)
-            var passwordValidationReusltMessage = checkPassword(model.Password);
-            if (!passwordValidationReusltMessage.Success)
+            // check if model data is valid (FirstName, LastName and Password)
+            var dataValidationReusltMessage = UserDataValidator.checkModelData(model);
+            if (!dataValidationReusltMessage.Success)
             {
-                return passwordValidationReusltMessage;
+                return dataValidationReusltMessage;
             }
 
-            // check if password and confirmPassword match
-            if(model.Password != model.ConfirmPassword)
-                return new UserServiceResultMessage { Success = false, Message = "Password and Confirm Password do not match" };
-
-            // user info is OK. Add user
+            // user data is OK. Add user
             _users.Add(new UserModel
             {
                 UserInfoId = Guid.NewGuid(),
@@ -114,18 +110,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             if (currentUser.EmailAdress != model.EmailAdress)
                 return new UserServiceResultMessage { Success = false, Message = "User can not change is email address" };
 
-            // check if password is valid (length, alpha-numeric, numbers, Capitals...)
-            var passwordValidationReusltMessage = checkPassword(model.Password);
-            if (!passwordValidationReusltMessage.Success)
+            // check if model data is valid (FirstName, LastName and Password)
+            var dataValidationReusltMessage = UserDataValidator.checkModelData(model);
+            if (!dataValidationReusltMessage.Success)
             {
-                return passwordValidationReusltMessage;
+                return dataValidationReusltMessage;
             }
 
-            // check if password and confirmPassword match
-            if (model.Password != model.ConfirmPassword)
-                return new UserServiceResultMessage { Success = false, Message = "Password and Confirm Password do not match" };
-
-            // user info is ok. Update user
+            // user data is ok. Update user
             _users[id].FirstName = model.FirstName;
             _users[id].LastName = model.LastName;
             _users[id].Password = model.Password;
@@ -148,27 +140,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
 
 
-        private UserServiceResultMessage checkPassword(string password)
-        {
 
-            var hasMiniMaxChars = new Regex(@".{8,100}");
-            if (!hasMiniMaxChars.IsMatch(password))
-                return new UserServiceResultMessage { Success = false, Message = "Password must have at least 8 characters" };
-
-            var hasUpperChar = new Regex(@"[A-Z]+");
-            if (!hasUpperChar.IsMatch(password))
-                return new UserServiceResultMessage { Success = false, Message = "Password must have at least one capital letter" };
-
-            var hasNumber = new Regex(@"[0-9]+");
-            if(!hasNumber.IsMatch(password))
-                return new UserServiceResultMessage { Success = false, Message = "Password must have at least one numeric value" };
-
-            var hasSymbols = new Regex(@"[!@#$%^&*()_+=\[{\]};:<>|./?,-]");
-            if (!hasSymbols.IsMatch(password))
-                return new UserServiceResultMessage { Success = false, Message = "Password must have at least one special character" };
-
-
-            return new UserServiceResultMessage { Success = true, Message = "Password is valid" };
-        }
     }
 }
