@@ -9,6 +9,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 
 namespace Rui.tables.bank
@@ -20,7 +21,7 @@ namespace Rui.tables.bank
     {
             genericDao = genericDaoOut;
     }
-        public int insertIncomeStatements(String incomeStatements, int index)
+        public Task<IncomeStatement> insertIncomeStatements(String incomeStatements, int index)
         {
 
             var jsonCompanyList = JObject.Parse(incomeStatements);
@@ -34,26 +35,25 @@ namespace Rui.tables.bank
             var income = new IncomeStatement
             {
 
-                TotalInterestIncome = System.Convert.ToDecimal(item["total_interest_income"][index].ToString()),
-                TotalInterestExpense = System.Convert.ToDecimal(item["total_interest_expense"][index].ToString()),
-                NetInterestIncomeBank = System.Convert.ToDecimal(item["net_interest_income"][index].ToString()),
-                TotalNoninterestRevenue = System.Convert.ToDecimal(item["total_noninterest_revenue"][index].ToString()),
-                TotalNonInterestExpense = System.Convert.ToDecimal(item["total_noninterest_expense"][index].ToString()),
-                PreTaxIncome = System.Convert.ToDecimal(item["pretax_income"][index].ToString()),
-                CreditLossesProvision = System.Convert.ToDecimal(item["credit_losses_provision"][index].ToString()),
-                NetInterestAclp = System.Convert.ToDecimal(item["net_interest_income_after_credit_losses_provision"][index].ToString()),
-                IncomeTax = System.Convert.ToDecimal(item["income_tax"][index].ToString()),
-                NetIncome = System.Convert.ToDecimal(item["net_income"][index].ToString()),
-                Epsbasic = System.Convert.ToDecimal(item["eps_basic"][index].ToString()),
-                Epsdiluted = System.Convert.ToDecimal(item["eps_diluted"][index].ToString()),
-                SharesBasic = System.Convert.ToDecimal(item["shares_basic"][index].ToString()),
-                SharesDiluted = System.Convert.ToDecimal(item["shares_diluted"][index].ToString()),
+                TotalInterestIncome = Decimal.Parse(item["total_interest_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalInterestExpense = Decimal.Parse(item["total_interest_expense"][index].ToString(), System.Globalization.NumberStyles.Float),
+                NetInterestIncomeBank = Decimal.Parse(item["net_interest_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalNoninterestRevenue = Decimal.Parse(item["total_noninterest_revenue"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalNonInterestExpense = Decimal.Parse(item["total_noninterest_expense"][index].ToString(), System.Globalization.NumberStyles.Float),
+                PreTaxIncome = Decimal.Parse(item["pretax_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                CreditLossesProvision = Decimal.Parse(item["credit_losses_provision"][index].ToString(), System.Globalization.NumberStyles.Float),
+                NetInterestAclp = Decimal.Parse(item["net_interest_income_after_credit_losses_provision"][index].ToString(), System.Globalization.NumberStyles.Float),
+                IncomeTax = Decimal.Parse(item["income_tax"][index].ToString(), System.Globalization.NumberStyles.Float),
+                NetIncome = Decimal.Parse(item["net_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Epsbasic = Decimal.Parse(item["eps_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Epsdiluted = Decimal.Parse(item["eps_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
+                SharesBasic = Decimal.Parse(item["shares_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
+                SharesDiluted = Decimal.Parse(item["shares_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
                 Uuid = Guid.NewGuid()
             };
 
-            var incomeAdded = genericDao.Add<IncomeStatement>(income);
+            return genericDao.AddAsync<IncomeStatement>(income);
 
-            return incomeAdded.Id;
 
         }
     }

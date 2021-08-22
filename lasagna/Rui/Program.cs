@@ -8,6 +8,7 @@ using Rui.tables.insurance;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Rui
 {
@@ -71,7 +72,7 @@ namespace Rui
             //GetIndex
             var index = genericDao.GetAll<KeyStatistic>().Count();  
             var counter = clientClass.CheckQuota(apiKey);
-
+            Console.WriteLine(companyBD[index].Name);
             for (int i = index; i < companyBD.Count(); i++)
             {
                 var item = companyBD[i];
@@ -104,6 +105,13 @@ namespace Rui
                 for (int yearIndex = 0; yearIndex < count; yearIndex++)
                 {
 
+
+
+                    Task<KeyRatio> keyTask;
+                    Task<IncomeStatement> incomeTask;
+                    Task<BalanceSheet> balanceTask;
+                    Task<CashFlowStatement> cashTask;
+
                     YearlyReport yearlyReport;
 
 
@@ -115,17 +123,15 @@ namespace Rui
                             {
                                 keyStatisticsBank.insertKeyStatistics(response.Content, yearIndex, companyId);
                             }
-                            yearlyReport = new YearlyReport
-                            {
-                                Year = listYearInt.ElementAt(yearIndex),
-                                CompanyId = companyId,
-                                IncomeStatementId = incomeBank.insertIncomeStatements(response.Content, yearIndex),
-                                BalanceSheetId = balanceBank.insertBalanceSheets(response.Content, yearIndex),
-                                CashFlowStatementId = cashFlowBank.InsertCashFlowStatements(response.Content, yearIndex),
-                                KeyRatioId = ratiosBank.InsertKeyRatios(response.Content, yearIndex),
-                                Uuid = Guid.NewGuid()
-                            };
-                            genericDao.Add<YearlyReport>(yearlyReport);
+                            keyTask = ratiosBank.InsertKeyRatios(response.Content, yearIndex);
+                            incomeTask = incomeBank.insertIncomeStatements(response.Content, yearIndex);
+                            balanceTask = balanceBank.insertBalanceSheets(response.Content, yearIndex);
+                            cashTask = cashFlowBank.InsertCashFlowStatements(response.Content, yearIndex);
+
+                            var taskArrayBank = new Task[] { keyTask, incomeTask, balanceTask, cashTask };
+                            Task.WaitAll(taskArrayBank);
+                            Console.WriteLine(keyTask.Result.Id);
+
                             break;
 
                         case "normal":
@@ -133,40 +139,51 @@ namespace Rui
                             {
                                 keyStatistics.insertKeyStatistics(response.Content, yearIndex, companyId);
                             }
-                            yearlyReport = new YearlyReport
-                            {
-                                Year = listYearInt.ElementAt(yearIndex),
-                                CompanyId = companyId,
-                                IncomeStatementId = income.insertIncomeStatements(response.Content, yearIndex),
-                                BalanceSheetId = balance.insertBalanceSheets(response.Content, yearIndex),
-                                CashFlowStatementId = cashFlow.InsertCashFlowStatements(response.Content, yearIndex),
-                                KeyRatioId = ratios.InsertKeyRatios(response.Content, yearIndex),
-                                Uuid = Guid.NewGuid()
-                            };
-                            genericDao.Add<YearlyReport>(yearlyReport);
+
+                            keyTask = ratios.InsertKeyRatios(response.Content, yearIndex);
+                            incomeTask = income.insertIncomeStatements(response.Content, yearIndex);
+                            balanceTask = balance.insertBalanceSheets(response.Content, yearIndex);
+                            cashTask = cashFlow.InsertCashFlowStatements(response.Content, yearIndex);
+
+                            var taskArrayNormal = new Task[] { keyTask, incomeTask, balanceTask, cashTask };
+                            Task.WaitAll(taskArrayNormal);
+                            Console.WriteLine(keyTask.Result.Id);
+
                             break;
                         case "insurance":
                             if (yearIndex == count - 1)
                             {
                                 keyStatisticsInsurance.insertKeyStatistics(response.Content, yearIndex, companyId);
                             }
-                            yearlyReport = new YearlyReport
-                            {
-                                Year = listYearInt.ElementAt(yearIndex),
-                                CompanyId = companyId,
-                                IncomeStatementId = incomeInsurance.insertIncomeStatements(response.Content, yearIndex),
-                                BalanceSheetId = balanceInsurance.insertBalanceSheets(response.Content, yearIndex),
-                                CashFlowStatementId = cashFlowInsurance.InsertCashFlowStatements(response.Content, yearIndex),
-                                KeyRatioId = ratiosInsurance.InsertKeyRatios(response.Content, yearIndex),
-                                Uuid = Guid.NewGuid()
-                            };
-                            genericDao.Add<YearlyReport>(yearlyReport);
+                            keyTask = ratiosInsurance.InsertKeyRatios(response.Content, yearIndex);
+                            incomeTask = incomeInsurance.insertIncomeStatements(response.Content, yearIndex);
+                            balanceTask = balanceInsurance.insertBalanceSheets(response.Content, yearIndex);
+                            cashTask = cashFlowInsurance.InsertCashFlowStatements(response.Content, yearIndex);
 
+                            var taskArrayInsurance = new Task[] { keyTask, incomeTask, balanceTask, cashTask };
+                            Task.WaitAll(taskArrayInsurance);
+                            Console.WriteLine(keyTask.Result.Id);
                             break;
                         default:
                             Console.WriteLine("break");
+                            keyTask = ratios.InsertKeyRatios(response.Content, yearIndex);
+                            incomeTask = income.insertIncomeStatements(response.Content, yearIndex);
+                            balanceTask = balance.insertBalanceSheets(response.Content, yearIndex);
+                            cashTask = cashFlow.InsertCashFlowStatements(response.Content, yearIndex);
                             break;
                     }
+
+                    yearlyReport = new YearlyReport
+                    {
+                        Year = listYearInt.ElementAt(yearIndex),
+                        CompanyId = companyId,
+                        IncomeStatementId = incomeTask.Result.Id,
+                        BalanceSheetId = balanceTask.Result.Id,
+                        CashFlowStatementId = cashTask.Result.Id,
+                        KeyRatioId = keyTask.Result.Id,
+                        Uuid = Guid.NewGuid()
+                    };
+                    genericDao.Add<YearlyReport>(yearlyReport);
 
 
                 }

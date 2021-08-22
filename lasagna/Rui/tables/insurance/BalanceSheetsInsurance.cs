@@ -9,6 +9,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 
 namespace Rui.tables.insurance
@@ -20,7 +21,7 @@ namespace Rui.tables.insurance
         {
             genericDao = genericDaoOut;
         }
-        public int insertBalanceSheets(String balanceSheets, int index)
+        public Task<BalanceSheet> insertBalanceSheets(String balanceSheets, int index)
         {
 
             var jsonCompanyList = JObject.Parse(balanceSheets);
@@ -33,33 +34,32 @@ namespace Rui.tables.insurance
             var balance = new BalanceSheet
             {
 
-                CashAndEquivalents = System.Convert.ToDecimal(item["cash_and_equiv"][index].ToString()),
+                CashAndEquivalents = Decimal.Parse(item["cash_and_equiv"][index].ToString(), System.Globalization.NumberStyles.Float),
 
                 
-                AccountsReceivable = System.Convert.ToDecimal(item["receivables"][index].ToString()),
-                Investments = System.Convert.ToDecimal(item["total_investments"][index].ToString()),
-                PropertyPlantAndEquipment = System.Convert.ToDecimal(item["ppe_net"][index].ToString()),
-                OtherIntangibleAssets = System.Convert.ToDecimal(item["intangible_assets"][index].ToString()),
-                OtherAssets = System.Convert.ToDecimal(item["other_lt_assets"][index].ToString()),   
-                TotalAssets = System.Convert.ToDecimal(item["total_assets"][index].ToString()),
-                ShortTermDebt = System.Convert.ToDecimal(item["st_debt"][index].ToString()),
-                LongTermDebt = System.Convert.ToDecimal(item["lt_debt"][index].ToString()),
-                OtherLiabilities = System.Convert.ToDecimal(item["other_lt_liabilities"][index].ToString()),
-                TotalLiabilities = System.Convert.ToDecimal(item["total_liabilities"][index].ToString()),
-                OtherCurrentLabilities = System.Convert.ToDecimal(item["other_current_liabilities"][index].ToString()),
-                FuturePolicyBenefits = System.Convert.ToDecimal(item["future_policy_benefits"][index].ToString()),
-                DeferredPolicyCost = System.Convert.ToDecimal(item["deferred_policy_acquisition_cost"][index].ToString()),
-                RetainedEarnings = System.Convert.ToDecimal(item["retained_earnings"][index].ToString()),
-                CommonStock = System.Convert.ToDecimal(item["common_stock"][index].ToString()),
-                Aoci = System.Convert.ToDecimal(item["aoci"][index].ToString()),
-                ShareholdersEquity = System.Convert.ToDecimal(item["total_equity"][index].ToString()),
-                TotalLiabilitiesAndEquity = System.Convert.ToDecimal(item["total_liabilities_and_equity"][index].ToString()),
+                AccountsReceivable = Decimal.Parse(item["receivables"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Investments = Decimal.Parse(item["total_investments"][index].ToString(), System.Globalization.NumberStyles.Float),
+                PropertyPlantAndEquipment = Decimal.Parse(item["ppe_net"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OtherIntangibleAssets = Decimal.Parse(item["intangible_assets"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OtherAssets = Decimal.Parse(item["other_lt_assets"][index].ToString(), System.Globalization.NumberStyles.Float),   
+                TotalAssets = Decimal.Parse(item["total_assets"][index].ToString(), System.Globalization.NumberStyles.Float),
+                ShortTermDebt = Decimal.Parse(item["st_debt"][index].ToString(), System.Globalization.NumberStyles.Float),
+                LongTermDebt = Decimal.Parse(item["lt_debt"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OtherLiabilities = Decimal.Parse(item["other_lt_liabilities"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalLiabilities = Decimal.Parse(item["total_liabilities"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OtherCurrentLabilities = Decimal.Parse(item["other_current_liabilities"][index].ToString(), System.Globalization.NumberStyles.Float),
+                FuturePolicyBenefits = Decimal.Parse(item["future_policy_benefits"][index].ToString(), System.Globalization.NumberStyles.Float),
+                DeferredPolicyCost = Decimal.Parse(item["deferred_policy_acquisition_cost"][index].ToString(), System.Globalization.NumberStyles.Float),
+                RetainedEarnings = Decimal.Parse(item["retained_earnings"][index].ToString(), System.Globalization.NumberStyles.Float),
+                CommonStock = Decimal.Parse(item["common_stock"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Aoci = Decimal.Parse(item["aoci"][index].ToString(), System.Globalization.NumberStyles.Float),
+                ShareholdersEquity = Decimal.Parse(item["total_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalLiabilitiesAndEquity = Decimal.Parse(item["total_liabilities_and_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
                 Uuid = Guid.NewGuid()
             };
 
-            var balanceAdded = genericDao.Add<BalanceSheet>(balance);
+           return genericDao.AddAsync<BalanceSheet>(balance);
 
-            return balanceAdded.Id;
 
         }
     }
