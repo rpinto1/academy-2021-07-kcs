@@ -49,120 +49,120 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
             modelBuilder.Entity<BalanceSheet>(entity =>
             {
-                entity.Property(e => e.AccountsPayable).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.AccountsPayable).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.AccountsReceivable).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.AccountsReceivable).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.AllowanceLoanLosses).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.AllowanceLoanLosses).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Aoci)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("AOCI");
 
-                entity.Property(e => e.CapitalLeases).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CapitalLeases).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CashAndEquivalents).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CashAndEquivalents).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CommonStock).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CommonStock).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CurrentDeferredRevenue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CurrentDeferredRevenue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DeferredPolicyCost).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DeferredPolicyCost).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DepositsLiability).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DepositsLiability).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.FuturePolicyBenefits).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FuturePolicyBenefits).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.Goodwill).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Goodwill).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.GrossLoans).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.GrossLoans).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.Inventories).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Inventories).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.Investments).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Investments).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.LongTermDebt).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.LongTermDebt).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetLoans).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetLoans).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NonCurrentDeferredRevenue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NonCurrentDeferredRevenue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherCurrentAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherCurrentAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherCurrentLabilities).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherCurrentLabilities).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherIntangibleAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherIntangibleAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherLiabilities).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherLiabilities).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PropertyPlantAndEquipment).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PropertyPlantAndEquipment).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.RetainedEarnings).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.RetainedEarnings).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ShareholdersEquity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ShareholdersEquity).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ShortTermDebt).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ShortTermDebt).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ShortTermInvestments).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ShortTermInvestments).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TaxPayable).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TaxPayable).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalCurrentAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalCurrentAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalCurrentLiabilities).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalCurrentLiabilities).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalInvestments).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalInvestments).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalLiabilities).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalLiabilities).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalLiabilitiesAndEquity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalLiabilitiesAndEquity).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.UnearnedIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.UnearnedIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.UnearnedPremiums).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.UnearnedPremiums).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
 
             modelBuilder.Entity<CashFlowStatement>(entity =>
             {
-                entity.Property(e => e.Acquisitions).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Acquisitions).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CashFinancing).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CashFinancing).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CashFromInvesting).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CashFromInvesting).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CashFromOperations).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CashFromOperations).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CashPaidForDividends).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CashPaidForDividends).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ChangeInDeferredTax).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ChangeInDeferredTax).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ChangeInWorkingCapital).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ChangeInWorkingCapital).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DepreciationAmortization).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DepreciationAmortization).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.Investements).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Investements).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetIssuanceOfCommonStock).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetIssuanceOfCommonStock).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetIssuanceOfDebt).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetIssuanceOfDebt).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherFinancing).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherFinancing).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherInvesting).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherInvesting).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherOperations).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherOperations).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PropertyPlantEquipment).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PropertyPlantEquipment).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.StockBasedCompensation).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.StockBasedCompensation).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -277,71 +277,71 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
             modelBuilder.Entity<IncomeStatement>(entity =>
             {
-                entity.Property(e => e.CostOfGoodsSold).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CostOfGoodsSold).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CreditLossesProvision).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CreditLossesProvision).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.Development).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Development).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Epsbasic)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EPSBasic");
 
                 entity.Property(e => e.Epsdiluted)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EPSDiluted");
 
-                entity.Property(e => e.FeesOtherIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FeesOtherIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.GrossProfit).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.GrossProfit).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.IncomeTax).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.IncomeTax).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.InterestExpense).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.InterestExpense).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetIncome).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.NetInterestAclp)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("NetInterestACLP");
 
-                entity.Property(e => e.NetInterestIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetInterestIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetInterestIncomeBank).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetInterestIncomeBank).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetIvestmentIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetIvestmentIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OperatingProfit).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OperatingProfit).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherNonOperatingIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherNonOperatingIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OtherOperatingExpense).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OtherOperatingExpense).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PolicyClaims).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PolicyClaims).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PolicyExpense).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PolicyExpense).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PreTaxIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PreTaxIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.Revenue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Revenue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.SalesGeneralAdministrative).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.SalesGeneralAdministrative).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.SharesBasic).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.SharesBasic).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.SharesDiluted).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.SharesDiluted).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalInterestExpense).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalInterestExpense).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalInterestIncome).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalInterestIncome).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalNonInterestExpense).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalNonInterestExpense).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalNoninterestRevenue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalNoninterestRevenue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalOperatingExpenses).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalOperatingExpenses).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalPremiums).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalPremiums).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -381,141 +381,141 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.AssetsToEquity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.AssetsToEquity).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.BookValue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.BookValue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.BookValuePerShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.BookValuePerShare).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CapitalExpendituresGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CapitalExpendituresGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.CashFromOperationsGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.CashFromOperationsGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DebtToAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DebtToAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DebtToEquity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DebtToEquity).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.DilutedEpsgrowth)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("DilutedEPSGrowth");
 
-                entity.Property(e => e.DilutedSharesGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DilutedSharesGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DividendsPerShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.DividendsPerShare).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.EarningAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.EarningAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.EarningAssetsGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.EarningAssetsGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.EarningAssetsToEquity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.EarningAssetsToEquity).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Ebidtagrowth)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EBIDTAGrowth");
 
                 entity.Property(e => e.Ebidtamargin)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EBIDTAMargin");
 
                 entity.Property(e => e.EbidtaperShare)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EBIDTAPerShare");
 
-                entity.Property(e => e.EquityGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.EquityGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.EquityToAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.EquityToAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.FreeCashFlow).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FreeCashFlow).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.FreeCashFlowGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FreeCashFlowGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.FreeCashFlowPerShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FreeCashFlowPerShare).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.FreeCashMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.FreeCashMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.GrossLoansGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.GrossLoansGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.GrossMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.GrossMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.GrossProfitGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.GrossProfitGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.LoanDeposit).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.LoanDeposit).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.LoanLossReverseLoans).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.LoanLossReverseLoans).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.MarketCapitalization).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.MarketCapitalization).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetIncomeGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetIncomeGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetInterestIncomeGrowthBank).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetInterestIncomeGrowthBank).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetInterestMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetInterestMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetLoansGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetLoansGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.NetMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.NetMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OperatingIncomeGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OperatingIncomeGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OperatingIncomePerShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OperatingIncomePerShare).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.OperatingMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.OperatingMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PayoutRatio).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PayoutRatio).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PolicyRevenue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PolicyRevenue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PolicyRevenueGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PolicyRevenueGrowth).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Ppegrowth)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("PPEGrowth");
 
-                entity.Property(e => e.PremiumGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PremiumGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PremiumShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PremiumShare).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PretaxIncomeGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PretaxIncomeGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PretaxMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PretaxMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PriceToBook).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PriceToBook).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PriceToEarnings).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PriceToEarnings).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.PriceToSales).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.PriceToSales).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ReturnOnAssets).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ReturnOnAssets).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ReturnOnCapitalEmployed).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ReturnOnCapitalEmployed).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ReturnOnEquity).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ReturnOnEquity).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ReturnOnInvestedCapital).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ReturnOnInvestedCapital).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.ReturnOnTangibleCapitalEmployed).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ReturnOnTangibleCapitalEmployed).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.RevenueGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.RevenueGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.RevenuePerShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.RevenuePerShare).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Roi)
-                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("ROI");
 
-                entity.Property(e => e.TangibleBookValue).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TangibleBookValue).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TangibleBookValuePerShare).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TangibleBookValuePerShare).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalAssetsGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalAssetsGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalDepositGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalDepositGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.TotalInvestmentsGrowth).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.TotalInvestmentsGrowth).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.UnderwritingMargin).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.UnderwritingMargin).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.UnderwritingProfit).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.UnderwritingProfit).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -523,90 +523,90 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             modelBuilder.Entity<KeyStatistic>(entity =>
             {
                 entity.Property(e => e.AssetsCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("AssetsCAGR");
 
-                entity.Property(e => e.AssetsEquityMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.AssetsEquityMedian).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DebtAssetsMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.DebtAssetsMedian).HasColumnType("decimal(22, 2)");
 
-                entity.Property(e => e.DebtEquityMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.DebtEquityMedian).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.DepositsCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("DepositsCAGR");
 
                 entity.Property(e => e.EarningAemedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EarningAEMedian");
 
                 entity.Property(e => e.EarningAssetsCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EarningAssetsCAGR");
 
                 entity.Property(e => e.Ebitmedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EBITMedian");
 
                 entity.Property(e => e.Epscagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("EPSCAGR");
 
-                entity.Property(e => e.EquityAssetsMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.EquityAssetsMedian).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Fcfcagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("FCFCAGR");
 
                 entity.Property(e => e.Fcfmedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("FCFMedian");
 
                 entity.Property(e => e.GrossLoansCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("GrossLoansCAGR");
 
-                entity.Property(e => e.GrossProfitMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.GrossProfitMedian).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.LoanLossRtlmedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("LoanLossRTLMedian");
 
                 entity.Property(e => e.NetInterestIncomeCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("NetInterestIncomeCAGR");
 
                 entity.Property(e => e.Nimmedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("NIMMedian");
 
                 entity.Property(e => e.PermiumCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("PermiumCAGR");
 
-                entity.Property(e => e.PreTaxIncomeMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.PreTaxIncomeMedian).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.RevenueCagr)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("RevenueCAGR");
 
                 entity.Property(e => e.Roamedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("ROAMedian");
 
                 entity.Property(e => e.Roemedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("ROEMedian");
 
                 entity.Property(e => e.Roicmedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("ROICMedian");
 
                 entity.Property(e => e.Roimedian)
-                    .HasColumnType("decimal(8, 2)")
+                    .HasColumnType("decimal(22, 2)")
                     .HasColumnName("ROIMedian");
 
-                entity.Property(e => e.UnderwritingMedian).HasColumnType("decimal(8, 2)");
+                entity.Property(e => e.UnderwritingMedian).HasColumnType("decimal(22, 2)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
 

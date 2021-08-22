@@ -9,6 +9,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 
 namespace Rui.tables
@@ -20,7 +21,7 @@ namespace Rui.tables
     {
             genericDao = genericDaoOut;
     }
-        public int insertIncomeStatements(String incomeStatements, int index)
+        public Task<IncomeStatement> insertIncomeStatements(String incomeStatements, int index)
         {
 
             var jsonCompanyList = JObject.Parse(incomeStatements);
@@ -34,29 +35,28 @@ namespace Rui.tables
             var income = new IncomeStatement
             {
 
-                Revenue = System.Convert.ToDecimal(item["revenue"][index].ToString()),
-                CostOfGoodsSold = System.Convert.ToDecimal(item["cogs"][index].ToString()),
-                GrossProfit = System.Convert.ToDecimal(item["gross_profit"][index].ToString()),
-                SalesGeneralAdministrative = System.Convert.ToDecimal(item["sga"][index].ToString()),
-                Development = System.Convert.ToDecimal(item["rnd"][index].ToString()),
-                OtherOperatingExpense = System.Convert.ToDecimal(item["other_opex"][index].ToString()),
-                TotalOperatingExpenses = System.Convert.ToDecimal(item["total_opex"][index].ToString()),
-                OperatingProfit = System.Convert.ToDecimal(item["operating_income"][index].ToString()),
-                NetInterestIncome = System.Convert.ToDecimal(item["interest_income"][index].ToString()),
-                OtherNonOperatingIncome = System.Convert.ToDecimal(item["other_nonoperating_income"][index].ToString()),
-                PreTaxIncome = System.Convert.ToDecimal(item["pretax_income"][index].ToString()),
-                IncomeTax = System.Convert.ToDecimal(item["income_tax"][index].ToString()),
-                NetIncome = System.Convert.ToDecimal(item["net_income"][index].ToString()),
-                Epsbasic = System.Convert.ToDecimal(item["eps_basic"][index].ToString()),
-                Epsdiluted = System.Convert.ToDecimal(item["eps_diluted"][index].ToString()),
-                SharesBasic = System.Convert.ToDecimal(item["shares_basic"][index].ToString()),
-                SharesDiluted = System.Convert.ToDecimal(item["shares_diluted"][index].ToString()),
+                Revenue = Decimal.Parse(item["revenue"][index].ToString(), System.Globalization.NumberStyles.Float),
+                CostOfGoodsSold = Decimal.Parse(item["cogs"][index].ToString(), System.Globalization.NumberStyles.Float),
+                GrossProfit = Decimal.Parse(item["gross_profit"][index].ToString(), System.Globalization.NumberStyles.Float),
+                SalesGeneralAdministrative = Decimal.Parse(item["sga"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Development = Decimal.Parse(item["rnd"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OtherOperatingExpense = Decimal.Parse(item["other_opex"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalOperatingExpenses = Decimal.Parse(item["total_opex"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OperatingProfit = Decimal.Parse(item["operating_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                NetInterestIncome = Decimal.Parse(item["interest_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                OtherNonOperatingIncome = Decimal.Parse(item["other_nonoperating_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                PreTaxIncome = Decimal.Parse(item["pretax_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                IncomeTax = Decimal.Parse(item["income_tax"][index].ToString(), System.Globalization.NumberStyles.Float),
+                NetIncome = Decimal.Parse(item["net_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Epsbasic = Decimal.Parse(item["eps_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
+                Epsdiluted = Decimal.Parse(item["eps_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
+                SharesBasic = Decimal.Parse(item["shares_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
+                SharesDiluted = Decimal.Parse(item["shares_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
                 Uuid = Guid.NewGuid()
             };
 
-            var incomeAdded = genericDao.Add<IncomeStatement>(income);
+            return genericDao.AddAsync<IncomeStatement>(income);
 
-            return incomeAdded.Id;
 
         }
     }
