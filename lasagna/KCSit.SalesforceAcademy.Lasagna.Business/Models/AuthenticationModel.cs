@@ -8,7 +8,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
     public class AuthenticationModel
     {
         [Required]
-        public string Username { get; set; }
+        public string EmailAdress { get; set; }
 
         [Required]
         public string Password { get; set; }

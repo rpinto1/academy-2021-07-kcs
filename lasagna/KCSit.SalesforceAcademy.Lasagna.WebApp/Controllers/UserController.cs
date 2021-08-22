@@ -1,5 +1,6 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Business.Models;
+using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,55 +19,93 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
         private IUserService _userService;
 
+
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
+
+
         // POST: api/user/authenticate
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] AuthenticationModel model)
         {
-            var user = _userService.Authenticate(model.Username, model.Password);
+            Console.WriteLine("Authenticate request - USER: " + model.EmailAdress + " PASSWORD: " + model.Password);
+            var user = _userService.Authenticate(model.EmailAdress, model.Password);
 
-            if (user == null) return BadRequest(new { message = "Username and/or password incorrect" });
+            if (user == null) return BadRequest(new { message = "Email address and/or password incorrect" });
 
             return Ok(user);
         }
 
-        // GET: api/<UserController>
+
+
         // GET: api/user
         [Authorize]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<UserModel> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _userService.GetAll();
         }
 
-        // GET api/<UserController>/5
+
+
         // GET api/user/5
+        [Authorize]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public UserModel Get(int id)
         {
-            return "value";
+            return _userService.GetUser(id);
         }
 
-        // POST api/<UserController>
+
+
+        // POST api/user
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] UserModel model)
         {
+            UserServiceResultMessage addUserResult = _userService.AddUser(model);
+
+            return ReturnResult(addUserResult);
         }
+
+
 
         // PUT api/<UserController>/5
+        [Authorize]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] UserModel model)
         {
+            UserServiceResultMessage updateUserResult = _userService.UpdateUser(id, model);
+
+            return ReturnResult(updateUserResult);
         }
 
+
+
         // DELETE api/<UserController>/5
+        [Authorize]
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            UserServiceResultMessage deleteResult = _userService.DeleteId(id);
+
+            return ReturnResult(deleteResult);
         }
+
+
+
+        private IActionResult ReturnResult(UserServiceResultMessage action)
+        {
+            if (action.Success)
+            {
+                return Ok(new { message = action.Message });
+            }
+
+            return BadRequest(new { message = action.Message });
+        }
+
+
     }
 }

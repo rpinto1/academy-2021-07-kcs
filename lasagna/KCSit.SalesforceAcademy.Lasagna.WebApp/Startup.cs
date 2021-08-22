@@ -56,7 +56,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
                 };
             });
 
-            services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<IUserService, UserService>();
 
 
             // In production, the React files will be served from this directory
