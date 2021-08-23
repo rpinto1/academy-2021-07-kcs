@@ -81,13 +81,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     return new UserServiceResultMessage { Success = false, Message = "User already exists" };
             }
 
-            // check if model data is valid (FirstName, LastName and Password)
-            var dataValidationReusltMessage = UserModelDataValidator.CheckModelData(model);
-            if (!dataValidationReusltMessage.Success)
-            {
-                return dataValidationReusltMessage;
-            }
-
             // user data is OK. Add user
             _users.Add(new UserModel
             {
@@ -109,13 +102,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             // make sure user is not allowed to change is email address
             if (currentUser.EmailAdress != model.EmailAdress)
                 return new UserServiceResultMessage { Success = false, Message = "User can not change is email address" };
-
-            // check if model data is valid (FirstName, LastName and Password)
-            var dataValidationReusltMessage = UserModelDataValidator.CheckModelData(model);
-            if (!dataValidationReusltMessage.Success)
-            {
-                return dataValidationReusltMessage;
-            }
 
             // user data is ok. Update user
             _users[id].FirstName = model.FirstName;
