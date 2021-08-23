@@ -1,15 +1,16 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Models;
+using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
+namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
 {
-    public static class UserDataValidator
+    public static class UserModelDataValidator
     {
 
-        public static UserServiceResultMessage checkModelData(UserModel model)
+        public static UserServiceResultMessage CheckModelData(UserModel model)
         {
 
             // check if FirstName is valid
@@ -50,7 +51,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             if (model.FirstName.Length < 2 || model.FirstName.Length > 15)
                 return new UserServiceResultMessage { Success = false, Message = "First Name must have 2 to 15 characters" };
 
-            return new UserServiceResultMessage { Success = true, Message = "FirstName is valid" };
+            var isFirstNameValid = new Regex(@"^([a-zA-Z]+)$");
+            if (!isFirstNameValid.IsMatch(model.FirstName))
+                return new UserServiceResultMessage { Success = false, Message = "First Name has invalid characters" };
+
+            return new UserServiceResultMessage { Success = true, Message = "First Name is valid" };
         }
 
         private static UserServiceResultMessage CheckLastName(UserModel model)
@@ -58,7 +63,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             if (model.LastName.Length < 2 || model.LastName.Length > 15)
                 return new UserServiceResultMessage { Success = false, Message = "Last Name must have 2 to 15 characters" };
 
-            return new UserServiceResultMessage { Success = true, Message = "LastName is valid" };
+            var isLastNameValid = new Regex(@"^([a-zA-Z]+)$");
+            if (!isLastNameValid.IsMatch(model.LastName))
+                return new UserServiceResultMessage { Success = false, Message = "Last Name has invalid characters" };
+
+            return new UserServiceResultMessage { Success = true, Message = "Last Name is valid" };
         }
 
         private static UserServiceResultMessage CheckEmailAddress(UserModel model)
@@ -67,7 +76,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             if (!isEmailAddressValid.IsMatch(model.EmailAdress))
                 return new UserServiceResultMessage { Success = false, Message = "Email Address is not valid" };
 
-            return new UserServiceResultMessage { Success = true, Message = "EmailAddress is valid" };
+            return new UserServiceResultMessage { Success = true, Message = "Email Address is valid" };
         }
 
 

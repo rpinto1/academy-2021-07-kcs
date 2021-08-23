@@ -82,7 +82,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             }
 
             // check if model data is valid (FirstName, LastName and Password)
-            var dataValidationReusltMessage = UserDataValidator.checkModelData(model);
+            var dataValidationReusltMessage = UserModelDataValidator.CheckModelData(model);
             if (!dataValidationReusltMessage.Success)
             {
                 return dataValidationReusltMessage;
@@ -111,7 +111,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 return new UserServiceResultMessage { Success = false, Message = "User can not change is email address" };
 
             // check if model data is valid (FirstName, LastName and Password)
-            var dataValidationReusltMessage = UserDataValidator.checkModelData(model);
+            var dataValidationReusltMessage = UserModelDataValidator.CheckModelData(model);
             if (!dataValidationReusltMessage.Success)
             {
                 return dataValidationReusltMessage;
