@@ -14,11 +14,9 @@ export default function SignUpForm() {
 
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const alert= 'insert message here';
+  
 
     return (
-
-        //need to add the hidden tag to the user id.
        
     <Container className= 'form'> 
          <h1> Create an account with us </h1>
@@ -30,7 +28,7 @@ export default function SignUpForm() {
             placeholder='Write your First Name' 
             value={newUser.firstName} 
             onChange={({ target }) => setNewUser((prevState)=> ({...prevState, firstName: target.value,}))}
-            pattern="\P{M}\p{M}*+{2,50}"
+            pattern= '(?=.*[a-z])(?=.*[A-Z]).{3,50}'
             required/>
         </Form.Field>
         <Form.Field>
@@ -40,6 +38,7 @@ export default function SignUpForm() {
             placeholder='Write your Last Name' 
             value={newUser.lastName} 
             onChange={({ target }) => setNewUser((prevState)=> ({...prevState, lastName: target.value,}))}
+            pattern= '(?=.*[a-z])(?=.*[A-Z]).{3,50}'
             required/>
         </Form.Field>
         <Form.Field>
@@ -49,7 +48,7 @@ export default function SignUpForm() {
             placeholder='Create your password' 
             value = {newUser.password}
             onChange = {({ target }) => setNewUser((prevState)=> ({...prevState, password: target.value,}))}
-            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}' 
+            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}' 
             title="Must contain at least one number, one uppercase, one lowercase letter; and at least 8 characters."
             required/>
         </Form.Field>
