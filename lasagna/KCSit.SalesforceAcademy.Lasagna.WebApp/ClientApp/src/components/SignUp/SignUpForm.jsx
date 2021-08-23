@@ -14,7 +14,11 @@ export default function SignUpForm() {
 
     const [confirmPassword, setConfirmPassword] = useState('');
 
-  
+    validatePasswords = () => {
+        if (newUser.password !== confirmPassword)
+        
+
+    };
 
     return (
        
