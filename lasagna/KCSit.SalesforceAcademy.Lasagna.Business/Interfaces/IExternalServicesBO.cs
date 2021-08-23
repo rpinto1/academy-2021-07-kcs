@@ -1,7 +1,9 @@
-﻿namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
+﻿using RestSharp;
+
+namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 {
     public interface IExternalServicesBO
     {
-        void FetchGainLoseData();
+        string FetchGainLoseData();
     }
 }
