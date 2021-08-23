@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +14,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
     [ApiController]
     public class CompaniesController : ControllerBase
     {
+        private ICompaniesBO _companiesBO;
+
+        public CompaniesController(ICompaniesBO companiesBO)
+        {
+            _companiesBO = companiesBO;
+        }
+
+
+
+
         // GET: api/<CompaniesController>
         [HttpGet]
         public IEnumerable<string> Get()

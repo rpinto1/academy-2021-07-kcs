@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KCSit.SalesforceAcademy.Kappify.Data.Interfaces
+namespace KCSit.SalesforceAcademy.Lasagna.Data.Interfaces
 {
     public interface IEntity
     {
