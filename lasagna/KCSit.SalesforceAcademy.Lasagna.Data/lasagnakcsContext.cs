@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -15,6 +16,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public lasagnakcsContext(DbContextOptions<lasagnakcsContext> options)
             : base(options)
         {
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 180;
         }
 
         public virtual DbSet<BalanceSheet> BalanceSheets { get; set; }

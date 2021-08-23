@@ -34,27 +34,27 @@ namespace Rui.tables.insurance
             var balance = new BalanceSheet
             {
 
-                CashAndEquivalents = Decimal.Parse(item["cash_and_equiv"][index].ToString(), System.Globalization.NumberStyles.Float),
+                CashAndEquivalents = Decimal.Parse(item["cash_and_equiv"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
 
                 
-                AccountsReceivable = Decimal.Parse(item["receivables"][index].ToString(), System.Globalization.NumberStyles.Float),
-                Investments = Decimal.Parse(item["total_investments"][index].ToString(), System.Globalization.NumberStyles.Float),
-                PropertyPlantAndEquipment = Decimal.Parse(item["ppe_net"][index].ToString(), System.Globalization.NumberStyles.Float),
-                OtherIntangibleAssets = Decimal.Parse(item["intangible_assets"][index].ToString(), System.Globalization.NumberStyles.Float),
-                OtherAssets = Decimal.Parse(item["other_lt_assets"][index].ToString(), System.Globalization.NumberStyles.Float),   
-                TotalAssets = Decimal.Parse(item["total_assets"][index].ToString(), System.Globalization.NumberStyles.Float),
-                ShortTermDebt = Decimal.Parse(item["st_debt"][index].ToString(), System.Globalization.NumberStyles.Float),
-                LongTermDebt = Decimal.Parse(item["lt_debt"][index].ToString(), System.Globalization.NumberStyles.Float),
-                OtherLiabilities = Decimal.Parse(item["other_lt_liabilities"][index].ToString(), System.Globalization.NumberStyles.Float),
-                TotalLiabilities = Decimal.Parse(item["total_liabilities"][index].ToString(), System.Globalization.NumberStyles.Float),
-                OtherCurrentLabilities = Decimal.Parse(item["other_current_liabilities"][index].ToString(), System.Globalization.NumberStyles.Float),
-                FuturePolicyBenefits = Decimal.Parse(item["future_policy_benefits"][index].ToString(), System.Globalization.NumberStyles.Float),
-                DeferredPolicyCost = Decimal.Parse(item["deferred_policy_acquisition_cost"][index].ToString(), System.Globalization.NumberStyles.Float),
-                RetainedEarnings = Decimal.Parse(item["retained_earnings"][index].ToString(), System.Globalization.NumberStyles.Float),
-                CommonStock = Decimal.Parse(item["common_stock"][index].ToString(), System.Globalization.NumberStyles.Float),
-                Aoci = Decimal.Parse(item["aoci"][index].ToString(), System.Globalization.NumberStyles.Float),
-                ShareholdersEquity = Decimal.Parse(item["total_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
-                TotalLiabilitiesAndEquity = Decimal.Parse(item["total_liabilities_and_equity"][index].ToString(), System.Globalization.NumberStyles.Float),
+                AccountsReceivable = Decimal.Parse(item["receivables"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                Investments = Decimal.Parse(item["total_investments"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                PropertyPlantAndEquipment = Decimal.Parse(item["ppe_net"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                OtherIntangibleAssets = Decimal.Parse(item["intangible_assets"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                OtherAssets = Decimal.Parse(item["other_lt_assets"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),   
+                TotalAssets = Decimal.Parse(item["total_assets"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                ShortTermDebt = Decimal.Parse(item["st_debt"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                LongTermDebt = Decimal.Parse(item["lt_debt"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                OtherLiabilities = Decimal.Parse(item["other_lt_liabilities"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                TotalLiabilities = Decimal.Parse(item["total_liabilities"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                OtherCurrentLabilities = Decimal.Parse(item["other_current_liabilities"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                FuturePolicyBenefits = Decimal.Parse(item["future_policy_benefits"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                DeferredPolicyCost = Decimal.Parse(item["deferred_policy_acquisition_cost"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                RetainedEarnings = Decimal.Parse(item["retained_earnings"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                CommonStock = Decimal.Parse(item["common_stock"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                Aoci = Decimal.Parse(item["aoci"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                ShareholdersEquity = Decimal.Parse(item["total_equity"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                TotalLiabilitiesAndEquity = Decimal.Parse(item["total_liabilities_and_equity"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
                 Uuid = Guid.NewGuid()
             };
 

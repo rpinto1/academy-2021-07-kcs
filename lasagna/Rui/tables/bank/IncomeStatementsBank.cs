@@ -35,20 +35,20 @@ namespace Rui.tables.bank
             var income = new IncomeStatement
             {
 
-                TotalInterestIncome = Decimal.Parse(item["total_interest_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-                TotalInterestExpense = Decimal.Parse(item["total_interest_expense"][index].ToString(), System.Globalization.NumberStyles.Float),
-                NetInterestIncomeBank = Decimal.Parse(item["net_interest_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-                TotalNoninterestRevenue = Decimal.Parse(item["total_noninterest_revenue"][index].ToString(), System.Globalization.NumberStyles.Float),
-                TotalNonInterestExpense = Decimal.Parse(item["total_noninterest_expense"][index].ToString(), System.Globalization.NumberStyles.Float),
-                PreTaxIncome = Decimal.Parse(item["pretax_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-                CreditLossesProvision = Decimal.Parse(item["credit_losses_provision"][index].ToString(), System.Globalization.NumberStyles.Float),
-                NetInterestAclp = Decimal.Parse(item["net_interest_income_after_credit_losses_provision"][index].ToString(), System.Globalization.NumberStyles.Float),
-                IncomeTax = Decimal.Parse(item["income_tax"][index].ToString(), System.Globalization.NumberStyles.Float),
-                NetIncome = Decimal.Parse(item["net_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-                Epsbasic = Decimal.Parse(item["eps_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
-                Epsdiluted = Decimal.Parse(item["eps_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
-                SharesBasic = Decimal.Parse(item["shares_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
-                SharesDiluted = Decimal.Parse(item["shares_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalInterestIncome = Decimal.Parse(item["total_interest_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                TotalInterestExpense = Decimal.Parse(item["total_interest_expense"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                NetInterestIncomeBank = Decimal.Parse(item["net_interest_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                TotalNoninterestRevenue = Decimal.Parse(item["total_noninterest_revenue"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                TotalNonInterestExpense = Decimal.Parse(item["total_noninterest_expense"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                PreTaxIncome = Decimal.Parse(item["pretax_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                CreditLossesProvision = Decimal.Parse(item["credit_losses_provision"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                NetInterestAclp = Decimal.Parse(item["net_interest_income_after_credit_losses_provision"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                IncomeTax = Decimal.Parse(item["income_tax"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                NetIncome = Decimal.Parse(item["net_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                Epsbasic = Decimal.Parse(item["eps_basic"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                Epsdiluted = Decimal.Parse(item["eps_diluted"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                SharesBasic = Decimal.Parse(item["shares_basic"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                SharesDiluted = Decimal.Parse(item["shares_diluted"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
                 Uuid = Guid.NewGuid()
             };
 

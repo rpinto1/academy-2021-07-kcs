@@ -102,7 +102,8 @@ namespace Rui
                 var count = year.Children().ToList().Count();
                 Console.WriteLine(count);
 
-                for (int yearIndex = 0; yearIndex < count; yearIndex++)
+            
+            for (int yearIndex = 0; yearIndex < count; yearIndex++)
                 {
 
 
@@ -123,9 +124,10 @@ namespace Rui
                             {
                                 keyStatisticsBank.insertKeyStatistics(response.Content, yearIndex, companyId);
                             }
+                            balanceTask = balanceBank.insertBalanceSheets(response.Content, yearIndex);
                             keyTask = ratiosBank.InsertKeyRatios(response.Content, yearIndex);
                             incomeTask = incomeBank.insertIncomeStatements(response.Content, yearIndex);
-                            balanceTask = balanceBank.insertBalanceSheets(response.Content, yearIndex);
+                            
                             cashTask = cashFlowBank.InsertCashFlowStatements(response.Content, yearIndex);
 
                             var taskArrayBank = new Task[] { keyTask, incomeTask, balanceTask, cashTask };

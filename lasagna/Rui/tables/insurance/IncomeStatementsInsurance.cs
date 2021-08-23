@@ -35,28 +35,28 @@ namespace Rui.tables.insurance
             var income = new IncomeStatement
             {
 
-                TotalPremiums = Decimal.Parse(item["premiums_earned"][index].ToString(), System.Globalization.NumberStyles.Float),
-                NetIvestmentIncome = Decimal.Parse(item["net_investment_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-                FeesOtherIncome = Decimal.Parse(item["fees_and_other_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-                Revenue = Decimal.Parse(item["revenue"][index].ToString(), System.Globalization.NumberStyles.Float),
+                TotalPremiums = Decimal.Parse(item["premiums_earned"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                NetIvestmentIncome = Decimal.Parse(item["net_investment_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                FeesOtherIncome = Decimal.Parse(item["fees_and_other_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                Revenue = Decimal.Parse(item["revenue"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
 
 
-                SalesGeneralAdministrative = Decimal.Parse(item["sga"][index].ToString(), System.Globalization.NumberStyles.Float),
-                PolicyClaims = Decimal.Parse(item["net_policyholder_claims_expense"][index].ToString(), System.Globalization.NumberStyles.Float),
-                PolicyExpense = Decimal.Parse(item["policy_acquisition_expense"][index].ToString(), System.Globalization.NumberStyles.Float),
-                InterestExpense = Decimal.Parse(item["interest_expense_insurance"][index].ToString(), System.Globalization.NumberStyles.Float),
+                SalesGeneralAdministrative = Decimal.Parse(item["sga"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                PolicyClaims = Decimal.Parse(item["net_policyholder_claims_expense"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                PolicyExpense = Decimal.Parse(item["policy_acquisition_expense"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                InterestExpense = Decimal.Parse(item["interest_expense_insurance"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
 
-                PreTaxIncome = Decimal.Parse(item["pretax_income"][index].ToString(), System.Globalization.NumberStyles.Float),
-
-
-                IncomeTax = Decimal.Parse(item["income_tax"][index].ToString(), System.Globalization.NumberStyles.Float),
-                NetIncome = Decimal.Parse(item["net_income"][index].ToString(), System.Globalization.NumberStyles.Float),
+                PreTaxIncome = Decimal.Parse(item["pretax_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
 
 
-                Epsbasic = Decimal.Parse(item["eps_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
-                Epsdiluted = Decimal.Parse(item["eps_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
-                SharesBasic = Decimal.Parse(item["shares_basic"][index].ToString(), System.Globalization.NumberStyles.Float),
-                SharesDiluted = Decimal.Parse(item["shares_diluted"][index].ToString(), System.Globalization.NumberStyles.Float),
+                IncomeTax = Decimal.Parse(item["income_tax"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                NetIncome = Decimal.Parse(item["net_income"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+
+
+                Epsbasic = Decimal.Parse(item["eps_basic"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                Epsdiluted = Decimal.Parse(item["eps_diluted"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                SharesBasic = Decimal.Parse(item["shares_basic"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                SharesDiluted = Decimal.Parse(item["shares_diluted"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
                 Uuid = Guid.NewGuid()
             };
 

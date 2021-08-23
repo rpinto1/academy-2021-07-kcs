@@ -21,7 +21,7 @@ namespace Rui.tables
             genericDao = genericDaoOut;
         }
 
-        public int insertKeyStatistics(String keyStatistics, int index, int companyId)
+        public void insertKeyStatistics(String keyStatistics, int index, int companyId)
         {
 
                 var jsonCompanyList = JObject.Parse(keyStatistics);
@@ -34,26 +34,26 @@ namespace Rui.tables
                     var keyStatistic = new KeyStatistic
                     {
                         CompanyId = companyId,
-                        Roamedian = Decimal.Parse(item["roa_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        Roemedian = Decimal.Parse(item["roe_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        Roicmedian = Decimal.Parse(item["roic_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        RevenueCagr = Decimal.Parse(item["revenue_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
-                        AssetsCagr = Decimal.Parse(item["total_assets_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
-                        Fcfcagr = Decimal.Parse(item["fcf_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
-                        Epscagr = Decimal.Parse(item["eps_diluted_cagr_10"][index].ToString(), System.Globalization.NumberStyles.Float),
-                        GrossProfitMedian = Decimal.Parse(item["gross_margin_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        Ebitmedian = Decimal.Parse(item["operating_income_margin_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        PreTaxIncomeMedian = Decimal.Parse(item["pretax_margin_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        Fcfmedian = Decimal.Parse(item["fcf_margin_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        AssetsEquityMedian = Decimal.Parse(item["assets_to_equity_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        DebtEquityMedian = Decimal.Parse(item["debt_to_equity_median"].ToString(), System.Globalization.NumberStyles.Float),
-                        DebtAssetsMedian = Decimal.Parse(item["debt_to_assets_median"].ToString(), System.Globalization.NumberStyles.Float),
+                        Roamedian = Decimal.Parse(item["roa_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Roemedian = Decimal.Parse(item["roe_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Roicmedian = Decimal.Parse(item["roic_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        RevenueCagr = Decimal.Parse(item["revenue_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        AssetsCagr = Decimal.Parse(item["total_assets_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Fcfcagr = Decimal.Parse(item["fcf_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Epscagr = Decimal.Parse(item["eps_diluted_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        GrossProfitMedian = Decimal.Parse(item["gross_margin_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Ebitmedian = Decimal.Parse(item["operating_income_margin_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        PreTaxIncomeMedian = Decimal.Parse(item["pretax_margin_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Fcfmedian = Decimal.Parse(item["fcf_margin_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        AssetsEquityMedian = Decimal.Parse(item["assets_to_equity_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        DebtEquityMedian = Decimal.Parse(item["debt_to_equity_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        DebtAssetsMedian = Decimal.Parse(item["debt_to_assets_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
                         Uuid = Guid.NewGuid()
                     };
 
-            var statisticAdded = genericDao.Add<KeyStatistic>(keyStatistic);
+            genericDao.AddAsync<KeyStatistic>(keyStatistic);
 
-            return statisticAdded.Id;
+            
             
         }
     }
