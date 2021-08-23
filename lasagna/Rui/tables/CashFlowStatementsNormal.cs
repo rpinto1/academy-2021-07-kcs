@@ -5,6 +5,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Linq;
 
 namespace Rui.tables
@@ -16,7 +17,7 @@ namespace Rui.tables
         {
             genericDao = genericDaoOut;
         }
-        public int InsertCashFlowStatements(String cashFlowStatements, int index)
+        public Task<CashFlowStatement> InsertCashFlowStatements(String cashFlowStatements, int index)
         {
 
             var jsonCompanyList = JObject.Parse(cashFlowStatements);
@@ -45,34 +46,30 @@ namespace Rui.tables
                     //Console.WriteLine(item["cf_cff"]);
                      var CashFlowObject = new CashFlowStatement
                     {
-                        NetIncome =System.Convert.ToDecimal(item["net_income"][index].ToString()) ,
-                        DepreciationAmortization = System.Convert.ToDecimal(item["cfo_da"][index].ToString()),
-                        ChangeInWorkingCapital = System.Convert.ToDecimal(item["cfo_change_in_working_capital"][index].ToString()),
-                        ChangeInDeferredTax = System.Convert.ToDecimal(item["cfo_deferred_tax"][index].ToString()),
-                        StockBasedCompensation = System.Convert.ToDecimal(item["cfo_stock_comp"][index].ToString()),
-                        OtherOperations = System.Convert.ToDecimal(item["cfo_other_noncash_items"][index].ToString()),
-                        CashFromOperations = System.Convert.ToDecimal(item["cf_cfo"][index].ToString()),
-                        PropertyPlantEquipment = System.Convert.ToDecimal(item["cfi_ppe_net"][index].ToString()),
-                        Acquisitions = System.Convert.ToDecimal(item["cfi_acquisitions_net"][index].ToString()),
-                        Investements = System.Convert.ToDecimal(item["cfi_investment_net"][index].ToString()),
-                        OtherInvesting = System.Convert.ToDecimal(item["cfi_other"][index].ToString()),
-                        CashFromInvesting = System.Convert.ToDecimal(item["cf_cfi"][index].ToString()),
-                        NetIssuanceOfCommonStock = System.Convert.ToDecimal(item["cff_common_stock_net"][index].ToString()),
-                        NetIssuanceOfDebt = System.Convert.ToDecimal(item["cff_debt_net"][index].ToString()),
-                        CashPaidForDividends = System.Convert.ToDecimal(item["cff_dividend_paid"][index].ToString()),
-                        OtherFinancing = System.Convert.ToDecimal(item["cff_other"][index].ToString()),
-                        CashFinancing = System.Convert.ToDecimal(item["cf_cff"][index].ToString()),
+                        NetIncome =Decimal.Parse(item["net_income"][index].ToString()) ,
+                        DepreciationAmortization = Decimal.Parse(item["cfo_da"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        ChangeInWorkingCapital = Decimal.Parse(item["cfo_change_in_working_capital"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        ChangeInDeferredTax = Decimal.Parse(item["cfo_deferred_tax"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        StockBasedCompensation = Decimal.Parse(item["cfo_stock_comp"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        OtherOperations = Decimal.Parse(item["cfo_other_noncash_items"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        CashFromOperations = Decimal.Parse(item["cf_cfo"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        PropertyPlantEquipment = Decimal.Parse(item["cfi_ppe_net"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Acquisitions = Decimal.Parse(item["cfi_acquisitions_net"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Investements = Decimal.Parse(item["cfi_investment_net"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        OtherInvesting = Decimal.Parse(item["cfi_other"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        CashFromInvesting = Decimal.Parse(item["cf_cfi"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        NetIssuanceOfCommonStock = Decimal.Parse(item["cff_common_stock_net"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        NetIssuanceOfDebt = Decimal.Parse(item["cff_debt_net"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        CashPaidForDividends = Decimal.Parse(item["cff_dividend_paid"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        OtherFinancing = Decimal.Parse(item["cff_other"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        CashFinancing = Decimal.Parse(item["cf_cff"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
                         Uuid = Guid.NewGuid()
                     };
 
-     
 
-                genericDao.Add<CashFlowStatement>(CashFlowObject);
+            
 
-
-            //var cashFlowAdded = genericDao.Add<CashFlowStatement>(CashFlowObject);
-
-            return 1; //cashFlowAdded.Id;
+            return genericDao.AddAsync<CashFlowStatement>(CashFlowObject);
         }
 
             

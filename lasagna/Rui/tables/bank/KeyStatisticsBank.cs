@@ -10,14 +10,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Rui.tables.insurance
+namespace Rui.tables.bank
+
 {
-    class KeyStatisticsInsurance
+    class KeyStatisticsBank
     {
         GenericDAO genericDao;
-        public KeyStatisticsInsurance(GenericDAO genericDaoOut)
+        public KeyStatisticsBank(GenericDAO genericDaoOut)
         {
             genericDao = genericDaoOut;
         }
@@ -37,19 +37,18 @@ namespace Rui.tables.insurance
                         CompanyId = companyId,
                         Roamedian = Decimal.Parse(item["roa_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
                         Roemedian = Decimal.Parse(item["roe_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        Roimedian = Decimal.Parse(item["roi_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        RevenueCagr = Decimal.Parse(item["revenue_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        PermiumCagr = Decimal.Parse(item["premiums_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        AssetsCagr = Decimal.Parse(item["total_assets_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        Epscagr = Decimal.Parse(item["eps_diluted_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        UnderwritingMedian = Decimal.Parse(item["underwriting_margin_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        PreTaxIncomeMedian = Decimal.Parse(item["pretax_margin_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        NetInterestIncomeCagr = Decimal.Parse(item["net_interest_income_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        GrossLoansCagr = Decimal.Parse(item["loans_gross_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        EarningAssetsCagr = Decimal.Parse(item["earning_assets_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        DepositsCagr = Decimal.Parse(item["deposits_cagr_10"]?[index].ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        Nimmedian = Decimal.Parse(item["nim_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
                         AssetsEquityMedian = Decimal.Parse(item["assets_to_equity_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
-                        EquityAssetsMedian = Decimal.Parse(item["equity_to_assets_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        EarningAemedian = Decimal.Parse(item["earning_assets_to_equity_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
+                        LoanLossRtlmedian = Decimal.Parse(item["loan_loss_reserve_to_loans_median"]?.ToString() ?? "0", System.Globalization.NumberStyles.Float),
                         Uuid = Guid.NewGuid()
                     };
 
-            genericDao.AddAsync<KeyStatistic>(keyStatistic);
+             genericDao.AddAsync<KeyStatistic>(keyStatistic);
 
             
         }

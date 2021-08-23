@@ -14,14 +14,14 @@ export default function Header() {
             <div className="total-top">
                 <Logo />
 
-                <div className='search-bar'>
+                {/* <div className='search-bar'>
 
                     <div className="ui disabled icon input">
                         <i className="search icon"></i>
                         <input type="text" placeholder="Search..." />
                     </div>
 
-                </div>
+                </div> */}
 
                 <div className='buttons'>
 

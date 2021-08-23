@@ -12,9 +12,13 @@ export default function SignUpForm() {
         isRobot: 'false'    
     });
 
-    const confirmPassword = '';
+    const [confirmPassword, setConfirmPassword] = useState('');
 
-    const alert= 'insert message here';
+    validatePasswords = () => {
+        if (newUser.password !== confirmPassword)
+        
+
+    };
 
     return (
        
@@ -27,7 +31,9 @@ export default function SignUpForm() {
             type= 'text' 
             placeholder='Write your First Name' 
             value={newUser.firstName} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, firstName: target.value,}))}/>
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, firstName: target.value,}))}
+            pattern= '(?=.*[a-z])(?=.*[A-Z]).{3,50}'
+            required/>
         </Form.Field>
         <Form.Field>
             <label>Last Name</label>
@@ -35,32 +41,41 @@ export default function SignUpForm() {
             type= 'text' 
             placeholder='Write your Last Name' 
             value={newUser.lastName} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, lastName: target.value,}))}/>
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, lastName: target.value,}))}
+            pattern= '(?=.*[a-z])(?=.*[A-Z]).{3,50}'
+            required/>
         </Form.Field>
         <Form.Field>
             <label>Password</label>
             <input
             type= 'password' 
             placeholder='Create your password' 
-            value = {newUser.password} />
+            value = {newUser.password}
+            onChange = {({ target }) => setNewUser((prevState)=> ({...prevState, password: target.value,}))}
+            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}' 
+            title="Must contain at least one number, one uppercase, one lowercase letter; and at least 8 characters."
+            required/>
         </Form.Field>
         <Form.Field>
             <label>Repeat password</label>
             <input 
             type ='password'
             placeholder='Rewrite your password' 
-            onChange= {({ target }) => setNewUser({password: target.value})}  />
+            value= {confirmPassword}
+            onChange= {({ target }) => setConfirmPassword(target.value)}
+            required/>
         </Form.Field>
         <Form.Field>
             <label>E-mail</label>
             <input 
             type= 'email' 
             placeholder='Write your e-mail address' 
-            value = {newUser.email} onChange={({ target }) => setNewUser({emailAddress: target.value})} />
+            value = {newUser.email} 
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, email: target.value,}))}
+            required/>
         </Form.Field>
         <Form.Field>
-            <Checkbox type='checkbox' name='isRobot' label='Are you a robot?' />
-        </Form.Field>
+            <Checkbox type='checkbox' name='isRobot' label='Are you a robot?' />        </Form.Field>
         <Button type='submit'>Submit</Button>
         </Form>
 
