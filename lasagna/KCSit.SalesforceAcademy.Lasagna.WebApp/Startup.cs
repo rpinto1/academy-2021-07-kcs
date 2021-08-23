@@ -2,6 +2,8 @@ using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
+using KCSit.SalesforceAcademy.Lasagna.DataAccess;
+using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -68,6 +70,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
 
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
+            services.AddScoped<ICompaniesBO, CompaniesBO >();
+            services.AddScoped<ISearchDAO, SearchDAO>();
 
 
         }

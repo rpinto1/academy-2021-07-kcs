@@ -1,15 +1,17 @@
 ﻿
-using KCSit.SalesforceAcademy.Kappify.Data.Interfaces;
+
 using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KCSit.SalesforceAcademy.Kappify.DataAccess
+namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 {
-    public class GenericDAO
+    public class GenericDAO : IGenericDAO
     {
         public T Add<T>(T generic) where T : class
         {
@@ -17,9 +19,9 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             {
                 try
                 {
-                context.Set<T>().Add(generic);
-                
-                context.SaveChanges();
+                    context.Set<T>().Add(generic);
+
+                    context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -141,7 +143,7 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
         /// <returns></returns>
 
 
-        public T Get<T>(Guid guid) where T : class,IEntity
+        public T Get<T>(Guid guid) where T : class, IEntity
         {
             using (var context = new lasagnakcsContext())
             {

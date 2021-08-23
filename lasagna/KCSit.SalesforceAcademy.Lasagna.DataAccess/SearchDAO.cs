@@ -1,13 +1,14 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+﻿using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KCSit.SalesforceAcademy.Kappify.DataAccess
+namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 {
-    public class SearchDAO
+    public class SearchDAO : ISearchDAO
     {
 
         public int Get(string ticker)
@@ -19,7 +20,7 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
             }
         }
 
-        
+
 
         public Industry GetIndustry(string name)
         {
@@ -55,19 +56,19 @@ namespace KCSit.SalesforceAcademy.Kappify.DataAccess
                 return results;
             }
         }
-        public async Task<List<Company>> SearchCompaniesByIndex(string? indexName, string? sectorName,string? industryName)
+        public async Task<List<Company>> SearchCompaniesByIndex(string? indexName, string? sectorName, string? industryName)
         {
             using (var context = new lasagnakcsContext())
             {
-                if (indexName==null)
+                if (indexName == null)
                 {
                     indexName = "";
                 }
-                if (sectorName==null)
+                if (sectorName == null)
                 {
                     sectorName = "";
                 }
-                if (industryName==null)
+                if (industryName == null)
                 {
                     industryName = "";
                 }

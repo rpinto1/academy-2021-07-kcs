@@ -1,5 +1,5 @@
-﻿using KCSit.SalesforceAcademy.Kappify.DataAccess;
-using KCSit.SalesforceAcademy.Lasagna.Data;
+﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Rui.tables;
@@ -131,6 +131,7 @@ namespace Rui
                             cashTask = cashFlowBank.InsertCashFlowStatements(response.Content, yearIndex);
 
                             var taskArrayBank = new Task[] { keyTask, incomeTask, balanceTask, cashTask };
+                            
                             Task.WaitAll(taskArrayBank);
                             Console.WriteLine(keyTask.Result.Id);
 
