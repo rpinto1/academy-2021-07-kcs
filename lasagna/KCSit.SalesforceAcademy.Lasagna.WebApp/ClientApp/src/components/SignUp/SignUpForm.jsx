@@ -39,9 +39,6 @@ export default function SignUpForm() {
         )
     }; */
 
-
-
-
     const submitUser = () => {
 
         axios.post('api/user', newUser)
