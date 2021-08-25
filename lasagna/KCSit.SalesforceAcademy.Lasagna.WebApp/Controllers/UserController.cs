@@ -27,7 +27,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        [Route('api/user/authenticate')]
+        // POST: api/user/authenticate
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] AuthenticationModel model)
         {
@@ -39,18 +39,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
             return Ok(user);
         }
 
-       
-        public bool VerifyUser([FromBody] AuthenticationModel model)
-        {
-            Console.WriteLine("Verify user existence - USER: " + model.EmailAddress);
-            var userExists = _userService.Verify(model.EmailAddress);
-            return userExists;
-        }
 
 
-
-
-        [Route('api/user')]
+        // GET: api/user
         [Authorize]
         [HttpGet]
         public IEnumerable<UserModel> Get()
@@ -60,7 +51,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        [Route('api/user/{id}')]
+        // GET api/user/5
         [Authorize]
         [HttpGet("{id}")]
         public UserModel Get(int id)
@@ -70,25 +61,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        [Route('api/user')]
+        // POST api/user
         [HttpPost]
         public IActionResult Post([FromBody] UserModel model)
         {
-            var isVerified = VerifyUser(model);
-
-            if (isVerified) {
-                UserServiceResultMessage addUserResult = _userService.AddUser(model);
-                return Console.WriteLine(ReturnResult(addUserResult));
-            }
-
-            return BadRequest(new { message = "User already exists!" });
+            UserServiceResultMessage addUserResult = _userService.AddUser(model);
 
             return ReturnResult(addUserResult);
         }
 
 
 
-        [Route('api/<UserController>/{id}')]
+        // PUT api/<UserController>/5
         [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UserModel model)
@@ -100,7 +84,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        [Route('api/<UserController>/{id}')]
+        // DELETE api/<UserController>/5
         [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
