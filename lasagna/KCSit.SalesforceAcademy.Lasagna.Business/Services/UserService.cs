@@ -16,11 +16,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
     public class UserService : IUserService
     {
         private List<UserModel> _users = new List<UserModel> {
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Pete", LastName="Selvas", EmailAdress="pete@selvas.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Joana", LastName="Zerpa", EmailAdress="joana@zerpa.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Rui", LastName="Costa", EmailAdress="rui@costa.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Vitor", LastName="Costa", EmailAdress="vitor@costa.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Raul", LastName="Ribeiro", EmailAdress="raul@ribeiro.com", Password="test", ConfirmPassword="test"}
+            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Pete", LastName="Selvas", EmailAddress="pete@selvas.com", Password="test", ConfirmPassword="test"},
+            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Joana", LastName="Zerpa", EmailAddress="joana@zerpa.com", Password="test", ConfirmPassword="test"},
+            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Rui", LastName="Costa", EmailAddress="rui@costa.com", Password="test", ConfirmPassword="test"},
+            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Vitor", LastName="Costa", EmailAddress="vitor@costa.com", Password="test", ConfirmPassword="test"},
+            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Raul", LastName="Ribeiro", EmailAddress="raul@ribeiro.com", Password="test", ConfirmPassword="test"}
         };
 
         private readonly AppSettings _appSettings;
@@ -30,9 +30,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             _appSettings = appSettings.Value;
         }
 
-        public UserModel Authenticate(string emailAdress, string password)
+        public UserModel Authenticate(string emailAddress, string password)
         {
-            var user = _users.SingleOrDefault(x => x.EmailAdress == emailAdress && x.Password == password);
+            var user = _users.SingleOrDefault(x => x.EmailAddress == emailAddress && x.Password == password);
 
             if (user == null) return null;
 
@@ -77,7 +77,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             // check if EmailAddress already exist
             foreach (UserModel user in _users)
             {
-                if (user.EmailAdress == model.EmailAdress)
+                if (user.EmailAddress == model.EmailAddress)
                     return new UserServiceResultMessage { Success = false, Message = "User already exists" };
             }
 
@@ -87,7 +87,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 UserInfoId = Guid.NewGuid(),
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                EmailAdress = model.EmailAdress,
+                EmailAddress = model.EmailAddress,
                 Password = model.Password,
                 ConfirmPassword = model.ConfirmPassword
             });
@@ -100,7 +100,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             var currentUser = GetUser(id);
 
             // make sure user is not allowed to change is email address
-            if (currentUser.EmailAdress != model.EmailAdress)
+            if (currentUser.EmailAddress != model.EmailAddress)
                 return new UserServiceResultMessage { Success = false, Message = "User can not change is email address" };
 
             // user data is ok. Update user
