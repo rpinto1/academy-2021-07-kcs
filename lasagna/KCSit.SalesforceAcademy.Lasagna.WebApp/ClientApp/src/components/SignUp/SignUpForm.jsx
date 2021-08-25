@@ -6,9 +6,9 @@ export default function SignUpForm() {
     const [newUser, setNewUser] = useState({
         FirstName: '',
         LastName: '',
+        EmailAddress:'',
         Password: '',
-        ConfirmPassWord: '',
-        EmailAddress:''
+        ConfirmPassWord: ''    
     });
 
     const [isRobot, setIsRobot] = useState('true');
