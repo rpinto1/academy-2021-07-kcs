@@ -44,7 +44,6 @@ export default function SignUpForm() {
 
     const submitUser = () => {
 
-       // if(isRobot == 'false') {
         axios.post('api/user', newUser)
              .catch ((error) => {console.log(error);});
 

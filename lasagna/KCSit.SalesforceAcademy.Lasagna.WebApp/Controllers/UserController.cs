@@ -40,11 +40,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         }
 
        
-        public boolean VerifyUser([FromBody] AuthenticationModel model)
+        public bool VerifyUser([FromBody] AuthenticationModel model)
         {
             Console.WriteLine("Verify user existence - USER: " + model.EmailAddress);
-            var user = _userService.Verify(model.EmailAddress);
-            return user;
+            var userExists = _userService.Verify(model.EmailAddress);
+            return userExists;
         }
 
 
@@ -74,13 +74,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] UserModel model)
         {
-            VerifyUser(model);
+            var isVerified = VerifyUser(model);
 
-            if (user) {
-            UserServiceResultMessage addUserResult = _userService.AddUser(model);
-
-            return Console.WriteLine(ReturnResult(addUserResult));
+            if (isVerified) {
+                UserServiceResultMessage addUserResult = _userService.AddUser(model);
+                return Console.WriteLine(ReturnResult(addUserResult));
             }
+
+            return BadRequest(new { message = "User already exists!" });
+
         }
 
 
