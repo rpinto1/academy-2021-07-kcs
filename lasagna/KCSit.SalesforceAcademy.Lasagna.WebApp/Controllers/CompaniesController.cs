@@ -55,5 +55,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         public void Delete(int id)
         {
         }
+
+        // POST api/<CompaniesController>
+        [HttpGet("search/{search}")]
+        public string GetSearch(string search)
+        {
+            return search;
+        }
     }
 }

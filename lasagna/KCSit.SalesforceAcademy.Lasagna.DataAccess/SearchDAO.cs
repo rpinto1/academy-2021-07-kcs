@@ -39,6 +39,22 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
             }
         }
+        public List<Company> CompanySearchBar(string search)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+
+                var query = (from test in context.Companies
+                             where test.Name.ToLower().StartsWith(search.ToLower())
+                             || test.Ticker.ToLower().StartsWith(search.ToLower())
+                             select new Company {Name=test.Name,Ticker=test.Ticker});
+
+
+                var results = query.ToList();
+
+                return results;
+            }
+        }
         public List<Industry> SearchIndustiesBySector(string sectorName)
         {
             using (var context = new lasagnakcsContext())
