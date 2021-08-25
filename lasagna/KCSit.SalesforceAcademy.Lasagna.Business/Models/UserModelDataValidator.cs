@@ -73,7 +73,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
         private static UserServiceResultMessage CheckEmailAddress(UserModel model)
         {
             var isEmailAddressValid = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-            if (!isEmailAddressValid.IsMatch(model.EmailAdress))
+            if (!isEmailAddressValid.IsMatch(model.EmailAddress))
                 return new UserServiceResultMessage { Success = false, Message = "Email Address is not valid" };
 
             return new UserServiceResultMessage { Success = true, Message = "Email Address is valid" };
