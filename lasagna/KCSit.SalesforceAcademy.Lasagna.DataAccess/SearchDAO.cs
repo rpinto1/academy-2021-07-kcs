@@ -31,14 +31,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public SubIndustry GetSub(string name)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
+        //public SubIndustry GetSub(string name)
+        //{
+        //    using (var context = new lasagnakcsContext())
+        //    {
+        //        return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
 
-            }
-        }
+        //    }
+        //}
         public List<Company> CompanySearchBar(string search)
         {
             using (var context = new lasagnakcsContext())
