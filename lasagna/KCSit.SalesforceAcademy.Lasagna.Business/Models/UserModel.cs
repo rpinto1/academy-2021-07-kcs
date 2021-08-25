@@ -24,7 +24,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
         [Key]
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
-        public string EmailAdress { get; set; }
+        public string EmailAddress { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
