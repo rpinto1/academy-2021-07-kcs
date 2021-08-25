@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
-    public partial class lasagnakcsContext : DbContext
+    public partial class lasagnakcsContext : IdentityDbContext
     {
         public lasagnakcsContext()
         {
@@ -47,6 +48,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<BalanceSheet>(entity =>
