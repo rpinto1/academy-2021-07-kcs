@@ -72,6 +72,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
             services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericDAO, GenericDAO>();
+            services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
         }
