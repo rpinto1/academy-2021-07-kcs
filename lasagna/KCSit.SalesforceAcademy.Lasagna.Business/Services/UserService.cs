@@ -55,6 +55,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             return user;
         }
 
+        public boolean Verify(string emailAdress)
+        {
+            var user = _users.SingleOrDefault((x => x.EmailAddress == EmailAddress) ? false : true);
+        }
 
         public IEnumerable<UserModel> GetAll()
         {

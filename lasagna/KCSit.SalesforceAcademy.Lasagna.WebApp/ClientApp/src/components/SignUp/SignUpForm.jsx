@@ -1,38 +1,73 @@
+
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Button, Form, Checkbox, Container } from 'semantic-ui-react';
-import Test from '../Test';
 
 export default function SignUpForm() {
 
     const [newUser, setNewUser] = useState({
-        firstName: '',
-        lastName: '',
-        password: '',
-        email:'',
-        isRobot: 'false'    
+        FirstName: '',
+        LastName: '',
+        Password: '',
+        ConfirmPassword: '',
+        EmailAddress:''          
     });
 
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isRobot, setIsRobot] = useState('');
 
-    validatePasswords = () => {
-        if (newUser.password !== confirmPassword)
+
+  /*  const validatePasswords = () => {
+        if (newUser.password !== confirmPassword){
+            return (
+                <div class="ui negative message">
+                    <i class="close icon"></i>
+                        <div class="header">
+                            Your passwords don't match.
+                        </div>
+                        <p>Please re-enter the passwords</p>
+                        </div>
+            )
+        }
+        return (
+            <div class="ui success message">
+            <i class="close icon"></i>
+                <div class="header">
+                    Your user registration was successful.
+                </div>
+            <p>You may now log-in with your email address and password.</p>
+            </div>
+        )
+    }; */
+
+
+
+
+    const submitUser = () => {
+
+       // if(isRobot == 'false') {
+        axios.post('api/user', newUser)
+             .catch ((error) => {console.log(error);});
+
+        console.log(newUser);
+
         
-
     };
+
+
 
     return (
        
     <Container className= 'form'> 
          <h1> Create an account with us </h1>
-        <Form onSubmit={console.log(newUser)}>
+        <Form onSubmit={submitUser}>
         <Form.Field>
             <label>First Name</label>
             <input 
             type= 'text' 
             placeholder='Write your First Name' 
-            value={newUser.firstName} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, firstName: target.value,}))}
-            pattern= '(?=.*[a-z])(?=.*[A-Z]).{3,50}'
+            value={newUser.FirstName} 
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, FirstName: target.value,}))}
+            pattern="[\w+/\s*]{3,50}" 
             required/>
         </Form.Field>
         <Form.Field>
@@ -40,9 +75,9 @@ export default function SignUpForm() {
             <input 
             type= 'text' 
             placeholder='Write your Last Name' 
-            value={newUser.lastName} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, lastName: target.value,}))}
-            pattern= '(?=.*[a-z])(?=.*[A-Z]).{3,50}'
+            value={newUser.LastName} 
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, LastName: target.value,}))}
+            pattern="[\w+/\s*]{3,50}"  
             required/>
         </Form.Field>
         <Form.Field>
@@ -50,8 +85,8 @@ export default function SignUpForm() {
             <input
             type= 'password' 
             placeholder='Create your password' 
-            value = {newUser.password}
-            onChange = {({ target }) => setNewUser((prevState)=> ({...prevState, password: target.value,}))}
+            value = {newUser.Password}
+            onChange= {({ target }) => setNewUser((prevState)=> ({...prevState, Password: target.value,}))}
             pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}' 
             title="Must contain at least one number, one uppercase, one lowercase letter; and at least 8 characters."
             required/>
@@ -61,8 +96,8 @@ export default function SignUpForm() {
             <input 
             type ='password'
             placeholder='Rewrite your password' 
-            value= {confirmPassword}
-            onChange= {({ target }) => setConfirmPassword(target.value)}
+            value= {newUser.ConfirmPassword}
+            onChange= {({target}) => setNewUser((prevState)=> ({...prevState, ConfirmPassword: target.value,}))}
             required/>
         </Form.Field>
         <Form.Field>
@@ -70,16 +105,18 @@ export default function SignUpForm() {
             <input 
             type= 'email' 
             placeholder='Write your e-mail address' 
-            value = {newUser.email} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, email: target.value,}))}
+            value = {newUser.EmailAdress} 
+            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, EmailAddress: target.value,}))}
             required/>
         </Form.Field>
         <Form.Field>
-            <Checkbox type='checkbox' name='isRobot' label='Are you a robot?' />        </Form.Field>
+            <Checkbox type='checkbox' 
+            name='isRobot' 
+            label='Are you a robot?' 
+            onChange= {({ target }) => setIsRobot('false')}
+            required/>        </Form.Field>
         <Button type='submit'>Submit</Button>
         </Form>
-
-        <Test newUser={newUser}/>
 
         </Container>
         
