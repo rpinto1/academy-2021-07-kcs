@@ -80,10 +80,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         }
 
         // POST api/<CompaniesController>
-        [HttpGet("search/{search}")]
-        public string GetSearch(string search)
+        [HttpGet("search/{search}/{searchPageIndex}")]
+        public string GetSearch(string search, int searchPageIndex)
         {
-            return search;
+            var companies = _companiesBO.GetCompaniesNamesTickers(search).Result.Result.Skip(searchPageIndex * 10).Take(10);
+            return JsonConvert.SerializeObject(companies);
         }
     }
 }

@@ -6,6 +6,7 @@ using Index = KCSit.SalesforceAcademy.Lasagna.Data.Index;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
@@ -29,6 +30,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             var indexList = _genericDao.GetAllAsync<Index>();
             return await indexList;
         }
+        public async Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDao.SearchCompaniesBySearchBar(companiesNamesTickers);
+            }
+
+            );
+        }
         public async Task<GenericReturn<List<Industry>>> GetIndustries(string sectorName)
         {
             if (sectorName.Equals("All")) 
@@ -46,9 +60,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             );
         }
-        public string GetSectors()
-        {
-            return "";
-        }
+
     }
 }

@@ -4,7 +4,9 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
-    class CompanyPoco
+    public class CompanyPoco
     {
+        public string Name { get; set; }
+        public string Ticker { get; set; }
     }
 }

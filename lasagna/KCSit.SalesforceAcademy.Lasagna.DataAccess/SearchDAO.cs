@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,28 +38,27 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         //    {
         //        return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
 
-            }
-        }
+        //    }
+        //  }
 
         //todos os métodos devem ter um verbo
         //o método deve ser assíncrono
         //para ter paginação, vai ter que ter os parâmetros skip e take
-        public List<Company> SearchCompaniesBySearchBar(string search)
+        public async Task<List<CompanyPoco>> SearchCompaniesBySearchBar(string search)
         {
+
             using (var context = new lasagnakcsContext())
             {
 
-                var query = (from test in context.Companies
+                var query = (from companies in context.Companies
                              //considerar usar o contains em vez do startswith
-                             where test.Name.ToLower().Contains(search.ToLower())
-                             || test.Ticker.ToLower().Contains(search.ToLower())
+                             where companies.Name.ToLower().Contains(search.ToLower())
+                             || companies.Ticker.ToLower().Contains(search.ToLower())
                              //deves devolver um POCO em vez de Company
-                             select new Company {Name=test.Name,Ticker=test.Ticker});
+                             select new CompanyPoco {Name=companies.Name,Ticker=companies.Ticker});
 
                 //o pedido deve ser assíncrono
-                var results = query
-                    //.Skip(20).Take(10)
-                    .ToList();
+                var results = await query.ToListAsync();
 
                 return results;
             }
