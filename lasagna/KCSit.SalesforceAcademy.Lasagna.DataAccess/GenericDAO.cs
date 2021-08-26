@@ -1,6 +1,4 @@
-﻿
-
-using KCSit.SalesforceAcademy.Lasagna.Data;
+﻿using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +24,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 catch (DbUpdateConcurrencyException)
                 {
 
+                }
+                catch (Exception e)
+                {
+                    return null;
                 }
 
 

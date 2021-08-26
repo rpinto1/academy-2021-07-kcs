@@ -31,11 +31,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public SubIndustry GetSub(string name)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
+        //public SubIndustry GetSub(string name)
+        //{
+        //    using (var context = new lasagnakcsContext())
+        //    {
+        //        return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
 
             }
         }
@@ -63,7 +63,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 return results;
             }
         }
-        public List<Industry> SearchIndustiesBySector(string sectorName)
+        public async Task<List<Industry>> SearchIndustiesBySector(string sectorName)
         {
             using (var context = new lasagnakcsContext())
             {
@@ -75,7 +75,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              select industry);
 
 
-                var results = query.ToList();
+                var results = await query.ToListAsync();
 
                 return results;
             }

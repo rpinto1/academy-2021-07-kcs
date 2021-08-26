@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
+
+namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
-    public class UserModel
+    public class UserModel 
     {
         [Key]
         public Guid UserInfoId { get; set; }
@@ -27,7 +27,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
         [DataType(DataType.EmailAddress)]
         [EmailAddress]
         [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email Address is not valid")]
-        public string EmailAdress { get; set; }
+        public string EmailAddress { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

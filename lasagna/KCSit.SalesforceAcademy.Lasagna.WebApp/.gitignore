@@ -230,3 +230,9 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+
+/lasagna/KCSit.SalesforceAcademy.Lasagna.WebApp/ClientApp/tmpnodejsnpm-cache/_cacache/content-v2/sha512
+/lasagna/KCSit.SalesforceAcademy.Lasagna.WebApp/ClientApp/tmpnodejsnpm-cache/*
+**/tmpnodejsnpm-cache/*
+**/tmpnodejsnpm-cache

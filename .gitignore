@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/lasagna/KCSit.SalesforceAcademy.Lasagna.WebApp/ClientApp/tmpnodejsnpm-cache/*
+**/tmpnodejsnpm-cache/*
+
