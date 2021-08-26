@@ -13,7 +13,7 @@ export default function SignUpForm() {
 
     const [isRobot, setIsRobot] = useState('true');
 
-    /* const submitUser = () => {
+const submitUser = () => {
         if (isRobot){
             return (
                     <div class="ui negative message">
@@ -32,12 +32,12 @@ export default function SignUpForm() {
              console.log(newUser);
 
     };
- */
+
     return (
        
     <Container className= 'form'> 
          <h1> Create an account with us </h1>
-        <Form>
+        <Form onSubmit = {submitUser}>
         <Form.Field>
             <label>First Name</label>
             <input 
