@@ -39,18 +39,26 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
             }
         }
-        public List<Company> CompanySearchBar(string search)
+
+        //todos os métodos devem ter um verbo
+        //o método deve ser assíncrono
+        //para ter paginação, vai ter que ter os parâmetros skip e take
+        public List<Company> SearchCompaniesBySearchBar(string search)
         {
             using (var context = new lasagnakcsContext())
             {
 
                 var query = (from test in context.Companies
-                             where test.Name.ToLower().StartsWith(search.ToLower())
-                             || test.Ticker.ToLower().StartsWith(search.ToLower())
+                             //considerar usar o contains em vez do startswith
+                             where test.Name.ToLower().Contains(search.ToLower())
+                             || test.Ticker.ToLower().Contains(search.ToLower())
+                             //deves devolver um POCO em vez de Company
                              select new Company {Name=test.Name,Ticker=test.Ticker});
 
-
-                var results = query.ToList();
+                //o pedido deve ser assíncrono
+                var results = query
+                    //.Skip(20).Take(10)
+                    .ToList();
 
                 return results;
             }
