@@ -1,6 +1,4 @@
-﻿
-
-using KCSit.SalesforceAcademy.Lasagna.Data;
+﻿using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
