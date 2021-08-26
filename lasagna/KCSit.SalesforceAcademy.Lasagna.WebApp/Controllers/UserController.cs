@@ -1,12 +1,10 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
-using KCSit.SalesforceAcademy.Lasagna.Business.Models;
-using KCSit.SalesforceAcademy.Lasagna.Business.Services;
+﻿using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,10 +15,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
     public class UserController : ControllerBase
     {
 
-        private IUserService _userService;
+        private IUserServiceBO _userService;
 
 
-        public UserController(IUserService userService)
+        public UserController(IUserServiceBO userService)
         {
             _userService = userService;
         }
@@ -29,7 +27,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
         // POST: api/user/authenticate
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] AuthenticationModel model)
+        public IActionResult Authenticate([FromBody] UserModelAuthentication model)
         {
             Console.WriteLine("Authenticate request - USER: " + model.EmailAdress + " PASSWORD: " + model.Password);
             var user = _userService.Authenticate(model.EmailAdress, model.Password);
@@ -65,7 +63,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] UserModel model)
         {
-            UserServiceResultMessage addUserResult = _userService.AddUser(model);
+            GenericReturn addUserResult = _userService.AddUser(model);
 
             return ReturnResult(addUserResult);
         }
@@ -77,7 +75,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UserModel model)
         {
-            UserServiceResultMessage updateUserResult = _userService.UpdateUser(id, model);
+            GenericReturn updateUserResult = _userService.UpdateUser(id, model);
 
             return ReturnResult(updateUserResult);
         }
@@ -89,16 +87,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            UserServiceResultMessage deleteResult = _userService.DeleteId(id);
+            GenericReturn deleteResult = _userService.DeleteId(id);
 
             return ReturnResult(deleteResult);
         }
 
 
 
-        private IActionResult ReturnResult(UserServiceResultMessage action)
+        private IActionResult ReturnResult(GenericReturn action)
         {
-            if (action.Success)
+            if (action.Succeeded)
             {
                 return Ok(new { message = action.Message });
             }

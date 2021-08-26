@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
+
+namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
-    public class UserModel
+    public class UserModel 
     {
         [Key]
         public Guid UserInfoId { get; set; }

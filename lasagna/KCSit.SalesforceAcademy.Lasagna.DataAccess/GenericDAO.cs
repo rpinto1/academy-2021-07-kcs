@@ -27,6 +27,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 {
 
                 }
+                catch (Exception e)
+                {
+                    return null;
+                }
 
 
                 return generic;

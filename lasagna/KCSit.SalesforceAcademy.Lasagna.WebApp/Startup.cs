@@ -60,7 +60,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             });
 
             //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IUserServiceBO, UserServiceBO>();
 
 
             // In production, the React files will be served from this directory
@@ -76,8 +76,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<lasagnakcsContext>();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<lasagnakcsContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

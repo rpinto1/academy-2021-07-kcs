@@ -1,5 +1,5 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
-using KCSit.SalesforceAcademy.Lasagna.Business.Models;
+using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -9,11 +9,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Text.RegularExpressions;
+using KCSit.SalesforceAcademy.Lasagna.DataAccess;
+using Microsoft.AspNetCore.Identity;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
-    public class UserService : IUserService
+    public class UserServiceBO : IUserServiceBO
     {
         private List<UserModel> _users = new List<UserModel> {
             new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Pete", LastName="Selvas", EmailAddress="pete@selvas.com", Password="test", ConfirmPassword="test"},
@@ -25,7 +26,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserServiceBO(IOptions<AppSettings> appSettings)
         {
             _appSettings = appSettings.Value;
         }
@@ -72,13 +73,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         }
 
 
-        public UserServiceResultMessage AddUser(UserModel model)
+        public GenericReturn AddUser(UserModel model)
         {
             // check if EmailAddress already exist
             foreach (UserModel user in _users)
             {
                 if (user.EmailAddress == model.EmailAddress)
-                    return new UserServiceResultMessage { Success = false, Message = "User already exists" };
+                    return new GenericReturn { Succeeded = false, Message = "User already exists" };
             }
 
             // user data is OK. Add user
@@ -92,16 +93,40 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 ConfirmPassword = model.ConfirmPassword
             });
 
-            return new UserServiceResultMessage { Success = true, Message = "User added successfully" };
+            //var test = new IdentityUser();
+
+            //model.UserName = model.EmailAddress;
+            //model.Email = model.EmailAddress;
+            //model.NormalizedEmail = model.EmailAddress;
+            //model.PasswordHash = model.Password;
+
+            ////model.PhoneNumber = "123456789";
+
+            ////model.EmailConfirmed = true;
+            ////model.PhoneNumberConfirmed = true;
+            ////model.TwoFactorEnabled = false;
+            ////model.LockoutEnabled = false;
+            ////model.AccessFailedCount = 0;
+
+
+            ////var addUserResult = new GenericDAO().Add<IdentityUser>(test);
+            //var addUserResult = new GenericDAO().Add<IdentityUser>(model);
+
+            //if (addUserResult == null)
+            //{
+            //    return new GenericReturn { Succeeded = false, Message = "Error while adding this User" };
+            //}
+
+            return new GenericReturn { Succeeded = true, Message = "User added successfully" };
         }
 
-        public UserServiceResultMessage UpdateUser(int id, UserModel model)
+        public GenericReturn UpdateUser(int id, UserModel model)
         {
             var currentUser = GetUser(id);
 
             // make sure user is not allowed to change is email address
             if (currentUser.EmailAddress != model.EmailAddress)
-                return new UserServiceResultMessage { Success = false, Message = "User can not change is email address" };
+                return new GenericReturn { Succeeded = false, Message = "User can not change is email address" };
 
             // user data is ok. Update user
             _users[id].FirstName = model.FirstName;
@@ -109,19 +134,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             _users[id].Password = model.Password;
             _users[id].ConfirmPassword = model.ConfirmPassword;
 
-            return new UserServiceResultMessage { Success = true, Message = "User updated successfully" };
+            return new GenericReturn { Succeeded = true, Message = "User updated successfully" };
         }
 
 
-        public UserServiceResultMessage DeleteId(int id)
+        public GenericReturn DeleteId(int id)
         {
             if (id < 0 || id >= _users.Count)
             {
-                return new UserServiceResultMessage { Success = false, Message = "Invalid Id number" };
+                return new GenericReturn { Succeeded = false, Message = "Invalid Id number" };
             }
 
             _users.RemoveAt(id);
-            return new UserServiceResultMessage { Success = true, Message = "UserId " + id + " was deleted" };
+            return new GenericReturn { Succeeded = true, Message = "UserId " + id + " was deleted" };
         }
 
 
