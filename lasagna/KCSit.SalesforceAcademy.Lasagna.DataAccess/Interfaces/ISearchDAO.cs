@@ -8,7 +8,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
     {
         int Get(string ticker);
         Industry GetIndustry(string name);
-        SubIndustry GetSub(string name);
+        // SubIndustry GetSub(string name);
         Task<List<Company>> SearchCompaniesByIndex(string indexName, string sectorName, string industryName);
         List<Industry> SearchIndustiesBySector(string sectorName);
     }

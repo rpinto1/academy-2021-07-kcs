@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -24,8 +24,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         }
 
 
-
-        // POST: api/user/authenticate
+        [Route("api/user/authenticate")]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserModelAuthentication model)
         {
@@ -39,7 +38,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        // GET: api/user
+        [Route("api/user")]
         [Authorize]
         [HttpGet]
         public IEnumerable<UserModel> Get()
@@ -49,7 +48,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        // GET api/user/5
+        [Route("api/user/{id}")]
         [Authorize]
         [HttpGet("{id}")]
         public UserModel Get(int id)
@@ -59,7 +58,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        // POST api/user
+        [Route("api/user")]
         [HttpPost]
         public IActionResult Post([FromBody] UserModel model)
         {
@@ -69,8 +68,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         }
 
 
-
-        // PUT api/<UserController>/5
+        [Route("api/<UserController>/{id}")]
         [Authorize]
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] UserModel model)
@@ -82,7 +80,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
 
 
 
-        // DELETE api/<UserController>/5
+        [Route("api/<UserController>/{id}")]
         [Authorize]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
