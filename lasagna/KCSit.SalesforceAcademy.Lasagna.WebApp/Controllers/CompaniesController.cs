@@ -43,16 +43,22 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         {
             return "value";
         }
-        // GET api/<CompaniesController>/5
+        // GET api/<CompaniesController>/indexSector
         [HttpGet("indexSector")]
         public string GetIndexAndSector()
         {
             var indexList = _genericLogic.GetAll<Data.Index>().Result;
-            var CompanyList = _genericLogic.GetAll<Company>().Result;
             var sectorList = _genericLogic.GetAll<Sector>().Result;
-
-
             return JsonConvert.SerializeObject( new {index = indexList.Result , sector = sectorList.Result });
+        }
+        // GET api/<CompaniesController>/industries/?
+        [HttpGet("industries/{sector}")]
+        public string GetIndustries(string sector)
+        {
+            var industriesList = _companiesBO.GetIndustries(sector).Result;
+
+
+            return  JsonConvert.SerializeObject(industriesList);
         }
 
         // POST api/<CompaniesController>
