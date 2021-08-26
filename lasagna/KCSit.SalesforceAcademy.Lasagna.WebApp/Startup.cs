@@ -59,6 +59,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
                 };
             });
 
+
+
             //services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IUserServiceBO, UserServiceBO>();
 
@@ -72,9 +74,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
             services.AddScoped<ISearchDAO, SearchDAO>();
+            services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
+
 
             //services.AddIdentity<IdentityUser, IdentityRole>()
             //    .AddEntityFrameworkStores<lasagnakcsContext>();
