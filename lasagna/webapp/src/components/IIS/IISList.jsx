@@ -5,12 +5,25 @@ import { Company } from './Company'
 
 export const IISList = () => {
 
-    const [index, setindex] = useState(["ok","ok2"])
-    const [sector, setsector] = useState([()=>"ok","ok2"])
-    const [industry, setindustry] = useState(["ok","ok2"])
-
+    const [index, setindex] = useState([])
+    const [sector, setsector] = useState([])
+    const [industry, setindustry] = useState([])
+    const options = (dropdownList) => _.map(dropdownList, (dropDownItem, index) => ({
+        key: dropdownList[index],
+        text: dropDownItem,
+        value: dropdownList[index],
+      }))
     useEffect(() => {
-    
+        try {        
+            
+            fetch('http://localhost:3010/api/Companies/indexSector')
+            .then(response => response.json())
+            .then(data => console.log(data));
+            
+            
+        } catch (error) {
+            console.log(error)
+        }
     }, [])
 
 
@@ -25,9 +38,9 @@ export const IISList = () => {
         <Segment textAlign='left' className='segment'>
             <h1>List of Companies</h1>
             <Segment.Inline >
-            <Dropdown placeholder='Index' search selection scrolling options={()=>index}/>
-            <Dropdown placeholder='Sector' search selection scrolling options={sector}/>
-            <Dropdown placeholder='Industry' search selection scrolling options={industry}/>
+            <Dropdown placeholder='Index' search selection scrolling options={options(index)}/>
+            <Dropdown placeholder='Sector' search selection scrolling options={options(index)}/>
+            <Dropdown placeholder='Industry' search selection scrolling options={options(index)}/>
             </Segment.Inline>
             
             <Table celled >

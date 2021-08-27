@@ -34,7 +34,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -61,7 +70,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             });
 
 
-
+            
             //services.AddScoped<IUserService, UserService>();
             services.AddSingleton<IUserServiceBO, UserServiceBO>();
 
@@ -91,7 +100,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
