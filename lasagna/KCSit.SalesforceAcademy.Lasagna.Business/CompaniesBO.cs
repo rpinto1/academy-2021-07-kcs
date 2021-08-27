@@ -6,6 +6,7 @@ using Index = KCSit.SalesforceAcademy.Lasagna.Data.Index;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
@@ -14,25 +15,62 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
         private ISearchDAO _searchDao;
         private IGenericDAO _genericDao;
+        private IGenericBusinessLogic _genericBusiness;
 
-        public CompaniesBO(ISearchDAO searchDao, IGenericDAO genericDao)
+
+        public CompaniesBO(ISearchDAO searchDao, IGenericDAO genericDao, IGenericBusinessLogic genericBusiness)
         {
             _searchDao = searchDao;
             _genericDao = genericDao;
+            _genericBusiness = genericBusiness;
         }
        
-        public async Task<List<Index>> GetIndex()
+
+        public async Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers)
         {
-            var indexList = _genericDao.GetAllAsync<Index>();
-            return await indexList;
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDao.SearchCompaniesBySearchBar(companiesNamesTickers);
+            }
+
+            );
         }
-        public string GetIndustries(string? sectorName)
+        public async Task<GenericReturn<List<Industry>>> GetIndustries(string sectorName)
         {
-            return "";
+            if (sectorName.Equals("All")) 
+            {
+                sectorName = "";
+            }
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDao.SearchIndustiesBySector(sectorName);
+            }
+
+            );
         }
-        public string GetSectors()
+
+        public async Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page)
         {
-            return "";
+
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDao.SearchCompaniesByIndex(indexName,sectorName,industryName, page);
+            }
+
+            );
         }
+
     }
 }

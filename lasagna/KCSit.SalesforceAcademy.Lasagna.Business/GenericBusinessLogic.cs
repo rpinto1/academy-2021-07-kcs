@@ -5,7 +5,7 @@ using System.Transactions;
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
 
-    public class GenericBusinessLogic
+    public class GenericBusinessLogic : IGenericBusinessLogic
     {
         public async Task<GenericReturn<T>> GenericTransaction<T>(Func<Task<T>> func)
         {

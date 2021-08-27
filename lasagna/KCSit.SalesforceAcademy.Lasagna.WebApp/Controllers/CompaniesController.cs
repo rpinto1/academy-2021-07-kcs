@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using KCSit.SalesforceAcademy.Lasagna.Data;
-using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
 
@@ -43,16 +42,30 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         {
             return "value";
         }
-        // GET api/<CompaniesController>/5
+        // GET api/<CompaniesController>/indexSector
         [HttpGet("indexSector")]
-        public string GetIndexAndSector()
+        public async Task<string> GetIndexAndSector()
         {
-            var indexList = _genericLogic.GetAll<Data.Index>().Result;
-            var CompanyList = _genericLogic.GetAll<Company>().Result;
-            var sectorList = _genericLogic.GetAll<Sector>().Result;
+            var indexList = (await _genericLogic.GetAll<Data.Index>()).Result;
+            var sectorList =  (await _genericLogic.GetAll<Sector>()).Result;
+            return JsonConvert.SerializeObject( new {index = indexList , sector = sectorList });
+        }
+        // GET api/<CompaniesController>/industries/?
+        [HttpGet("industries/{sector}")]
+        public async Task<string> GetIndustries(string sector)
+        {
+            var industriesList = (await _companiesBO.GetIndustries(sector)).Result;
 
 
-            return JsonConvert.SerializeObject( new {index = indexList.Result , sector = sectorList.Result });
+            return  JsonConvert.SerializeObject(industriesList);
+        }
+        // POST api/<CompaniesController>
+        [HttpPost("IIS")]
+        public async Task<string> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
+        {
+
+            var companies = (await _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page)).Result;
+            return JsonConvert.SerializeObject(companies);
         }
 
         // POST api/<CompaniesController>
@@ -74,10 +87,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         }
 
         // POST api/<CompaniesController>
-        [HttpGet("search/{search}")]
-        public string GetSearch(string search)
+        [HttpGet("search/{search}/{searchPageIndex}")]
+        public string GetSearch(string search, int searchPageIndex)
         {
-            return search;
+            var companies = _companiesBO.GetCompaniesNamesTickers(search).Result.Result.Skip(searchPageIndex * 10).Take(10);
+            return JsonConvert.SerializeObject(companies);
         }
     }
 }

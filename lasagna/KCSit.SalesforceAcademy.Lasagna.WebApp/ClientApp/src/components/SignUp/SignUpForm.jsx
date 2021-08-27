@@ -13,7 +13,7 @@ export default function SignUpForm() {
 
     const [isRobot, setIsRobot] = useState('true');
 
-    const submitUser = () => {
+const submitUser = () => {
         if (isRobot){
             return (
                     <div class="ui negative message">
@@ -37,7 +37,7 @@ export default function SignUpForm() {
        
     <Container className= 'form'> 
          <h1> Create an account with us </h1>
-        <Form onSubmit={submitUser}>
+        <Form onSubmit = {submitUser}>
         <Form.Field>
             <label>First Name</label>
             <input 
@@ -88,15 +88,15 @@ export default function SignUpForm() {
             required/>
         </Form.Field>
         <Form.Field>
-            <Checkbox type='checkbox' name='isRobot' label='Are you a robot?' 
+            <Checkbox type='checkbox' 
+            name='isRobot' 
+            label='Are you a robot?' 
             value= {isRobot}
             onChange= {setIsRobot('false')}
             required/>        
             </Form.Field>
         <Button type='submit'>Submit</Button>
         </Form>
-
-        <Test newUser={newUser}/>
 
         </Container>
         

@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,24 +39,31 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         //        return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
 
         //    }
-        //}
-        public List<Company> CompanySearchBar(string search)
+        //  }
+
+        //todos os métodos devem ter um verbo
+        //o método deve ser assíncrono
+        //para ter paginação, vai ter que ter os parâmetros skip e take
+        public async Task<List<CompanyPoco>> SearchCompaniesBySearchBar(string search)
         {
+
             using (var context = new lasagnakcsContext())
             {
 
-                var query = (from test in context.Companies
-                             where test.Name.ToLower().StartsWith(search.ToLower())
-                             || test.Ticker.ToLower().StartsWith(search.ToLower())
-                             select new Company {Name=test.Name,Ticker=test.Ticker});
+                var query = (from companies in context.Companies
+                             //considerar usar o contains em vez do startswith
+                             where companies.Name.ToLower().Contains(search.ToLower())
+                             || companies.Ticker.ToLower().Contains(search.ToLower())
+                             //deves devolver um POCO em vez de Company
+                             select new CompanyPoco {Name=companies.Name,Ticker=companies.Ticker});
 
-
-                var results = query.ToList();
+                //o pedido deve ser assíncrono
+                var results = await query.ToListAsync();
 
                 return results;
             }
         }
-        public List<Industry> SearchIndustiesBySector(string sectorName)
+        public async Task<List<Industry>> SearchIndustiesBySector(string sectorName)
         {
             using (var context = new lasagnakcsContext())
             {
@@ -67,28 +75,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              select industry);
 
 
-                var results = query.ToList();
+                var results = await query.ToListAsync();
 
                 return results;
             }
         }
-        public async Task<List<Company>> SearchCompaniesByIndex(string? indexName, string? sectorName, string? industryName)
+        public async Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName,int page)
         {
+            var pageSize = 10;
             using (var context = new lasagnakcsContext())
             {
-                if (indexName == null)
-                {
-                    indexName = "";
-                }
-                if (sectorName == null)
-                {
-                    sectorName = "";
-                }
-                if (industryName == null)
-                {
-                    industryName = "";
-                }
-
 
                 var query = (from company in context.Companies
                              join companyIndice in context.CompanyIndices
@@ -101,13 +97,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              on company.IndustryId equals industry.Id
                              where indice.Name.ToLower().Contains(indexName.ToLower()) &&
                              sector.Name.ToLower().Contains(sectorName.ToLower()) &&
-                             industry.Name.ToLower().Contains(industryName.ToLower())
-                             select company);
+                             industry.Name.ToLower().Contains(industryName.ToLower()) 
+                             select new CompanyPoco { Name = company.Name , Ticker = company.Ticker});
 
-
-                var results = query.ToListAsync();
-
-                return await results;
+                var countResults = await query.CountAsync();
+                var results = await query.Skip(pageSize * (page -1)).Take(pageSize).ToListAsync();
+                var objectok = new CompanyScorePoco { companyPoco = results , Count = countResults};
+                return objectok;
             }
         }
 
