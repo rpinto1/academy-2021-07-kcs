@@ -73,7 +73,7 @@ namespace Rui
             var index = genericDao.GetAll<KeyStatistic>().Count();  
             var counter = clientClass.CheckQuota(apiKey);
             Console.WriteLine(companyBD[index].Name);
-            for (int i = index; i < companyBD.Count(); i++)
+            for (int i = index + 1; i < companyBD.Count(); i++)
             {
                 var item = companyBD[i];
                 Console.WriteLine(item.Ticker);
