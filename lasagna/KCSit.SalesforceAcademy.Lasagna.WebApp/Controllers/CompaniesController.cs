@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,10 +18,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
     public class CompaniesController : ControllerBase
     {
         private ICompaniesBO _companiesBO;
+        private IGenericLogic _genericLogic;
 
-        public CompaniesController(ICompaniesBO companiesBO)
+        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic)
         {
             _companiesBO = companiesBO;
+            _genericLogic = genericLogic;
+
         }
 
 
@@ -37,6 +43,23 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         {
             return "value";
         }
+        // GET api/<CompaniesController>/indexSector
+        [HttpGet("indexSector")]
+        public string GetIndexAndSector()
+        {
+            var indexList = _genericLogic.GetAll<Data.Index>().Result;
+            var sectorList = _genericLogic.GetAll<Sector>().Result;
+            return JsonConvert.SerializeObject( new {index = indexList.Result , sector = sectorList.Result });
+        }
+        // GET api/<CompaniesController>/industries/?
+        [HttpGet("industries/{sector}")]
+        public string GetIndustries(string sector)
+        {
+            var industriesList = _companiesBO.GetIndustries(sector).Result;
+
+
+            return  JsonConvert.SerializeObject(industriesList);
+        }
 
         // POST api/<CompaniesController>
         [HttpPost]
@@ -54,6 +77,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        // POST api/<CompaniesController>
+        [HttpGet("search/{search}/{searchPageIndex}")]
+        public string GetSearch(string search, int searchPageIndex)
+        {
+            var companies = _companiesBO.GetCompaniesNamesTickers(search).Result.Result.Skip(searchPageIndex * 10).Take(10);
+            return JsonConvert.SerializeObject(companies);
         }
     }
 }

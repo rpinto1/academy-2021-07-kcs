@@ -1,40 +1,51 @@
 import React, {useState} from 'react';
-import { Button, Container, Form } from 'semantic-ui-react';
+import { Button, Container, Form, Checkbox} from 'semantic-ui-react';
 
 
 export default function SignInForm() {
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [user, setUser] = useState()
+    const [user, setUser] = useState({
+      EmailAddress: '',
+      Password: ''
+    });
+
     
-    const handleSubmit = async e => {
-         
+    const [isRobot, setIsRobot] = useState('true');
 
-            /* // store the user in localStorage to check later when uploading the homepage!
-            localStorage.setItem('user', response.data)
-            console.log(response.data) */
+    const submitUser = () => {
+        if (isRobot){
+            return (
+                    <div class="ui negative message">
+                    <i class="close icon"></i>
+                        <div class="header">
+                            WE ARE SORRY!
+                        </div>
+                        <p>Our website is only available to humans, not robots.</p>
+                        </div>
 
+            )
+        };
         
+        axios.post("api/user/authenticate", user)
+             .catch ((error) => {console.log(error);});
+             console.log(user);
+
     };
+  
     
-      if (user) {
-        //buscar como hacer una sticky alert 
-        return <div>{username} is loggged in</div>;
-      }
+
     
       return (
-        //<Form onSubmit={handleSubmit}>
         <Container className= 'form'>
           <h1>Sign in to your account</h1>
-        <Form>
+          <Form onSubmit= {console.log('hola')}>
          <Form.Field> 
           <label htmlFor="username">Username: </label>
           <input
             type="text"
-            value={username}
+            value={user.EmailAddress}
             placeholder="Enter your username"
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={({ target}) => setUser((prevState)=> ({...prevState, keyword: target.value,}))}
           />
           </Form.Field>  
 
@@ -42,12 +53,19 @@ export default function SignInForm() {
             <label htmlFor="password">Password: </label>
             <input
               type="password"
-              value={password}
+              value={user.Password}
               placeholder="Enter your password"
-              onChange={({ target }) => setPassword(target.value)}
+              onChange={({ target}) => setUser((prevState)=> ({...prevState, keyword: target.value,}))}
             />
          </Form.Field> 
-
+         <Form.Field>
+            <Checkbox type='checkbox' 
+            name='isRobot' 
+            label='Are you a robot?' 
+            value= {isRobot}
+            onChange= {setIsRobot('false')}
+            required/>        
+            </Form.Field>
           <Button type="submit">Sign in</Button>
         </Form>
         </Container>

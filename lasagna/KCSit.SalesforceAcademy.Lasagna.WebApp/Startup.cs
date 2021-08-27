@@ -2,12 +2,14 @@ using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
+using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
@@ -33,7 +35,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
         {
             services.AddControllersWithViews();
 
-
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
@@ -58,8 +59,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
                 };
             });
 
+
+
             //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IUserServiceBO, UserServiceBO>();
 
 
             // In production, the React files will be served from this directory
@@ -71,9 +74,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
             services.AddScoped<ISearchDAO, SearchDAO>();
+            services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
             services.AddScoped<IGenericDAO, GenericDAO>();
+            services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
+
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<lasagnakcsContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

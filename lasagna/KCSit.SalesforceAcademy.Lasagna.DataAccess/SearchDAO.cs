@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,15 +32,38 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public SubIndustry GetSub(string name)
+        //public SubIndustry GetSub(string name)
+        //{
+        //    using (var context = new lasagnakcsContext())
+        //    {
+        //        return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
+
+        //    }
+        //  }
+
+        //todos os métodos devem ter um verbo
+        //o método deve ser assíncrono
+        //para ter paginação, vai ter que ter os parâmetros skip e take
+        public async Task<List<CompanyPoco>> SearchCompaniesBySearchBar(string search)
         {
+
             using (var context = new lasagnakcsContext())
             {
-                return context.Set<SubIndustry>().Where(item => item.Name == name).SingleOrDefault();
 
+                var query = (from companies in context.Companies
+                             //considerar usar o contains em vez do startswith
+                             where companies.Name.ToLower().Contains(search.ToLower())
+                             || companies.Ticker.ToLower().Contains(search.ToLower())
+                             //deves devolver um POCO em vez de Company
+                             select new CompanyPoco {Name=companies.Name,Ticker=companies.Ticker});
+
+                //o pedido deve ser assíncrono
+                var results = await query.ToListAsync();
+
+                return results;
             }
         }
-        public List<Industry> SearchIndustiesBySector(string sectorName)
+        public async Task<List<Industry>> SearchIndustiesBySector(string sectorName)
         {
             using (var context = new lasagnakcsContext())
             {
@@ -51,7 +75,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              select industry);
 
 
-                var results = query.ToList();
+                var results = await query.ToListAsync();
 
                 return results;
             }

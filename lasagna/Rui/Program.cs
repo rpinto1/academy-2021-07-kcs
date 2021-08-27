@@ -90,8 +90,8 @@ namespace Rui
                 counter -= 10;
 
                 IRestResponse response = clientClass.GetAll("https://public-api.quickfs.net/v1/data/all-data/" + company + "?api_key=" + apiKey);
-
-
+                Console.WriteLine(response.ResponseUri);
+                
                 var jsonCompanyList = JObject.Parse(response.Content);
                 //Get the year
 
@@ -142,10 +142,10 @@ namespace Rui
                             {
                                 keyStatistics.insertKeyStatistics(response.Content, yearIndex, companyId);
                             }
-
+                            balanceTask = balance.insertBalanceSheets(response.Content, yearIndex);
                             keyTask = ratios.InsertKeyRatios(response.Content, yearIndex);
                             incomeTask = income.insertIncomeStatements(response.Content, yearIndex);
-                            balanceTask = balance.insertBalanceSheets(response.Content, yearIndex);
+                            
                             cashTask = cashFlow.InsertCashFlowStatements(response.Content, yearIndex);
 
                             var taskArrayNormal = new Task[] { keyTask, incomeTask, balanceTask, cashTask };
