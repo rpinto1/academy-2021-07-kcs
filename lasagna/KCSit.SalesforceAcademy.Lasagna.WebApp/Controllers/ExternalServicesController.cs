@@ -30,20 +30,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         public string Get()
         {
 
-            
 
             var result = _externalServicesBO.FetchGainLoseData();
 
-            //if (result.Succeeded)
-            // {
-            Console.WriteLine("gainlose: ", result);
+            if (!result.Succeeded)
+            {
+                Console.WriteLine("gainlose: ", result);
                 return result.Result;
-           // }
+            }
 
-            
+            return result.Message;
 
-
-            
         }
     }
 }

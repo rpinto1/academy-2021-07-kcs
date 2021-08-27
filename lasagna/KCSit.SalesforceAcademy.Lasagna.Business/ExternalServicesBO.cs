@@ -40,7 +40,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             request.AddHeader(hostHeader, host);
 
             var response = client.Get<IRestResponse>(request);
-
+            
             return response;
 
         }
