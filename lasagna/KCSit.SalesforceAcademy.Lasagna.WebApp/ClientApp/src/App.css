@@ -22,11 +22,11 @@ header {
 /* List */
 
 .segment {
-    height:300px;
+    height:660px;
 
 }
 
-.list {
+.table {
     height: 70%;
     overflow-y: scroll;   
 }

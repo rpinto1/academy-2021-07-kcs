@@ -25,11 +25,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             _genericBusiness = genericBusiness;
         }
        
-        public async Task<List<Index>> GetIndex()
-        {
-            var indexList = _genericDao.GetAllAsync<Index>();
-            return await indexList;
-        }
+
         public async Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers)
         {
 
@@ -56,6 +52,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
 
                 return await _searchDao.SearchIndustiesBySector(sectorName);
+            }
+
+            );
+        }
+
+        public async Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page)
+        {
+
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDao.SearchCompaniesByIndex(indexName,sectorName,industryName, page);
             }
 
             );
