@@ -30,10 +30,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         public string Get()
         {
 
-            //fetch
-            //business inst has a service returns op result
+            
 
-            return _externalServicesBO.FetchGainLoseData();
+            var result = _externalServicesBO.FetchGainLoseData();
+
+            //if (result.Succeeded)
+            // {
+            Console.WriteLine("gainlose: ", result);
+                return result.Result;
+           // }
 
             
 
