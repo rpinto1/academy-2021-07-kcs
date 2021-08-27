@@ -1,0 +1,105 @@
+.everything {
+    margin-top: 1vh;
+    margin: 1vh;
+    position: relative;
+}
+
+header {
+    padding: 5vh;
+}
+
+.search-bar {
+    justify-content: center;
+}
+
+
+.content {
+    padding: 2vh;
+    margin: 10px auto 20px;
+    /* text-align: center; */
+}
+
+/* List */
+
+.segment {
+    height:660px;
+
+}
+
+.table {
+    height: 70%;
+    overflow-y: scroll;   
+}
+
+
+
+/* Gain + Lose */
+
+
+.gain-items, .lose-items {
+    padding: 0 5%;
+}
+
+.gain-items span.item-symbol, .gain-items h1 {
+    color: rgb(20, 180, 100);
+}
+
+.lose-items span.item-symbol, .lose-items h1 {
+    color: rgb(180, 20, 100);
+}
+
+.gainlose-data {
+    display: flex;
+    align-self:center;
+    justify-content: center;
+    max-height: 40vh;
+    overflow-y: scroll;
+    
+}
+
+.item-symbol{
+    font-weight: bold;
+}
+
+.item-name {
+    color:darkgray;
+    font-size: smaller;
+}
+
+
+
+footer {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex-column;
+    position: absolute;
+    bottom: -28%;
+}
+
+
+#news-img {
+    height: 10vh;
+    width: 10vh;
+}
+
+#underlined {
+    text-decoration: none;
+    color: rgb(255, 72, 0);
+}
+
+.total-top {
+    display: flex;
+    align-content: flex-start;
+    justify-content: space-around;
+}
+
+
+
+.company-info {
+    margin: 10px;
+    padding: 5px;
+    text-align-last: center;
+}
+
+

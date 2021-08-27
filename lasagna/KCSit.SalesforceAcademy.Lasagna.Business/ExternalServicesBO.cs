@@ -40,6 +40,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             request.AddHeader(hostHeader, host);
 
             var response = client.Get<IRestResponse>(request);
+           
             
             return response;
 
@@ -69,8 +70,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var gainersResponse = FetchData(url, endpoints.gainers, "x-rapidapi-key", yahooAPIOptions.key, "x-rapidapi-host", yahooAPIOptions.host, DataFormat.Json);
                 var losersResponse = FetchData(url, endpoints.losers, "x-rapidapi-key", yahooAPIOptions.key, "x-rapidapi-host", yahooAPIOptions.host, DataFormat.Json);
 
-                if (!gainersResponse.IsSuccessful) throw gainersResponse.ErrorException;
-                if (!losersResponse.IsSuccessful) throw losersResponse.ErrorException;
+                //if (!gainersResponse.IsSuccessful) throw gainersResponse.ErrorException;
+                //if (!losersResponse.IsSuccessful) throw losersResponse.ErrorException;
 
                 var resultObject = new
                 {

@@ -1,6 +1,6 @@
 using System;
 
-namespace KCSit.SalesforceAcademy.Lasagna.WebApp
+namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
     public class CompanyData
     {
