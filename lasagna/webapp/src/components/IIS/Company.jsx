@@ -13,7 +13,7 @@ export const Company = () => {
         <Table.Cell>10000</Table.Cell>
         <Table.Cell>15</Table.Cell>
         <Table.Cell>50</Table.Cell>
-        <Table.Cell><Dropdown floating options={"Add to Profile","Profile"} text='Profile' /></Table.Cell>
+        <Table.Cell><Dropdown floating options={[{key: "", text: "", value: ""}]} text='Profile' /></Table.Cell>
       </Table.Row>
     )
 }

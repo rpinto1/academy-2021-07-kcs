@@ -1,3 +1,4 @@
+
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
@@ -5,22 +6,50 @@ import { Company } from './Company'
 
 export const IISList = () => {
 
-    const [index, setindex] = useState([])
-    const [sector, setsector] = useState([])
-    const [industry, setindustry] = useState([])
-    const options = (dropdownList) => _.map(dropdownList, (dropDownItem, index) => ({
-        key: dropdownList[index],
-        text: dropDownItem,
-        value: dropdownList[index],
-      }))
+
+    const [index, setindex] = useState([{key: "", text: "", value: ""}])
+    const [indexValue, setindexValue] = useState("")
+    const [sector, setsector] = useState([{key: "", text: "", value: ""}])
+    const [sectorValue, setsectorValue] = useState("")
+    const [industry, setindustry] = useState([{key: "", text: "", value: ""}])
+    const [industryValue, setindustryValue] = useState("")
+    const turnIntoOptions = (data,type) => {data[type].map(x=>({
+        key: x["Name"],
+        text: x["Name"],
+        value: x["Name"],
+    })) }
+
+        useEffect(() => {
+            var data = fetch(`http://localhost:3010/api/Companies/industries/${sectorValue}`)
+            .then(response => response.json());
+            data.then(data => data.map(x=>({
+                key: x["Name"],
+                text: x["Name"],
+                value: x["Name"],
+            })) )
+            .then(arrayFinal => setindustry(arrayFinal))
+        }, [sectorValue])
+
     useEffect(() => {
         try {        
             
-            fetch('http://localhost:3010/api/Companies/indexSector')
-            .then(response => response.json())
-            .then(data => console.log(data));
+            var data = fetch('http://localhost:3010/api/Companies/indexSector')
+            .then(response => response.json());
             
-            
+            data.then(data => data["index"].map(x=>({
+                key: x["Name"],
+                text: x["Name"],
+                value: x["Name"],
+            })) )
+            .then(arrayFinal => setindex(arrayFinal))
+
+            data.then(data => data["sector"].map(x=>({
+                key: x["Name"],
+                text: x["Name"],
+                value: x["Name"],
+            })) )
+            .then(arrayFinal => setsector(arrayFinal))
+            console.log(index);
         } catch (error) {
             console.log(error)
         }
@@ -38,9 +67,9 @@ export const IISList = () => {
         <Segment textAlign='left' className='segment'>
             <h1>List of Companies</h1>
             <Segment.Inline >
-            <Dropdown placeholder='Index' search selection scrolling options={options(index)}/>
-            <Dropdown placeholder='Sector' search selection scrolling options={options(index)}/>
-            <Dropdown placeholder='Industry' search selection scrolling options={options(index)}/>
+            <Dropdown placeholder='Index' onChange={(e)=>setindexValue(e.target.textContent)} search selection scrolling options={index}/>
+            <Dropdown placeholder='Sector' onChange={(e)=>setsectorValue(e.target.textContent)} search selection scrolling options={sector}/>
+            <Dropdown placeholder='Industry' onChange={(e)=>setindustryValue(e.target.textContent)} search selection scrolling options={industry}/>
             </Segment.Inline>
             
             <Table celled >
@@ -55,7 +84,7 @@ export const IISList = () => {
                 </Table.Header>
             <Table.Body className="table">
                 {
-                    arrayCompanys.map(x=> <Company />)
+                    arrayCompanys.map((x,i)=> <Company key ={i}/>)
                 }
             </Table.Body>
                 <Table.Footer>
