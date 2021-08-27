@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
-import { Button, List, ListContent, ListItem } from 'semantic-ui-react'
+import { Table, Dropdown } from 'semantic-ui-react'
 
 export const Company = () => {
 
     
     return (
-        <List.Item className="listItems">        
-            <List.Content floated='right'>
-                <Button size='mini'>Add</Button>
-            </List.Content>
-            <List.Icon name='angle right' size='large' />
-            <List.Content className='item'>   
-                <List.Header>BAC</List.Header>
-                <List.Description>Bank Of America</List.Description>
-            </List.Content>
-        </List.Item>
+    <Table.Row>
+        <Table.Cell>
+          BAC
+          BanckOfAmerica
+        </Table.Cell>
+        <Table.Cell>10000</Table.Cell>
+        <Table.Cell>15</Table.Cell>
+        <Table.Cell>50</Table.Cell>
+        <Table.Cell><Dropdown floating options={"Add to Profile","Profile"} text='Profile' /></Table.Cell>
+      </Table.Row>
     )
 }

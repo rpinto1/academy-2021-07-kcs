@@ -80,23 +80,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 return results;
             }
         }
-        public async Task<List<Company>> SearchCompaniesByIndex(string? indexName, string? sectorName, string? industryName)
+        public async Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName,int page)
         {
+            var pageSize = 10;
             using (var context = new lasagnakcsContext())
             {
-                if (indexName == null)
-                {
-                    indexName = "";
-                }
-                if (sectorName == null)
-                {
-                    sectorName = "";
-                }
-                if (industryName == null)
-                {
-                    industryName = "";
-                }
-
 
                 var query = (from company in context.Companies
                              join companyIndice in context.CompanyIndices
@@ -109,13 +97,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              on company.IndustryId equals industry.Id
                              where indice.Name.ToLower().Contains(indexName.ToLower()) &&
                              sector.Name.ToLower().Contains(sectorName.ToLower()) &&
-                             industry.Name.ToLower().Contains(industryName.ToLower())
-                             select company);
+                             industry.Name.ToLower().Contains(industryName.ToLower()) 
+                             select new CompanyPoco { Name = company.Name , Ticker = company.Ticker});
 
-
-                var results = query.ToListAsync();
-
-                return await results;
+                var countResults = await query.CountAsync();
+                var results = await query.Skip(pageSize * (page -1)).Take(pageSize).ToListAsync();
+                var objectok = new CompanyScorePoco { companyPoco = results , Count = countResults};
+                return objectok;
             }
         }
 
