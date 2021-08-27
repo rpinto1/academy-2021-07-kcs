@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Form, Checkbox, Container } from 'semantic-ui-react';
+import { Button, Form, Container } from 'semantic-ui-react';
+import axios from 'axios';
+import Captcha from './Captcha';
 
 export default function SignUpForm() {
 
@@ -11,40 +13,53 @@ export default function SignUpForm() {
         ConfirmPassWord: ''    
     });
 
-    const [isRobot, setIsRobot] = useState('true');
 
-const submitUser = () => {
-        if (isRobot){
-            return (
-                    <div class="ui negative message">
-                    <i class="close icon"></i>
-                        <div class="header">
-                            WE ARE SORRY!
-                        </div>
-                        <p>Our website is only available to humans, not robots.</p>
-                        </div>
-
-            )
-        };
+    function handleChange (event) {
+        const { id, value } = event.target
         
-        axios.post('api/user', newUser)
+        setNewUser(prevState => ({
+            ...prevState,
+            [id]: value     
+        }));
+        
+    };
+
+
+
+    const handleSubmit = () => {
+        
+        let user_captcha = document.getElementById('user_captcha_input').value;
+ 
+        if (validateCaptcha(user_captcha)==true) {
+            
+            axios.post('api/user', newUser)
              .catch ((error) => {console.log(error);});
              console.log(newUser);
-
+            //recharge captcha box
+            loadCaptchaEnginge(6); 
+            document.getElementById('user_captcha_input').value = "";
+        }
+ 
+        else {
+            alert('Captcha simbols must match!');
+            document.getElementById('user_captcha_input').value = "";
+        }
     };
+
 
     return (
        
     <Container className= 'form'> 
          <h1> Create an account with us </h1>
-        <Form onSubmit = {submitUser}>
+        <Form>
         <Form.Field>
             <label>First Name</label>
             <input 
             type= 'text' 
             placeholder='Write your First Name' 
             value={newUser.FirstName} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, FirstName: target.value,}))}
+            onChange={handleChange}
+            id='FirstName'
             pattern="[\w+/\s*]{2,50}"     
             required/>
         </Form.Field>
@@ -54,7 +69,8 @@ const submitUser = () => {
             type= 'text' 
             placeholder='Write your Last Name' 
             value={newUser.LastName} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, LastName: target.value,}))}
+            onChange={handleChange}
+            id='LastName'
             pattern="[\w+/\s*]{2,50}"
             required/>
         </Form.Field>
@@ -64,7 +80,8 @@ const submitUser = () => {
             type= 'password' 
             placeholder='Create your password' 
             value = {newUser.password}
-            onChange= {({ target }) => setNewUser((prevState)=> ({...prevState, Password: target.value,}))}
+            onChange={handleChange}
+            id='Password'
             pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}' 
             title="Passwords must contain at least 8 characters and from those you need at least, one number, one uppercase and one lowercase letter."
             required/>
@@ -75,7 +92,8 @@ const submitUser = () => {
             type ='password'
             placeholder='Rewrite your password' 
             value= {newUser.ConfirmPassword}
-            onChange= {({target}) => setNewUser((prevState)=> ({...prevState, ConfirmPassword: target.value,}))}   
+            onChange={handleChange}
+            id='ConfirmPassword'
             required/>
         </Form.Field>
         <Form.Field>
@@ -84,18 +102,14 @@ const submitUser = () => {
             type= 'email' 
             placeholder='Write your e-mail address' 
             value = {newUser.EmailAddress} 
-            onChange={({ target }) => setNewUser((prevState)=> ({...prevState, EmailAddress: target.value,}))}
+            onChange={handleChange}
+            id='EmailAddress'
             required/>
         </Form.Field>
         <Form.Field>
-            <Checkbox type='checkbox' 
-            name='isRobot' 
-            label='Are you a robot?' 
-            value= {isRobot}
-            onChange= {setIsRobot('false')}
-            required/>        
-            </Form.Field>
-        <Button type='submit'>Submit</Button>
+            <Captcha />
+        </Form.Field>
+        <Button type='submit' onClick={() => handleSubmit}>Submit</Button>
         </Form>
 
         </Container>
