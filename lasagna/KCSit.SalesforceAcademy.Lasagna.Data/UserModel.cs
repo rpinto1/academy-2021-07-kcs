@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
-    public class UserModel 
+    public class UserModel : IdentityUser
     {
         [Key]
         public Guid UserInfoId { get; set; }
@@ -41,5 +41,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public string ConfirmPassword { get; set; }
 
         public string Token { get; set; }
+
+
+        public UserModel()
+        {
+
+        }
     }
 }

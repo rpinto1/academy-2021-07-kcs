@@ -5,6 +5,7 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Data.Entity;
 using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.WebApp
@@ -59,8 +61,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
                 };
             });
 
-            //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserServiceBO, UserServiceBO>();
+            // For mocks use AddSingleton. For Database use AddScoped
+            //services.AddSingleton<IUserServiceBO, UserServiceBO>();
+            services.AddScoped<IUserServiceBO, UserServiceBO>();
 
 
             // In production, the React files will be served from this directory
@@ -74,10 +77,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
-            services.AddScoped<ICompaniesBO, CompaniesBO >();
+            services.AddScoped<ICompaniesBO, CompaniesBO>();
 
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<lasagnakcsContext>();
+            services.AddScoped<lasagnakcsContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<lasagnakcsContext>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

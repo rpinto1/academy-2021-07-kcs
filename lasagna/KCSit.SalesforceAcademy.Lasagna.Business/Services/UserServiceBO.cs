@@ -93,29 +93,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 ConfirmPassword = model.ConfirmPassword
             });
 
-            //var test = new IdentityUser();
 
-            //model.UserName = model.EmailAddress;
-            //model.Email = model.EmailAddress;
-            //model.NormalizedEmail = model.EmailAddress;
-            //model.PasswordHash = model.Password;
-
-            ////model.PhoneNumber = "123456789";
-
-            ////model.EmailConfirmed = true;
-            ////model.PhoneNumberConfirmed = true;
-            ////model.TwoFactorEnabled = false;
-            ////model.LockoutEnabled = false;
-            ////model.AccessFailedCount = 0;
+            model.UserName = model.EmailAddress;
+            model.Email = model.EmailAddress;
+            model.NormalizedEmail = model.EmailAddress;
+            model.PasswordHash = model.Password;
+            var addUserResult = new GenericDAO().Add<IdentityUser>(model);
 
 
-            ////var addUserResult = new GenericDAO().Add<IdentityUser>(test);
-            //var addUserResult = new GenericDAO().Add<IdentityUser>(model);
-
-            //if (addUserResult == null)
-            //{
-            //    return new GenericReturn { Succeeded = false, Message = "Error while adding this User" };
-            //}
+            if (addUserResult == null)
+            {
+                return new GenericReturn { Succeeded = false, Message = "Error while adding this User" };
+            }
 
             return new GenericReturn { Succeeded = true, Message = "User added successfully" };
         }
