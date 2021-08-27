@@ -11,9 +11,17 @@ export default function SignInForm() {
 
     
     const [isRobot, setIsRobot] = useState('true');
+    
+    const handleChange = event => {
+      const { id, value } = event.target
+      setUser(prevState => ({
+          ...prevState,
+          [id]: value
+      }));
+  };
 
     const submitUser = () => {
-        if (isRobot){
+/*         if (isRobot){
             return (
                     <div class="ui negative message">
                     <i class="close icon"></i>
@@ -26,7 +34,7 @@ export default function SignInForm() {
             )
         };
         
-        axios.post("api/user/authenticate", user)
+ */        axios.post("api/user/authenticate", user)
              .catch ((error) => {console.log(error);});
              console.log(user);
 
@@ -38,36 +46,41 @@ export default function SignInForm() {
       return (
         <Container className= 'form'>
           <h1>Sign in to your account</h1>
-          <Form onSubmit= {console.log('hola')}>
-         <Form.Field> 
-          <label htmlFor="username">Username: </label>
+        <Form onSubmit= {console.log(user)}>
+        <Form.Field> 
+          <label>Username</label>
           <input
-            type="text"
-            value={user.EmailAddress}
-            placeholder="Enter your username"
-            onChange={({ target}) => setUser((prevState)=> ({...prevState, keyword: target.value,}))}
+            type='email'
+              placeholder='Enter your username'
+              value={user.EmailAddress}
+              id="EmailAddress"
+              onChange={handleChange}
           />
           </Form.Field>  
 
           <Form.Field> 
-            <label htmlFor="password">Password: </label>
+            <label>Password</label>
             <input
-              type="password"
+              type='password'
               value={user.Password}
-              placeholder="Enter your password"
-              onChange={({ target}) => setUser((prevState)=> ({...prevState, keyword: target.value,}))}
+              placeholder='Enter your password'
+              id="Password"
+              onChange={handleChange}
             />
          </Form.Field> 
+
          <Form.Field>
             <Checkbox type='checkbox' 
             name='isRobot' 
             label='Are you a robot?' 
             value= {isRobot}
-            onChange= {setIsRobot('false')}
+            onChange= {() => setIsRobot('false')}
             required/>        
             </Form.Field>
+          
           <Button type="submit">Sign in</Button>
-        </Form>
+          </Form>
+        
         </Container>
 
       );

@@ -26,7 +26,6 @@ function App() {
                 <Route path ='/aboutus' component ={AboutUsView} />
             </Switch> 
            
-        
            
 
 
