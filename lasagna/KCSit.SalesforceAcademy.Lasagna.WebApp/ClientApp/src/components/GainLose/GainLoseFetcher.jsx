@@ -5,27 +5,23 @@ import TitlesList from './TitlesList';
 
 export default function GainLoseFetcher(props) {
 
-    const {gainLoseUrl} = props;
+    const {url} = props;
     
     const [allData, setAllData] = useState({});
 
-
-    const fetchData = async (url, setterFunc) => {
-        console.log("fetchdata")
+    const fetchData = async endpoint => {
         
-        let response = await fetch(url)
+        let response = await fetch(endpoint)
             .catch(err => console.error(err));
 
         response = await response.json();
-        setterFunc(response);
-        console.log("RESPONSE: ", response)
-
+        setAllData(response);
+        
     };
 
  
     useEffect(() => {
-        fetchData(gainLoseUrl, setAllData);
-        console.log("useEffect: ", allData)
+        fetchData(url);
     }, []);
 
 

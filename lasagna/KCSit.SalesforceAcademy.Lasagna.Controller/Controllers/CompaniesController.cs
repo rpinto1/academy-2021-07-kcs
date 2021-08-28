@@ -59,6 +59,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             return  JsonConvert.SerializeObject(industriesList);
         }
+        // GET api/<CompaniesController>/industries/?
+        [HttpGet("industries")]
+        public async Task<string> GetIndustriesAll()
+        {
+            var industriesList = (await _companiesBO.GetIndustries("")).Result;
+
+
+            return JsonConvert.SerializeObject(industriesList);
+        }
         // POST api/<CompaniesController>
         [HttpPost("IIS")]
         public async Task<string> PostSearchCompaniesIIS([FromBody] DropDownParameters value)

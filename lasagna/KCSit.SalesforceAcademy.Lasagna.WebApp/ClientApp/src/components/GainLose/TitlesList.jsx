@@ -5,6 +5,7 @@ export default function TitlesList({ quotes, className}) {
     let signal = className === 'gain-items' ? '+' : '';
     let title = className === 'gain-items' ? 'Gainers' : 'Losers';
 
+    console.log('quotes: ', quotes, className);
     if (quotes) {
         
         return (

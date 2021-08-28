@@ -36,10 +36,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
             if (!result.Succeeded)
             {
                 Console.WriteLine("gainlose: ", result);
-                return result.Result;
+                return result.Message;
             }
 
-            return result.Message;
+            return result.Result;
 
         }
     }
