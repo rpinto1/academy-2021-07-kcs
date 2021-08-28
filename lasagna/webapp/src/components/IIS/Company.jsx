@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { Table, Dropdown } from 'semantic-ui-react'
 
-export const Company = () => {
+export const Company = ({company}) => {
 
     
     return (
     <Table.Row>
         <Table.Cell>
-          BAC
-          BanckOfAmerica
+          {company.Ticker}
+        </Table.Cell>
+        <Table.Cell>
+          {company["Name"]}
         </Table.Cell>
         <Table.Cell>10000</Table.Cell>
         <Table.Cell>15</Table.Cell>
