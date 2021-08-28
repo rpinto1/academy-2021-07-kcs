@@ -75,12 +75,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 };
             });
 
-
-            
-            //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserServiceBO, UserServiceBO>();
-
-
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();

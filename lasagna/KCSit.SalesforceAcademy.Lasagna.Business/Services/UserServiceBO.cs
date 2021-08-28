@@ -108,20 +108,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         }
 
 
-        public IEnumerable<SignUpViewModel> GetAllUsers()
-        {
-            //return _users;
-            return null;
-        }
-
-        public SignUpViewModel GetUser(Guid guid)
-        {
-
-            return null;
-        }
-
-
-
         public async Task<GenericReturn> Update(SignUpViewModel newModel)
         {
             var userModel = await userManager.FindByEmailAsync(newModel.EmailAddress);
