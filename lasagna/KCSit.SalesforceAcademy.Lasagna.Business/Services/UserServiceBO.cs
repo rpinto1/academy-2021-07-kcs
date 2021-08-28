@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
+using KCSit.SalesforceAcademy.Lasagna.Business;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -20,8 +21,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         private readonly AppSettings _appSettings;
         private readonly UserManager<UserModel> userManager;
         private readonly SignInManager<UserModel> signInManager;
-
-        // signInManager.Options.User.RequireUniqueEmail = true;
+        private GenericBusinessLogic genericBusinessLogic;
 
 
         public UserServiceBO(IOptions<AppSettings> appSettings, UserManager<UserModel> userManager, SignInManager<UserModel> signInManager)
@@ -29,6 +29,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             _appSettings = appSettings.Value;
             this.userManager = userManager;
             this.signInManager = signInManager;
+
+            this.genericBusinessLogic = new GenericBusinessLogic();
         }
 
         //public UserModel Authenticate(string emailAddress, string password)
@@ -58,28 +60,25 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
-            // check if EmailAddress already exist
-            var userModel = await userManager.FindByEmailAsync(model.EmailAddress);
-
-            if(userModel != null)
+            return await genericBusinessLogic.GenericTransaction(async () => 
             {
-                return new GenericReturn { Succeeded = false, Message = "User already exists" };
-            }
+                var user = new UserModel()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    UserName = model.EmailAddress,
+                    Email = model.EmailAddress
+                };
 
-            var user = new UserModel() { 
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                UserName = model.EmailAddress,
-                Email = model.EmailAddress };
-            
-            var result = await userManager.CreateAsync(user, model.Password);
+                var result = await userManager.CreateAsync(user, model.Password);
 
-            if (!result.Succeeded)
-            {
-                return new GenericReturn { Succeeded = false, Message = "Error while creating this User" };
-            }
+                if (!result.Succeeded)
+                {
+                    return new GenericReturn { Succeeded = false, Message = result.Errors.First().Description };
+                }
 
-            return new GenericReturn { Succeeded = true, Message = "User created successfully" };
+                return new GenericReturn { Succeeded = true, Message = "User created successfully" };
+            });
         }
 
         public async Task<GenericReturn> SignIn(SignInViewModel model)
