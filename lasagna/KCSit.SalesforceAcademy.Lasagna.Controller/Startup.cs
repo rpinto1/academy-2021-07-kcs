@@ -35,7 +35,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
         {
             services.AddControllersWithViews();
 
-
+            services.AddScoped<lasagnakcsContext>();
+            services.AddIdentity<UserModel, IdentityRole>()
+                .AddEntityFrameworkStores<lasagnakcsContext>();
+            
+            
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
@@ -60,11 +64,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 };
             });
 
-
-
-            //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserServiceBO, UserServiceBO>();
-
+            services.AddScoped<IUserServiceBO, UserServiceBO>();
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
             services.AddScoped<ISearchDAO, SearchDAO>();
@@ -73,9 +73,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
-
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<lasagnakcsContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

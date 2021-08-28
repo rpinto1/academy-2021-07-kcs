@@ -37,6 +37,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
         {
             services.AddControllersWithViews();
 
+            services.AddScoped<lasagnakcsContext>();
+            services.AddIdentity<UserModel, IdentityRole>()
+                .AddEntityFrameworkStores<lasagnakcsContext>();
+
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
@@ -61,8 +65,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
                 };
             });
 
-            // For mocks use AddSingleton. For Database use AddScoped
-            //services.AddSingleton<IUserServiceBO, UserServiceBO>();
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 
 
@@ -79,13 +81,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO>();
-
-            services.AddScoped<lasagnakcsContext>();
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<lasagnakcsContext>();
-
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<lasagnakcsContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

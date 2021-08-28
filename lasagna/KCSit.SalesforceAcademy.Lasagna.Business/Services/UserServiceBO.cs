@@ -11,131 +11,165 @@ using System.Security.Claims;
 using System.Text;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
     public class UserServiceBO : IUserServiceBO
     {
-        private List<UserModel> _users = new List<UserModel> {
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Pete", LastName="Selvas", EmailAddress="pete@selvas.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Joana", LastName="Zerpa", EmailAddress="joana@zerpa.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Rui", LastName="Costa", EmailAddress="rui@costa.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Vitor", LastName="Costa", EmailAddress="vitor@costa.com", Password="test", ConfirmPassword="test"},
-            new UserModel{ UserInfoId=Guid.NewGuid(), FirstName="Raul", LastName="Ribeiro", EmailAddress="raul@ribeiro.com", Password="test", ConfirmPassword="test"}
-        };
-
         private readonly AppSettings _appSettings;
+        private readonly UserManager<UserModel> userManager;
+        private readonly SignInManager<UserModel> signInManager;
 
-        public UserServiceBO(IOptions<AppSettings> appSettings)
+        // signInManager.Options.User.RequireUniqueEmail = true;
+
+
+        public UserServiceBO(IOptions<AppSettings> appSettings, UserManager<UserModel> userManager, SignInManager<UserModel> signInManager)
         {
             _appSettings = appSettings.Value;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
-        public UserModel Authenticate(string emailAddress, string password)
-        {
-            var user = _users.SingleOrDefault(x => x.EmailAddress == emailAddress && x.Password == password);
+        //public UserModel Authenticate(string emailAddress, string password)
+        //{
+        //    var user = _users.SingleOrDefault(x => x.EmailAddress == emailAddress && x.Password == password);
 
-            if (user == null) return null;
+        //    if (user == null) return null;
 
-            var tokenHandler = new JwtSecurityTokenHandler();
+        //    var tokenHandler = new JwtSecurityTokenHandler();
 
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        //    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, user.UserInfoId.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+        //    var tokenDescriptor = new SecurityTokenDescriptor
+        //    {
+        //        Subject = new ClaimsIdentity(new Claim[] {
+        //            new Claim(ClaimTypes.Name, user.UserInfoId.ToString())
+        //        }),
+        //        Expires = DateTime.UtcNow.AddDays(7),
+        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //    };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+        //    var token = tokenHandler.CreateToken(tokenDescriptor);
+        //    user.Token = tokenHandler.WriteToken(token);
 
-            return user;
-        }
+        //    return user;
+        //}
 
-
-        public IEnumerable<UserModel> GetAll()
-        {
-            return _users;
-        }
-
-        public UserModel GetUser(int id)
-        {
-            if (id < 0 || id >= _users.Count)
-            {
-                return null;
-            }
-
-            return _users[id];
-        }
-
-
-        public GenericReturn AddUser(UserModel model)
+        public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
             // check if EmailAddress already exist
-            foreach (UserModel user in _users)
+            var userModel = await userManager.FindByEmailAsync(model.EmailAddress);
+
+            if(userModel != null)
             {
-                if (user.EmailAddress == model.EmailAddress)
-                    return new GenericReturn { Succeeded = false, Message = "User already exists" };
+                return new GenericReturn { Succeeded = false, Message = "User already exists" };
             }
 
-            // user data is OK. Add user
-            _users.Add(new UserModel
-            {
-                UserInfoId = Guid.NewGuid(),
+            var user = new UserModel() { 
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                EmailAddress = model.EmailAddress,
-                Password = model.Password,
-                ConfirmPassword = model.ConfirmPassword
-            });
+                UserName = model.EmailAddress,
+                Email = model.EmailAddress };
+            
+            var result = await userManager.CreateAsync(user, model.Password);
 
-
-            model.UserName = model.EmailAddress;
-            model.Email = model.EmailAddress;
-            model.NormalizedEmail = model.EmailAddress;
-            model.PasswordHash = model.Password;
-            var addUserResult = new GenericDAO().Add<IdentityUser>(model);
-
-
-            if (addUserResult == null)
+            if (!result.Succeeded)
             {
-                return new GenericReturn { Succeeded = false, Message = "Error while adding this User" };
+                return new GenericReturn { Succeeded = false, Message = "Error while creating this User" };
             }
 
-            return new GenericReturn { Succeeded = true, Message = "User added successfully" };
+            return new GenericReturn { Succeeded = true, Message = "User created successfully" };
         }
 
-        public GenericReturn UpdateUser(int id, UserModel model)
+        public async Task<GenericReturn> SignIn(SignInViewModel model)
         {
-            var currentUser = GetUser(id);
+            //// check if user is logged in
 
-            // make sure user is not allowed to change is email address
-            if (currentUser.EmailAddress != model.EmailAddress)
-                return new GenericReturn { Succeeded = false, Message = "User can not change is email address" };
+            // check if user exists
+            var userModel = await userManager.FindByEmailAsync(model.EmailAddress);
+
+            if (userModel == null)
+            {
+                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
+            }
+
+            await signInManager.SignInAsync(userModel, isPersistent: false);
+
+            return new GenericReturn { Succeeded = true, Message = "User signed in successfully" };
+        }
+
+
+        public async Task<GenericReturn> SignOut(UserModel model)
+        {
+            await signInManager.SignOutAsync();
+
+            return new GenericReturn { Succeeded = true, Message = "User signed out successfully" };
+        }
+
+
+        public IEnumerable<SignUpViewModel> GetAllUsers()
+        {
+            //return _users;
+            return null;
+        }
+
+        public SignUpViewModel GetUser(Guid guid)
+        {
+
+            return null;
+        }
+
+
+
+        public async Task<GenericReturn> Update(SignUpViewModel newModel)
+        {
+            var userModel = await userManager.FindByEmailAsync(newModel.EmailAddress);
+
+            if (userModel == null)
+            {
+                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
+            }
+
+            //// make sure user is not allowed to change is email address
+            //if (userModel.Email != newModel.EmailAddress)
+            //    return new GenericReturn { Succeeded = false, Message = "User can not change email address" };
 
             // user data is ok. Update user
-            _users[id].FirstName = model.FirstName;
-            _users[id].LastName = model.LastName;
-            _users[id].Password = model.Password;
-            _users[id].ConfirmPassword = model.ConfirmPassword;
+            userModel.FirstName = newModel.FirstName;
+            userModel.LastName = newModel.LastName;
+            var identityResult = await userManager.ChangePasswordAsync(userModel, userModel.PasswordHash, newModel.Password);
+            
+
+            var newUserModel = await userManager.UpdateAsync(userModel);
+
+            if (!newUserModel.Succeeded)
+            {
+                return new GenericReturn { Succeeded = false, Message = "User could not be updated" };
+            }
 
             return new GenericReturn { Succeeded = true, Message = "User updated successfully" };
         }
 
 
-        public GenericReturn DeleteId(int id)
+        public async Task<GenericReturn> Delete(UserModel model)
         {
-            if (id < 0 || id >= _users.Count)
+            // check if user exists
+            var userModel = await userManager.FindByEmailAsync(model.Email);
+
+            if (userModel == null)
             {
-                return new GenericReturn { Succeeded = false, Message = "Invalid Id number" };
+                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
             }
 
-            _users.RemoveAt(id);
-            return new GenericReturn { Succeeded = true, Message = "UserId " + id + " was deleted" };
+            var identityResult = await userManager.DeleteAsync(userModel);
+
+            if (!identityResult.Succeeded)
+            {
+                return new GenericReturn { Succeeded = false, Message = "Could not delete this User" };
+            }
+
+            return new GenericReturn { Succeeded = true, Message = "User deleted successfully" };
         }
 
 
