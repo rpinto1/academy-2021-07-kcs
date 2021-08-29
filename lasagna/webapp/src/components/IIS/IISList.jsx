@@ -3,6 +3,7 @@ import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
 import { Company } from './Company'
+import Pagination from './Pagination'
 
 export const IISList = () => {
 
@@ -12,6 +13,7 @@ export const IISList = () => {
     const [sector, setsector] = useState([{key: "", text: "", value: ""}])
     const [sectorValue, setsectorValue] = useState("")
     const [industry, setindustry] = useState([{key: "", text: "", value: ""}])
+    const defaultValue = [{key: "", text: "", value: ""}]
     const [industryValue, setindustryValue] = useState("")
     const [companyCount, setcompanyCount] = useState(100)
     const [currentPage, setcurrentPage] = useState(1)
@@ -38,26 +40,27 @@ export const IISList = () => {
         }
         )}
     
-
+        const fetchCompanys = async (page = -1) => {
+            const rawResponse = await fetch(`http://localhost:3010/api/Companies/IIS`, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({SectorName : sectorValue,IndexName: indexValue,IndustryName: industryValue,Page:currentPage})
+            });
+            const content = await rawResponse.json();
+            let companyInfo = JSON.parse(content);
+            setcompanies(companyInfo["companyPoco"])
+            setcompanyCount(companyInfo["Count"])
+            if (page == -1){
+                setcurrentPage(1);
+            }
+            };
 
         useEffect(() => {
             let timer1 = setTimeout(() => 
-                (async () => {
-                    const rawResponse = await fetch(`http://localhost:3010/api/Companies/IIS`, {
-                      method: 'POST',
-                      headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify({SectorName : sectorValue,IndexName: indexValue,IndustryName: industryValue,Page:currentPage})
-                    });
-                    const content = await rawResponse.json();
-                    let companyInfo = JSON.parse(content);
-                    setcompanies(companyInfo["companyPoco"])
-                    setcompanyCount(companyInfo["Count"])
-                    })()
-                
-            
+            fetchCompanys(-1)
             , 1000);
       
             // this will clear Timeout
@@ -66,9 +69,18 @@ export const IISList = () => {
             return () => {
               clearTimeout(timer1);
             };
-          }, [indexValue,indexValue,industryValue,currentPage])
+          }, [indexValue,sectorValue,industryValue])
 
+          useEffect(() => {
+            let timer1 = setTimeout(() => 
+                fetchCompanys(currentPage)
+            , 1000);
+      
 
+            return () => {
+              clearTimeout(timer1);
+            };
+          }, [currentPage])
 
         useEffect(() => {
             var data = fetch(`http://localhost:3010/api/Companies/industries/${sectorValue}`)
@@ -78,7 +90,7 @@ export const IISList = () => {
                 text: x["Name"],
                 value: x["Name"],
             })) )
-            .then(arrayFinal => setindustry(arrayFinal))
+            .then(arrayFinal => setindustry([...defaultValue,...arrayFinal]))
         }, [sectorValue])
 
     useEffect(() => {
@@ -92,14 +104,14 @@ export const IISList = () => {
                 text: x["Name"],
                 value: x["Name"],
             })) )
-            .then(arrayFinal => setindex(arrayFinal))
+            .then(arrayFinal => setindex((prevState) => [...prevState, ...arrayFinal]))
 
             data.then(data => data["sector"].map(x=>({
                 key: x["Name"],
                 text: x["Name"],
                 value: x["Name"],
             })) )
-            .then(arrayFinal => setsector(arrayFinal))
+            .then(arrayFinal => setsector((prevState) => [...prevState, ...arrayFinal]))
             console.log(index);
         } catch (error) {
             console.log(error)
@@ -139,23 +151,7 @@ export const IISList = () => {
                         <Menu.Item onClick={()=>handlePageNext("-")} as='a' icon>
                         <Icon name='chevron left' />
                         </Menu.Item>
-                        {
-                           currentPage < eval((Math.ceil(companyCount/10)) -3)  ?
-                           <>
-                           <Menu.Item onClick={handlePageClick} as='a'>{currentPage}</Menu.Item>
-                           <Menu.Item onClick={handlePageClick} as='a'>{eval(currentPage + 1)}</Menu.Item>
-                           <Menu.Item as='a'>...</Menu.Item>
-                           <Menu.Item onClick={handlePageClick}as='a'>{Math.ceil(companyCount/10)}</Menu.Item>
-                           </>
-                           : 
-                           <>
-                           <Menu.Item onClick={handlePageClick} as='a'>{eval(Math.ceil(companyCount/10) -3)}</Menu.Item>
-                           <Menu.Item onClick={handlePageClick} as='a'>{eval(Math.ceil(companyCount/10) -2)}</Menu.Item>
-                           <Menu.Item onClick={handlePageClick} as='a'>{eval(Math.ceil(companyCount/10) -1)}</Menu.Item>
-                           <Menu.Item onClick={handlePageClick} as='a'>{eval(Math.ceil(companyCount/10))}</Menu.Item>
-                           </>
-                        }
-
+                        <Pagination count = {companyCount} page={currentPage} handlePageClick={handlePageClick}/>
                         <Menu.Item onClick={() => handlePageNext("+")} as='a' icon>
                         <Icon name='chevron right' />
                         </Menu.Item>

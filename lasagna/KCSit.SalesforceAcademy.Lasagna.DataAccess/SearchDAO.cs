@@ -88,16 +88,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
                 var query = (from company in context.Companies
                              join companyIndice in context.CompanyIndices
-                             on company.Id equals companyIndice.CompanyId
+                             on company.Id equals companyIndice.CompanyId into LJCI from companyIndex in LJCI.DefaultIfEmpty()
                              join indice in context.Indices
-                             on companyIndice.IndexId equals indice.Id
+                             on companyIndex.IndexId equals indice.Id into LJI from index in LJI.DefaultIfEmpty()
                              join sector in context.Sectors
                              on company.SectorId equals sector.Id
                              join industry in context.Industries
                              on company.IndustryId equals industry.Id
-                             where indice.Name.ToLower().Contains(indexName.ToLower()) &&
+                             where index.Name.ToLower().Contains(indexName.ToLower()) &&
                              sector.Name.ToLower().Contains(sectorName.ToLower()) &&
-                             industry.Name.ToLower().Contains(industryName.ToLower()) 
+                             industry.Name.ToLower().Contains(industryName.ToLower())
                              select new CompanyPoco { Name = company.Name , Ticker = company.Ticker});
 
                 var countResults = await query.CountAsync();
