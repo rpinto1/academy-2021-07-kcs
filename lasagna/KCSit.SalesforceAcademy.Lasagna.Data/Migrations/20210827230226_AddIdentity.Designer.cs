@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
 {
     [DbContext(typeof(lasagnakcsContext))]
-    [Migration("20210825234259_AddIdentity")]
+    [Migration("20210827230226_AddIdentity")]
     partial class AddIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

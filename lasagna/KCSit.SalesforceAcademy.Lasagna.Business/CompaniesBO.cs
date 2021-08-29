@@ -41,10 +41,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
         public async Task<GenericReturn<List<Industry>>> GetIndustries(string sectorName)
         {
-            if (sectorName.Equals("All")) 
-            {
-                sectorName = "";
-            }
 
             return await _genericBusiness.GenericTransaction(
 

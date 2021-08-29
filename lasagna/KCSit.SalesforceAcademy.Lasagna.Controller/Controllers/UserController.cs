@@ -2,9 +2,11 @@
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,77 +17,65 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     public class UserController : ControllerBase
     {
 
-        private IUserServiceBO _userService;
+        private IUserServiceBO userService;
 
 
         public UserController(IUserServiceBO userService)
         {
-            _userService = userService;
+            this.userService = userService;
         }
 
 
-        [Route("api/user/authenticate")]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] UserModelAuthentication model)
-        {
-            Console.WriteLine("Authenticate request - USER: " + model.EmailAdress + " PASSWORD: " + model.Password);
-            var user = _userService.Authenticate(model.EmailAdress, model.Password);
-
-            if (user == null) return BadRequest(new { message = "Email address and/or password incorrect" });
-
-            return Ok(user);
-        }
-
-
-
-        [Route("api/user")]
-        [Authorize]
-        [HttpGet]
-        public IEnumerable<UserModel> Get()
-        {
-            return _userService.GetAll();
-        }
-
-
-
-        [Route("api/user/{id}")]
-        [Authorize]
-        [HttpGet("{id}")]
-        public UserModel Get(int id)
-        {
-            return _userService.GetUser(id);
-        }
-
-
-
-        [Route("api/user")]
+        [Route("api/SignUp")]
         [HttpPost]
-        public IActionResult Post([FromBody] UserModel model)
+        public async Task<IActionResult> SignUp([FromBody] SignUpViewModel model)
         {
-            GenericReturn addUserResult = _userService.AddUser(model);
+            GenericReturn signUpResult = await userService.SignUp(model);
 
-            return ReturnResult(addUserResult);
+            return ReturnResult(signUpResult);
         }
 
 
-        [Route("api/<UserController>/{id}")]
-        [Authorize]
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UserModel model)
+        [Route("api/SignIn")]
+        [HttpPost]
+        public async Task<IActionResult> SignIn([FromBody] SignInViewModel model)
         {
-            GenericReturn updateUserResult = _userService.UpdateUser(id, model);
+            GenericReturn signInResult = await userService.SignIn(model);
+
+            return ReturnResult(signInResult);
+        }
+
+
+        [Route("api/SignOut")]
+        //[Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SignOut([FromBody] UserModel model)
+        {
+            GenericReturn signOutResult = await userService.SignOut(model);
+
+            return ReturnResult(signOutResult);
+        }
+
+
+
+        [Route("api/Update")]
+        //[Authorize]
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] SignUpViewModel newModel)
+        {
+            GenericReturn updateUserResult = await userService.Update(newModel);
 
             return ReturnResult(updateUserResult);
         }
 
 
 
-        [Route("api/<UserController>/{id}")]
-        [Authorize]
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [Route("api/Delete")]
+        //[Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] UserModel model)
         {
-            GenericReturn deleteResult = _userService.DeleteId(id);
+            GenericReturn deleteResult = await userService.Delete(model);
 
             return ReturnResult(deleteResult);
         }

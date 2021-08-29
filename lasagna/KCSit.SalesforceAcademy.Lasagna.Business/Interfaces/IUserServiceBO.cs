@@ -1,21 +1,20 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+using System;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 {
     public interface IUserServiceBO
     {
-        public UserModel Authenticate(string emailAdress, string password);
+        public Task<GenericReturn> SignUp(SignUpViewModel model);
 
-        public IEnumerable<UserModel> GetAll();
+        public Task<GenericReturn> SignIn(SignInViewModel model);
 
-        public UserModel GetUser(int id);
+        public Task<GenericReturn> SignOut(UserModel model);
 
-        public GenericReturn AddUser(UserModel model);
+        public Task<GenericReturn> Update(SignUpViewModel newModel);
 
-        public GenericReturn UpdateUser(int id, UserModel model);
-
-        public GenericReturn DeleteId(int id);
+        public Task<GenericReturn> Delete(UserModel model);
     }
 }

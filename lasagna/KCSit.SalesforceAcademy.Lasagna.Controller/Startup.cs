@@ -34,7 +34,29 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
 
+
+            services.AddScoped<lasagnakcsContext>();
+            services.AddIdentity<UserModel, IdentityRole>(option =>
+                { option.User.RequireUniqueEmail = true;
+                    option.Password.RequiredLength = 8;
+                    option.Password.RequireLowercase = true;
+                    option.Password.RequireUppercase = true;
+                    option.Password.RequireDigit = true;
+                    option.Password.RequireNonAlphanumeric = true;
+                    option.Password.RequiredUniqueChars = 5;
+                })
+                .AddEntityFrameworkStores<lasagnakcsContext>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -60,11 +82,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 };
             });
 
-
-
-            //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserServiceBO, UserServiceBO>();
-
+            services.AddScoped<IUserServiceBO, UserServiceBO>();
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
             services.AddScoped<ISearchDAO, SearchDAO>();
@@ -73,9 +91,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
-
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<lasagnakcsContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,7 +106,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

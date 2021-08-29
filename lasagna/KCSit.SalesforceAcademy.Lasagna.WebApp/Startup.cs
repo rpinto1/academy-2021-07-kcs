@@ -5,6 +5,7 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Data.Entity;
 using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.WebApp
@@ -34,6 +36,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddScoped<lasagnakcsContext>();
+            services.AddIdentity<UserModel, IdentityRole>()
+                .AddEntityFrameworkStores<lasagnakcsContext>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -59,10 +65,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
                 };
             });
 
-
-
-            //services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IUserServiceBO, UserServiceBO>();
+            services.AddScoped<IUserServiceBO, UserServiceBO>();
 
 
             // In production, the React files will be served from this directory
@@ -77,11 +80,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
-            services.AddScoped<ICompaniesBO, CompaniesBO >();
-
-
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<lasagnakcsContext>();
+            services.AddScoped<ICompaniesBO, CompaniesBO>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

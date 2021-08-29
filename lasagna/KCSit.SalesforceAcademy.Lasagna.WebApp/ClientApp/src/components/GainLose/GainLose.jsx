@@ -12,7 +12,7 @@ export default function GainLose() {
 
     return (
         <div>
-            <GainLoseFetcher gainLoseURL={gainLoseURL} />
+            <GainLoseFetcher url={gainLoseURL} />
         </div>
     )
 }
