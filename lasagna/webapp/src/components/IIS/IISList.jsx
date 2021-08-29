@@ -1,5 +1,3 @@
-
-import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
 import { Company } from './Company'
