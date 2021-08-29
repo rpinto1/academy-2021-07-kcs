@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Button, Form, Container } from 'semantic-ui-react';
+import React, { useState, useCallback } from 'react';
+import { Form, Container, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import Captcha from './Captcha';
+import { validateCaptcha } from 'react-simple-captcha';
+import AboutUsContactButtons from '../AboutUsContactButtons';
 
 export default function SignUpForm() {
 
@@ -10,11 +12,11 @@ export default function SignUpForm() {
         LastName: '',
         EmailAddress:'',
         Password: '',
-        ConfirmPassWord: ''    
+        ConfirmPassword: ''    
     });
 
 
-    function handleChange (event) {
+    const handleChange = (event) => {
         const { id, value } = event.target
         
         setNewUser(prevState => ({
@@ -31,13 +33,14 @@ export default function SignUpForm() {
         let user_captcha = document.getElementById('user_captcha_input').value;
  
         if (validateCaptcha(user_captcha)==true) {
-            
-            axios.post('api/user', newUser)
+            console.log(user_captcha);
+            console.log(newUser);
+            /* axios.post('api/user', newUser)
              .catch ((error) => {console.log(error);});
              console.log(newUser);
             //recharge captcha box
             loadCaptchaEnginge(6); 
-            document.getElementById('user_captcha_input').value = "";
+            document.getElementById('user_captcha_input').value = ""; */
         }
  
         else {
@@ -49,9 +52,9 @@ export default function SignUpForm() {
 
     return (
        
-    <Container className= 'form'> 
+    <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
-        <Form>
+        <Form onSubmit={handleSubmit}>
         <Form.Field>
             <label>First Name</label>
             <input 
@@ -109,9 +112,12 @@ export default function SignUpForm() {
         <Form.Field>
             <Captcha />
         </Form.Field>
-        <Button type='submit' onClick={() => handleSubmit}>Submit</Button>
+        <Form.Field>
+            <Button type='submit'>Submit</Button>
+        </Form.Field>
+        
         </Form>
-
+        <AboutUsContactButtons />
         </Container>
         
         
