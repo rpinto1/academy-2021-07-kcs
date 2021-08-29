@@ -8,12 +8,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
     public class SignInViewModel
     {
         [Required]
-        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email Address is not valid")]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Invalid Email Address")]
         public string EmailAddress { get; set; }
 
         [Required]
-        [RegularExpression(@"((?=.*\d)(?=.*[A-Z])(?=.*\W).{8,100})",
-            ErrorMessage = "Password must have at least 8 characters length, at least one capital letter, at least one digit and at least one special character")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Display(Name = "Remember me")]
+        public bool RememberMe { get; set; }
+
     }
 }

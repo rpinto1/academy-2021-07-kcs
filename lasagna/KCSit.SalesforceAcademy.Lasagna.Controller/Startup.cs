@@ -47,8 +47,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
 
 
             services.AddScoped<lasagnakcsContext>();
-            services.AddIdentity<UserModel, IdentityRole>(option => 
-                option.User.RequireUniqueEmail = true)
+            services.AddIdentity<UserModel, IdentityRole>(option =>
+                { option.User.RequireUniqueEmail = true;
+                    option.Password.RequiredLength = 8;
+                    option.Password.RequireLowercase = true;
+                    option.Password.RequireUppercase = true;
+                    option.Password.RequireDigit = true;
+                    option.Password.RequireNonAlphanumeric = true;
+                    option.Password.RequiredUniqueChars = 5;
+                })
                 .AddEntityFrameworkStores<lasagnakcsContext>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");

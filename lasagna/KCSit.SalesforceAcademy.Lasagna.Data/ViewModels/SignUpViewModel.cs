@@ -18,20 +18,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public string LastName { get; set; }
 
         [Required]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Invalid Email Address")]
         //[DataType(DataType.EmailAddress)]
-        //[EmailAddress]
-        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Email Address is not valid")]
+        [Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
 
         [Required]
-        //[DataType(DataType.Password)]
-        [RegularExpression(@"((?=.*\d)(?=.*[A-Z])(?=.*\W).{8,100})", 
-            ErrorMessage = "Password must have at least 8 characters length, at least one capital letter, at least one digit and at least one special character")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required]
-        //[DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Password and Confirm Password do not match")]
+        [DataType(DataType.Password)]
+        [Compare("Password")]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
 

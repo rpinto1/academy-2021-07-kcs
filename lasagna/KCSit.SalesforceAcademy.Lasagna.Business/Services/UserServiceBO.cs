@@ -74,7 +74,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
                 if (!result.Succeeded)
                 {
-                    return new GenericReturn { Succeeded = false, Message = result.Errors.First().Description };
+                    string errorMsg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        errorMsg = String.Concat(errorMsg, error.Description, " ");
+                    }
+                    return new GenericReturn { Succeeded = false, Message = errorMsg };
                 }
 
                 return new GenericReturn { Succeeded = true, Message = "User created successfully" };
@@ -83,20 +88,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignIn(SignInViewModel model)
         {
-            //// check if user is logged in
-
-            // check if user exists
-            var userModel = await userManager.FindByEmailAsync(model.EmailAddress);
-
-            if (userModel == null)
+            return await genericBusinessLogic.GenericTransaction(async () =>
             {
-                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
-            }
+                //// check if user is already logged in
 
-            await signInManager.SignInAsync(userModel, isPersistent: false);
+                var result = await signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
-            return new GenericReturn { Succeeded = true, Message = "User signed in successfully" };
+                if (!result.Succeeded)
+                {
+                    return new GenericReturn { Succeeded = false, Message = "Invalid Sign In credentials" };
+                }
+
+                return new GenericReturn { Succeeded = true, Message = "User signed in successfully" };
+            });
         }
+
 
 
         public async Task<GenericReturn> SignOut(UserModel model)
