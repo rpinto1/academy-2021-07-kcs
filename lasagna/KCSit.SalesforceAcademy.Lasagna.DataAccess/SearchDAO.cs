@@ -44,7 +44,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         //todos os métodos devem ter um verbo
         //o método deve ser assíncrono
         //para ter paginação, vai ter que ter os parâmetros skip e take
-        public async Task<List<CompanyPoco>> SearchCompaniesBySearchBar(string search)
+        public async Task<List<CompanyPoco>> SearchCompaniesBySearchQuery(string search)
         {
 
             using (var context = new lasagnakcsContext())

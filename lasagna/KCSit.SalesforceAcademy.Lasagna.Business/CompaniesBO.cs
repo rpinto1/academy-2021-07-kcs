@@ -38,7 +38,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
 
-                return await _searchDao.SearchCompaniesBySearchBar(companiesNamesTickers);
+                return await _searchDao.SearchCompaniesBySearchQuery(companiesNamesTickers);
             }
 
             );
