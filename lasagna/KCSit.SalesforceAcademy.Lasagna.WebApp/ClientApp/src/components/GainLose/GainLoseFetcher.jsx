@@ -5,36 +5,31 @@ import TitlesList from './TitlesList';
 
 export default function GainLoseFetcher(props) {
 
-    const {options, urlSet} = props;
-
+    const {url} = props;
     
-    const [gainersData, setGainersData] = useState({});
-    const [losersData, setLosersData] = useState({});
+    const [allData, setAllData] = useState({});
 
-
-    const fetchData = async (url, setterFunc) => {
-
-        let response = await fetch(url, options)
+    const fetchData = async endpoint => {
+        
+        let response = await fetch(endpoint)
             .catch(err => console.error(err));
 
         response = await response.json();
-        setterFunc(response);
-        console.log(response)
-
+        setAllData(response);
+        
     };
 
-
+ 
     useEffect(() => {
-        fetchData(urlSet.gainersUrl, setGainersData);
-        fetchData(urlSet.losersUrl, setLosersData);
+        fetchData(url);
     }, []);
 
 
     return (
         <main className="App">
             <section className='gainlose-data' >
-                <TitlesList className='gain-items' quotes={gainersData} />
-                <TitlesList className='lose-items' quotes={losersData} />
+                <TitlesList className='gain-items' quotes={allData.gainers} />
+                <TitlesList className='lose-items' quotes={allData.losers} /> 
             </section>
         </main>
     );

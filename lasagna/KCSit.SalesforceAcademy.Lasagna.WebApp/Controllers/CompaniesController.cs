@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using KCSit.SalesforceAcademy.Lasagna.Data;
-using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
 
@@ -45,20 +44,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.WebApp.Controllers
         }
         // GET api/<CompaniesController>/indexSector
         [HttpGet("indexSector")]
-        public string GetIndexAndSector()
+        public async Task<string> GetIndexAndSector()
         {
-            var indexList = _genericLogic.GetAll<Data.Index>().Result;
-            var sectorList = _genericLogic.GetAll<Sector>().Result;
-            return JsonConvert.SerializeObject( new {index = indexList.Result , sector = sectorList.Result });
+            var indexList = (await _genericLogic.GetAll<Data.Index>()).Result;
+            var sectorList =  (await _genericLogic.GetAll<Sector>()).Result;
+            return JsonConvert.SerializeObject( new {index = indexList , sector = sectorList });
         }
         // GET api/<CompaniesController>/industries/?
         [HttpGet("industries/{sector}")]
-        public string GetIndustries(string sector)
+        public async Task<string> GetIndustries(string sector)
         {
-            var industriesList = _companiesBO.GetIndustries(sector).Result;
+            var industriesList = (await _companiesBO.GetIndustries(sector)).Result;
 
 
             return  JsonConvert.SerializeObject(industriesList);
+        }
+        // POST api/<CompaniesController>
+        [HttpPost("IIS")]
+        public async Task<string> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
+        {
+
+            var companies = (await _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page)).Result;
+            return JsonConvert.SerializeObject(companies);
         }
 
         // POST api/<CompaniesController>

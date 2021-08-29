@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
+using KCSit.SalesforceAcademy.Lasagna.Data.Migrations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
-    public partial class lasagnakcsContext : IdentityDbContext
+    public partial class lasagnakcsContext : IdentityDbContext<UserModel>
     {
         public lasagnakcsContext()
         {
