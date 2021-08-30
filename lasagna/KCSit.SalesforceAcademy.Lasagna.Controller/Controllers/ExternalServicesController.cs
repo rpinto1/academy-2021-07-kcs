@@ -27,7 +27,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
 
         [HttpGet("gainlose")]
-        public string Get()
+        public string GetGainLose()
         {
 
 
@@ -35,12 +35,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             if (!result.Succeeded)
             {
-                Console.WriteLine("gainlose: ", result);
                 return result.Message;
             }
 
             return result.Result;
 
         }
+
+        [HttpGet("news")]
+        public string GetNews()
+        {
+
+
+            var result = _externalServicesBO.FetchNewsData();
+
+            if (!result.Succeeded)
+            {
+                return result.Message;
+            }
+
+            return result.Result;
+
+        }
+
     }
 }

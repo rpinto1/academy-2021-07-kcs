@@ -7,6 +7,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
     {
         GenericReturn<string> FetchGainLoseData();
 
+        GenericReturn<string> FetchNewsData();
 
     }
 }
