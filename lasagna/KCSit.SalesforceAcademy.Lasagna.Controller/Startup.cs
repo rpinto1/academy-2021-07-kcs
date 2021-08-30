@@ -2,6 +2,7 @@ using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
+using KCSit.SalesforceAcademy.Lasagna.Controller.Controllers;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
@@ -91,6 +92,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
+            services.AddScoped<GenericControllerReturn>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

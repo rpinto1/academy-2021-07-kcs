@@ -17,12 +17,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     public class UserController : ControllerBase
     {
 
-        private IUserServiceBO userService;
+        private readonly IUserServiceBO _userService;
+        private GenericControllerReturn _genericControllerReturn;
 
 
-        public UserController(IUserServiceBO userService)
+        public UserController(IUserServiceBO userService, GenericControllerReturn genericControllerReturn)
         {
-            this.userService = userService;
+            this._userService = userService;
+            this._genericControllerReturn = genericControllerReturn;
         }
 
 
@@ -30,9 +32,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] SignUpViewModel model)
         {
-            GenericReturn signUpResult = await userService.SignUp(model);
+            var signUpResult = _userService.SignUp(model);
 
-            return ReturnResult(signUpResult);
+            return await _genericControllerReturn.ReturnResult(signUpResult);
         }
 
 
@@ -40,7 +42,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn([FromBody] SignInViewModel model)
         {
-            GenericReturn signInResult = await userService.SignIn(model);
+            GenericReturn signInResult = await _userService.SignIn(model);
 
             return ReturnResult(signInResult);
         }
@@ -51,7 +53,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpPost]
         public async Task<IActionResult> SignOut([FromBody] ApplicationUser model)
         {
-            GenericReturn signOutResult = await userService.SignOut(model);
+            GenericReturn signOutResult = await _userService.SignOut(model);
 
             return ReturnResult(signOutResult);
         }
@@ -63,7 +65,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] SignUpViewModel newModel)
         {
-            GenericReturn updateUserResult = await userService.Update(newModel);
+            GenericReturn updateUserResult = await _userService.Update(newModel);
 
             return ReturnResult(updateUserResult);
         }
@@ -75,22 +77,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] ApplicationUser model)
         {
-            GenericReturn deleteResult = await userService.Delete(model);
+            GenericReturn deleteResult = await _userService.Delete(model);
 
             return ReturnResult(deleteResult);
         }
 
 
 
-        private IActionResult ReturnResult(GenericReturn action)
-        {
-            if (action.Succeeded)
-            {
-                return Ok(new { message = action.Message });
-            }
-
-            return BadRequest(new { message = action.Message });
-        }
 
 
     }

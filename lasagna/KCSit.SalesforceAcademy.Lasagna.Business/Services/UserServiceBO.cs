@@ -79,11 +79,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     {
                         errorMsg = String.Concat(errorMsg, error.Description, " ");
                     }
-                    throw new Exception(errorMsg);
-                    //return new GenericReturn { Succeeded = false, Message = errorMsg };
+                    //throw new Exception(errorMsg);
+                    return new GenericReturn { Succeeded = false, Message = errorMsg };
                 }
 
-                //return new GenericReturn { Succeeded = true, Message = "User created successfully" };
+                return new GenericReturn { Succeeded = true, Message = "User created successfully" };
             });
         }
 
