@@ -49,7 +49,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Route("api/SignOut")]
         //[Authorize]
         [HttpPost]
-        public async Task<IActionResult> SignOut([FromBody] UserModel model)
+        public async Task<IActionResult> SignOut([FromBody] ApplicationUser model)
         {
             GenericReturn signOutResult = await userService.SignOut(model);
 
@@ -73,7 +73,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Route("api/Delete")]
         //[Authorize]
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] UserModel model)
+        public async Task<IActionResult> Delete([FromBody] ApplicationUser model)
         {
             GenericReturn deleteResult = await userService.Delete(model);
 

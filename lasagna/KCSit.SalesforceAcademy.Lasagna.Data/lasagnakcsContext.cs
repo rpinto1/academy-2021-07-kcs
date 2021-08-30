@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data
 {
-    public partial class lasagnakcsContext : IdentityDbContext<UserModel>
+    public partial class lasagnakcsContext : IdentityDbContext<ApplicationUser>
     {
         public lasagnakcsContext()
         {

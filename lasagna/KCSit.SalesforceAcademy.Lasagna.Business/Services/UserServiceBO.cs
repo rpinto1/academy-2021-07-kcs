@@ -19,12 +19,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
     public class UserServiceBO : IUserServiceBO
     {
         private readonly AppSettings _appSettings;
-        private readonly UserManager<UserModel> userManager;
-        private readonly SignInManager<UserModel> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private GenericBusinessLogic genericBusinessLogic;
 
 
-        public UserServiceBO(IOptions<AppSettings> appSettings, UserManager<UserModel> userManager, SignInManager<UserModel> signInManager)
+        public UserServiceBO(IOptions<AppSettings> appSettings, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _appSettings = appSettings.Value;
             this.userManager = userManager;
@@ -33,7 +33,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             this.genericBusinessLogic = new GenericBusinessLogic();
         }
 
-        //public UserModel Authenticate(string emailAddress, string password)
+        //public ApplicationUser Authenticate(string emailAddress, string password)
         //{
         //    var user = _users.SingleOrDefault(x => x.EmailAddress == emailAddress && x.Password == password);
 
@@ -62,7 +62,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         {
             return await genericBusinessLogic.GenericTransaction(async () => 
             {
-                var user = new UserModel()
+                var user = new ApplicationUser()
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -79,16 +79,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     {
                         errorMsg = String.Concat(errorMsg, error.Description, " ");
                     }
-                    return new GenericReturn { Succeeded = false, Message = errorMsg };
+                    throw new Exception(errorMsg);
+                    //return new GenericReturn { Succeeded = false, Message = errorMsg };
                 }
 
-                return new GenericReturn { Succeeded = true, Message = "User created successfully" };
+                //return new GenericReturn { Succeeded = true, Message = "User created successfully" };
             });
         }
 
         public async Task<GenericReturn> SignIn(SignInViewModel model)
         {
-            return await genericBusinessLogic.GenericTransaction(async () =>
+            return await genericBusinessLogic.GenericTransaction<GenericReturn>(async () =>
             {
                 //// check if user is already logged in
 
@@ -105,7 +106,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
 
 
-        public async Task<GenericReturn> SignOut(UserModel model)
+        public async Task<GenericReturn> SignOut(ApplicationUser model)
         {
             await signInManager.SignOutAsync();
 
@@ -143,7 +144,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         }
 
 
-        public async Task<GenericReturn> Delete(UserModel model)
+        public async Task<GenericReturn> Delete(ApplicationUser model)
         {
             // check if user exists
             var userModel = await userManager.FindByEmailAsync(model.Email);
