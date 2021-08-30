@@ -39,7 +39,7 @@ function ArticleList() {
                         articles &&
                         articles.map((article, i) => (
 
-                            <td><Article article={article} /></td>
+                            <td><Article article={article} key={i} /></td>
 
                         ))
                     }
