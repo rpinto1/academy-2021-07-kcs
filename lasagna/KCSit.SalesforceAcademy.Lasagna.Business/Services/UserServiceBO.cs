@@ -19,18 +19,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
     public class UserServiceBO : IUserServiceBO
     {
         private readonly AppSettings _appSettings;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private GenericBusinessLogic genericBusinessLogic;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private GenericBusinessLogic _genericBusinessLogic;
 
 
-        public UserServiceBO(IOptions<AppSettings> appSettings, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserServiceBO(IOptions<AppSettings> appSettings, GenericBusinessLogic genericBusinessLogic,
+            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            _appSettings = appSettings.Value;
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            this._appSettings = appSettings.Value;
+            this._genericBusinessLogic = genericBusinessLogic;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
 
-            this.genericBusinessLogic = new GenericBusinessLogic();
         }
 
         //public ApplicationUser Authenticate(string emailAddress, string password)
@@ -60,7 +61,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
-            return await genericBusinessLogic.GenericTransaction(async () => 
+            return await _genericBusinessLogic.GenericTransaction(async () => 
             {
                 var user = new ApplicationUser()
                 {
@@ -70,7 +71,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     Email = model.EmailAddress
                 };
 
-                var result = await userManager.CreateAsync(user, model.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (!result.Succeeded)
                 {
@@ -89,11 +90,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignIn(SignInViewModel model)
         {
-            return await genericBusinessLogic.GenericTransaction<GenericReturn>(async () =>
+            return await _genericBusinessLogic.GenericTransaction<GenericReturn>(async () =>
             {
                 //// check if user is already logged in
 
-                var result = await signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
                 if (!result.Succeeded)
                 {
@@ -108,7 +109,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignOut(ApplicationUser model)
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
 
             return new GenericReturn { Succeeded = true, Message = "User signed out successfully" };
         }
@@ -116,7 +117,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> Update(SignUpViewModel newModel)
         {
-            var userModel = await userManager.FindByEmailAsync(newModel.EmailAddress);
+            var userModel = await _userManager.FindByEmailAsync(newModel.EmailAddress);
 
             if (userModel == null)
             {
@@ -130,10 +131,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             // user data is ok. Update user
             userModel.FirstName = newModel.FirstName;
             userModel.LastName = newModel.LastName;
-            var identityResult = await userManager.ChangePasswordAsync(userModel, userModel.PasswordHash, newModel.Password);
+            var identityResult = await _userManager.ChangePasswordAsync(userModel, userModel.PasswordHash, newModel.Password);
             
 
-            var newUserModel = await userManager.UpdateAsync(userModel);
+            var newUserModel = await _userManager.UpdateAsync(userModel);
 
             if (!newUserModel.Succeeded)
             {
@@ -147,14 +148,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         public async Task<GenericReturn> Delete(ApplicationUser model)
         {
             // check if user exists
-            var userModel = await userManager.FindByEmailAsync(model.Email);
+            var userModel = await _userManager.FindByEmailAsync(model.Email);
 
             if (userModel == null)
             {
                 return new GenericReturn { Succeeded = false, Message = "User does not exist" };
             }
 
-            var identityResult = await userManager.DeleteAsync(userModel);
+            var identityResult = await _userManager.DeleteAsync(userModel);
 
             if (!identityResult.Succeeded)
             {

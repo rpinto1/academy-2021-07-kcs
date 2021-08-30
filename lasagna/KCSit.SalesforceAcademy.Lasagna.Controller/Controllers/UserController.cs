@@ -18,7 +18,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
 
         private readonly IUserServiceBO _userService;
-        private GenericControllerReturn _genericControllerReturn;
+        private readonly GenericControllerReturn _genericControllerReturn;
 
 
         public UserController(IUserServiceBO userService, GenericControllerReturn genericControllerReturn)
@@ -44,7 +44,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             GenericReturn signInResult = await _userService.SignIn(model);
 
-            return ReturnResult(signInResult);
+            return _genericControllerReturn.ReturnResult(signInResult);
         }
 
 
@@ -55,7 +55,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             GenericReturn signOutResult = await _userService.SignOut(model);
 
-            return ReturnResult(signOutResult);
+            return _genericControllerReturn.ReturnResult(signOutResult);
         }
 
 
@@ -67,7 +67,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             GenericReturn updateUserResult = await _userService.Update(newModel);
 
-            return ReturnResult(updateUserResult);
+            return _genericControllerReturn.ReturnResult(updateUserResult);
         }
 
 
@@ -79,7 +79,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             GenericReturn deleteResult = await _userService.Delete(model);
 
-            return ReturnResult(deleteResult);
+            return _genericControllerReturn.ReturnResult(deleteResult);
         }
 
 

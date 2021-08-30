@@ -92,6 +92,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO >();
 
+            services.AddScoped<GenericBusinessLogic>();
             services.AddScoped<GenericControllerReturn>();
         }
 
