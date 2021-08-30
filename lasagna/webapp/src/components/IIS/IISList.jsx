@@ -132,7 +132,7 @@ export const IISList = () => {
                     <Table.HeaderCell width="3">Ticker</Table.HeaderCell>
                     <Table.HeaderCell width="5">Company Name</Table.HeaderCell>
                     <Table.HeaderCell width="2">Score</Table.HeaderCell>
-                    <Table.HeaderCell width="2">Sticer Price</Table.HeaderCell>
+                    <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
                     <Table.HeaderCell width="2">Previous Close</Table.HeaderCell>
                     <Table.HeaderCell>Profile</Table.HeaderCell>
                 </Table.Row>
