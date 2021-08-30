@@ -67,7 +67,6 @@ header {
 }
 
 
-
 footer {
     list-style-type: none;
     padding: 0;
@@ -94,12 +93,31 @@ footer {
     justify-content: space-around;
 }
 
-
-
 .company-info {
     margin: 10px;
     padding: 5px;
     text-align-last: center;
 }
+
+form {
+    border: 1px solid gray;
+    padding: 2%;
+    border-radius: 1%;
+
+}
+
+
+#text-right {
+    text-align: right;
+}
+
+
+.our_info
+{
+    padding: 1%;
+    text-align: justify;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
 
 
