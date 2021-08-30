@@ -18,9 +18,9 @@ export const IISList = () => {
     const [companies, setcompanies] = useState([])
 
     const turnIntoOptions = (data,type) => {data[type].map(x=>({
-        key: x["Name"],
-        text: x["Name"],
-        value: x["Name"],
+        key: x["name"],
+        text: x["name"],
+        value: x["name"],
     })) }
 
     const handlePageClick = ({target}) => {
@@ -39,18 +39,20 @@ export const IISList = () => {
         )}
     
         const fetchCompanys = async (page = -1) => {
-            const rawResponse = await fetch(`http://localhost:3010/api/Companies/IIS`, {
+            const rawResponse = fetch(`http://localhost:3010/api/Companies/IIS`, {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({SectorName : sectorValue,IndexName: indexValue,IndustryName: industryValue,Page:currentPage})
+              body: JSON.stringify({Sectorname : sectorValue,Indexname: indexValue,Industryname: industryValue,Page:currentPage})
             });
-            const content = await rawResponse.json();
-            let companyInfo = JSON.parse(content);
-            setcompanies(companyInfo["companyPoco"])
-            setcompanyCount(companyInfo["Count"])
+            const content = rawResponse.then(response => response.json());
+            content.then(data => {
+                setcompanies(data["result"]["companyPocos"])
+                setcompanyCount(data["result"]["count"])
+            })
+
             if (page == -1){
                 setcurrentPage(1);
             }
@@ -83,10 +85,10 @@ export const IISList = () => {
         useEffect(() => {
             var data = fetch(`http://localhost:3010/api/Companies/industries/${sectorValue}`)
             .then(response => response.json());
-            data.then(data => data.map(x=>({
-                key: x["Name"],
-                text: x["Name"],
-                value: x["Name"],
+            data.then(data => data["result"].map(x=>({
+                key: x["name"],
+                text: x["name"],
+                value: x["name"],
             })) )
             .then(arrayFinal => setindustry([...defaultValue,...arrayFinal]))
         }, [sectorValue])
@@ -117,7 +119,7 @@ export const IISList = () => {
 
     console.log(companies)
     return (
-        <Segment textAlign='left' className='segment'>
+        <Segment textAlign='left' classname='segment'>
             <h1>List of Companies</h1>
             <Segment.Inline >
             <Dropdown placeholder='Index' onChange={(e)=>setindexValue(e.target.textContent)} search selection scrolling options={index}/>
@@ -129,14 +131,14 @@ export const IISList = () => {
                 <Table.Header>
                 <Table.Row>
                     <Table.HeaderCell width="3">Ticker</Table.HeaderCell>
-                    <Table.HeaderCell width="5">Company Name</Table.HeaderCell>
+                    <Table.HeaderCell width="5">Company name</Table.HeaderCell>
                     <Table.HeaderCell width="2">Score</Table.HeaderCell>
                     <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
                     <Table.HeaderCell width="2">Previous Close</Table.HeaderCell>
                     <Table.HeaderCell>Profile</Table.HeaderCell>
                 </Table.Row>
                 </Table.Header>
-            <Table.Body className="table">
+            <Table.Body classname="table">
                 {
                     companies.map((x,i)=> <Company company={x} key={i}/>)
                 }

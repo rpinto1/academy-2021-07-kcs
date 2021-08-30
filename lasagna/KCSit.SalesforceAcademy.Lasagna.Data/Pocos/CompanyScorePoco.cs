@@ -6,7 +6,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
     public class CompanyScorePoco
     {
-        public List<CompanyPoco> companyPoco;
+        public List<CompanyPoco> CompanyPocos { get; set; }
         public int Count { get; set; }
 
     }

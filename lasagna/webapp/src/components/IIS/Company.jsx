@@ -7,10 +7,10 @@ export const Company = ({company}) => {
     return (
     <Table.Row>
         <Table.Cell>
-          {company.Ticker}
+          {company.ticker}
         </Table.Cell>
         <Table.Cell>
-          {company["Name"]}
+          {company["name"]}
         </Table.Cell>
         <Table.Cell>10000</Table.Cell>
         <Table.Cell>15</Table.Cell>

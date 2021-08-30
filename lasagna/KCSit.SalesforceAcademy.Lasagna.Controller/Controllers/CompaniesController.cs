@@ -66,20 +66,20 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         }
         // GET api/<CompaniesController>/industries/?
         [HttpGet("industries")]
-        public async Task<string> GetIndustriesAll()
+        public async Task<IActionResult> GetIndustriesAll()
         {
-            var industriesList = (await _companiesBO.GetIndustries("")).Result;
+            var industriesList = _companiesBO.GetIndustries("");
 
 
-            return JsonConvert.SerializeObject(industriesList);
+            return await _genericCR.ReturnResult(industriesList);
         }
         // POST api/<CompaniesController>
         [HttpPost("IIS")]
-        public async Task<string> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
+        public async Task<IActionResult> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
         {
 
-            var companies = (await _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page)).Result;
-            return JsonConvert.SerializeObject(companies);
+            var companies = _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page);
+            return await _genericCR.ReturnResult(companies);
         }
 
         // POST api/<CompaniesController>

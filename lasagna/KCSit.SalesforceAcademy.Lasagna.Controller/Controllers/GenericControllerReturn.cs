@@ -31,22 +31,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         public async Task<IActionResult> ReturnResult(Task<GenericReturn> action) 
         {
-            if ((await action).Succeeded)
+            var wait = await action;
+            if (wait.Succeeded)
             {
-                return Ok(action.Result);
+                return Ok(wait);
             }
 
-            return BadRequest(action.Result);
+            return BadRequest(wait);
         }
 
         public async Task<IActionResult> ReturnResult<T>(Task<GenericReturn<T>> action) where T : class
         {
-            if ((await action).Succeeded)
+            var wait = await action;
+            if (wait.Succeeded)
             {
-                return Ok(action.Result);
+                return Ok(wait);
             }
 
-            return BadRequest(action.Result);
+            return BadRequest(wait);
         }
     }
 }
