@@ -1,8 +1,8 @@
-import axios from 'axios';
 import React, {useState} from 'react';
-import { Button, Container, Form, Checkbox} from 'semantic-ui-react';
-
-
+import { Button, Container, Form } from 'semantic-ui-react';
+import axios from 'axios';
+import Captcha from '../SignUp/Captcha';
+import { validateCaptcha } from 'react-simple-captcha';
 
 export default function SignInForm() {
 
@@ -11,43 +11,51 @@ export default function SignInForm() {
       Password: ''
     });
 
+    const handleChange = (event) => {
+      const { id, value } = event.target
+      
+      setUser(prevState => ({
+          ...prevState,
+          [id]: value     
+      }));
+      
+  };
     
-    const [isRobot, setIsRobot] = useState('true');
 
-    const submitUser = () => {
-        if (isRobot){
-            return (
-                    <div class="ui negative message">
-                    <i class="close icon"></i>
-                        <div class="header">
-                            WE ARE SORRY!
-                        </div>
-                        <p>Our website is only available to humans, not robots.</p>
-                        </div>
-
-            )
-        };
+    const handleSubmit = () => {
         
-        axios.post("api/user/authenticate", user)
-             .catch ((error) => {console.log(error);});
-             console.log(user);
+      let user_captcha = document.getElementById('user_captcha_input').value;
 
-    };
-  
+      if (validateCaptcha(user_captcha)==true) {
+          console.log(user);
+          /* axios.post('api/user/authenticate', user)
+           .catch ((error) => {console.log(error);});
+        
+          //recharge captcha box
+          loadCaptchaEnginge(6); 
+          document.getElementById('user_captcha_input').value = ""; */
+      }
+
+      else {
+          alert('Oops! Our page is only available to people, not robots!');
+          document.getElementById('user_captcha_input').value = "";
+      }
+  };  
     
 
     
       return (
-        <Container className= 'form'>
+        <Container className= 'formulario'>
           <h1>Sign in to your account</h1>
-          <Form onSubmit= {console.log('hola')}>
+          <Form onSubmit= {handleSubmit}>
          <Form.Field> 
           <label htmlFor="username">Username: </label>
           <input
             type="text"
             value={user.EmailAddress}
-            placeholder="Enter your username"
-            onChange={({ target}) => setUser((prevState)=> ({...prevState, keyword: target.value,}))}
+            placeholder="Enter your email address here"
+            id="EmailAddress"
+            onChange={handleChange}
           />
           </Form.Field>  
 
@@ -56,19 +64,15 @@ export default function SignInForm() {
             <input
               type="password"
               value={user.Password}
-              placeholder="Enter your password"
-              onChange={({ target}) => setUser((prevState)=> ({...prevState, keyword: target.value,}))}
+              placeholder="Enter your password here"
+              id="Password"
+              onChange={handleChange}
             />
          </Form.Field> 
          <Form.Field>
-            <Checkbox type='checkbox' 
-            name='isRobot' 
-            label='Are you a robot?' 
-            value= {isRobot}
-            onChange= {setIsRobot('false')}
-            required/>        
-            </Form.Field>
-          <Button type="submit">Sign in</Button>
+          <Captcha />
+         </Form.Field>
+          <Button type="submit" id="submit_btn">Sign in</Button>
         </Form>
         </Container>
 
