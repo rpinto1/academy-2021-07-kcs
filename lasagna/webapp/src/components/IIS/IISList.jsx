@@ -96,18 +96,17 @@ export const IISList = () => {
             
             var data = fetch('http://localhost:3010/api/Companies/indexSector')
             .then(response => response.json());
-            
-            data.then(data => data["index"].map(x=>({
-                key: x["Name"],
-                text: x["Name"],
-                value: x["Name"],
+            data.then(data => data["result"]["indices"].map(x=>({
+                key: x["name"],
+                text: x["name"],
+                value: x["name"],
             })) )
             .then(arrayFinal => setindex((prevState) => [...prevState, ...arrayFinal]))
 
-            data.then(data => data["sector"].map(x=>({
-                key: x["Name"],
-                text: x["Name"],
-                value: x["Name"],
+            data.then(data => data["result"]["sectors"].map(x=>({
+                key: x["name"],
+                text: x["name"],
+                value: x["name"],
             })) )
             .then(arrayFinal => setsector((prevState) => [...prevState, ...arrayFinal]))
             console.log(index);
