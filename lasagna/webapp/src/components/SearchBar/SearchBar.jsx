@@ -22,10 +22,26 @@ function SearchBar() {
 
     return (
         <div className="SearchBar">
-            
-            <header className="Search-header">
+
+            <div class="ui search">
+                <div class="ui icon input">
+                    <input class="prompt"
+                        type="text"
+                        placeholder="Search for a company"
+                        value={pattern}
+                        onChange={test => setPattern(test.target.value)} />
+                        <i class="search icon"></i> 
+                        
+                        </div>
+                </div>
+
+
+
+                {/*<header className="Search-header">
                 <input type="text" className="input" value={pattern} onChange={test => setPattern(test.target.value)} />
-            </header>
+            </header>*/}
+
+
             
             <div className="NameTickers">
                 {
