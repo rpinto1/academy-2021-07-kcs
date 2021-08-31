@@ -23,18 +23,18 @@ function SearchBar() {
     return (
         <div className="SearchBar">
 
-            <div class="ui search">
-                <div class="ui icon input">
-                    <input class="prompt"
+            <div className="ui search">
+                <div className="ui icon input">
+                    <input className="prompt"
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
                         onChange={test => setPattern(test.target.value)} />
                         <i class="search icon"></i> 
                 </div>
-                <div class="results">       
-                    {
-                        (nameTickers != null) ? nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) : ''
+                <div>       
+                    {    nameTickers &&
+                         nameTickers.map((nameTicker, index) => <div className='results'><NameTicker key={ index } nameTicker={ nameTicker } /> </div>) 
                     }
                 </div>
             </div>
