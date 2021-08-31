@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Container, Button } from 'semantic-ui-react';
 import axios from 'axios';
-import Captcha from './Captcha';
-import { loadCaptchaEnginge , validateCaptcha } from 'react-simple-captcha';
 import AboutUsContactButtons from '../AboutUsContactButtons';
 
 export default function SignUpForm() {
@@ -29,26 +27,16 @@ export default function SignUpForm() {
 
 
     const handleSubmit = () => {
-        
-        // let user_captcha = document.getElementById('user_captcha_input').value;
- 
-        // if (validateCaptcha(user_captcha)==true) {
-           
-            axios.post('api/SignUp', newUser)
-            .then(response => {
-                console.log('you have saved the user'+ response)
-            })
-            .catch ((error) => {console.log(error);});
+        fetch(`http://localhost:3010/api/SignUp`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newUser)
+        });
           
-            //recharge captcha box
-            loadCaptchaEnginge(6); 
-            document.getElementById('user_captcha_input').value = ""; 
-        // }
-/*  
-        else {
-            alert('Captcha simbols must match!');
-            document.getElementById('user_captcha_input').value = "";
- */        }
+
     };
 
 
