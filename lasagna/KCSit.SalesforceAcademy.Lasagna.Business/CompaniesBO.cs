@@ -26,15 +26,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
        
 
-        public async Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers)
+        public async Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers, int pageNumber)
         {
-
+            var pageSize = 30;
             return await _genericBusiness.GenericTransaction(
 
             async () =>
             {
 
-                return await _searchDao.SearchCompaniesBySearchQuery(companiesNamesTickers);
+                return await _searchDao.SearchCompaniesBySearchQuery(companiesNamesTickers, pageSize, pageNumber);
             }
 
             );

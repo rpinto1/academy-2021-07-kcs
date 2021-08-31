@@ -2,7 +2,7 @@
 import { Link, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Logo from './Logo';
-
+import SearchBar from './SearchBar/SearchBar';
 
 
 export default function Header() {
@@ -22,6 +22,8 @@ export default function Header() {
                     </div>
 
                 </div> */}
+
+                <SearchBar />
 
                 <div className='buttons'>
 

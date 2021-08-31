@@ -47,8 +47,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         public async Task<string> GetIndexAndSector()
         {
             var indexList = (await _genericLogic.GetAll<Data.Index>()).Result;
-            var sectorList =  (await _genericLogic.GetAll<Sector>()).Result;
-            return JsonConvert.SerializeObject( new {index = indexList , sector = sectorList });
+            var sectorList = (await _genericLogic.GetAll<Sector>()).Result;
+            return JsonConvert.SerializeObject(new { index = indexList, sector = sectorList });
         }
         // GET api/<CompaniesController>/industries/?
         [HttpGet("industries/{sector}")]
@@ -57,7 +57,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             var industriesList = (await _companiesBO.GetIndustries(sector)).Result;
 
 
-            return  JsonConvert.SerializeObject(industriesList);
+            return JsonConvert.SerializeObject(industriesList);
         }
         // GET api/<CompaniesController>/industries/?
         [HttpGet("industries")]
@@ -73,7 +73,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         public async Task<string> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
         {
 
-            var companies = (await _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page)).Result;
+            var companies = (await _companiesBO.GetCompanyByIIS(value.SectorName, value.IndexName, value.IndustryName, value.Page)).Result;
             return JsonConvert.SerializeObject(companies);
         }
 
@@ -96,11 +96,23 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         }
 
         // POST api/<CompaniesController>
-        [HttpGet("search/{search}/{searchPageIndex}")]
-        public string GetSearch(string search, int searchPageIndex)
+        /*[HttpGet("search/{search}/{searchPageIndex}")]
+        public string GetSearchTest(string search, int searchPageIndex)
         {
             var companies = _companiesBO.GetCompaniesNamesTickers(search).Result.Result.Skip(searchPageIndex * 10).Take(10);
             return JsonConvert.SerializeObject(companies);
+        } */
+
+        // POST api/<CompaniesController>
+        [HttpGet("search/{search}/{searchPageIndex}")]
+        public async Task<IActionResult> GetSearch(string search, int searchPageIndex)
+        {
+            //passar o searchPageIndex como parâmetro
+            //devolver o GenericReturn
+            //mudar a assinatura do método para ser um IActionResult
+            //return Ok(genericReturn)
+            var genericReturn = await _companiesBO.GetCompaniesNamesTickers(search, searchPageIndex);
+            return Ok(genericReturn);
         }
     }
 }
