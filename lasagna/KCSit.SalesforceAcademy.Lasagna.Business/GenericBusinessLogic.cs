@@ -93,6 +93,49 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             }
         }
 
+        
+        public async Task<GenericReturn<T>> ExecuteOperation<T>(Func<Task<T>> func)
+        {
+            var result = new GenericReturn<T>();
+
+            try
+            {
+                var funcResult = await func();
+
+                result.Succeeded = true;
+                result.Result = funcResult;
+            }
+            catch (Exception e)
+            {
+                result.Result = default(T);
+                result.Succeeded = false;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
+
+        
+        public GenericReturn<T> ExecuteOperation<T>(Func<T> func)
+        {
+            var result = new GenericReturn<T>();
+
+            try
+            {
+                var funcResult = func();
+
+                result.Succeeded = true;
+                result.Result = funcResult;
+            }
+            catch (Exception e)
+            {
+                result.Result = default(T);
+                result.Succeeded = false;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
 
     }
 }
