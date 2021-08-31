@@ -7,6 +7,7 @@ import HomepageGuest from './Views/HomepageGuest';
 import SignInView from './Views/SignInView';
 import SignUpView from './Views/SignUpView';
 import ContactUsView from './Views/ContactUsView';
+import CompanyProfileView from './Views/CompanyProfileView';
 
 
 function App() {
@@ -20,10 +21,11 @@ function App() {
             
             <Switch>
                 <Route exact path ='/' component={HomepageGuest} />  
-                <Route path ='/createaccount' component = {SignUpView} /> 
+                <Route path ='/signup' component = {SignUpView} /> 
                 <Route path ='/signin' component ={SignInView} />
                 <Route path ='/contactus' component={ContactUsView} />
                 <Route path ='/aboutus' component ={AboutUsView} />
+                <Route path= '/company/details/${ticker}' component={CompanyProfileView} />
             </Switch> 
            
         

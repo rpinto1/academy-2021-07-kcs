@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 function NameTicker(props) {
@@ -7,11 +8,16 @@ function NameTicker(props) {
         console.log(props);
     }
     return (
-        <article>
-            <a href={'localhost:3010/company/detail/'+props.nameTicker.ticker} target="_blank">
+            <Link to='/company/details/${props.nameTicker.ticker}'> 
+                <p>{props.nameTicker.name}</p>
+            </Link>
+    
+
+       /*  <article>
+                 <a href={'localhost:3010/company/detail/'+props.nameTicker.ticker} target="_blank">
                 <p>{props.nameTicker.name}</p>
             </a>
-        </article>
+        </article> */
 
     )
 }
