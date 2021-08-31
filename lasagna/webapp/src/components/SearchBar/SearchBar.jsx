@@ -31,22 +31,12 @@ function SearchBar() {
                         value={pattern}
                         onChange={test => setPattern(test.target.value)} />
                         <i class="search icon"></i> 
-                        
-                        </div>
                 </div>
-
-
-
-                {/*<header className="Search-header">
-                <input type="text" className="input" value={pattern} onChange={test => setPattern(test.target.value)} />
-            </header>*/}
-
-
-            
-            <div className="NameTickers">
-                {
-                    (nameTickers != null) ? nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) : ''
-                }
+                <div class="results">       
+                    {
+                        (nameTickers != null) ? nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) : ''
+                    }
+                </div>
             </div>
         </div>
     );
