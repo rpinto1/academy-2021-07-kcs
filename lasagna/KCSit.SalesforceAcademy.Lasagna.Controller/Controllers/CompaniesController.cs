@@ -7,6 +7,7 @@ using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
+using KCSit.SalesforceAcademy.Lasagna.Business;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,12 +19,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
         private ICompaniesBO _companiesBO;
         private IGenericLogic _genericLogic;
+        private GenericControllerReturn _genericCR;
 
-        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic)
+        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic, GenericControllerReturn genericCR)
         {
             _companiesBO = companiesBO;
             _genericLogic = genericLogic;
-
+            _genericCR = genericCR;
         }
 
 
@@ -42,39 +44,42 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             return "value";
         }
-        // GET api/<CompaniesController>/indexSector
+        // GET api/Companies/indexSector
         [HttpGet("indexSector")]
-        public async Task<string> GetIndexAndSector()
+        public async Task<IActionResult> GetIndexAndSector()
         {
-            var indexList = (await _genericLogic.GetAll<Data.Index>()).Result;
-            var sectorList = (await _genericLogic.GetAll<Sector>()).Result;
-            return JsonConvert.SerializeObject(new { index = indexList, sector = sectorList });
+            var indexList = (await _genericLogic.GetAll<Data.Index>());
+            var sectorList =  (await _genericLogic.GetAll<Sector>());
+            var newResult = new IndexSector{ Indices = indexList.Result, Sectors = sectorList.Result };
+            var returnList = new GenericReturn<IndexSector> { Succeeded = true, Message = indexList.Message, 
+                Result = newResult };
+            return _genericCR.ReturnResult(returnList);
         }
         // GET api/<CompaniesController>/industries/?
         [HttpGet("industries/{sector}")]
-        public async Task<string> GetIndustries(string sector)
+        public async Task<IActionResult> GetIndustries(string sector)
         {
-            var industriesList = (await _companiesBO.GetIndustries(sector)).Result;
+            var industriesList =  _companiesBO.GetIndustries(sector);
 
 
-            return JsonConvert.SerializeObject(industriesList);
+            return await _genericCR.ReturnResult(industriesList);
         }
         // GET api/<CompaniesController>/industries/?
         [HttpGet("industries")]
-        public async Task<string> GetIndustriesAll()
+        public async Task<IActionResult> GetIndustriesAll()
         {
-            var industriesList = (await _companiesBO.GetIndustries("")).Result;
+            var industriesList = _companiesBO.GetIndustries("");
 
 
-            return JsonConvert.SerializeObject(industriesList);
+            return await _genericCR.ReturnResult(industriesList);
         }
         // POST api/<CompaniesController>
         [HttpPost("IIS")]
-        public async Task<string> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
+        public async Task<IActionResult> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
         {
 
-            var companies = (await _companiesBO.GetCompanyByIIS(value.SectorName, value.IndexName, value.IndustryName, value.Page)).Result;
-            return JsonConvert.SerializeObject(companies);
+            var companies = _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page);
+            return await _genericCR.ReturnResult(companies);
         }
 
         // POST api/<CompaniesController>

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { loadCaptchaEnginge, LoadCanvasTemplate } from 'react-simple-captcha';
 
 

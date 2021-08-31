@@ -11,10 +11,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         public Task<GenericReturn> SignIn(SignInViewModel model);
 
-        public Task<GenericReturn> SignOut(UserModel model);
+        public Task<GenericReturn> SignOut(ApplicationUser model);
 
         public Task<GenericReturn> Update(SignUpViewModel newModel);
 
-        public Task<GenericReturn> Delete(UserModel model);
+        public Task<GenericReturn> Delete(ApplicationUser model);
     }
 }

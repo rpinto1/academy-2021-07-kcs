@@ -69,7 +69,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
 
 
-        // Made by Pete - Adicionei este método para ter feedback dos métodos em caso de sucesso, falha e também exceções
         public async Task<GenericReturn> GenericTransaction(Func<Task<GenericReturn>> func)
         {
             var transactionOptions = new TransactionOptions();
@@ -94,6 +93,49 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             }
         }
 
+        
+        public async Task<GenericReturn<T>> ExecuteOperation<T>(Func<Task<T>> func)
+        {
+            var result = new GenericReturn<T>();
+
+            try
+            {
+                var funcResult = await func();
+
+                result.Succeeded = true;
+                result.Result = funcResult;
+            }
+            catch (Exception e)
+            {
+                result.Result = default(T);
+                result.Succeeded = false;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
+
+        
+        public GenericReturn<T> ExecuteOperation<T>(Func<T> func)
+        {
+            var result = new GenericReturn<T>();
+
+            try
+            {
+                var funcResult = func();
+
+                result.Succeeded = true;
+                result.Result = funcResult;
+            }
+            catch (Exception e)
+            {
+                result.Result = default(T);
+                result.Succeeded = false;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
 
     }
 }

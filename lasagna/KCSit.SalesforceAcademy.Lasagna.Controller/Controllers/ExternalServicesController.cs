@@ -15,7 +15,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         private readonly ILogger<ExternalServicesController> _logger;
 
-        private readonly IExternalServicesBO _externalServicesBO;
+        private IExternalServicesBO _externalServicesBO;
+        private GenericControllerReturn _genericControllerReturn;
 
 
 
@@ -27,20 +28,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
 
         [HttpGet("gainlose")]
-        public string Get()
+        public IActionResult GetGainLose()
         {
-
 
             var result = _externalServicesBO.FetchGainLoseData();
 
-            if (!result.Succeeded)
-            {
-                Console.WriteLine("gainlose: ", result);
-                return result.Message;
-            }
-
-            return result.Result;
+            return _genericControllerReturn.ReturnResult(result);
 
         }
+
+        [HttpGet("news")]
+        public IActionResult GetNews()
+        {
+
+            var result = _externalServicesBO.FetchNewsData();
+
+            return _genericControllerReturn.ReturnResult(result);
+
+        }
+
     }
 }

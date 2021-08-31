@@ -103,7 +103,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
                 var countResults = await query.CountAsync();
                 var results = await query.Skip(pageSize * (page -1)).Take(pageSize).ToListAsync();
-                var objectok = new CompanyScorePoco { companyPoco = results , Count = countResults};
+                var objectok = new CompanyScorePoco { CompanyPocos = results , Count = countResults};
                 return objectok;
             }
         }

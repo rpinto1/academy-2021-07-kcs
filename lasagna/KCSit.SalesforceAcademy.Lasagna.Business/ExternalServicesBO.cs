@@ -12,7 +12,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
     public class ExternalServicesBO : IExternalServicesBO
     {
 
-        //para ficar genérico deve-se passar os request headers por parâmetro, tal como o dataFormat
+        
         public async Task<IRestResponse> FetchDataAsync(string url, string endpoint, string keyHeader, string key, string hostHeader, string host, DataFormat format)
         {
             var client = new RestClient(url);
@@ -38,10 +38,25 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             request.AddHeader(keyHeader, key);
             request.AddHeader(hostHeader, host);
-
+            
             var response = client.Get<IRestResponse>(request);
            
             
+            return response;
+
+        }
+
+        public IRestResponse FetchData(string url, string endpoint, string keyHeader, string key, DataFormat format)
+        {
+            var client = new RestClient(url);
+
+            var request = new RestRequest(endpoint, format);
+
+            request.AddHeader(keyHeader, key);
+            
+            var response = client.Get<IRestResponse>(request);
+
+
             return response;
 
         }
@@ -88,6 +103,36 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         //deve ser refactorizado
         //add overloaded methods
         //remover e colocar logica na classe generica
+
+        public GenericReturn<string> FetchNewsData()
+        {
+
+            var url = "https://newsapi.org/";
+
+            var newsAPIOptions = new
+            {
+                key = "1d46c2ebccbd48e597c869e5881a2d87",
+            };
+
+            var endpoint = "v2/top-headlines?country=${location}&category=business&pageSize=5";
+
+
+            return ExecuteOperation(() =>
+            {
+
+                var newsResponse = FetchData(url, endpoint, "apiKey", newsAPIOptions.key, DataFormat.Json);
+                
+                var resultObject = new
+                {
+                    news = JsonConvert.DeserializeObject<GainLoseResponse>(newsResponse.Content)
+                };
+
+                return JsonConvert.SerializeObject(resultObject);
+
+            });
+
+        }
+
         GenericReturn<string> ExecuteOperation(Func<string> lambda)
         {
             var operationResult = new GenericReturn<string>();
