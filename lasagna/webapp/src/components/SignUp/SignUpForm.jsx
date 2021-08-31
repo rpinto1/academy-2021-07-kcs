@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Container, Button } from 'semantic-ui-react';
 import axios from 'axios';
-import Captcha from './Captcha';
-import { validateCaptcha } from 'react-simple-captcha';
 import AboutUsContactButtons from '../AboutUsContactButtons';
 
 export default function SignUpForm() {
@@ -29,24 +27,16 @@ export default function SignUpForm() {
 
 
     const handleSubmit = () => {
-        
-        let user_captcha = document.getElementById('user_captcha_input').value;
- 
-        if (validateCaptcha(user_captcha)==true) {
-            console.log(user_captcha);
-            console.log(newUser);
-            /* axios.post('api/user', newUser)
-             .catch ((error) => {console.log(error);});
-             console.log(newUser);
-            //recharge captcha box
-            loadCaptchaEnginge(6); 
-            document.getElementById('user_captcha_input').value = ""; */
-        }
- 
-        else {
-            alert('Captcha simbols must match!');
-            document.getElementById('user_captcha_input').value = "";
-        }
+        fetch(`http://localhost:3010/api/SignUp`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newUser)
+        });
+          
+
     };
 
 
@@ -63,7 +53,7 @@ export default function SignUpForm() {
             value={newUser.FirstName} 
             onChange={handleChange}
             id='FirstName'
-            pattern="[\w+/\s*]{2,50}"     
+            pattern="[\w+/\s*]{2,15}"     
             required/>
         </Form.Field>
         <Form.Field>
@@ -74,7 +64,7 @@ export default function SignUpForm() {
             value={newUser.LastName} 
             onChange={handleChange}
             id='LastName'
-            pattern="[\w+/\s*]{2,50}"
+            pattern="[\w+/\s*]{2,15}"
             required/>
         </Form.Field>
         <Form.Field>
@@ -86,7 +76,7 @@ export default function SignUpForm() {
             onChange={handleChange}
             id='Password'
             pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}' 
-            title="Passwords must contain at least 8 characters and from those you need at least, one number, one uppercase and one lowercase letter."
+            title="Passwords must contain at least 8 characters. At least one number, one uppercase, one lowercase letter and one special character."
             required/>
         </Form.Field>
         <Form.Field>
@@ -110,7 +100,7 @@ export default function SignUpForm() {
             required/>
         </Form.Field>
         <Form.Field>
-            <Captcha />
+           
         </Form.Field>
         <Form.Field>
             <Button type='submit'>Submit</Button>
