@@ -47,12 +47,7 @@ function ArticleList() {
            
       
     );
-
-
-return (
-    <NoNewsError />
-);
- */
+    
 }
 
 export default ArticleList;

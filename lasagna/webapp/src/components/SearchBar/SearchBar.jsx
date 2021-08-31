@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import NameTicker from './NameTicker';
+import $ from 'jquery';
 
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
@@ -20,6 +21,15 @@ function SearchBar() {
         })
     }, [pattern]);
 
+    useEffect(() => {
+        if(pattern == '') {
+            $(".search_list").hide();
+        } else {
+            $(".search_list").show();
+        }
+    }, [pattern]);
+    
+
     return (
         <div className="SearchBar">
 
@@ -31,11 +41,13 @@ function SearchBar() {
                         value={pattern}
                         onChange={test => setPattern(test.target.value)} />
                         <i class="search icon"></i> 
-                </div>
-                <div>       
+                </div>~
+                <div className= "search_list">
+                <div className="ui raised fluid text segment">       
                     {    nameTickers &&
-                         nameTickers.map((nameTicker, index) => <div className='results'><NameTicker key={ index } nameTicker={ nameTicker } /> </div>) 
+                         nameTickers.map((nameTicker, index) => <div className='results'><p><NameTicker key={ index } nameTicker={ nameTicker } /></p></div>) 
                     }
+                </div>
                 </div>
             </div>
         </div>
