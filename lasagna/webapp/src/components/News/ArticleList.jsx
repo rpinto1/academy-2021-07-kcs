@@ -30,7 +30,6 @@ function ArticleList() {
 
 
 
-/* if(articles){ */
     return (
             <table className='ui table'>
                 <tr><th id='news-title'>Latest News</th></tr>
@@ -39,7 +38,7 @@ function ArticleList() {
                         articles &&
                         articles.map((article, i) => (
 
-                            <td><Article article={article} /></td>
+                            <td><Article article={article} key= {i}/></td>
 
                         ))
                     }
@@ -48,7 +47,7 @@ function ArticleList() {
            
       
     );
-/* }
+
 
 return (
     <NoNewsError />
