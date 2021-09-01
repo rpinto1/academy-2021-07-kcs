@@ -13,6 +13,7 @@ using System.Text;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
@@ -21,7 +22,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         private readonly AppSettings _appSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private GenericBusinessLogic _genericBusinessLogic;
+        private readonly GenericBusinessLogic _genericBusinessLogic;
 
 
         public UserServiceBO(IOptions<AppSettings> appSettings, GenericBusinessLogic genericBusinessLogic,
@@ -33,31 +34,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             this._signInManager = signInManager;
 
         }
-
-        //public ApplicationUser Authenticate(string emailAddress, string password)
-        //{
-        //    var user = _users.SingleOrDefault(x => x.EmailAddress == emailAddress && x.Password == password);
-
-        //    if (user == null) return null;
-
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-
-        //    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = new ClaimsIdentity(new Claim[] {
-        //            new Claim(ClaimTypes.Name, user.UserInfoId.ToString())
-        //        }),
-        //        Expires = DateTime.UtcNow.AddDays(7),
-        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //    };
-
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    user.Token = tokenHandler.WriteToken(token);
-
-        //    return user;
-        //}
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
@@ -80,31 +56,31 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     {
                         errorMsg = String.Concat(errorMsg, error.Description, " ");
                     }
-                    //throw new Exception(errorMsg);
-                    return new GenericReturn { Succeeded = false, Message = errorMsg };
+                    throw new Exception(errorMsg);
                 }
-
-                return new GenericReturn { Succeeded = true, Message = "User created successfully" };
             });
         }
 
-        public async Task<GenericReturn> SignIn(SignInViewModel model)
+        public async Task<GenericReturn<GuidToken>> SignIn(SignInViewModel model)
         {
-            return await _genericBusinessLogic.GenericTransaction<GenericReturn>(async () =>
+            return await _genericBusinessLogic.GenericTransaction<GuidToken>(async () =>
             {
-                //// check if user is already logged in
-
                 var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
                 if (!result.Succeeded)
                 {
-                    return new GenericReturn { Succeeded = false, Message = "Invalid Sign In credentials" };
+                    throw new Exception("Invalid Sign In credentials");
                 }
 
-                return new GenericReturn { Succeeded = true, Message = "User signed in successfully" };
+                var user = await _userManager.FindByEmailAsync(model.EmailAddress);
+
+                await _userManager.RemoveAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken");
+                var newAccessToken = await _userManager.GenerateUserTokenAsync(user, "LasagnaApp", "AccessToken");
+                await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken", newAccessToken);
+
+                return new GuidToken { Guid = user.Id, Token = newAccessToken };
             });
         }
-
 
 
         public async Task<GenericReturn> SignOut(ApplicationUser model)
@@ -115,47 +91,56 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         }
 
 
-        public async Task<GenericReturn> Update(SignUpViewModel newModel)
+        public async Task<GenericReturn> Update(string id, SignUpViewModel newModel)
         {
-            var userModel = await _userManager.FindByEmailAsync(newModel.EmailAddress);
+            var user = await _userManager.FindByIdAsync(id);
 
-            if (userModel == null)
+            if (user == null)
             {
                 return new GenericReturn { Succeeded = false, Message = "User does not exist" };
             }
 
-            //// make sure user is not allowed to change is email address
-            //if (userModel.Email != newModel.EmailAddress)
-            //    return new GenericReturn { Succeeded = false, Message = "User can not change email address" };
+            // make sure user is not allowed to change is email address
+            if (user.Email != newModel.EmailAddress)
+                return new GenericReturn { Succeeded = false, Message = "User can not change email address" };
 
             // user data is ok. Update user
-            userModel.FirstName = newModel.FirstName;
-            userModel.LastName = newModel.LastName;
-            var identityResult = await _userManager.ChangePasswordAsync(userModel, userModel.PasswordHash, newModel.Password);
-            
+            user.FirstName = newModel.FirstName;
+            user.LastName = newModel.LastName;
 
-            var newUserModel = await _userManager.UpdateAsync(userModel);
-
-            if (!newUserModel.Succeeded)
+            var userIdentityResult = await _userManager.UpdateAsync(user);
+            if (!userIdentityResult.Succeeded)
             {
-                return new GenericReturn { Succeeded = false, Message = "User could not be updated" };
+                return new GenericReturn { Succeeded = false, Message = userIdentityResult.Errors.First().Description.ToString() };
+            }
+
+            var pass = _userManager.PasswordHasher.HashPassword(user, user.PasswordHash);
+            if (await _userManager.CheckPasswordAsync(user, pass))
+            {
+                return new GenericReturn { Succeeded = true, Message = "Passwords match" };
+            }
+
+            var passwordIdentityResult = await _userManager.ChangePasswordAsync(user, user.PasswordHash, newModel.Password);            
+            if (!passwordIdentityResult.Succeeded)
+            {
+                return new GenericReturn { Succeeded = false, Message = passwordIdentityResult.Errors.First().Description.ToString() };
             }
 
             return new GenericReturn { Succeeded = true, Message = "User updated successfully" };
         }
 
 
-        public async Task<GenericReturn> Delete(ApplicationUser model)
+        public async Task<GenericReturn> Delete(string id)
         {
             // check if user exists
-            var userModel = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByIdAsync(id);
 
-            if (userModel == null)
+            if (user == null)
             {
                 return new GenericReturn { Succeeded = false, Message = "User does not exist" };
             }
 
-            var identityResult = await _userManager.DeleteAsync(userModel);
+            var identityResult = await _userManager.DeleteAsync(user);
 
             if (!identityResult.Succeeded)
             {
@@ -167,6 +152,26 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
 
 
+
+        private string GenerateToken()
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[] {
+                        new Claim("token", "value")
+                    }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            
+            return tokenHandler.WriteToken(token);
+        }
 
     }
 }
