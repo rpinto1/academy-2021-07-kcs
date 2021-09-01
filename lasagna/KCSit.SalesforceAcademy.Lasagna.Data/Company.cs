@@ -10,6 +10,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public Company()
         {
             CompanyIndices = new HashSet<CompanyIndex>();
+            PortfolioCompanies = new HashSet<PortfolioCompany>();
             KeyStatistics = new HashSet<KeyStatistic>();
             Scores = new HashSet<Score>();
             YearlyReports = new HashSet<YearlyReport>();
@@ -35,6 +36,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public virtual Industry Industry { get; set; }
         public virtual Sector Sector { get; set; }
         public virtual ICollection<CompanyIndex> CompanyIndices { get; set; }
+
+        public virtual ICollection<PortfolioCompany> PortfolioCompanies { get; set; }
         public virtual ICollection<KeyStatistic> KeyStatistics { get; set; }
         public virtual ICollection<Score> Scores { get; set; }
         public virtual ICollection<YearlyReport> YearlyReports { get; set; }
