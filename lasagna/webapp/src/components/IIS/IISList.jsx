@@ -6,12 +6,12 @@ import Pagination from './Pagination'
 export const IISList = () => {
 
 
-    const [index, setindex] = useState([{key: "", text: "", value: ""}])
+    const [index, setindex] = useState([{key: "", text: "--None--", value: ""}])
     const [indexValue, setindexValue] = useState("")
-    const [sector, setsector] = useState([{key: "", text: "", value: ""}])
+    const [sector, setsector] = useState([{key: "", text: "--None--", value: ""}])
     const [sectorValue, setsectorValue] = useState("")
-    const [industry, setindustry] = useState([{key: "", text: "", value: ""}])
-    const defaultValue = [{key: "", text: "", value: ""}]
+    const [industry, setindustry] = useState([{key: "", text: "--None--", value: ""}])
+    const defaultValue = [{key: "", text: "--None--", value: ""}]
     const [industryValue, setindustryValue] = useState("")
     const [companyCount, setcompanyCount] = useState(100)
     const [currentPage, setcurrentPage] = useState(1)
