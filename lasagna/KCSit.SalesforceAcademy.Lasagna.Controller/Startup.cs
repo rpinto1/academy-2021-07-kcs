@@ -57,7 +57,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                     option.Password.RequireNonAlphanumeric = true;
                     option.Password.RequiredUniqueChars = 5;
                 })
-                .AddEntityFrameworkStores<lasagnakcsContext>();
+                .AddEntityFrameworkStores<lasagnakcsContext>()
+                .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>));
+
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
