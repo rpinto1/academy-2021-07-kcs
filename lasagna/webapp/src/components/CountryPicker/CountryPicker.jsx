@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Menu } from 'semantic-ui-react'
 import { Store } from 'redux'
+import store from '../../redux/store'
 
 export default function CountryPicker() {
 
     const [countrys, setCountrys] = useState(["US"])
     const activeItems = useSelector(state => state.countries)
-
+    const urlPage = store.getState().url;
 
     useEffect(() => {
-        var data = fetch(process.env.REACT_APP_URL+'/api/Companies/countries')
+        var data = fetch(`${urlPage}api/Companies/countries`)
         .then(response => response.json());
         data.then(data => data["result"].map(x=>({
             key: x["name"],

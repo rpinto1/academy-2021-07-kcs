@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
+import store from '../../redux/store'
+
 
 export const IISList = () => {
 
@@ -16,13 +18,13 @@ export const IISList = () => {
     const [companyCount, setcompanyCount] = useState(100)
     const [currentPage, setcurrentPage] = useState(1)
     const [companies, setcompanies] = useState([])
-
+    const urlPage = store.getState().url;
     const turnIntoOptions = (data,type) => {data[type].map(x=>({
         key: x["name"],
         text: x["name"],
         value: x["name"],
     })) }
-
+    console.log(urlPage)
     const handlePageClick = ({target}) => {
         setcurrentPage(eval(target.textContent))
     }
@@ -95,9 +97,7 @@ export const IISList = () => {
 
     useEffect(() => {
         try {
-            console.log(process.env.NODE_ENV)
-            console.log(process.env.REACT_APP_URL)
-            var data = fetch(process.env.REACT_APP_URL+'/api/Companies/indexSector')
+            var data = fetch(`${urlPage}api/Companies/indexSector`)
             .then(response => response.json());
             data.then(data => data["result"]["indices"].map(x=>({
                 key: x["name"],
