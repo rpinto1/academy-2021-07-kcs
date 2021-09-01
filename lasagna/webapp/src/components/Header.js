@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Logo from './Logo';
 import SearchBar from './SearchBar/SearchBar';
@@ -14,22 +14,13 @@ export default function Header() {
             <div className="total-top">
                 <Logo />
 
-                {/* <div className='search-bar'>
-
-                    <div className="ui disabled icon input">
-                        <i className="search icon"></i>
-                        <input type="text" placeholder="Search..." />
-                    </div>
-
-                </div> */}
-
                 <SearchBar />
 
                 <div className='buttons'>
 
                     <Link to='/signin'> <button className='ui small right floated teal button'>Sign in</button> </Link>
                
-                    <Link to='/createaccount'> <Button className='ui small right floated blue button'>Sign up</Button> </Link>
+                    <Link to='/signup'> <Button className='ui small right floated blue button'>Sign up</Button> </Link>
 
                 </div>
             </div>

@@ -33,9 +33,9 @@ function SearchBar() {
 
     useEffect(() => {
         if(pattern == '') {
-            $(".search_list").hide();
+            $("#search_list").hide();
         } else {
-            $(".search_list").show();
+            $("#search_list").show();
         }
     }, [pattern]);
     
@@ -51,13 +51,12 @@ function SearchBar() {
                         value={pattern}
                         onChange={test => setPattern(test.target.value)} />
                         <i class="search icon"></i> 
-                </div>~
-                <div className= "search_list">
-                <div className="ui raised fluid text segment">       
-                    {    nameTickers &&
-                         nameTickers.map((nameTicker, index) => <div className='results'><p><NameTicker key={ index } nameTicker={ nameTicker } /></p></div>) 
-                    }
                 </div>
+              
+                <div className="ui raised fluid text segment" id="search_list">       
+                    {    nameTickers &&
+                         nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
+                    }
                 </div>
             </div>
             <button onClick={indexPlus}>+</button>;
