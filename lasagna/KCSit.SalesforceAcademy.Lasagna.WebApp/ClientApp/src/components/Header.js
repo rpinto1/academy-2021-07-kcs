@@ -2,7 +2,8 @@
 import { Link, Route } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Logo from './Logo';
-
+import Article from './SearchBar/Article';
+import App from './SearchBar/App';
 
 
 export default function Header() {
@@ -21,7 +22,12 @@ export default function Header() {
                         <input type="text" placeholder="Search..." />
                     </div>
 
-                </div> */}
+                </div> */
+                }
+                <div className='search-bar'>
+                    app
+                    </div>
+                     
 
                 <div className='buttons'>
 

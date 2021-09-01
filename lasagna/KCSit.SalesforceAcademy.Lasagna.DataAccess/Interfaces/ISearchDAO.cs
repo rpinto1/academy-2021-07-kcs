@@ -13,7 +13,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<Industry>> SearchIndustiesBySector(string sectorName);
         Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName, int page);
 
-        Task<List<CompanyPoco>> SearchCompaniesBySearchBar(string search);
+        Task<List<CompanyPoco>> SearchCompaniesBySearchQuery(string search, int pageSize, int pageNumber);
 
     }
 }

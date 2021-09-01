@@ -90,7 +90,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignIn(SignInViewModel model)
         {
-            return await _genericBusinessLogic.GenericTransaction<GenericReturn>(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 //// check if user is already logged in
 
