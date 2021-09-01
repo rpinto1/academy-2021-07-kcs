@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import { Button, Container, Form } from 'semantic-ui-react';
 import axios from 'axios';
 import Captcha from '../SignUp/Captcha';
-import { validateCaptcha } from 'react-simple-captcha';
 
 export default function SignInForm() {
 
@@ -23,24 +22,17 @@ export default function SignInForm() {
     
 
     const handleSubmit = () => {
-        
-      let user_captcha = document.getElementById('user_captcha_input').value;
+        fetch(`http://localhost:3010/api/SignIn`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        });
 
-      if (validateCaptcha(user_captcha)==true) {
-          console.log(user);
-          /* axios.post('api/user/authenticate', user)
-           .catch ((error) => {console.log(error);});
-        
-          //recharge captcha box
-          loadCaptchaEnginge(6); 
-          document.getElementById('user_captcha_input').value = ""; */
-      }
 
-      else {
-          alert('Oops! Our page is only available to people, not robots!');
-          document.getElementById('user_captcha_input').value = "";
-      }
-  };  
+    };
     
 
     

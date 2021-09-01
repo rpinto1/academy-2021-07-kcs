@@ -4,10 +4,10 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
-    public class CompanyScorePoco
+    public class IndexSector
     {
-        public List<CompanyPoco> CompanyPocos { get; set; }
-        public int Count { get; set; }
+        public List<Sector> Sectors { get; set; }
 
+        public List<Index> Indices { get; set; }
     }
 }

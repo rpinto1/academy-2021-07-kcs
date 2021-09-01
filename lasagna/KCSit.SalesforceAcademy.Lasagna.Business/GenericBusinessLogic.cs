@@ -69,30 +69,50 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
 
 
-        public async Task<GenericReturn> GenericTransaction(Func<Task<GenericReturn>> func)
+
+        
+        public async Task<GenericReturn<T>> ExecuteOperation<T>(Func<Task<T>> func)
         {
-            var transactionOptions = new TransactionOptions();
-            transactionOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-            transactionOptions.Timeout = TimeSpan.FromSeconds(60);
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled))
+            var result = new GenericReturn<T>();
+
+            try
             {
-                var result = new GenericReturn();
+                var funcResult = await func();
 
-                try
-                {
-                    result = await func();
-                    transactionScope.Complete();
-                }
-                catch (Exception e)
-                {
-                    result.Succeeded = false;
-                    result.Message = e.Message;
-                }
-
-                return result;
+                result.Succeeded = true;
+                result.Result = funcResult;
             }
+            catch (Exception e)
+            {
+                result.Result = default(T);
+                result.Succeeded = false;
+                result.Message = e.Message;
+            }
+
+            return result;
         }
 
+        
+        public GenericReturn<T> ExecuteOperation<T>(Func<T> func)
+        {
+            var result = new GenericReturn<T>();
+
+            try
+            {
+                var funcResult = func();
+
+                result.Succeeded = true;
+                result.Result = funcResult;
+            }
+            catch (Exception e)
+            {
+                result.Result = default(T);
+                result.Succeeded = false;
+                result.Message = e.Message;
+            }
+
+            return result;
+        }
 
     }
 }
