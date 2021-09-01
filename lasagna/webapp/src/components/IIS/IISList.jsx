@@ -94,9 +94,10 @@ export const IISList = () => {
         }, [sectorValue])
 
     useEffect(() => {
-        try {        
-            
-            var data = fetch('http://localhost:3010/api/Companies/indexSector')
+        try {
+            console.log(process.env.NODE_ENV)
+            console.log(process.env.REACT_APP_URL)
+            var data = fetch(process.env.REACT_APP_URL+'/api/Companies/indexSector')
             .then(response => response.json());
             data.then(data => data["result"]["indices"].map(x=>({
                 key: x["name"],
