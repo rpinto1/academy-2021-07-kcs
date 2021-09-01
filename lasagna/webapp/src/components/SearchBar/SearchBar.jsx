@@ -5,9 +5,19 @@ import $ from 'jquery';
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
     const [pattern, setPattern] = useState('');
+    let pageIndex = 0;
+
+    function indexPlus() {
+        alert(pageIndex);
+        pageIndex++;
+    }
+    function indexMinus() {
+        alert(pageIndex);
+        if (pageIndex != 0) { pageIndex--;}
+    }
 
     useEffect(() => {
-        fetch("http://localhost:3010/api/Companies/search/"+ pattern + "/0").then(result => {
+        fetch("http://localhost:3010/api/Companies/search/"+ pattern +"/"+ pageIndex).then(result => {
             if (result.status != 200) {
                 console.log("error");
                 return;
@@ -49,6 +59,8 @@ function SearchBar() {
                     }
                 </div>
             </div>
+            <button onClick={indexPlus}>+</button>;
+            <button onClick={indexMinus}>-</button>;
         </div>
     );
 }
