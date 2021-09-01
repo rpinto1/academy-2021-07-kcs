@@ -15,35 +15,35 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         private readonly ILogger<ExternalServicesController> _logger;
 
-        private IExternalServicesBO _externalServicesBO;
-        private GenericControllerReturn _genericControllerReturn;
+        private readonly IExternalServicesBO _externalServicesBO;
+        private readonly GenericControllerReturn _genericControllerReturn;
 
 
-
-        public ExternalServicesController(ILogger<ExternalServicesController> logger, IExternalServicesBO externalServicesBO)
+        public ExternalServicesController(ILogger<ExternalServicesController> logger, IExternalServicesBO externalServicesBO, GenericControllerReturn genericControllerReturn)
         {
             _logger = logger;
             _externalServicesBO = externalServicesBO;
+            _genericControllerReturn = genericControllerReturn;
         }
 
 
         [HttpGet("gainlose")]
-        public IActionResult GetGainLose()
+        public async Task<IActionResult> GetGainLose()
         {
 
             var result = _externalServicesBO.FetchGainLoseData();
 
-            return _genericControllerReturn.ReturnResult(result);
+            return await _genericControllerReturn.ReturnResult(result);
 
         }
 
         [HttpGet("news")]
-        public IActionResult GetNews()
+        public async Task<IActionResult> GetNews()
         {
 
             var result = _externalServicesBO.FetchNewsData();
 
-            return _genericControllerReturn.ReturnResult(result);
+            return await _genericControllerReturn.ReturnResult(result);
 
         }
 

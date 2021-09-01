@@ -1,5 +1,5 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
-using KCSit.SalesforceAcademy.Lasagna.Business.Models;
+using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -11,66 +11,38 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
     public class ExternalServicesBO : IExternalServicesBO
     {
+        private IGenericBusinessLogic _genericBusinessLogic;
 
+
+        public ExternalServicesBO(IGenericBusinessLogic genericBusinessLogic)
+        {
+            _genericBusinessLogic = genericBusinessLogic;
+        }
+             
         
-        public async Task<IRestResponse> FetchDataAsync(string url, string endpoint, string keyHeader, string key, string hostHeader, string host, DataFormat format)
+        async Task<IRestResponse> FetchDataAsync(string url, string endpoint, string keyHeader, string key, DataFormat format)
         {
             var client = new RestClient(url);
 
             var request = new RestRequest(endpoint, format);
 
             request.AddHeader(keyHeader, key);
-            request.AddHeader(hostHeader, host);
 
             var responseAsync = client.GetAsync<IRestResponse>(request);
-            
+
             var response = await responseAsync;
 
             return response;
 
         }
 
-        public IRestResponse FetchData(string url, string endpoint, string keyHeader, string key, string hostHeader, string host, DataFormat format)
-        {
-            var client = new RestClient(url);
 
-            var request = new RestRequest(endpoint, format);
-
-            request.AddHeader(keyHeader, key);
-            request.AddHeader(hostHeader, host);
-            
-            var response = client.Get<IRestResponse>(request);
-           
-            
-            return response;
-
-        }
-
-        public IRestResponse FetchData(string url, string endpoint, string keyHeader, string key, DataFormat format)
-        {
-            var client = new RestClient(url);
-
-            var request = new RestRequest(endpoint, format);
-
-            request.AddHeader(keyHeader, key);
-            
-            var response = client.Get<IRestResponse>(request);
-
-
-            return response;
-
-        }
-
-        public GenericReturn<string> FetchGainLoseData()
+        public Task<GenericReturn<string>> FetchGainLoseData()
         {
             
             var url = "https://yahoo-finance15.p.rapidapi.com/api/yahoo/";
 
-            var yahooAPIOptions = new
-            {
-                key = "c16e3abf67msh98c7e364d5eed9ep19f991jsnd7123a9386c2",
-                host = "yahoo-finance15.p.rapidapi.com"
-            };
+            var yahooAPIKey = "c16e3abf67msh98c7e364d5eed9ep19f991jsnd7123a9386c2";
 
             var endpoints = new
             {
@@ -78,15 +50,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 losers = "co/collections/day_losers?start=0"
             };
 
-
-            return ExecuteOperation(() =>
+            return _genericBusinessLogic.ExecuteOperation(async () =>
             {
                 
-                var gainersResponse = FetchData(url, endpoints.gainers, "x-rapidapi-key", yahooAPIOptions.key, "x-rapidapi-host", yahooAPIOptions.host, DataFormat.Json);
-                var losersResponse = FetchData(url, endpoints.losers, "x-rapidapi-key", yahooAPIOptions.key, "x-rapidapi-host", yahooAPIOptions.host, DataFormat.Json);
-
-                //if (!gainersResponse.IsSuccessful) throw gainersResponse.ErrorException;
-                //if (!losersResponse.IsSuccessful) throw losersResponse.ErrorException;
+                var gainersResponse = await FetchDataAsync(url, endpoints.gainers, "x-rapidapi-key", yahooAPIKey, DataFormat.Json);
+                var losersResponse = await FetchDataAsync(url, endpoints.losers, "x-rapidapi-key", yahooAPIKey, DataFormat.Json);
 
                 var resultObject = new
                 {
@@ -97,58 +65,99 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 return JsonConvert.SerializeObject(resultObject);
                 
             });
-            
         }
 
-        //deve ser refactorizado
-        //add overloaded methods
-        //remover e colocar logica na classe generica
-
-        public GenericReturn<string> FetchNewsData()
+        
+        public Task<GenericReturn<string>> FetchNewsData()
         {
 
             var url = "https://newsapi.org/";
 
-            var newsAPIOptions = new
-            {
-                key = "1d46c2ebccbd48e597c869e5881a2d87",
-            };
+            var newsAPIKey = "1d46c2ebccbd48e597c869e5881a2d87";
 
             var endpoint = "v2/top-headlines?country=${location}&category=business&pageSize=5";
 
 
-            return ExecuteOperation(() =>
-            {
 
-                var newsResponse = FetchData(url, endpoint, "apiKey", newsAPIOptions.key, DataFormat.Json);
-                
-                var resultObject = new
-                {
-                    news = JsonConvert.DeserializeObject<GainLoseResponse>(newsResponse.Content)
-                };
+            return _genericBusinessLogic.ExecuteOperation(async () =>
+            {
+                var newsResponse = await FetchDataAsync(url, endpoint, "apiKey", newsAPIKey, DataFormat.Json);
+
+                var resultObject = JsonConvert.DeserializeObject<GainLoseResponse>(newsResponse.Content);
 
                 return JsonConvert.SerializeObject(resultObject);
+
 
             });
 
         }
 
-        GenericReturn<string> ExecuteOperation(Func<string> lambda)
-        {
-            var operationResult = new GenericReturn<string>();
-            
-            try
-            {
-                operationResult.Succeeded = true;
-                operationResult.Result = lambda.Invoke();
-            }
-            catch (Exception e)
-            {
-                operationResult.Succeeded = false;
-                operationResult.Message = "[ExecuteOperation] An operation error has occured: " + e.Message;
-            }
 
-            return operationResult;
-        }
+        //to remove
+        //GenericReturn<string> ExecuteOperation(Func<string> lambda)
+        //{
+        //    var operationResult = new GenericReturn<string>();
+
+        //    try
+        //    {
+        //        operationResult.Succeeded = true;
+        //        operationResult.Result = lambda();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        operationResult.Succeeded = false;
+        //        operationResult.Message = "[ExecuteOperation] An operation error has occured: " + e.Message;
+        //    }
+
+        //    return operationResult;
+        //}
+        //IRestResponse FetchData(string url, string endpoint, string keyHeader, string key, string hostHeader, string host, DataFormat format)
+        //{
+        //    var client = new RestClient(url);
+
+        //    var request = new RestRequest(endpoint, format);
+
+        //    request.AddHeader(keyHeader, key);
+        //    request.AddHeader(hostHeader, host);
+        //    request
+        //    var response = client.Get<IRestResponse>(request);
+
+
+        //    return response;
+
+        //}
+
+        //IRestResponse FetchData(string url, string endpoint, string keyHeader, string key, DataFormat format)
+        //{
+        //    var client = new RestClient(url);
+
+        //    var request = new RestRequest(endpoint, format);
+
+        //    request.AddHeader(keyHeader, key);
+
+        //    var response = client.Get<IRestResponse>(request);
+
+
+        //    return response;
+
+        //}
+
+        //async Task<IRestResponse> FetchDataAsync(string url, string endpoint, string keyHeader, string key, string hostHeader, string host, DataFormat format)
+        //{
+        //    var client = new RestClient(url);
+
+        //    var request = new RestRequest(endpoint, format);
+
+        //    request.AddHeader(keyHeader, key);
+        //    request.AddHeader(hostHeader, host);
+
+        //    var responseAsync = client.GetAsync<IRestResponse>(request);
+
+        //    var response = await responseAsync;
+
+        //    return response;
+
+        //}
+
     }
 }
