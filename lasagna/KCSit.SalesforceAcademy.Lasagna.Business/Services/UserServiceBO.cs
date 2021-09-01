@@ -37,7 +37,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
-            return await _genericBusinessLogic.GenericTransaction(async () => 
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 var user = new ApplicationUser()
                 {
@@ -61,9 +61,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
         }
 
-        public async Task<GenericReturn<GuidToken>> SignIn(SignInViewModel model)
+        public async Task<GenericReturn<IdToken>> SignIn(SignInViewModel model)
         {
-            return await _genericBusinessLogic.GenericTransaction<GuidToken>(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
@@ -78,7 +78,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 var newAccessToken = await _userManager.GenerateUserTokenAsync(user, "LasagnaApp", "AccessToken");
                 await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken", newAccessToken);
 
-                return new GuidToken { Guid = user.Id, Token = newAccessToken };
+                return new IdToken { Id = user.Id, Token = newAccessToken };
             });
         }
 
@@ -120,7 +120,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 return new GenericReturn { Succeeded = true, Message = "Passwords match" };
             }
 
-            var passwordIdentityResult = await _userManager.ChangePasswordAsync(user, user.PasswordHash, newModel.Password);            
+            var passwordIdentityResult = await _userManager.ChangePasswordAsync(user, user.PasswordHash, newModel.Password);
             if (!passwordIdentityResult.Succeeded)
             {
                 return new GenericReturn { Succeeded = false, Message = passwordIdentityResult.Errors.First().Description.ToString() };
@@ -132,22 +132,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> Delete(string id)
         {
-            // check if user exists
-            var user = await _userManager.FindByIdAsync(id);
-
-            if (user == null)
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
-            }
+                // check if user exists
+                var user = await _userManager.FindByIdAsync(id);
 
-            var identityResult = await _userManager.DeleteAsync(user);
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
 
-            if (!identityResult.Succeeded)
-            {
-                return new GenericReturn { Succeeded = false, Message = "Could not delete this User" };
-            }
+                var result = await _userManager.DeleteAsync(user);
 
-            return new GenericReturn { Succeeded = true, Message = "User deleted successfully" };
+                if (!result.Succeeded)
+                {
+                    string errorMsg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        errorMsg = String.Concat(errorMsg, error.Description, " ");
+                    }
+                    throw new Exception(errorMsg);
+                }
+            });
         }
 
 
@@ -169,7 +175,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            
+
             return tokenHandler.WriteToken(token);
         }
 

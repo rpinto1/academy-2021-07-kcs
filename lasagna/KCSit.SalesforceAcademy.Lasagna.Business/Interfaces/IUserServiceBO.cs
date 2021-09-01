@@ -10,7 +10,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
     {
         public Task<GenericReturn> SignUp(SignUpViewModel model);
 
-        public Task<GenericReturn<GuidToken>> SignIn(SignInViewModel model);
+        public Task<GenericReturn<IdToken>> SignIn(SignInViewModel model);
 
         public Task<GenericReturn> SignOut(ApplicationUser model);
 
