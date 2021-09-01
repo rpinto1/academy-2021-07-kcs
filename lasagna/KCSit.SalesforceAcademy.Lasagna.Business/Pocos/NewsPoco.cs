@@ -4,8 +4,8 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 {
-    public class GainLoseResponse
+    public class NewsPoco
     {
-        public IEnumerable<GainLoseCompanyData> Quotes { get; set; }
+        public IEnumerable<NewsData> Articles { get; set; }
     }
 }

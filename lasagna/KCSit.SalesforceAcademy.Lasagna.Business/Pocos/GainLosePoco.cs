@@ -4,8 +4,10 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 {
-    public class GainLoseResponse
+    public class GainLosePoco
     {
-        public IEnumerable<GainLoseCompanyData> Quotes { get; set; }
+        public GainLoseResponse Gainers { get; set; }
+
+        public GainLoseResponse Losers { get; set; }
     }
 }
