@@ -1,11 +1,11 @@
 import React from 'react'
 
-export default function TitlesList({ quotes, className}) {
+export default function TitlesList({ data, className}) {
 
     let signal = className === 'gain-items' ? '+' : '';
     let title = className === 'gain-items' ? 'Gainers' : 'Losers';
-
-    if (quotes) {
+    
+    if (data) {
         
         return (
             <section className={className}>
@@ -20,18 +20,18 @@ export default function TitlesList({ quotes, className}) {
                     </thead>
                     <tbody>
                 {
-                    quotes.map((item, i) => (
-                        <tr>
-                            <td key={i}>
-                                <span className="item-symbol">{`${item.Symbol}`}</span>
+                    data["quotes"].map((item, i) => (
+                        <tr key={i}>
+                            <td>
+                                <span className="item-symbol">{`${item.symbol}`}</span>
                                 <br />
-                                <span className="item-name">{`${item.DisplayName}`}</span>
+                                <span className="item-name">{`${item.displayName}`}</span>
                             </td>
                             <td>
-                                <p>{`${signal}${item.RegularMarketChange.toFixed(2)}`}</p>
+                                <p>{`${signal}${item.regularMarketChange.toFixed(2)}`}</p>
                             </td>
                             <td>
-                                <p>{`${signal}${item.RegularMarketChangePercent.toFixed(2)}%`}</p>
+                                <p>{`${signal}${item.regularMarketChangePercent.toFixed(2)}%`}</p>
                             </td>
                         </tr>
                     ))

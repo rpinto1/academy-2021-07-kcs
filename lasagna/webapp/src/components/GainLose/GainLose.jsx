@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React from "react";
 import GainLoseFetcher from "./GainLoseFetcher";
 
 
@@ -8,7 +8,7 @@ export default function GainLose() {
     //Maybe redux?
     
     
-    var gainLoseURL = "localhost:3010/api/ExternalServices/gainlose";
+    var gainLoseURL = "http://localhost:3010/api/ExternalServices/gainlose";
 
     return (
         <div>
