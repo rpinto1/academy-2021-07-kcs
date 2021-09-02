@@ -87,7 +87,7 @@ footer {
 
 #underlined {
     text-decoration: none;
-    color: rgb(255, 72, 0);
+    color: rgb(0, 153, 255);
 }
 
 .total-top {
@@ -102,11 +102,11 @@ footer {
     text-align-last: center;
 }
 
-form {
+.formulario {
     border: 1px solid gray;
     padding: 2%;
     border-radius: 1%;
-
+    
 }
 
 

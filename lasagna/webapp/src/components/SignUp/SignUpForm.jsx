@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Container, Button } from 'semantic-ui-react';
-import axios from 'axios';
-import AboutUsContactButtons from '../AboutUsContactButtons';
+import { Link } from 'react-router-dom';
+import Footer from '../Footer';
+import Captcha from './Captcha';
+import FailedSignUp from './FailedSignUp';
+import SuccessfulSignUp from './SuccessfulSignUp';
+
 
 export default function SignUpForm() {
 
@@ -12,6 +16,8 @@ export default function SignUpForm() {
         Password: '',
         ConfirmPassword: ''    
     });
+
+    
 
 
     const handleChange = (event) => {
@@ -34,14 +40,36 @@ export default function SignUpForm() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newUser)
-        });
+        }).then(response => {
+            if(response.status === 400) {
+                alert("This email is already being used, if you don't remember your password, please click on 'I don't remember my password'")
+            } if (response.status === 404){
+                alert("We are experiencing some issues with out system, please try again later")
+            } if (response.status === 200) {
+            alert('User created successfully')
+            }
+        })
+       
+        .catch(error => console.log(error))
           
-
     };
+    
+
+   /*  const exampleRef = useRef(null);
+
+
+    const captchaValue = useRef('');
+    const captchaRef = captchaValue.current;
+
+    useEffect(() => {
+    
+       console.log(captchaRef)
+
+    }, [captchaValue.current] */
 
 
     return (
-       
+    <>   
     <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
         <Form onSubmit={handleSubmit}>
@@ -53,7 +81,7 @@ export default function SignUpForm() {
             value={newUser.FirstName} 
             onChange={handleChange}
             id='FirstName'
-            pattern="[\w+/\s*]{2,15}"     
+            pattern="[\w+/\s*]{2,15}"      
             required/>
         </Form.Field>
         <Form.Field>
@@ -75,7 +103,7 @@ export default function SignUpForm() {
             value = {newUser.password}
             onChange={handleChange}
             id='Password'
-            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,100}' 
+            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}' 
             title="Passwords must contain at least 8 characters. At least one number, one uppercase, one lowercase letter and one special character."
             required/>
         </Form.Field>
@@ -100,17 +128,33 @@ export default function SignUpForm() {
             required/>
         </Form.Field>
         <Form.Field>
-           
+          {/* <Captcha />
+           <div className="container">
+               <div className="form-group">
+                   <div></div>
+                   <div className="col mt-3">
+                        <input 
+                         placeholder="Enter Captcha Value" 
+                         ref={captchaRef}>
+                        </input>
+                    </div>
+                </div>
+            </div> */}
+    
         </Form.Field>
         <Form.Field>
-            <Button type='submit'>Submit</Button>
+            <Link to ='/forgottenpassword'><p>I don't remember my password.</p></Link>
+        </Form.Field>
+        <Form.Field>
+            <Button type='submit'  className='ui small center teal button'>Submit</Button>
+            <Link to= '/'><Button type='cancel' className='ui small center red button'>Cancel</Button></Link>
         </Form.Field>
         
         </Form>
-        <AboutUsContactButtons />
+       
         </Container>
-        
-        
+        <Footer />
+        </>
     ) 
 
    
