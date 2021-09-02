@@ -32,9 +32,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             var responseAsync = client.ExecuteGetAsync(request);
 
             return responseAsync;
-
-            
-
         }
 
         
@@ -63,7 +60,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 };
 
                 return result;
-                
             });
         }
 
@@ -89,10 +85,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var result = new NewsPoco { Articles = JObject.Parse(newsResponse.Content)["articles"].ToObject<IEnumerable<NewsData>>() };
 
                 return result;
-
-
             });
-
         }
 
     }
