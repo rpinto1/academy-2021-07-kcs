@@ -1,13 +1,15 @@
-﻿using RestSharp;
+﻿using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
+using RestSharp;
 using System;
+using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 {
     public interface IExternalServicesBO
     {
-        GenericReturn<string> FetchGainLoseData();
+        Task<GenericReturn<GainLosePoco>> FetchGainLoseData();
 
-        GenericReturn<string> FetchNewsData();
+        Task<GenericReturn<NewsPoco>> FetchNewsData();
 
     }
 }

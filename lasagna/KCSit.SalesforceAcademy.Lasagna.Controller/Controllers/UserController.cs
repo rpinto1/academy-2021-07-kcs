@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -63,9 +64,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Route("api/Update")]
         //[Authorize]
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] SignUpViewModel newModel)
+        public async Task<IActionResult> Update(string id, [FromBody] SignUpViewModel newModel)
         {
-            GenericReturn updateUserResult = await _userService.Update(newModel);
+            GenericReturn updateUserResult = await _userService.Update(id, newModel);
 
             return _genericControllerReturn.ReturnResult(updateUserResult);
         }
@@ -75,14 +76,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Route("api/Delete")]
         //[Authorize]
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] ApplicationUser model)
+        public async Task<IActionResult> Delete(string id)
         {
-            GenericReturn deleteResult = await _userService.Delete(model);
+            
+            GenericReturn deleteResult = await _userService.Delete(id);
 
             return _genericControllerReturn.ReturnResult(deleteResult);
         }
-
-
 
 
 

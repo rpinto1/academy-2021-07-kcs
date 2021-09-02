@@ -73,6 +73,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             return await _genericCR.ReturnResult(industriesList);
         }
+        [HttpGet("countries")]
+        public async Task<IActionResult> GetCountries()
+        {
+            var countriesList = _genericLogic.GetAll<Country>();
+
+
+            return await _genericCR.ReturnResult(countriesList);
+        }
         // POST api/<CompaniesController>
         [HttpPost("IIS")]
         public async Task<IActionResult> PostSearchCompaniesIIS([FromBody] DropDownParameters value)

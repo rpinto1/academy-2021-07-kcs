@@ -38,6 +38,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public virtual DbSet<ScoringMethod> ScoringMethods { get; set; }
         public virtual DbSet<Sector> Sectors { get; set; }
         public virtual DbSet<YearlyReport> YearlyReports { get; set; }
+        public virtual DbSet<Portfolio> Portfolios { get; set; }
+        public virtual DbSet<PortfolioCompany> PortfolioCompanies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -258,6 +260,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
@@ -697,8 +700,42 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
                     .HasConstraintName("FK_YearlyReports_KeyRatios");
             });
 
+            modelBuilder.Entity<Portfolio>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserId)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Portfolios)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Portfolios_AspNetUsers");
+            });
+
+            modelBuilder.Entity<PortfolioCompany>(entity =>
+            {
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.PortfolioCompanies)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioCompanies_Companies");
+
+                entity.HasOne(d => d.Portfolio)
+                    .WithMany(p => p.PortfolioCompanies)
+                    .HasForeignKey(d => d.PortfolioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PortfolioCompanies_Portfolios");
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
+
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

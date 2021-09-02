@@ -2,27 +2,29 @@ import React, { useEffect, useState } from 'react'
 import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
+import store from '../../redux/store'
+
 
 export const IISList = () => {
 
 
-    const [index, setindex] = useState([{key: "", text: "", value: ""}])
+    const [index, setindex] = useState([{key: "", text: "--None--", value: ""}])
     const [indexValue, setindexValue] = useState("")
-    const [sector, setsector] = useState([{key: "", text: "", value: ""}])
+    const [sector, setsector] = useState([{key: "", text: "--None--", value: ""}])
     const [sectorValue, setsectorValue] = useState("")
-    const [industry, setindustry] = useState([{key: "", text: "", value: ""}])
-    const defaultValue = [{key: "", text: "", value: ""}]
+    const [industry, setindustry] = useState([{key: "", text: "--None--", value: ""}])
+    const defaultValue = [{key: "", text: "--None--", value: ""}]
     const [industryValue, setindustryValue] = useState("")
     const [companyCount, setcompanyCount] = useState(100)
     const [currentPage, setcurrentPage] = useState(1)
     const [companies, setcompanies] = useState([])
-
+    const urlPage = store.getState().url;
     const turnIntoOptions = (data,type) => {data[type].map(x=>({
         key: x["name"],
         text: x["name"],
         value: x["name"],
     })) }
-
+    console.log(urlPage)
     const handlePageClick = ({target}) => {
         setcurrentPage(eval(target.textContent))
     }
@@ -94,9 +96,8 @@ export const IISList = () => {
         }, [sectorValue])
 
     useEffect(() => {
-        try {        
-            
-            var data = fetch('http://localhost:3010/api/Companies/indexSector')
+        try {
+            var data = fetch(`${urlPage}api/Companies/indexSector`)
             .then(response => response.json());
             data.then(data => data["result"]["indices"].map(x=>({
                 key: x["name"],
