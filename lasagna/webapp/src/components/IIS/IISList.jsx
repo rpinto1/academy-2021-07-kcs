@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
+import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
 import store from '../../redux/store'
@@ -16,7 +16,7 @@ export const IISList = () => {
     const [industry, setindustry] = useState([{key: "", text: "--None--", value: ""}])
     const defaultValue = [{key: "", text: "--None--", value: ""}]
     const [industryValue, setindustryValue] = useState("")
-    const [companyCount, setcompanyCount] = useState(100)
+    const [companyCount, setcompanyCount] = useState(0)
     const [currentPage, setcurrentPage] = useState(1)
     const [companies, setcompanies] = useState([])
     const urlPage = useSelector(state => state.url);
@@ -63,6 +63,38 @@ export const IISList = () => {
             }
             };
 
+        const companyResults = ()=> {
+            if(companies.length == 0){
+                return(
+                    <Table.Body classname="table">
+                        <Table.Row>
+                            <Table.Cell colSpan={6}>
+                            <Segment className="tableSegment" textAlign="center" size="small">
+                                <Header icon>
+                                <Icon name='search' />
+                                We don't have any Companies matching your query.
+                                </Header>
+                            </Segment>
+                            </Table.Cell>
+
+
+                        </Table.Row>
+
+
+                    </Table.Body>
+
+                    )
+            } 
+            return(
+                <Table.Body classname="table">
+                {
+                    companies.map((x,i)=> <Company company={x} key={i}/>)
+                }
+                </Table.Body>
+            )
+
+        }
+        
         useEffect(() => {
             let timer1 = setTimeout(() => 
             fetchCompanys(-1)
@@ -134,11 +166,7 @@ export const IISList = () => {
                     <Table.HeaderCell>Profile</Table.HeaderCell>
                 </Table.Row>
                 </Table.Header>
-            <Table.Body classname="table">
-                {
-                    companies.map((x,i)=> <Company company={x} key={i}/>)
-                }
-            </Table.Body>
+                {companyResults()}
                 <Table.Footer>
                 <Table.Row>
                     <Table.HeaderCell colSpan='10'>
