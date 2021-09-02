@@ -3,6 +3,7 @@ import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
 import store from '../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 export const IISList = () => {
@@ -18,13 +19,15 @@ export const IISList = () => {
     const [companyCount, setcompanyCount] = useState(100)
     const [currentPage, setcurrentPage] = useState(1)
     const [companies, setcompanies] = useState([])
-    const urlPage = store.getState().url;
-    const turnIntoOptions = (data,type) => {data[type].map(x=>({
+    const urlPage = useSelector(state => state.url);
+    
+
+    const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
         key: x["name"],
         text: x["name"],
         value: x["name"],
     })) }
-    console.log(urlPage)
+
     const handlePageClick = ({target}) => {
         setcurrentPage(eval(target.textContent))
     }
@@ -99,18 +102,10 @@ export const IISList = () => {
         try {
             var data = fetch(`${urlPage}api/Companies/indexSector`)
             .then(response => response.json());
-            data.then(data => data["result"]["indices"].map(x=>({
-                key: x["name"],
-                text: x["name"],
-                value: x["name"],
-            })) )
+            data.then(data => turnIntoOptions(data,"result","indices"))
             .then(arrayFinal => setindex((prevState) => [...prevState, ...arrayFinal]))
 
-            data.then(data => data["result"]["sectors"].map(x=>({
-                key: x["name"],
-                text: x["name"],
-                value: x["name"],
-            })) )
+            data.then(data => turnIntoOptions(data,"result","sectors") )
             .then(arrayFinal => setsector((prevState) => [...prevState, ...arrayFinal]))
             console.log(index);
         } catch (error) {
