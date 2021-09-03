@@ -5,7 +5,7 @@ import $ from 'jquery';
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
     const [pattern, setPattern] = useState('');
-    let pageIndex = 0;
+    let [pageIndex, setPageIndex] = useState('');
 
     function indexPlus() {
         alert(pageIndex);
@@ -15,6 +15,12 @@ function SearchBar() {
         alert(pageIndex);
         if (pageIndex != 0) { pageIndex--;}
     }
+
+    {/*function description(nameTicker.ticker){
+       fetch("http://localhost:3010/api/Company/"+ ticker +"/description).then(result.json() => {
+            setDescription(data.result);
+            }}
+     */}
 
     useEffect(() => {
         fetch("http://localhost:3010/api/Companies/search/"+ pattern +"/"+ pageIndex).then(result => {
@@ -59,7 +65,7 @@ function SearchBar() {
                     }
                 </div>
             </div>
-            <button onClick={indexPlus}>+</button>;
+            <button onClick={setPageIndex(pageIndex++)}>+</button>;
             <button onClick={indexMinus}>-</button>;
         </div>
     );
