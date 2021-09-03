@@ -8,7 +8,8 @@ export default function SignInForm() {
 
     const [user, setUser] = useState({
       EmailAddress: '',
-      Password: ''
+      Password: '',
+      RememberMe: 'false'
     });
 
     const [loggedUser, setLoggedUser] = useState({
@@ -40,14 +41,15 @@ export default function SignInForm() {
      }).then(res => res.json())
       .then(data => {
         setLoggedUser(data.result)
-        console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
-     /*    if(loggedUser.id != '' && loggedUser.token != ''){
+        if(loggedUser.id != '' && loggedUser.token != ''){
         setRedirect(true)
-      } */
+      }
     })
     .catch(error => console.log(error))
-
+    
 };  
+
+console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
 
       return (
         <Container className= 'formulario'>
