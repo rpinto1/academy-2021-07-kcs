@@ -110,8 +110,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 await _userManager.RemoveAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken");
 
 
-                // How is this supposed to work??????
-                await _signInManager.SignOutAsync();
+                //// How is this supposed to work??????
+                //await _signInManager.SignOutAsync();
 
             });
         }
@@ -147,6 +147,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     throw new Exception(result.Errors.First().Description.ToString());
                 }
 
+                // Current Password must come as input parameter from a new model !!!!!!!!!!!!
+                //var passwordResult = await _userManager.ChangePasswordAsync(user, "Test1234%", newModel.Password);
                 var passwordResult = await _userManager.ChangePasswordAsync(user, user.PasswordHash, newModel.Password);
                 if (!passwordResult.Succeeded)
                 {
