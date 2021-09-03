@@ -10,6 +10,7 @@ import ContactUsView from './Views/ContactUsView';
 import CompanyProfileView from './Views/CompanyProfileView';
 import ForgottenPasswordView from './Views/ForgottenPasswordView';
 import UserProfileView from './Views/UserProfileView';
+import HomepageUserView from './Views/HomepageUser';
 
 
 
@@ -31,6 +32,7 @@ function App() {
                 <Route path= '/company/details/${ticker}' component={CompanyProfileView} />
                 <Route path='/forgottenpassword' component={ForgottenPasswordView} />
                 <Route path= '/user/profile' component = {UserProfileView} />
+                <Route path= '/user/homepage' component = {HomepageUserView} /> 
             </Switch> 
            
         
