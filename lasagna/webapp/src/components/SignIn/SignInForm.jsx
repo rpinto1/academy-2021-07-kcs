@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Container, Form } from 'semantic-ui-react';
-import axios from 'axios';
 import Captcha from '../SignUp/Captcha';
 import { validateCaptcha } from 'react-simple-captcha';
 
@@ -10,6 +10,11 @@ export default function SignInForm() {
       EmailAddress: '',
       Password: ''
     });
+
+    const [loggedUser, setLoggedUser] = useState({
+      id: '',
+      token: ''
+    })
 
     const handleChange = (event) => {
       const { id, value } = event.target
@@ -23,26 +28,22 @@ export default function SignInForm() {
     
 
     const handleSubmit = () => {
-        
-      let user_captcha = document.getElementById('user_captcha_input').value;
-
-      if (validateCaptcha(user_captcha)==true) {
-          console.log(user);
-          /* axios.post('api/user/authenticate', user)
-           .catch ((error) => {console.log(error);});
-        
-          //recharge captcha box
-          loadCaptchaEnginge(6); 
-          document.getElementById('user_captcha_input').value = ""; */
-      }
-
-      else {
-          alert('Oops! Our page is only available to people, not robots!');
-          document.getElementById('user_captcha_input').value = "";
-      }
-  };  
+      fetch(`http://localhost:3010/api/SignIn`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    }).then(res => res.json())
+    .then(data => {
+      setLoggedUser(data.result);
+      console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
+    })
+    .catch(error => console.log(error))
     
-
+  };  
+  
     
       return (
         <Container className= 'formulario'>
@@ -70,9 +71,9 @@ export default function SignInForm() {
             />
          </Form.Field> 
          <Form.Field>
-          <Captcha />
+         {/*  <Captcha /> */}
          </Form.Field>
-          <Button type="submit" id="submit_btn">Sign in</Button>
+          <Link to='/user/homepage'><Button type="submit" id="submit_btn">Sign in</Button></Link>
         </Form>
         </Container>
 

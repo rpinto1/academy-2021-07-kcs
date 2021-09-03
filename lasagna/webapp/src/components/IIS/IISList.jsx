@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Dropdown, Segment, Table ,Menu, Icon} from 'semantic-ui-react'
+import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
+import store from '../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+
 
 export const IISList = () => {
 
@@ -13,11 +16,13 @@ export const IISList = () => {
     const [industry, setindustry] = useState([{key: "", text: "--None--", value: ""}])
     const defaultValue = [{key: "", text: "--None--", value: ""}]
     const [industryValue, setindustryValue] = useState("")
-    const [companyCount, setcompanyCount] = useState(100)
+    const [companyCount, setcompanyCount] = useState(0)
     const [currentPage, setcurrentPage] = useState(1)
     const [companies, setcompanies] = useState([])
+    const urlPage = useSelector(state => state.url);
+    
 
-    const turnIntoOptions = (data,type) => {data[type].map(x=>({
+    const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
         key: x["name"],
         text: x["name"],
         value: x["name"],
@@ -58,6 +63,38 @@ export const IISList = () => {
             }
             };
 
+        const companyResults = ()=> {
+            if(companies.length == 0){
+                return(
+                    <Table.Body classname="table">
+                        <Table.Row>
+                            <Table.Cell colSpan={6}>
+                            <Segment className="tableSegment" textAlign="center" size="small">
+                                <Header icon>
+                                <Icon name='search' />
+                                We don't have any Companies matching your query.
+                                </Header>
+                            </Segment>
+                            </Table.Cell>
+
+
+                        </Table.Row>
+
+
+                    </Table.Body>
+
+                    )
+            } 
+            return(
+                <Table.Body classname="table">
+                {
+                    companies.map((x,i)=> <Company company={x} key={i}/>)
+                }
+                </Table.Body>
+            )
+
+        }
+        
         useEffect(() => {
             let timer1 = setTimeout(() => 
             fetchCompanys(-1)
@@ -95,22 +132,12 @@ export const IISList = () => {
 
     useEffect(() => {
         try {
-            console.log(process.env.NODE_ENV)
-            console.log(process.env.REACT_APP_URL)
-            var data = fetch(process.env.REACT_APP_URL+'/api/Companies/indexSector')
+            var data = fetch(`${urlPage}api/Companies/indexSector`)
             .then(response => response.json());
-            data.then(data => data["result"]["indices"].map(x=>({
-                key: x["name"],
-                text: x["name"],
-                value: x["name"],
-            })) )
+            data.then(data => turnIntoOptions(data,"result","indices"))
             .then(arrayFinal => setindex((prevState) => [...prevState, ...arrayFinal]))
 
-            data.then(data => data["result"]["sectors"].map(x=>({
-                key: x["name"],
-                text: x["name"],
-                value: x["name"],
-            })) )
+            data.then(data => turnIntoOptions(data,"result","sectors") )
             .then(arrayFinal => setsector((prevState) => [...prevState, ...arrayFinal]))
             console.log(index);
         } catch (error) {
@@ -139,11 +166,7 @@ export const IISList = () => {
                     <Table.HeaderCell>Profile</Table.HeaderCell>
                 </Table.Row>
                 </Table.Header>
-            <Table.Body classname="table">
-                {
-                    companies.map((x,i)=> <Company company={x} key={i}/>)
-                }
-            </Table.Body>
+                {companyResults()}
                 <Table.Footer>
                 <Table.Row>
                     <Table.HeaderCell colSpan='10'>

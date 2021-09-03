@@ -8,16 +8,14 @@ function ArticleList() {
 
     const [location, setLocation] = useState('us'); 
 
-    const NEWS_API_KEY = "1d46c2ebccbd48e597c869e5881a2d87";
 
     useEffect(() => {
         const fetchArticles = async () => {
             try {
-                const response = await fetch(
-                `https://newsapi.org/v2/top-headlines?country=${location}&category=business&pageSize=5&apiKey=${NEWS_API_KEY}`
-                );
+                const response = await fetch(`http://localhost:3010/api/ExternalServices/news`);
                 const json = await response.json();
-                setArticles(json.articles);
+                const articles = json.result.articles;
+                setArticles(articles);
 
             } catch (e) {
                 <NoNewsError />
@@ -38,7 +36,7 @@ function ArticleList() {
                         articles &&
                         articles.map((article, i) => (
 
-                            <td><Article article={article} key= {i}/></td>
+                            <td key={i}><Article article={article}/></td>
 
                         ))
                     }
