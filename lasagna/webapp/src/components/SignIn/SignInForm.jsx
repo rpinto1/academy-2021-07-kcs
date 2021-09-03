@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Button, Container, Form } from 'semantic-ui-react';
 import Captcha from '../SignUp/Captcha';
-import { validateCaptcha } from 'react-simple-captcha';
+import { validateCaptcha, loadCaptchaEnginge } from 'react-simple-captcha';
+
 
 export default function SignInForm() {
 
@@ -10,6 +11,11 @@ export default function SignInForm() {
       EmailAddress: '',
       Password: ''
     });
+
+ 
+    const captchaInputRef = useRef('');
+
+    const [captchaPass, setCaptchaPass] = useState(false);
 
     const [loggedUser, setLoggedUser] = useState({
       id: '',
@@ -26,24 +32,38 @@ export default function SignInForm() {
       
   };
     
-
     const handleSubmit = () => {
-      fetch(`http://localhost:3010/api/SignIn`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    }).then(res => res.json())
-    .then(data => {
-      setLoggedUser(data.result);
-      console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
-    })
-    .catch(error => console.log(error))
-    
+
+      let user_captcha = captchaInputRef.current.value;
+
+      if (validateCaptcha(user_captcha) == true) {
+        
+        fetch(`http://localhost:3010/api/SignIn`, {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(user)
+        }).then(res => res.json())
+          .then(data => {
+           setLoggedUser(data.result);
+          console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
+          //setCaptchaPass(true);
+
+         // if (captchaPass) {<Redirect to='/user/homepage' loggedUser={loggedUser}/>};
+
+        })
+
+      .catch(error => console.log(error));
+
+      } else {
+          alert('Captcha Does Not Match');
+          loadCaptchaEnginge(6); 
+      }
   };  
   
+
     
       return (
         <Container className= 'formulario'>
@@ -71,9 +91,22 @@ export default function SignInForm() {
             />
          </Form.Field> 
          <Form.Field>
-         {/*  <Captcha /> */}
+         <Captcha />
+          <div className="col mt-3">
+                   <div></div>
+                       <div>   
+                           <input 
+                           placeholder="Enter Captcha Value" 
+                           name="user_captcha_input" 
+                           type="text"
+                           ref={captchaInputRef}>
+                            </input>
+                        </div>
+                   </div>
          </Form.Field>
-          <Link to='/user/homepage'><Button type="submit" id="submit_btn">Sign in</Button></Link>
+          <Button 
+          type="submit" 
+          id="submit_btn">Sign in</Button>
         </Form>
         </Container>
 
