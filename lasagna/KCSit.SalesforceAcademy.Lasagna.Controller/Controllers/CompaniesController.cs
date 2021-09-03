@@ -86,7 +86,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         public async Task<IActionResult> PostSearchCompaniesIIS([FromBody] DropDownParameters value)
         {
 
-            var companies = _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page);
+            var companies = _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page,value.Countries);
             return await _genericCR.ReturnResult(companies);
         }
 

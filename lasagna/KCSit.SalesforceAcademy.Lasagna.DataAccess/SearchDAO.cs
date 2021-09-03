@@ -75,13 +75,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 return results;
             }
         }
-        public async Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName,int page)
+        public async Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName,int page, List<string> countries)
         {
             var pageSize = 10;
             using (var context = new lasagnakcsContext())
             {
 
                 var query = (from company in context.Companies
+                             join country in (context.Countries.Where(c => countries.Contains(c.Name)).AsEnumerable())
+                             on company.CountryId equals country.Id
                              join companyIndice in context.CompanyIndices
                              on company.Id equals companyIndice.CompanyId into LJCI from companyIndex in LJCI.DefaultIfEmpty()
                              join indice in context.Indices
@@ -92,7 +94,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              on company.IndustryId equals industry.Id
                              where index.Name.ToLower().Contains(indexName.ToLower()) &&
                              sector.Name.ToLower().Contains(sectorName.ToLower()) &&
-                             industry.Name.ToLower().Contains(industryName.ToLower())
+                             industry.Name.ToLower().Contains(industryName.ToLower()) 
                              select new CompanyPoco { Name = company.Name , Ticker = company.Ticker});
 
                 var countResults = await query.CountAsync();

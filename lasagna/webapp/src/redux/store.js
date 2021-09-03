@@ -1,10 +1,14 @@
-import { createStore } from "redux";
-import Reducer from "./Reducer";
+import { configureStore } from '@reduxjs/toolkit'
 
-let inicialState = {countries:["US"],url:"http://localhost:3010/"};
-
+import countriesReducer from './countriesReducer'
 
 
-const store = createStore(Reducer, inicialState);
+const store = configureStore({
+  reducer: {
+    // Define a top-level state field named `todos`, handled by `todosReducer`
+    countries: countriesReducer,
 
-export default store;
+  }
+})
+
+export default store

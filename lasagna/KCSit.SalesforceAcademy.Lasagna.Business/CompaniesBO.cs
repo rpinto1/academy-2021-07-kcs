@@ -53,7 +53,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             );
         }
 
-        public async Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page)
+        public async Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page, List<string> countries)
         {
 
 
@@ -62,7 +62,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
 
-                return await _searchDao.SearchCompaniesByIndex(indexName,sectorName,industryName, page);
+                return await _searchDao.SearchCompaniesByIndex(indexName,sectorName,industryName, page, countries);
             }
 
             );

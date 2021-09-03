@@ -11,7 +11,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Industry GetIndustry(string name);
         // SubIndustry GetSub(string name);
         Task<List<Industry>> SearchIndustiesBySector(string sectorName);
-        Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName, int page);
+        Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName, int page, List<string> countries);
 
         Task<List<CompanyPoco>> SearchCompaniesBySearchQuery(string search, int pageSize, int pageNumber);
 
