@@ -60,30 +60,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 .AddEntityFrameworkStores<lasagnakcsContext>()
                 .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>));
 
-
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ClockSkew = TimeSpan.FromMinutes(30),
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
+            services.AddAuthorization(options => {
+                options.AddPolicy("BasicUserPolicy", policy => policy.RequireRole("BasicUser", "PremiumUser", "Manager", "Admin"));
+                options.AddPolicy("PremiumUserPolicy", policy => policy.RequireRole("PremiumUser", "Manager", "Admin"));
+                options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager", "Admin"));
+                options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             });
+
 
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 

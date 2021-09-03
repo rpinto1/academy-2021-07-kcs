@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import Reducer from "./Reducer";
 
-let inicialState = {countries:[],url:"http://localhost:3010/"};
+let inicialState = {countries:["US"],url:"http://localhost:3010/"};
 
 
 

@@ -8,7 +8,7 @@ export default function Reducer(state,action) {
     }
     if(action.type === 'DELETE_COUNTRY') {
         return {
-            countries:state.countries.filter((m,i) => m.id != action.index)
+            countries:state.countries.filter((m,i) => i != action.index)
         };
     }
 
