@@ -69,29 +69,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
 
 
-        public async Task<GenericReturn> GenericTransaction(Func<Task<GenericReturn>> func)
-        {
-            var transactionOptions = new TransactionOptions();
-            transactionOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-            transactionOptions.Timeout = TimeSpan.FromSeconds(60);
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled))
-            {
-                var result = new GenericReturn();
-
-                try
-                {
-                    result = await func();
-                    transactionScope.Complete();
-                }
-                catch (Exception e)
-                {
-                    result.Succeeded = false;
-                    result.Message = e.Message;
-                }
-
-                return result;
-            }
-        }
 
         
         public async Task<GenericReturn<T>> ExecuteOperation<T>(Func<Task<T>> func)

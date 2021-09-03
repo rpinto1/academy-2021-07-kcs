@@ -1,6 +1,9 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+﻿using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
@@ -9,12 +12,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
     {
         public Task<GenericReturn> SignUp(SignUpViewModel model);
 
-        public Task<GenericReturn> SignIn(SignInViewModel model);
+        public Task<GenericReturn<IdToken>> SignIn(SignInViewModel model);
 
-        public Task<GenericReturn> SignOut(ApplicationUser model);
+        public Task<GenericReturn> SignOut(string userId);
 
-        public Task<GenericReturn> Update(SignUpViewModel newModel);
+        public Task<GenericReturn> Update(string userId, SignUpViewModel newModel);
 
-        public Task<GenericReturn> Delete(ApplicationUser model);
+
+
+
+        // --------------------------  ADMIN  ---------------------------------------------------
+
+
+
+
+        public Task<GenericReturn<IEnumerable<GetUsersPoco>>> GetAllUsers();
+
+        public Task<GenericReturn> AddClaim(string userId, Claim claim);
+
+        public Task<GenericReturn> RemoveClaim(string userId, Claim claim);
+
+        public Task<GenericReturn<IList<Claim>>> GetClaims(string userId);
+
+        public Task<GenericReturn> DeleteUser(string userId);
     }
 }

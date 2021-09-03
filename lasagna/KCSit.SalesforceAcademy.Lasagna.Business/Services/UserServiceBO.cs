@@ -13,6 +13,8 @@ using System.Text;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
@@ -21,7 +23,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         private readonly AppSettings _appSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private GenericBusinessLogic _genericBusinessLogic;
+        private readonly GenericBusinessLogic _genericBusinessLogic;
 
 
         public UserServiceBO(IOptions<AppSettings> appSettings, GenericBusinessLogic genericBusinessLogic,
@@ -34,34 +36,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         }
 
-        //public ApplicationUser Authenticate(string emailAddress, string password)
-        //{
-        //    var user = _users.SingleOrDefault(x => x.EmailAddress == emailAddress && x.Password == password);
-
-        //    if (user == null) return null;
-
-        //    var tokenHandler = new JwtSecurityTokenHandler();
-
-        //    var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-        //    var tokenDescriptor = new SecurityTokenDescriptor
-        //    {
-        //        Subject = new ClaimsIdentity(new Claim[] {
-        //            new Claim(ClaimTypes.Name, user.UserInfoId.ToString())
-        //        }),
-        //        Expires = DateTime.UtcNow.AddDays(7),
-        //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //    };
-
-        //    var token = tokenHandler.CreateToken(tokenDescriptor);
-        //    user.Token = tokenHandler.WriteToken(token);
-
-        //    return user;
-        //}
-
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
-            return await _genericBusinessLogic.GenericTransaction(async () => 
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 var user = new ApplicationUser()
                 {
@@ -80,89 +57,209 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     {
                         errorMsg = String.Concat(errorMsg, error.Description, " ");
                     }
-                    //throw new Exception(errorMsg);
-                    return new GenericReturn { Succeeded = false, Message = errorMsg };
+                    throw new Exception(errorMsg);
                 }
 
-                return new GenericReturn { Succeeded = true, Message = "User created successfully" };
+                var claims = new List<Claim> {
+                    new Claim(ClaimTypes.Role, "BasicUser"),
+                    //new Claim(ClaimTypes.Role, "PremiumUser"),
+                    //new Claim(ClaimTypes.Role, "Manager"),
+                    //new Claim(ClaimTypes.Role, "Admin")
+                };
+                await _userManager.AddClaimsAsync(user, claims);
+
+
             });
         }
 
-        public async Task<GenericReturn> SignIn(SignInViewModel model)
+        public async Task<GenericReturn<IdToken>> SignIn(SignInViewModel model)
         {
-            return await _genericBusinessLogic.GenericTransaction<GenericReturn>(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                //// check if user is already logged in
-
                 var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
                 if (!result.Succeeded)
                 {
-                    return new GenericReturn { Succeeded = false, Message = "Invalid Sign In credentials" };
+                    throw new Exception("Invalid Sign In credentials");
                 }
 
-                return new GenericReturn { Succeeded = true, Message = "User signed in successfully" };
+                var user = await _userManager.FindByEmailAsync(model.EmailAddress);
+
+                var newAccessToken = await _userManager.GenerateUserTokenAsync(user, "LasagnaApp", "AccessToken");
+                await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken", newAccessToken);
+
+                await _userManager.ResetAccessFailedCountAsync(user);
+
+                return new IdToken { Id = user.Id, Token = newAccessToken };
+            });
+        }
+
+
+        public async Task<GenericReturn> SignOut(string userId)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                await _userManager.RemoveAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken");
+
+
+                // How is this supposed to work??????
+                await _signInManager.SignOutAsync();
+
             });
         }
 
 
 
-        public async Task<GenericReturn> SignOut(ApplicationUser model)
+        public async Task<GenericReturn> Update(string userId, SignUpViewModel newModel)
         {
-            await _signInManager.SignOutAsync();
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
 
-            return new GenericReturn { Succeeded = true, Message = "User signed out successfully" };
+
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                // make sure user is not allowed to change is email address
+                if (user.Email != newModel.EmailAddress)
+                {
+                    throw new Exception("User can not change email address");
+                }
+
+                // user data is ok. Update user
+                user.FirstName = newModel.FirstName;
+                user.LastName = newModel.LastName;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description.ToString());
+                }
+
+                var passwordResult = await _userManager.ChangePasswordAsync(user, user.PasswordHash, newModel.Password);
+                if (!passwordResult.Succeeded)
+                {
+                    throw new Exception(passwordResult.Errors.First().Description.ToString());
+                }
+
+
+            });
+
         }
 
 
-        public async Task<GenericReturn> Update(SignUpViewModel newModel)
+
+
+
+        // --------------------------  PremiumUser  ---------------------------------------------------
+
+        public async Task<GenericReturn<IEnumerable<GetUsersPoco>>> GetAllUsers()
         {
-            var userModel = await _userManager.FindByEmailAsync(newModel.EmailAddress);
-
-            if (userModel == null)
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
-            }
+                var userInfo = from user in _userManager.Users.ToList()
+                               select new GetUsersPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
 
-            //// make sure user is not allowed to change is email address
-            //if (userModel.Email != newModel.EmailAddress)
-            //    return new GenericReturn { Succeeded = false, Message = "User can not change email address" };
-
-            // user data is ok. Update user
-            userModel.FirstName = newModel.FirstName;
-            userModel.LastName = newModel.LastName;
-            var identityResult = await _userManager.ChangePasswordAsync(userModel, userModel.PasswordHash, newModel.Password);
-            
-
-            var newUserModel = await _userManager.UpdateAsync(userModel);
-
-            if (!newUserModel.Succeeded)
-            {
-                return new GenericReturn { Succeeded = false, Message = "User could not be updated" };
-            }
-
-            return new GenericReturn { Succeeded = true, Message = "User updated successfully" };
+                return userInfo;
+            });
         }
 
 
-        public async Task<GenericReturn> Delete(ApplicationUser model)
+
+
+        // --------------------------  Manager  ---------------------------------------------------
+
+        public async Task<GenericReturn> AddClaim(string userId, Claim claim)
         {
-            // check if user exists
-            var userModel = await _userManager.FindByEmailAsync(model.Email);
-
-            if (userModel == null)
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                return new GenericReturn { Succeeded = false, Message = "User does not exist" };
-            }
 
-            var identityResult = await _userManager.DeleteAsync(userModel);
+                var user = await _userManager.FindByIdAsync(userId);
 
-            if (!identityResult.Succeeded)
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                await _userManager.AddClaimAsync(user, claim);
+
+            });
+        }
+
+        public async Task<GenericReturn> RemoveClaim(string userId, Claim claim)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                return new GenericReturn { Succeeded = false, Message = "Could not delete this User" };
-            }
 
-            return new GenericReturn { Succeeded = true, Message = "User deleted successfully" };
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                await _userManager.RemoveClaimAsync(user, claim);
+
+            });
+        }
+
+        public async Task<GenericReturn<IList<Claim>>> GetClaims(string userId)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                return claims;
+
+            });
+        }
+
+
+
+        // --------------------------  ADMIN  ---------------------------------------------------
+
+        public async Task<GenericReturn> DeleteUser(string userId)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                var result = await _userManager.DeleteAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    string errorMsg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        errorMsg = String.Concat(errorMsg, error.Description, " ");
+                    }
+                    throw new Exception(errorMsg);
+                }
+            });
         }
 
 

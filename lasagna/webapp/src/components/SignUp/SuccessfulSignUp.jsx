@@ -1,11 +1,12 @@
 import React from 'react';
+import { Message } from 'semantic-ui-react';
 
 export default function SuccessfulSignUp() {
     return (
-        <div class="ui floating teal message">
-                <h1>SUCESSS!!</h1>
+        <Message>
+                <Message.Header>SUCESSS!!</Message.Header>
                 <p>Your user has been created.</p>
-        </div>
+        </Message>
 
         //maybe add a button to go to the user homepage and another to profile?
     )

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Business.Models
+namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 {
-    public class CompanyData
+    public class GainLoseCompanyData
     {
         public string DisplayName { get; set; }
 
