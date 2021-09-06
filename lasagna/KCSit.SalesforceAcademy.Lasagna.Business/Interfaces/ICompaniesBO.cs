@@ -13,6 +13,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         Task<GenericReturn<List<Industry>>> GetIndustries(string sectorName);
         Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers, int pageNumber);
 
-        Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page);
+        Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page, List<string> countries);
     }
 }

@@ -97,7 +97,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpPost]
         [Route("api/AddClaim")]
-        //[Authorize(Policy = "ManagerPolicy")]
+        [Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> AddClaim(string userId, [FromBody] Claim claim)
         {
             var result = await _userService.AddClaim(userId, claim);
@@ -118,7 +118,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpGet]
         [Route("api/GetClaims")]
-        //[Authorize(Policy = "ManagerPolicy")]
+        [Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> GetClaims(string userId)
         {
             var result = await _userService.GetClaims(userId);

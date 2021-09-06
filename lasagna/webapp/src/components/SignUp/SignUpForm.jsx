@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import Captcha from './Captcha';
 import FailedSignUp from './FailedSignUp';
 import SuccessfulSignUp from './SuccessfulSignUp';
+import { validateCaptcha, loadCaptchaEnginge } from 'react-simple-captcha';
 
 
 export default function SignUpForm() {
@@ -17,22 +18,21 @@ export default function SignUpForm() {
         ConfirmPassword: ''    
     });
 
-    
-
+    const captchaInputRef = useRef('');
 
     const handleChange = (event) => {
-        const { id, value } = event.target
-        
+        const { id, value } = event.target 
         setNewUser(prevState => ({
             ...prevState,
             [id]: value     
         }));
-        
     };
 
-
-
     const handleSubmit = () => {
+        let user_captcha = captchaInputRef.current.value;
+  
+        if (validateCaptcha(user_captcha) == true) {
+
         fetch(`http://localhost:3010/api/SignUp`, {
             method: 'POST',
             headers: {
@@ -52,21 +52,15 @@ export default function SignUpForm() {
        
         .catch(error => console.log(error))
           
+        }  else {
+        alert('Captcha Does Not Match');
+        loadCaptchaEnginge(6); 
+        }
     };
     
 
-   /*  const exampleRef = useRef(null);
-
-
-    const captchaValue = useRef('');
-    const captchaRef = captchaValue.current;
-
-    useEffect(() => {
     
-       console.log(captchaRef)
-
-    }, [captchaValue.current] */
-
+   
 
     return (
     <>   
@@ -128,18 +122,18 @@ export default function SignUpForm() {
             required/>
         </Form.Field>
         <Form.Field>
-          {/* <Captcha />
-           <div className="container">
+          <Captcha />
+          <div className="container">
                <div className="form-group">
                    <div></div>
                    <div className="col mt-3">
                         <input 
                          placeholder="Enter Captcha Value" 
-                         ref={captchaRef}>
+                         ref={captchaInputRef}>
                         </input>
                     </div>
                 </div>
-            </div> */}
+            </div> 
     
         </Form.Field>
         <Form.Field>

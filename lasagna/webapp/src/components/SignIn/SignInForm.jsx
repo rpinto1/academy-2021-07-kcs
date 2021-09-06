@@ -1,20 +1,23 @@
-import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Container, Form } from 'semantic-ui-react';
-import Captcha from '../SignUp/Captcha';
-import { validateCaptcha } from 'react-simple-captcha';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
+
+
 
 export default function SignInForm() {
 
     const [user, setUser] = useState({
       EmailAddress: '',
-      Password: ''
+      Password: '',
+      RememberMe: 'false'
     });
 
     const [loggedUser, setLoggedUser] = useState({
       id: '',
       token: ''
-    })
+    });
+
+   const [redirect, setRedirect] = useState(false);
 
     const handleChange = (event) => {
       const { id, value } = event.target
@@ -27,24 +30,27 @@ export default function SignInForm() {
   };
     
 
-    const handleSubmit = () => {
+  const handleSubmit = () => {
       fetch(`http://localhost:3010/api/SignIn`, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-    }).then(res => res.json())
-    .then(data => {
-      setLoggedUser(data.result);
-      console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+     }).then(res => res.json())
+      .then(data => {
+        setLoggedUser(data.result)
+        if(loggedUser.id != '' && loggedUser.token != ''){
+        setRedirect(true)
+      }
     })
     .catch(error => console.log(error))
     
-  };  
-  
-    
+};  
+
+console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
+
       return (
         <Container className= 'formulario'>
           <h1>Sign in to your account</h1>
@@ -71,12 +77,17 @@ export default function SignInForm() {
             />
          </Form.Field> 
          <Form.Field>
-         {/*  <Captcha /> */}
+            <Checkbox label='Remember me!' />
          </Form.Field>
-          <Link to='/user/homepage'><Button type="submit" id="submit_btn">Sign in</Button></Link>
+          <Button type="submit" id="submit_btn">Sign in</Button>
         </Form>
+        
+        { redirect &&
+            <Redirect to='/user/homepage' />
+        }
         </Container>
 
+        
       );
     
     
