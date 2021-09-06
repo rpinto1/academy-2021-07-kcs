@@ -72,6 +72,12 @@ export default function SignUpForm() {
     {
             successfullSignUp && <SuccessfulSignUp id='floating-msg' />
     }
+
+    {
+           dBError && <FailedSignUp id='floating-msg'/> 
+    }
+
+
     <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
         <Form onSubmit={handleSubmit}>
@@ -154,15 +160,6 @@ export default function SignUpForm() {
         
         </Form>
        
-        {
-           dBError && <FailedSignUp /> 
-        }
-
-        
-
-
-
-
 
         </Container>
         <Footer />

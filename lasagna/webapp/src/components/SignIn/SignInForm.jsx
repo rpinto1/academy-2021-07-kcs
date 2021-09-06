@@ -64,7 +64,6 @@ export default function SignInForm() {
     
 };  
 
-console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + loggedUser.token)
 
       return (
         <Container className= 'formulario'>
