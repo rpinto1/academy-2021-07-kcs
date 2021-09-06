@@ -28,6 +28,11 @@ export default function SignUpForm() {
         }));
     };
 
+    const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
+    const [successfullSignUp, setSuccessfullSignUp] = useState(false);
+    const [dBError, setDBError] = useState(false);
+
+
     const handleSubmit = () => {
         let user_captcha = captchaInputRef.current.value;
   
@@ -42,11 +47,11 @@ export default function SignUpForm() {
             body: JSON.stringify(newUser)
         }).then(response => {
             if(response.status === 400) {
-                alert("This email is already being used, if you don't remember your password, please click on 'I don't remember my password'")
+                setAccountAlreadyExists(true);
             } if (response.status === 404){
-                alert("We are experiencing some issues with out system, please try again later")
+                setDBError(true);
             } if (response.status === 200) {
-            alert('User created successfully')
+                setSuccessfullSignUp(true);
             }
         })
        
@@ -64,6 +69,9 @@ export default function SignUpForm() {
 
     return (
     <>   
+    {
+            successfullSignUp && <SuccessfulSignUp id='floating-msg' />
+    }
     <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
         <Form onSubmit={handleSubmit}>
@@ -146,6 +154,16 @@ export default function SignUpForm() {
         
         </Form>
        
+        {
+           dBError && <FailedSignUp /> 
+        }
+
+        
+
+
+
+
+
         </Container>
         <Footer />
         </>

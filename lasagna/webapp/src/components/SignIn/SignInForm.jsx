@@ -9,7 +9,7 @@ export default function SignInForm() {
     const [user, setUser] = useState({
       EmailAddress: '',
       Password: '',
-      RememberMe: 'false'
+      RememberMe: false
     });
 
     const [loggedUser, setLoggedUser] = useState({
@@ -26,8 +26,22 @@ export default function SignInForm() {
           ...prevState,
           [id]: value     
       }));
-      
-  };
+      };
+
+    
+    const handleChecked = (event) => {
+      if(user.RememberMe == false) {
+      setUser(prevState => ({
+        ... prevState,
+            RememberMe: true }))
+      } 
+      if(user.RememberMe == true) {
+        setUser(prevState => ({
+          ... prevState,
+              RememberMe: false }))
+        }
+          
+      };
     
 
   const handleSubmit = () => {
@@ -41,8 +55,9 @@ export default function SignInForm() {
      }).then(res => res.json())
       .then(data => {
         setLoggedUser(data.result)
+        console.log(user)
         if(loggedUser.id != '' && loggedUser.token != ''){
-        setRedirect(true)
+          //setRedirect(true)
       }
     })
     .catch(error => console.log(error))
@@ -77,9 +92,9 @@ console.log("Logged user id is: " + loggedUser.id +'. Logged user token is ' + l
             />
          </Form.Field> 
          <Form.Field>
-            <Checkbox label='Remember me!' />
+            <Checkbox label='Remember me!' onClick ={handleChecked}/>
          </Form.Field>
-          <Button type="submit" id="submit_btn">Sign in</Button>
+          <Button type="submit" id="submit_btn" >Sign in</Button>
         </Form>
         
         { redirect &&
