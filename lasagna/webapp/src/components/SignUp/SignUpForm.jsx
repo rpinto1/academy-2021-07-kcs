@@ -5,6 +5,7 @@ import Footer from '../Footer';
 import Captcha from './Captcha';
 import FailedSignUp from './FailedSignUp';
 import SuccessfulSignUp from './SuccessfulSignUp';
+import AccAlreadyExists from './AccAlreadyExists';
 import { validateCaptcha, loadCaptchaEnginge } from 'react-simple-captcha';
 
 
@@ -75,6 +76,9 @@ export default function SignUpForm() {
 
     {
            dBError && <FailedSignUp id='floating-msg'/> 
+    }
+    {
+        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
     }
 
 
