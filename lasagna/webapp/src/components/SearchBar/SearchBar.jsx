@@ -8,11 +8,11 @@ function SearchBar() {
     let [pageIndex, setPageIndex] = useState('');
 
     function indexPlus() {
-        alert(pageIndex);
+        console.log(pageIndex);
         pageIndex++;
     }
     function indexMinus() {
-        alert(pageIndex);
+        console.log(pageIndex);
         if (pageIndex != 0) { pageIndex--;}
     }
 
