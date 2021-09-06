@@ -4,14 +4,16 @@ using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
 {
     [DbContext(typeof(lasagnakcsContext))]
-    partial class lasagnakcsContextModelSnapshot : ModelSnapshot
+    [Migration("20210906125522_Add_ForwardPE_and_EpsTTM_to_DailyInfo")]
+    partial class Add_ForwardPE_and_EpsTTM_to_DailyInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -5,6 +5,8 @@ import Footer from '../Footer';
 import Captcha from './Captcha';
 import FailedSignUp from './FailedSignUp';
 import SuccessfulSignUp from './SuccessfulSignUp';
+import AccAlreadyExists from './AccAlreadyExists';
+import { validateCaptcha, loadCaptchaEnginge } from 'react-simple-captcha';
 
 
 export default function SignUpForm() {
@@ -17,22 +19,26 @@ export default function SignUpForm() {
         ConfirmPassword: ''    
     });
 
-    
-
+    const captchaInputRef = useRef('');
 
     const handleChange = (event) => {
-        const { id, value } = event.target
-        
+        const { id, value } = event.target 
         setNewUser(prevState => ({
             ...prevState,
             [id]: value     
         }));
-        
     };
 
+    const [accountAlreadyExists, setAccountAlreadyExists] = useState(false);
+    const [successfullSignUp, setSuccessfullSignUp] = useState(false);
+    const [dBError, setDBError] = useState(false);
 
 
     const handleSubmit = () => {
+        let user_captcha = captchaInputRef.current.value;
+  
+        if (validateCaptcha(user_captcha) == true) {
+
         fetch(`http://localhost:3010/api/SignUp`, {
             method: 'POST',
             headers: {
@@ -42,34 +48,40 @@ export default function SignUpForm() {
             body: JSON.stringify(newUser)
         }).then(response => {
             if(response.status === 400) {
-                alert("This email is already being used, if you don't remember your password, please click on 'I don't remember my password'")
+                setAccountAlreadyExists(true);
             } if (response.status === 404){
-                alert("We are experiencing some issues with out system, please try again later")
+                setDBError(true);
             } if (response.status === 200) {
-            alert('User created successfully')
+                setSuccessfullSignUp(true);
             }
         })
        
         .catch(error => console.log(error))
           
+        }  else {
+        alert('Captcha Does Not Match');
+        loadCaptchaEnginge(6); 
+        }
     };
     
 
-   /*  const exampleRef = useRef(null);
-
-
-    const captchaValue = useRef('');
-    const captchaRef = captchaValue.current;
-
-    useEffect(() => {
     
-       console.log(captchaRef)
-
-    }, [captchaValue.current] */
-
+   
 
     return (
     <>   
+    {
+            successfullSignUp && <SuccessfulSignUp id='floating-msg' />
+    }
+
+    {
+           dBError && <FailedSignUp id='floating-msg'/> 
+    }
+    {
+        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
+    }
+
+
     <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
         <Form onSubmit={handleSubmit}>
@@ -128,18 +140,18 @@ export default function SignUpForm() {
             required/>
         </Form.Field>
         <Form.Field>
-          {/* <Captcha />
-           <div className="container">
+          <Captcha />
+          <div className="container">
                <div className="form-group">
                    <div></div>
                    <div className="col mt-3">
                         <input 
                          placeholder="Enter Captcha Value" 
-                         ref={captchaRef}>
+                         ref={captchaInputRef}>
                         </input>
                     </div>
                 </div>
-            </div> */}
+            </div> 
     
         </Form.Field>
         <Form.Field>
@@ -152,6 +164,7 @@ export default function SignUpForm() {
         
         </Form>
        
+
         </Container>
         <Footer />
         </>

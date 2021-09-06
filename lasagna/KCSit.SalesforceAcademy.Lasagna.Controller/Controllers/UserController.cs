@@ -1,5 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,55 +36,109 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUp([FromBody] SignUpViewModel model)
         {
-            var signUpResult = _userService.SignUp(model);
+            var result = _userService.SignUp(model);
 
-            return await _genericControllerReturn.ReturnResult(signUpResult);
+            return await _genericControllerReturn.ReturnResult(result);
         }
+
 
 
         [Route("api/SignIn")]
         [HttpPost]
         public async Task<IActionResult> SignIn([FromBody] SignInViewModel model)
         {
-            GenericReturn signInResult = await _userService.SignIn(model);
+            var result = await _userService.SignIn(model);
 
-            return _genericControllerReturn.ReturnResult(signInResult);
+            return _genericControllerReturn.ReturnResult(result);
         }
 
 
         [Route("api/SignOut")]
-        //[Authorize]
         [HttpPost]
-        public async Task<IActionResult> SignOut([FromBody] ApplicationUser model)
+        //[Authorize]
+        public async Task<IActionResult> SignOut(string userId)
         {
-            GenericReturn signOutResult = await _userService.SignOut(model);
+            var signOutResult = await _userService.SignOut(userId);
 
             return _genericControllerReturn.ReturnResult(signOutResult);
         }
 
 
-
         [Route("api/Update")]
-        //[Authorize]
         [HttpPut]
-        public async Task<IActionResult> Update(string id, [FromBody] SignUpViewModel newModel)
+        //[Authorize]
+        public async Task<IActionResult> Update(string userId, [FromBody] SignUpViewModel newModel)
         {
-            GenericReturn updateUserResult = await _userService.Update(id, newModel);
+            var result = await _userService.Update(userId, newModel);
 
-            return _genericControllerReturn.ReturnResult(updateUserResult);
+            return _genericControllerReturn.ReturnResult(result);
         }
 
 
 
-        [Route("api/Delete")]
-        //[Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Delete(string id)
-        {
-            
-            GenericReturn deleteResult = await _userService.Delete(id);
 
-            return _genericControllerReturn.ReturnResult(deleteResult);
+
+        // --------------------------  PremiumUser  ---------------------------------------------------
+
+
+        [HttpGet]
+        [Route("api/GetAllUsers")]
+        [Authorize(Policy = "PremiumUserPolicy")]
+        public Task<IActionResult> GetAllUsers()
+        {
+            var result = _userService.GetAllUsers();
+
+            return _genericControllerReturn.ReturnResult(result);
+        }
+
+
+
+        // --------------------------  Manager  ---------------------------------------------------
+
+        [HttpPost]
+        [Route("api/AddClaim")]
+        [Authorize(Policy = "ManagerPolicy")]
+        public async Task<IActionResult> AddClaim(string userId, [FromBody] Claim claim)
+        {
+            var result = await _userService.AddClaim(userId, claim);
+
+            return _genericControllerReturn.ReturnResult(result);
+        }
+
+        [HttpPost]
+        [Route("api/RemoveClaim")]
+        [Authorize(Policy = "ManagerPolicy")]
+        public async Task<IActionResult> RemoveClaim(string userId, [FromBody] Claim claim)
+        {
+            var result = await _userService.RemoveClaim(userId, claim);
+
+            return _genericControllerReturn.ReturnResult(result);
+        }
+
+
+        [HttpGet]
+        [Route("api/GetClaims")]
+        [Authorize(Policy = "ManagerPolicy")]
+        public async Task<IActionResult> GetClaims(string userId)
+        {
+            var result = await _userService.GetClaims(userId);
+
+            return _genericControllerReturn.ReturnResult(result);
+        }
+
+
+
+
+        // --------------------------  ADMIN  ---------------------------------------------------
+
+        [Route("api/DeleteUser")]
+        [HttpDelete]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            var result = await _userService.DeleteUser(userId);
+
+            return _genericControllerReturn.ReturnResult(result);
         }
 
 

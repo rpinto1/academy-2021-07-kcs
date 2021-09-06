@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
-import store from '../../redux/store'
-import { useDispatch, useSelector } from 'react-redux'
+
 
 
 export const IISList = () => {
@@ -19,7 +19,7 @@ export const IISList = () => {
     const [companyCount, setcompanyCount] = useState(0)
     const [currentPage, setcurrentPage] = useState(1)
     const [companies, setcompanies] = useState([])
-    const urlPage = useSelector(state => state.url);
+    const countriesPicked = useSelector(state => state.countries)
     
 
     const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
@@ -50,7 +50,12 @@ export const IISList = () => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({Sectorname : sectorValue,Indexname: indexValue,Industryname: industryValue,Page:currentPage})
+              body: JSON.stringify({Sectorname : sectorValue,
+                                    Indexname: indexValue,
+                                    Industryname: industryValue,
+                                    Page:currentPage,
+                                    Countries:countriesPicked
+                                    })
             });
             const content = rawResponse.then(response => response.json());
             content.then(data => {
@@ -106,7 +111,7 @@ export const IISList = () => {
             return () => {
               clearTimeout(timer1);
             };
-          }, [indexValue,sectorValue,industryValue])
+          }, [indexValue,sectorValue,industryValue,countriesPicked])
 
           useEffect(() => {
             let timer1 = setTimeout(() => 
@@ -132,20 +137,19 @@ export const IISList = () => {
 
     useEffect(() => {
         try {
-            var data = fetch(`${urlPage}api/Companies/indexSector`)
+            var data = fetch(`http://localhost:3010/api/Companies/indexSector`)
             .then(response => response.json());
             data.then(data => turnIntoOptions(data,"result","indices"))
             .then(arrayFinal => setindex((prevState) => [...prevState, ...arrayFinal]))
 
             data.then(data => turnIntoOptions(data,"result","sectors") )
             .then(arrayFinal => setsector((prevState) => [...prevState, ...arrayFinal]))
-            console.log(index);
         } catch (error) {
             console.log(error)
         }
     }, [])
 
-    console.log(companies)
+
     return (
         <Segment textAlign='left' classname='segment'>
             <h1>List of Companies</h1>

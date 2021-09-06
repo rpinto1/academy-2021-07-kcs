@@ -29,6 +29,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public int? DailyInfoId { get; set; }
         public Guid Uuid { get; set; }
         public int? IndustryId { get; set; }
+        public string YahooTicker { get; set; }
 
         public virtual Country Country { get; set; }
         public virtual DailyInfo DailyInfo { get; set; }

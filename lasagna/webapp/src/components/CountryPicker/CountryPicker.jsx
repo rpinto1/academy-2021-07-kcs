@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Grid, Menu } from 'semantic-ui-react'
-import './countrypicker.css'
+import './countrypicker.css';
+import { countryAdd, countryDelete } from '../../redux/countriesReducer';
 
 export default function CountryPicker() {
 
     const [countrys, setCountrys] = useState([])
     const activeItems = useSelector(state => state.countries)
-    const urlPage = useSelector(state => state.url);
     const dispatch = useDispatch();
 
     
 
     useEffect(() => {
-        var data = fetch(`${urlPage}api/Companies/countries`)
+        var data = fetch(`http://localhost:3010/api/Companies/countries`)
         .then(response => response.json());
         data.then(data => data["result"].map(x=>({
             key: x["name"],
@@ -24,22 +24,13 @@ export default function CountryPicker() {
     }, [])
 
    const handleItemClick = (e, { name }) => {
-    console.log("hello")
         let nameIndex = activeItems.findIndex(country => country === name)
-        console.log(nameIndex)
        if(activeItems.length == 1 && nameIndex >= 0) {return;}     
        if(nameIndex >= 0){
-        console.log("delete")
-        dispatch({
-            type:'DELETE_COUNTRY',
-            index: nameIndex
-        })
+        dispatch(countryDelete(nameIndex))
         return;
        }
-       dispatch({
-        type:'ADD_COUNTRY',
-        country: name
-        })
+       dispatch(countryAdd(name))
     }
 
     return (
