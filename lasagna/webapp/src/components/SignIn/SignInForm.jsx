@@ -8,8 +8,8 @@ export default function SignInForm() {
 
     const [user, setUser] = useState({
       EmailAddress: '',
-      Password: '',
-      RememberMe: false
+      Password: '', 
+      RememberMe: ''
     });
 
     const [loggedUser, setLoggedUser] = useState({
@@ -33,14 +33,8 @@ export default function SignInForm() {
       if(user.RememberMe == false) {
       setUser(prevState => ({
         ... prevState,
-            RememberMe: true }))
-      } 
-      if(user.RememberMe == true) {
-        setUser(prevState => ({
-          ... prevState,
-              RememberMe: false }))
-        }
-          
+            RememberMe: true }
+      ))}      
       };
     
 
@@ -55,10 +49,8 @@ export default function SignInForm() {
      }).then(res => res.json())
       .then(data => {
         setLoggedUser(data.result)
-        console.log(user)
-        if(loggedUser.id != '' && loggedUser.token != ''){
-          //setRedirect(true)
-      }
+        setRedirect(true)
+      
     })
     .catch(error => console.log(error))
     
@@ -91,7 +83,7 @@ export default function SignInForm() {
             />
          </Form.Field> 
          <Form.Field>
-            <Checkbox label='Remember me!' onClick ={handleChecked}/>
+            <Checkbox label='Remember me!' onClick ={handleChecked} required />
          </Form.Field>
           <Button type="submit" id="submit_btn" >Sign in</Button>
         </Form>
@@ -99,6 +91,7 @@ export default function SignInForm() {
         { redirect &&
             <Redirect to='/user/homepage' />
         }
+
         </Container>
 
         
