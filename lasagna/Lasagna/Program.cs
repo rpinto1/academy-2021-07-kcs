@@ -19,8 +19,35 @@ namespace Lasagna
             var genericDao = new GenericDAO();
             var searchDao = new SearchDAO();
 
+            var load = new LoadPrice();
+
+            load.LoadPrices();
 
 
+            //// search By canada to add .TO
+            //var companies =  File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Rui\EmpresasSemTicker.json");
+            //var companyList = JsonConvert.DeserializeObject<List<Company>>(companies);
+            //for (int i = 0; i < companyList.Count; i++)
+            //{
+            //    if (companyList[i].CountryId == 2)
+            //    {
+            //        var response2 = clientClass.GetAll("https://query1.finance.yahoo.com/v7/finance/quote?symbols=" + companyList[i].Symbol + ".TO");
+            //        var ok = JObject.Parse(response2.Content)["quoteResponse"]["result"];
+
+
+            //        if (ok.HasValues)
+            //        {
+            //            companyList[i].YahooTicker = companyList[i].Symbol + ".TO";
+            //            Console.WriteLine(companyList[i].Symbol + ".TO");
+            //            continue;
+            //        }
+
+            //    }
+            //}
+            //genericDao.UpdateRange(companyList);
+
+
+            //Search all companys
             //var companyBD = genericDao.GetAll<Company>();
             //var listUpdatedCompanys = new List<Company>();
 
