@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu } from 'semantic-ui-react'
-import './Pagination.css'
+import './pagination.css'
 
 export default function Pagination({count, page, handlePageClick}) {
 

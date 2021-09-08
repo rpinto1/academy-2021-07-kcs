@@ -5,16 +5,8 @@ import $ from 'jquery';
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
     const [pattern, setPattern] = useState('');
-    let [pageIndex, setPageIndex] = useState('');
+    let [pageIndex, setPageIndex] = useState(0);
 
-    function indexPlus() {
-        console.log(pageIndex);
-        pageIndex++;
-    }
-    function indexMinus() {
-        console.log(pageIndex);
-        if (pageIndex != 0) { pageIndex--;}
-    }
 
     {/*function description(nameTicker.ticker){
        fetch("http://localhost:3010/api/Company/"+ ticker +"/description).then(result.json() => {
@@ -35,7 +27,7 @@ function SearchBar() {
                 }
             })
         })
-    }, [pattern]);
+    }, [pattern,pageIndex]);
 
     useEffect(() => {
         if(pattern == '') {
@@ -55,7 +47,7 @@ function SearchBar() {
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
-                        onChange={test => setPattern(test.target.value)} />
+                        onChange={test => setPattern(test.target.value), setPageIndex(0)} />
                         <i class="search icon"></i> 
                 </div>
               
@@ -65,8 +57,8 @@ function SearchBar() {
                     }
                 </div>
             </div>
-            <button onClick={setPageIndex(pageIndex++)}>+</button>;
-            <button onClick={indexMinus}>-</button>;
+            <button onClick={()=>setPageIndex(prevState => prevState+1)}>+</button>;
+            <button onClick={() => setPageIndex(prevState => prevState-1)}>-</button>;
         </div>
     );
 }
