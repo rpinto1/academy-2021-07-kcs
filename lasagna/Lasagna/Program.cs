@@ -21,7 +21,6 @@ namespace Lasagna
 
             var load = new LoadPrice();
 
-            load.LoadPrices();
 
 
             //// search By canada to add .TO
