@@ -112,4 +112,25 @@ footer {
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
+/* user profile view */
+
+.profile {                  /* the whole profile section */
+    max-width: 70%;
+}
+
+.greeting {
+    display: flex;
+    flex-direction: row;
+}    
+
+.greeting > img {
+    max-width: 10px;
+}
+
+.portfolio-section {
+    display: flex;
+    flex-direction: row;
+    
+}
+
 
