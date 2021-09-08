@@ -427,6 +427,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("EpsTTM")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("ForwardPe")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal?>("PreviousClose")
                         .HasColumnType("decimal(10,2)");
 
@@ -1024,6 +1030,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
 
                     b.Property<decimal?>("StickerPrice")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("Uuid")
                         .ValueGeneratedOnAdd()

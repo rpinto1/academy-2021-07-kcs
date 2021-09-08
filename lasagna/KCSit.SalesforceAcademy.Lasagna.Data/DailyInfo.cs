@@ -16,6 +16,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? StockPrice { get; set; }
         public decimal? PreviousClose { get; set; }
         public Guid Uuid { get; set; }
+        public decimal ForwardPe { get; set; }
+        public decimal EpsTTM { get; set; }
 
         public virtual ICollection<Company> Companies { get; set; }
     }

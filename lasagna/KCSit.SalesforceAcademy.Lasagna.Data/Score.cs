@@ -15,6 +15,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal? MarginOfSafety { get; set; }
         public Guid Uuid { get; set; }
 
+        public DateTime UpdatedOn { get; set; }
         public virtual Company Company { get; set; }
         public virtual ScoringMethod ScoringMethod { get; set; }
     }

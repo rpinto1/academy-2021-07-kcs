@@ -96,9 +96,15 @@ footer {
     border: 1px solid gray;
     padding: 2%;
     border-radius: 1%;
+    position: relative;
+    z-index: 1;
     
 }
 
+#floating-msg{
+    position:absolute;
+    z-index: 3;
+}
 
 #text-right {
     text-align: right;

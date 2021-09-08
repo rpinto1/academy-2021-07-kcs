@@ -103,7 +103,7 @@ export const IISList = () => {
         useEffect(() => {
             let timer1 = setTimeout(() => 
             fetchCompanys(-1)
-            , 1000);
+            , 500);
       
             // this will clear Timeout
             // when component unmount like in willComponentUnmount
@@ -116,7 +116,7 @@ export const IISList = () => {
           useEffect(() => {
             let timer1 = setTimeout(() => 
                 fetchCompanys(currentPage)
-            , 1000);
+            , 500);
       
 
             return () => {
