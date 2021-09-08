@@ -6,7 +6,7 @@ import { countryAdd, countryDelete } from '../../redux/countriesReducer';
 
 export default function CountryPicker() {
 
-    const [countrys, setCountrys] = useState([])
+    const [countries, setCountrys] = useState([])
     const activeItems = useSelector(state => state.countries)
     const dispatch = useDispatch();
 
@@ -33,13 +33,13 @@ export default function CountryPicker() {
        dispatch(countryAdd(name))
     }
 
-    return (
+    return (countries.length > 0 &&
         <Grid padded="vertically">
             <Grid.Row textAlign="center" verticalAlign="middle" centered>
                 <Menu compact>
                         {
                             
-                        countrys.map((country,i) => 
+                        countries.map((country,i) => 
                         <Menu.Item 
                         key = {i}
                         name={country.key}

@@ -35,7 +35,7 @@ namespace Lasagna
                 
                 queryString += HttpUtility.UrlEncode(company.YahooTicker)  + ",";
 
-                if ((counting % 53==0 && counting > 0)|| companyIndex == (companyBD.Count -1))
+                if ((counting % 199==0 && counting > 0)|| companyIndex == (companyBD.Count -1))
                 {
                     var response = clientClass.GetAll("https://query1.finance.yahoo.com/v7/finance/quote?symbols=" + queryString);
                     var responseObject = JObject.Parse(response.Content)["quoteResponse"]["result"];
