@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Form, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Footer from '../Footer';
@@ -37,7 +37,7 @@ export default function SignUpForm() {
     const handleSubmit = () => {
         let user_captcha = captchaInputRef.current.value;
   
-        if (validateCaptcha(user_captcha) == true) {
+        if (validateCaptcha(user_captcha) === true) {
 
         fetch(`http://localhost:3010/api/SignUp`, {
             method: 'POST',

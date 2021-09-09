@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Button, Checkbox, Container, Form, GridColumn } from 'semantic-ui-react';
+import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 
 
 
@@ -37,7 +37,7 @@ export default function SignInForm() {
       }
     };  
   
-  const handleKeepMeLogged= (event) => {
+  const handleKeepMeLogged = (event) => {
       setKeepMeLogged(!keepMeLogged);
     };
     
@@ -49,7 +49,7 @@ export default function SignInForm() {
       sessionStorage.setItem('id', loggedUser.id.toString());
       sessionStorage.setItem('token', loggedUser.token.toString());
     }
-  }, [keepMeLogged]); 
+  }, []); 
     
 
   const handleSubmit = () => {

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Radio, Container } from 'semantic-ui-react';
 import CompanyTitleAndLink from './CompanyTitleAndLink';
 import RuleOnegraph from './RuleOnegraph';
+import $ from 'jquery';
+
 
 
 export default function BodyCompanyProfile() {
@@ -21,13 +23,22 @@ export default function BodyCompanyProfile() {
     });
        
     const handleChange = (event) => {
-        const { id } = event.target
+        /* const { id } = event.target
+
+        if ($("input[name='aspect']").is(':checked')) {
         setAspect(prevState => ({
             ...prevState,
-            [id]: !aspect     
+            [id]: true     
         }))
-    };
+        } else if ($("input[name='aspect']").is(!':checked')) {
+            setAspect(prevState => ({
+                ...prevState,
+                [id]: false     
+            })) 
+        } */
+    }; 
 
+    console.log(aspect);
 
     return (
         <>

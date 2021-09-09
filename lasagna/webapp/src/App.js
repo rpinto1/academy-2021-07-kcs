@@ -11,7 +11,7 @@ import CompanyProfileView from './Views/CompanyProfileView';
 import ForgottenPasswordView from './Views/ForgottenPasswordView';
 import UserProfileView from './Views/UserProfileView';
 import HomepageUserView from './Views/HomepageUser';
-import SuccessfulSignUp from './components/SignUp/AccAlreadyExists';
+
 
 
 
