@@ -6,6 +6,13 @@ import SearchBar from './SearchBar/SearchBar';
 
 export default function UserHeader() {
 
+const handleLogOut = ()=>{
+    if(sessionStorage.getItem('id') != null || sessionStorage('token') != null) {
+        //removes all items saved at the time
+        sessionStorage.clear();
+    }
+}
+
     return (
       
         <header>
@@ -18,7 +25,7 @@ export default function UserHeader() {
                 <div className='buttons'>
 
                     <p>Hello <Link to='/user/profile'> User.FirstName </Link></p>
-                    <Link to='/'> <Button className='ui small right floated red button'>Sign out </Button> </Link>
+                    <Link to='/'> <Button className='ui small right floated red button' onClick={handleLogOut}>Sign out </Button> </Link>
 
                 </div>
             </div>

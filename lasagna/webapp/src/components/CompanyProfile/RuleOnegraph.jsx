@@ -1,16 +1,20 @@
 import React from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
-export default function RuleOnegraph() {
+export default function RuleOnegraph( { aspect } ) {
 
+  const { ROIC, SGR, EPS, BVPS, FCF } = aspect;
+  const randomValue = Math.ceil()*1000;
 
 //Data precisa receber info from db
 
-const data = [{year: '1990', ROIC: 1000, StickerPrice: 150, Score: 100, CashFlow: 1000}, 
-              {year: '1991', ROIC: 200, StickerPrice: 410 , Score: 200, CashFlow: 200},
-              {year: '1992', ROIC: -40, StickerPrice: 90, Score: 500, CashFlow: 2000},
-              {year: '1993', ROIC: 80, StickerPrice: 620, Score: 100, CashFlow: 4000},];
-            
+const data = [{year: '2014', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue}, 
+              {year: '2015', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue},
+              {year: '2016', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue},
+              {year: '2017', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue},
+              {year: '2018', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue},
+              {year: '2019', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue},
+              {year: '2020', ROIC: randomValue, Sales: randomValue, Earnings: randomValue, Equity: randomValue, CashFlow: randomValue}]
 
 
     return (
@@ -27,10 +31,11 @@ const data = [{year: '1990', ROIC: 1000, StickerPrice: 150, Score: 100, CashFlow
           }}>
 
             
-        <Line type="monotone" dataKey="ROIC" stroke="#e71e28" />
-        <Line type="monotone" dataKey="StickerPrice" stroke="#e71e28" />
-        <Line type="monotone" dataKey="Score" stroke="#6cad0e" />
-        <Line type="monotone" dataKey="CashFlow" stroke="#c545ff" />
+        {ROIC && <Line type="monotone" dataKey="ROIC" stroke="#e71e28" />}
+        { SGR && <Line type="monotone" dataKey="Sales" stroke="#e71e28" />}
+        { EPS && <Line type="monotone" dataKey="Earnings" stroke="#6cad0e" />}
+        { FCF && <Line type="monotone" dataKey="Equity" stroke="#c545ff" />}
+        { BVPS && <Line type="monotone" dataKey="CashFlow" stroke="#c545f1" />}
 
 
         <CartesianGrid stroke="#ccc" />
@@ -38,6 +43,9 @@ const data = [{year: '1990', ROIC: 1000, StickerPrice: 150, Score: 100, CashFlow
         <YAxis />
         <Tooltip />
         <Legend />
+          
       </LineChart>
+
+      
     )
   }
