@@ -1,5 +1,6 @@
 import React from 'react';
-import AboutUsContactButtons from '../components/AboutUsContactButtons';
+import Footer from '../components/Footer';
+import BodyCompanyProfile from '../components/CompanyProfile/BodyCompanyProfile';
 import Header from '../components/Header';
 
 export default function CompanyProfileView() {
@@ -7,16 +8,13 @@ export default function CompanyProfileView() {
     
 
 
-
     return (
         <div>
             <Header />
 
+            <BodyCompanyProfile />
 
-
-
-
-            <AboutUsContactButtons />
+            <Footer />
         </div>
     )
 }

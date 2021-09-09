@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 
@@ -9,7 +9,6 @@ export default function SignInForm() {
     const [user, setUser] = useState({
       EmailAddress: '',
       Password: '', 
-      RememberMe: ''
     });
 
     const [loggedUser, setLoggedUser] = useState({
@@ -18,6 +17,8 @@ export default function SignInForm() {
     });
 
    const [redirect, setRedirect] = useState(false);
+
+   const [rememberMe, setRememberMe] = useState(false);
 
     const handleChange = (event) => {
       const { id, value } = event.target
@@ -30,12 +31,20 @@ export default function SignInForm() {
 
     
     const handleChecked = (event) => {
-      if(user.RememberMe == false) {
       setUser(prevState => ({
         ... prevState,
-            RememberMe: true }
-      ))}      
-      };
+            RememberMe: !rememberMe}
+      ))};
+
+  useEffect (( ) => {
+    if(rememberMe) {
+      localStorage.setItem('id', loggedUser.id.toString());
+      localStorage.setItem('token', loggedUser.token.toString());
+    } else {
+      sessionStorage.setItem('id', loggedUser.id.toString());
+      sessionStorage.setItem('token', loggedUser.token.toString());
+    }
+  }, [rememberMe]); 
     
 
   const handleSubmit = () => {
@@ -56,6 +65,8 @@ export default function SignInForm() {
     
 };  
 
+console.log(user);
+console.log(loggedUser);
 
       return (
         <Container className= 'formulario'>

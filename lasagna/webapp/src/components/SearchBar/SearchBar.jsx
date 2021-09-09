@@ -57,6 +57,7 @@ function SearchBar() {
                     {    nameTickers &&
                          nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
                     }
+                    
                 </div>
             </div>
             <button onClick={indexPlus}>+</button>;

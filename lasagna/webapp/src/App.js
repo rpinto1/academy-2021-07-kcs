@@ -11,6 +11,7 @@ import CompanyProfileView from './Views/CompanyProfileView';
 import ForgottenPasswordView from './Views/ForgottenPasswordView';
 import UserProfileView from './Views/UserProfileView';
 import HomepageUserView from './Views/HomepageUser';
+import SuccessfulSignUp from './components/SignUp/AccAlreadyExists';
 
 
 
@@ -29,11 +30,12 @@ function App() {
                 <Route path ='/signin' component ={SignInView} />
                 <Route path ='/contactus' component={ContactUsView} />
                 <Route path ='/aboutus' component ={AboutUsView} />
-                <Route path= '/company/details/${ticker}' component={CompanyProfileView} />
+                <Route path= '/company/details' component={CompanyProfileView} />
                 <Route path='/forgottenpassword' component={ForgottenPasswordView} />
                 <Route path= '/user/profile' component = {UserProfileView} />
                 <Route path= '/user/homepage' component = {HomepageUserView} /> 
-            </Switch> 
+            </Switch>  
+           
            
         
            

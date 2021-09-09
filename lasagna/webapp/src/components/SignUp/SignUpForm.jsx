@@ -70,17 +70,7 @@ export default function SignUpForm() {
 
     return (
     <>   
-    {
-            successfullSignUp && <SuccessfulSignUp id='floating-msg' />
-    }
-
-    {
-           dBError && <FailedSignUp id='floating-msg'/> 
-    }
-    {
-        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
-    }
-
+    
 
     <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
@@ -107,6 +97,17 @@ export default function SignUpForm() {
             pattern="[\w+/\s*]{2,15}"
             required/>
         </Form.Field>
+        {
+            successfullSignUp && <SuccessfulSignUp id='floating-msg' />
+        }
+
+        {
+           dBError && <FailedSignUp id='floating-msg'/> 
+        }
+        {
+        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
+        }
+
         <Form.Field>
             <label>Password</label>
             <input
