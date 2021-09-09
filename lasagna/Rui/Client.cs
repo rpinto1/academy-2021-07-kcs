@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Rui
 {
-    class Client
+    public class Client
     {
 
 

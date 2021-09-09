@@ -8,5 +8,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
     {
         public string Name { get; set; }
         public string Ticker { get; set; }
+
+        public Decimal? Price { get; set; }
     }
 }
