@@ -22,6 +22,7 @@ namespace Lasagna
             var searchDao = new SearchDAO();
 
             var companyBD = genericDao.GetAll<Company>();
+            var companyDaily = genericDao.GetAll<DailyInfo>();
             var counting = 0;
             var queryString = "";
 
@@ -50,8 +51,7 @@ namespace Lasagna
                         {
                             var companyIndexSecondary = companyBD.FindIndex(x => (x.YahooTicker ?? "").ToLower() == ((responseObject[responseIndex]["symbol"])).ToString().ToLower());
                             var dailyInfoId = companyBD[companyIndexSecondary].DailyInfoId.Value;
-
-                            var daily = genericDao.Get<DailyInfo>(dailyInfoId);
+                            var daily = companyDaily.Find(x => x.Id == dailyInfoId);
                             daily.PreviousClose = daily.StockPrice;
                             daily.EpsTTM = (decimal)(responseObject[responseIndex]["epsTrailingTwelveMonths"] ?? 0);
                             daily.ForwardPe = (decimal)(responseObject[responseIndex]["forwardPE"] ?? (responseObject[responseIndex]["trailingPE"] ?? 0));
@@ -85,13 +85,22 @@ namespace Lasagna
         }
         public bool WriteResult(string result)
         {
-            using (StreamWriter sr = File.AppendText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\result.txt"))
+            try
             {
-                sr.WriteLine(result);
-                sr.Flush();
-                return true;
+                using (StreamWriter sr = File.AppendText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\result.txt"))
+                {
+                    sr.WriteLine(result);
+                    sr.Flush();
+                    return true;
+                }
             }
-            return false;
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
         }
     }
 

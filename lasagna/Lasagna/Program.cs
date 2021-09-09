@@ -20,6 +20,9 @@ namespace Lasagna
             var searchDao = new SearchDAO();
 
             var load = new LoadPrice();
+            var update = new UpdatePrice();
+
+            //update.UpdatePrices();
 
 
 
