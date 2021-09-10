@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
-
+import FailedSignUp from '../SignUp/FailedSignUp';
 
 
 export default function SignInForm() {
@@ -16,9 +16,14 @@ export default function SignInForm() {
       token: ''
     });
 
+   //if all went well, the user is redirected to the user homepage
    const [redirect, setRedirect] = useState(false);
-   const [rememberMe, setRememberMe] = useState(false);
+   //if user wishes to remain logged, token and id will be saved no localstorage, if not, on sessionstorage
    const [keepMeLogged, setKeepMeLogged] = useState(false);
+   //if the password on the input is not correct, user will receive this message
+   const [incorrectPassword, setIncorrectPassword] = useState(false);
+   //if there are issues with the DB, user will receive this message
+   const [dBError, setDBError] = useState(false);
 
     const handleChange = (event) => {
       const { id, value } = event.target
@@ -29,17 +34,9 @@ export default function SignInForm() {
       }));
       };
      
-  const handleRememberMe = (event) => {
-        setRememberMe(!rememberMe)
-          if(rememberMe) {
-          localStorage.setItem('username', user.EmailAddress.toString());
-          localStorage.setItem('password', user.Password.toString());
-      }
-    };  
-  
   const handleKeepMeLogged = (event) => {
       setKeepMeLogged(!keepMeLogged);
-    };
+  };
     
   useEffect (( ) => {
     if(keepMeLogged) {
@@ -49,7 +46,7 @@ export default function SignInForm() {
       sessionStorage.setItem('id', loggedUser.id.toString());
       sessionStorage.setItem('token', loggedUser.token.toString());
     }
-  }, []); 
+  }, [keepMeLogged]); 
     
 
   const handleSubmit = () => {
@@ -61,10 +58,15 @@ export default function SignInForm() {
       },
       body: JSON.stringify(user)
      }).then(res => res.json())
-      .then(data => {
-        setLoggedUser(data.result)
+      .then(response => {
+        if(response.status === 400) {
+          setIncorrectPassword(true);
+      } if (response.status === 404){
+          setDBError(true);
+      } if (response.status === 200) {
+        setLoggedUser(response.result)
         setRedirect(true)
-      
+      }     
     })
     .catch(error => console.log(error))
     
@@ -99,7 +101,9 @@ console.log(loggedUser);
                 />
             </Form.Field> 
             <Form.Field>
-              <Checkbox label='Remember me!   ' onClick ={handleRememberMe} />
+              <Link to ='/forgottenpassword'><p>I don't remember my password.</p></Link>
+            </Form.Field>
+            <Form.Field>
               <Checkbox label='Keep me logged in!' onClick ={handleKeepMeLogged} />
             </Form.Field>
               <Button type="submit" id="submit_btn" >Sign in</Button>

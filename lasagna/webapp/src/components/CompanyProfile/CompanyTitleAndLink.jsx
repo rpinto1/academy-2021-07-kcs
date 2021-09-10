@@ -2,7 +2,13 @@ import React from 'react'
 
 export default function CompanyTitleAndLink() {
 
-//aqui tiene que hacer el fetch a google. 
+    const companyName = 'Banco de Mexico';
+    const baseUrl = `https://www.google.com/search?q="annual+report"+`;
+    const fixArr = companyName.split(' ').map(a => a+'+');
+    const append = baseUrl+fixArr;
+    
+
+
 //Tambien recibe el nombre por props desde el click de la barra search.
 
     return (
@@ -11,7 +17,8 @@ export default function CompanyTitleAndLink() {
         <div>
         
             <h1>Company.Name</h1>
-            <p>Company.url</p>
+            <a href={append} > <p>Company.Name</p> </a>
+            
            
 
 

@@ -156,9 +156,6 @@ export default function SignUpForm() {
     
         </Form.Field>
         <Form.Field>
-            <Link to ='/forgottenpassword'><p>I don't remember my password.</p></Link>
-        </Form.Field>
-        <Form.Field>
             <Button type='submit'  className='ui small center teal button'>Submit</Button>
             <Link to= '/'><Button type='cancel' className='ui small center red button'>Cancel</Button></Link>
         </Form.Field>

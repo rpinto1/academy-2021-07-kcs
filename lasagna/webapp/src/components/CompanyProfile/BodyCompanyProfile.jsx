@@ -23,19 +23,14 @@ export default function BodyCompanyProfile() {
     });
        
     const handleChange = (event) => {
-        /* const { id } = event.target
-
+/*      const { id } = event.target
+    
         if ($("input[name='aspect']").is(':checked')) {
         setAspect(prevState => ({
             ...prevState,
-            [id]: true     
+            [id]: true    
         }))
-        } else if ($("input[name='aspect']").is(!':checked')) {
-            setAspect(prevState => ({
-                ...prevState,
-                [id]: false     
-            })) 
-        } */
+       */
     }; 
 
     console.log(aspect);
@@ -64,19 +59,19 @@ export default function BodyCompanyProfile() {
                             </div>
                             <div class="item">
                                 <Radio name='aspect'
-                                label='EPS growth rate'
+                                label='Earnings per share'
                                 id='EPS'
                                 onChange={handleChange}/>
                             </div>
                             <div class="item">
                                 <Radio name='aspect'
-                                label='BVPS growth rate' 
+                                label='Equity growth rate' 
                                 id= 'BVPS'
                                 onChange={handleChange}/>
                             </div>
                             <div class="item">
                                 <Radio name='aspect'
-                                label='FCF' 
+                                label='Cash Flow' 
                                 id='FCF'
                                 onChange={handleChange}/>
                             </div>
