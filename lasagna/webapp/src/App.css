@@ -132,15 +132,20 @@ footer {
 .greeting {
     display: flex;
     flex-direction: row;
+    padding: 1vw;
+    margin: 2vh;
 }    
 
-.greeting > img {
-    max-width: 10px;
+.greeting img {
+    max-width: 10vw;
+    padding: 0 1vw;
+    
 }
 
 .portfolio-section {
     display: flex;
     flex-direction: row;
+    margin: 5vw;
     
 }
 
