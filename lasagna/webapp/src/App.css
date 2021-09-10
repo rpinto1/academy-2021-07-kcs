@@ -120,9 +120,9 @@ footer {
 
 /* user profile view */
 
-.profile {                  /* the whole profile section */
+/* .profile {                  
     max-width: 70%;
-}
+} */
 
 .greeting {
     display: flex;
