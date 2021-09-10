@@ -45,6 +45,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return "value";
         }
         // GET api/Companies/indexSector
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("indexSector")]
         public async Task<IActionResult> GetIndexAndSector()
         {
@@ -56,6 +57,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return _genericCR.ReturnResult(returnList);
         }
         // GET api/<CompaniesController>/industries/?
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true, VaryByQueryKeys = new [] {"sector" })]
         [HttpGet("industries/{sector}")]
         public async Task<IActionResult> GetIndustries(string sector)
         {
@@ -65,6 +67,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return await _genericCR.ReturnResult(industriesList);
         }
         // GET api/<CompaniesController>/industries/?
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("industries")]
         public async Task<IActionResult> GetIndustriesAll()
         {
@@ -73,6 +76,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             return await _genericCR.ReturnResult(industriesList);
         }
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("countries")]
         public async Task<IActionResult> GetCountries()
         {

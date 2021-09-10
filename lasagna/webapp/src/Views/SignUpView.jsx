@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import SignUpForm from '../components/SignUp/SignUpForm';
 import Header from '../components/Header';
 

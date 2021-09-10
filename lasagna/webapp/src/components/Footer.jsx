@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import ArticleList from './News/ArticleList';
 import AboutUsContactButtons from './AboutUsContactButtons';
 

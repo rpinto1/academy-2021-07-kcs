@@ -46,7 +46,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                     });
             });
 
-
+            services.AddResponseCaching();
             services.AddScoped<lasagnakcsContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
@@ -111,7 +111,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseResponseCaching();
 
 
             app.UseEndpoints(endpoints =>

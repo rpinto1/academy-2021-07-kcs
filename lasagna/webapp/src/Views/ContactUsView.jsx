@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Container } from 'semantic-ui-react';
 import Logo from '../components/Logo';
 
@@ -12,8 +12,8 @@ export default function ContactUsView() {
         </div>
         <Container className="our_info">
             <div className="total-top">
-                <a href="https://kcsit.pt/" target='_blank'>
-                <img src='../salesforceAcademytiny.png' />
+                <a href="https://kcsit.pt/" target='_blank' rel="noreferrer">
+                <img src='../salesforceAcademytiny.png' alt="salesfor-ceacademy-logo" />
                 </a>
             </div>
             <div className="total-top">
