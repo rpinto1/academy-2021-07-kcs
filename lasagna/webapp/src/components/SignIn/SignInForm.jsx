@@ -38,16 +38,16 @@ export default function SignInForm() {
       setKeepMeLogged(!keepMeLogged);
   };
     
-  useEffect (( ) => {
+  const saveUser = () => {
+    console.log(loggedUser.id)
     if(keepMeLogged) {
       localStorage.setItem('id', loggedUser.id.toString());
       localStorage.setItem('token', loggedUser.token.toString());
-    } else {
+      return;
+    } 
       sessionStorage.setItem('id', loggedUser.id.toString());
       sessionStorage.setItem('token', loggedUser.token.toString());
-    }
-  }, [keepMeLogged]); 
-    
+  };
 
   const handleSubmit = () => {
       fetch(`http://localhost:3010/api/SignIn`, {
@@ -58,19 +58,17 @@ export default function SignInForm() {
       },
       body: JSON.stringify(user)
      }).then(res => res.json())
-      .then(response => {
-        if(response.status === 400) {
-          setIncorrectPassword(true);
-      } if (response.status === 404){
-          setDBError(true);
-      } if (response.status === 200) {
-        setLoggedUser(response.result)
-        setRedirect(true)
-      }     
+     .then(data => {
+      setLoggedUser(data.result)
+      setRedirect(true)
     })
     .catch(error => console.log(error))
     
 };  
+
+    useEffect(() =>{
+      saveUser()
+    },[loggedUser]);
 
 console.log(user);
 console.log(loggedUser);
