@@ -23,5 +23,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<T> GetAsync<T>(Guid guid) where T : class, IEntity;
         void Update<T>(T generic) where T : class;
         Task UpdateAsync<T>(T generic) where T : class;
+        void UpdateRange<T>(List<T> generic) where T : class;
+    
     }
 }

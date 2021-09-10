@@ -12,8 +12,8 @@ export default function SignInForm() {
     });
 
     const [loggedUser, setLoggedUser] = useState({
-      id: '',
-      token: ''
+        id: '',
+        token: ''
     });
 
    const [redirect, setRedirect] = useState(false);
@@ -111,9 +111,9 @@ console.log(loggedUser);
 
         </Container>
 
-        
-      );
-    
-    
+
+    );
+
+
 
 };
