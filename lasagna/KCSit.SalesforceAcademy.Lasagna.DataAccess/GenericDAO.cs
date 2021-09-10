@@ -89,6 +89,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
+        public void UpdateRange<T>(List<T> generic) where T : class
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                context.Set<T>().UpdateRange(generic);
+
+                context.SaveChanges();
+            }
+        }
+
         public void Delete<T>(T generic) where T : class
         {
             using (var context = new lasagnakcsContext())

@@ -4,10 +4,16 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
-    public class CompanyPoco
+    public class KeyRatiosPoco
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+
         public string Ticker { get; set; }
+
+        public int Year { get; set; }
+
+        public Decimal Roic { get; set; }
+
     }
+
+
 }

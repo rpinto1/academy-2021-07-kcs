@@ -43,7 +43,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         {
             var transactionOptions = new TransactionOptions();
             transactionOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-            transactionOptions.Timeout = TimeSpan.FromSeconds(60);
+            transactionOptions.Timeout = TimeSpan.FromSeconds(6000);
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions, TransactionScopeAsyncFlowOption.Enabled))
             {
 

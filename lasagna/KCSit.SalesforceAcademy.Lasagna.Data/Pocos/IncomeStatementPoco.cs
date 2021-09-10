@@ -4,10 +4,15 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
-    public class CompanyPoco
+    public class IncomeStatementPoco
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public string Ticker { get; set; }
+
+        public int Year { get; set; }
+
+        public decimal Eps { get; set; }
+
+        public decimal Sales { get; set; }
+
     }
 }

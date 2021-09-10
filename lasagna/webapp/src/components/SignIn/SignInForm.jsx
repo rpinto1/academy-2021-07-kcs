@@ -7,103 +7,127 @@ import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 export default function SignInForm() {
 
     const [user, setUser] = useState({
-      EmailAddress: '',
-      Password: '',
-      RememberMe: false
+        EmailAddress: '',
+        Password: '',
+        RememberMe: false
     });
 
     const [loggedUser, setLoggedUser] = useState({
-      id: '',
-      token: ''
+        id: '',
+        token: ''
     });
 
-   const [redirect, setRedirect] = useState(false);
+    const [redirect, setRedirect] = useState(false);
 
     const handleChange = (event) => {
-      const { id, value } = event.target
-      
-      setUser(prevState => ({
-          ...prevState,
-          [id]: value     
-      }));
-      };
+        const { id, value } = event.target
 
-    
-    const handleChecked = (event) => {
-      if(user.RememberMe == false) {
-      setUser(prevState => ({
-        ... prevState,
-            RememberMe: true }))
-      } 
-      if(user.RememberMe == true) {
         setUser(prevState => ({
-          ... prevState,
-              RememberMe: false }))
-        }
-          
-      };
-    
-
-  const handleSubmit = () => {
-      fetch(`http://localhost:3010/api/SignIn`, {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-     }).then(res => res.json())
-      .then(data => {
-        setLoggedUser(data.result)
-        console.log(user)
-        if(loggedUser.id != '' && loggedUser.token != ''){
-          //setRedirect(true)
-      }
-    })
-    .catch(error => console.log(error))
-    
-};  
+            ...prevState,
+            [id]: value
+        }));
+    };
 
 
-      return (
-        <Container className= 'formulario'>
-          <h1>Sign in to your account</h1>
-          <Form onSubmit= {handleSubmit}>
-         <Form.Field> 
-          <label htmlFor="username">Username: </label>
-          <input
-            type="text"
-            value={user.EmailAddress}
-            placeholder="Enter your email address here"
-            id="EmailAddress"
-            onChange={handleChange}
-          />
-          </Form.Field>  
+    //const handleChecked = (event) => {
+    //  if(user.RememberMe == false) {
+    //  setUser(prevState => ({
+    //    ... prevState,
+    //        RememberMe: true }))
+    //  } 
+    //  if(user.RememberMe == true) {
+    //    setUser(prevState => ({
+    //      ... prevState,
+    //          RememberMe: false }))
+    //    }
 
-          <Form.Field> 
-            <label htmlFor="password">Password: </label>
-            <input
-              type="password"
-              value={user.Password}
-              placeholder="Enter your password here"
-              id="Password"
-              onChange={handleChange}
-            />
-         </Form.Field> 
-         <Form.Field>
-            <Checkbox label='Remember me!' onClick ={handleChecked}/>
-         </Form.Field>
-          <Button type="submit" id="submit_btn" >Sign in</Button>
-        </Form>
-        
-        { redirect &&
-            <Redirect to='/user/homepage' />
-        }
+    //  };
+
+    //const handleSubmit = () => {
+    //    fetch(`http://localhost:3010/api/SignIn`, {
+    //        method: 'POST',
+    //        headers: {
+    //            'Accept': 'application/json',
+    //            'Content-Type': 'application/json'
+    //        },
+    //        body: JSON.stringify(user)
+    //    }).then(res => res.json())
+    //        .then(data => {
+    //            setLoggedUser(data.result)
+    //            console.log(user)
+    //            if (loggedUser.id != '' && loggedUser.token != '') {
+    //                //setRedirect(true)
+    //            }
+    //        })
+    //        .catch(error => console.log(error))
+
+    //};
+
+
+    const handleChecked = (event) => {
+        setUser(prevState => ({
+            ...prevState,
+            RememberMe: !user.RememberMe
+        }))
+    };
+
+
+    const handleSubmit = () => {
+        fetch(`http://localhost:3010/api/SignIn`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }).then(res => res.json())
+            .then(data => {
+                setLoggedUser(data.result)
+                setRedirect(true)
+            })
+            .catch(error => console.log(error))
+    };
+
+
+    return (
+        <Container className='formulario'>
+            <h1>Sign in to your account</h1>
+            <Form onSubmit={handleSubmit}>
+                <Form.Field>
+                    <label htmlFor="username">Username: </label>
+                    <input
+                        type="text"
+                        value={user.EmailAddress}
+                        placeholder="Enter your email address here"
+                        id="EmailAddress"
+                        onChange={handleChange}
+                    />
+                </Form.Field>
+
+                <Form.Field>
+                    <label htmlFor="password">Password: </label>
+                    <input
+                        type="password"
+                        value={user.Password}
+                        placeholder="Enter your password here"
+                        id="Password"
+                        onChange={handleChange}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <Checkbox label='Remember me!' onClick={handleChecked} />
+                </Form.Field>
+                <Button type="submit" id="submit_btn" >Sign in</Button>
+            </Form>
+
+            {redirect &&
+                <Redirect to='/user/homepage' />
+            }
         </Container>
 
-        
-      );
-    
-    
+
+    );
+
+
 
 };
