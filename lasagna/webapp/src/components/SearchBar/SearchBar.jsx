@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import NameTicker from './NameTicker';
 import $ from 'jquery';
 
@@ -57,6 +57,7 @@ function SearchBar() {
                     {    nameTickers &&
                          nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
                     }
+                    
                 </div>
             </div>
             <button onClick={indexPlus}>+</button>;

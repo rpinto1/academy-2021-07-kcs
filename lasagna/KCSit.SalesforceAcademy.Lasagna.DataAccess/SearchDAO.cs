@@ -84,6 +84,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 var query = (from company in context.Companies
                              join country in (context.Countries.Where(c => countries.Contains(c.Name)).AsEnumerable())
                              on company.CountryId equals country.Id
+                             join dailyInfo in context.DailyInfos
+                             on company.DailyInfoId equals dailyInfo.Id into LJDI from dailyInfo in LJDI.DefaultIfEmpty()
                              join companyIndice in context.CompanyIndices
                              on company.Id equals companyIndice.CompanyId into LJCI from companyIndex in LJCI.DefaultIfEmpty()
                              join indice in context.Indices
@@ -94,8 +96,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              on company.IndustryId equals industry.Id
                              where index.Name.ToLower().Contains(indexName.ToLower()) &&
                              sector.Name.ToLower().Contains(sectorName.ToLower()) &&
-                             industry.Name.ToLower().Contains(industryName.ToLower()) 
-                             select new CompanyPoco { Name = company.Name , Ticker = company.Ticker});
+                             industry.Name.ToLower().Contains(industryName.ToLower())
+                             group company by new CompanyPoco { Name = company.Name, Ticker = company.Ticker, Price = dailyInfo.StockPrice } into companies
+                             select new CompanyPoco { Name = companies.Key.Name,Ticker= companies.Key.Ticker, Price= companies.Key.Price });
 
                 var countResults = await query.CountAsync();
                 var results = await query.Skip(pageSize * (page -1)).Take(pageSize).ToListAsync();

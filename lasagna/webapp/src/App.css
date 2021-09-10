@@ -111,13 +111,18 @@ footer {
 }
 
 
-.our_info
-{
+.our_info {
     padding: 1%;
     text-align: justify;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
+#up-front{
+    position: absolute;
+    z-index: 100;
+    margin-left: 38%;
+    vertical-align: middle;
+}
 /* user profile view */
 
 /* .profile {                  
@@ -140,3 +145,8 @@ footer {
 }
 
 
+#checkboxes-list{
+    padding: 12vh;
+    align-content: center;
+    justify-content: center;
+}

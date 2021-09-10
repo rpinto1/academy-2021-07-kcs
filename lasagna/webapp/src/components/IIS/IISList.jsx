@@ -57,7 +57,13 @@ export const IISList = () => {
                                     Countries:countriesPicked
                                     })
             });
-            const content = rawResponse.then(response => response.json());
+            const content = rawResponse.then(response => {
+             if(response.ok){
+                return response.json();
+             }
+              return [];  
+                
+            });
             content.then(data => {
                 setcompanies(data["result"]["companyPocos"])
                 setcompanyCount(data["result"]["count"])
@@ -71,7 +77,7 @@ export const IISList = () => {
         const companyResults = ()=> {
             if(companies.length == 0){
                 return(
-                    <Table.Body classname="table">
+                    <Table.Body className="table">
                         <Table.Row>
                             <Table.Cell colSpan={6}>
                             <Segment className="tableSegment" textAlign="center" size="small">
@@ -91,7 +97,7 @@ export const IISList = () => {
                     )
             } 
             return(
-                <Table.Body classname="table">
+                <Table.Body className="table">
                 {
                     companies.map((x,i)=> <Company company={x} key={i}/>)
                 }
@@ -151,21 +157,27 @@ export const IISList = () => {
 
 
     return (
-        <Segment textAlign='left' classname='segment'>
+        <Segment padded textAlign='left' className='segment'>
             <h1>List of Companies</h1>
-            <Segment.Inline >
-            <Dropdown placeholder='Index' onChange={(e)=>setindexValue(e.target.textContent)} search selection scrolling options={index}/>
-            <Dropdown placeholder='Sector' onChange={(e)=>setsectorValue(e.target.textContent)} search selection scrolling options={sector}/>
-            <Dropdown placeholder='Industry' onChange={(e)=>setindustryValue(e.target.textContent)} search selection scrolling options={industry}/>
-            </Segment.Inline>
+
+            <Dropdown placeholder='Index' onChange={(e,data)=>setindexValue(data.value)} search selection scrolling options={index}/>
+            <Dropdown style={{marginLeft:5}} placeholder='Sector' onChange={(e,data)=>setsectorValue(data.value)} search selection scrolling options={sector}/>
+            <Dropdown style={{marginLeft:5}} placeholder='Industry' onChange={(e,data)=>setindustryValue(data.value)} search selection scrolling options={industry}/>
+
             
             <Table celled >
-                <Table.Header>
-                <Table.Row>
+                <Table.Header >
+                <Table.Row textAlign="center"> 
                     <Table.HeaderCell width="3">Ticker</Table.HeaderCell>
                     <Table.HeaderCell width="5">Company name</Table.HeaderCell>
-                    <Table.HeaderCell width="2">Score</Table.HeaderCell>
-                    <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
+                    {false &&
+                        <Table.HeaderCell width="2">Score</Table.HeaderCell>
+                    }
+                    
+                    {false &&
+                        <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
+                        
+                    }
                     <Table.HeaderCell width="2">Previous Close</Table.HeaderCell>
                     <Table.HeaderCell>Profile</Table.HeaderCell>
                 </Table.Row>
