@@ -123,6 +123,32 @@ footer {
     margin-left: 38%;
     vertical-align: middle;
 }
+/* user profile view */
+
+/* .profile {                  
+    max-width: 70%;
+} */
+
+.greeting {
+    display: flex;
+    flex-direction: row;
+    padding: 1vw;
+    margin: 2vh;
+}    
+
+.greeting img {
+    max-width: 10vw;
+    padding: 0 1vw;
+    
+}
+
+.portfolio-section {
+    display: flex;
+    flex-direction: row;
+    margin: 5vw;
+    
+}
+
 
 #checkboxes-list{
     padding: 12vh;
