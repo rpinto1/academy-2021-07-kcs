@@ -23,10 +23,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
 
         private readonly IUserServiceBO _userService;
-        private readonly GenericControllerReturn _genericControllerReturn;
+        private readonly GenericController _genericControllerReturn;
 
 
-        public UserController(IUserServiceBO userService, GenericControllerReturn genericControllerReturn)
+        public UserController(IUserServiceBO userService, GenericController genericControllerReturn)
         {
             this._userService = userService;
             this._genericControllerReturn = genericControllerReturn;

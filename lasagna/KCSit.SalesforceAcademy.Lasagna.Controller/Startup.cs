@@ -79,7 +79,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<ICompaniesBO, CompaniesBO>();
 
             services.AddScoped<GenericBusinessLogic>();
-            services.AddScoped<GenericControllerReturn>();
+            services.AddScoped<GenericController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

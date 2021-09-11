@@ -43,7 +43,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
             services.AddScoped<IGenericLogic, GenericLogic>();
 
             services.AddScoped<GenericBusinessLogic>();
-            services.AddScoped<GenericControllerReturn>();
+            services.AddScoped<GenericController>();
 
             services.AddScoped<IRule1BO, Rule1BO>();
 

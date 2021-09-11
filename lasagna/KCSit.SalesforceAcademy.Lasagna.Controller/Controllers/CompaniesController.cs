@@ -19,9 +19,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
         private ICompaniesBO _companiesBO;
         private IGenericLogic _genericLogic;
-        private GenericControllerReturn _genericCR;
+        private GenericController _genericCR;
 
-        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic, GenericControllerReturn genericCR)
+        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic, GenericController genericCR)
         {
             _companiesBO = companiesBO;
             _genericLogic = genericLogic;

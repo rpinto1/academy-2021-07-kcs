@@ -9,16 +9,20 @@ using System.Threading.Tasks;
 namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 {
     [ApiController]
-    public class Rule1Controller : ControllerBase
+    public class Rule1Controller : GenericController
     {
         private readonly IRule1BO _rule1BO;
-        private readonly GenericControllerReturn _genericControllerReturn;
+        //private readonly GenericControllerReturn _genericControllerReturn;
 
-        public Rule1Controller(IRule1BO rule1BO, GenericControllerReturn genericControllerReturn)
+        public Rule1Controller(IRule1BO rule1BO)
         {
             _rule1BO = rule1BO;
-            _genericControllerReturn = genericControllerReturn;
         }
+        //public Rule1Controller(IRule1BO rule1BO, GenericControllerReturn genericControllerReturn)
+        //{
+        //    _rule1BO = rule1BO;
+        //    _genericControllerReturn = genericControllerReturn;
+        //}
 
         [Route("admin/UpdateScore")]
         [HttpGet]
@@ -26,7 +30,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
         {
             var result = _rule1BO.UpdateScore(ticker);
 
-            return await _genericControllerReturn.ReturnResult(result);
+            return await ReturnResult(result);
         }
 
         [Route("admin/UpdateAllScores")]
@@ -35,7 +39,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
         {
             var result = _rule1BO.UpdateAllScores();
 
-            return await _genericControllerReturn.ReturnResult(result);
+            return await ReturnResult(result);
         }
 
     }
