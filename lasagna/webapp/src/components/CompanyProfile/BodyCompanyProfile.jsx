@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Radio, Container } from 'semantic-ui-react';
+import { Radio, Container, Form } from 'semantic-ui-react';
 import CompanyTitleAndLink from './CompanyTitleAndLink';
 import RuleOnegraph from './RuleOnegraph';
 import $ from 'jquery';
@@ -14,79 +14,66 @@ export default function BodyCompanyProfile() {
     //Book value of equity per share 
     //Free cash flow
     
-    const [aspect, setAspect] = useState({
-        ROIC: false,
-        SGR: false,
-        EPS: false,
-        BVPS: false, 
-        FCF: false
-    });
-       
-    const handleChange = (event) => {
-        /* const { id } = event.target
+    const [selected, setSelected] = useState({
+        option: 'ROIC'
+    })
+          
+    const handleChange = (event, {value}) => {
+        setSelected({
+            option : value
+        });
+    };
 
-        if ($("input[name='aspect']").is(':checked')) {
-        setAspect(prevState => ({
-            ...prevState,
-            [id]: true     
-        }))
-        } else if ($("input[name='aspect']").is(!':checked')) {
-            setAspect(prevState => ({
-                ...prevState,
-                [id]: false     
-            })) 
-        } */
-    }; 
-
-    console.log(aspect);
+  
 
     return (
         <>
         <Container> 
             <CompanyTitleAndLink />           
         </Container>
-                <Container className="ui fluid raised two column divided grid ">
+                <Container className="ui fluid two column divided grid ">
 
-                    <div id="checkboxes-list">
+                    <Form className = 'ui list' id="checkboxes-list" >
 
-                        <div class="ui list">
-                            <div class="item">
-                                <Radio name='aspect'
-                                label='ROIC' 
-                                id='ROIC' 
+                            <Form.Field>
+                                <Radio 
+                                name='aspect'
+                                label='ROIC'
+                                value= 'ROIC' 
+                                checked = {selected.option == 'ROIC'}
                                 onChange={handleChange}/>
-                            </div>
-                            <div class="item">
+                            </Form.Field>
+                            <Form.Field>
                                 <Radio name='aspect'
                                 label='Sales growth rate' 
-                                id='SGR'
-                                onChange= {handleChange}/>
-                            </div>
-                            <div class="item">
-                                <Radio name='aspect'
-                                label='EPS growth rate'
-                                id='EPS'
+                                value='SGR'
+                                checked = {selected.option == 'SGR'}
                                 onChange={handleChange}/>
-                            </div>
-                            <div class="item">
+                            </Form.Field>
+                            <Form.Field>
                                 <Radio name='aspect'
-                                label='BVPS growth rate' 
-                                id= 'BVPS'
+                                label='Earnings per share'
+                                value='EPS'
+                                checked = {selected.option == 'EPS'}
                                 onChange={handleChange}/>
-                            </div>
-                            <div class="item">
+                            </Form.Field>
+                            <Form.Field>
                                 <Radio name='aspect'
-                                label='FCF' 
-                                id='FCF'
+                                label='Equity growth rate' 
+                                value= 'BVPS'
+                                checked = {selected.option == 'BVPS'}
                                 onChange={handleChange}/>
-                            </div>
-                         </div>
+                            </Form.Field>
+                            <Form.Field>
+                                <Radio name='aspect'
+                                label='Cash Flow' 
+                                value='FCF'
+                                checked = {selected.option == 'FCF'}
+                                onChange={handleChange}/>                            
+                            </Form.Field>
 
-                    </div> 
-                        <RuleOnegraph aspect = {aspect}/>
-                    <div>
-  
-                    </div>
+                        <RuleOnegraph selected={selected}/>
+                    </Form>
 
                 </Container>
     
