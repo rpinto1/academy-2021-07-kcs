@@ -4,14 +4,16 @@ using KCSit.SalesforceAcademy.Lasagna.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
 {
     [DbContext(typeof(lasagnakcsContext))]
-    partial class lasagnakcsContextModelSnapshot : ModelSnapshot
+    [Migration("20210911175228_Add_UpdatedOn_to_DailyInfo")]
+    partial class Add_UpdatedOn_to_DailyInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -434,10 +436,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("PreviousClose")
-                        .HasColumnType("decimal(10,4)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal?>("StockPrice")
-                        .HasColumnType("decimal(10,4)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");

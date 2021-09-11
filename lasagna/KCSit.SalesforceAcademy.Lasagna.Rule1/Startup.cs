@@ -20,7 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Controller
+namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 {
     public class Startup
     {
@@ -35,51 +35,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                               .AllowAnyMethod()
-                               .AllowAnyHeader();
-                    });
-            });
-
-            services.AddResponseCaching();
             services.AddScoped<lasagnakcsContext>();
-            services.AddIdentity<ApplicationUser, IdentityRole>(option =>
-            {
-                option.User.RequireUniqueEmail = true;
-                option.Password.RequiredLength = 8;
-                option.Password.RequireLowercase = true;
-                option.Password.RequireUppercase = true;
-                option.Password.RequireDigit = true;
-                option.Password.RequireNonAlphanumeric = true;
-                option.Password.RequiredUniqueChars = 5;
-            })
-                .AddEntityFrameworkStores<lasagnakcsContext>()
-                .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>));
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("BasicUserPolicy", policy => policy.RequireRole("BasicUser", "PremiumUser", "Manager", "Admin"));
-                options.AddPolicy("PremiumUserPolicy", policy => policy.RequireRole("PremiumUser", "Manager", "Admin"));
-                options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager", "Admin"));
-                options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-            });
-
-            services.AddScoped<IUserServiceBO, UserServiceBO>();
-
-            services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
             services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
-            services.AddScoped<ICompaniesBO, CompaniesBO>();
 
             services.AddScoped<GenericBusinessLogic>();
             services.AddScoped<GenericControllerReturn>();
+
+            services.AddScoped<IRule1BO, Rule1BO>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,7 +62,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -104,7 +70,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseResponseCaching();
 
 
             app.UseEndpoints(endpoints =>

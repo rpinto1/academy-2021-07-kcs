@@ -8,17 +8,20 @@ using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 {
+    [ApiController]
     public class Rule1Controller : ControllerBase
     {
-        private readonly IScore _rule1BO;
+        private readonly IRule1BO _rule1BO;
         private readonly GenericControllerReturn _genericControllerReturn;
 
-        public Rule1Controller(IScore rule1BO, GenericControllerReturn genericControllerReturn)
+        public Rule1Controller(IRule1BO rule1BO, GenericControllerReturn genericControllerReturn)
         {
             _rule1BO = rule1BO;
             _genericControllerReturn = genericControllerReturn;
         }
 
+        [Route("admin/UpdateScore")]
+        [HttpGet]
         public async Task<IActionResult> UpdateScore(string ticker)
         {
             var result = _rule1BO.UpdateScore(ticker);
@@ -26,6 +29,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
             return await _genericControllerReturn.ReturnResult(result);
         }
 
+        [Route("admin/UpdateAllScores")]
+        [HttpPost]
         public async Task<IActionResult> UpdateAllScores()
         {
             var result = _rule1BO.UpdateAllScores();

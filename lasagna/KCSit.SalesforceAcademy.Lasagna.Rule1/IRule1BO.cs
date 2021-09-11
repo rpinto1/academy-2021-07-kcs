@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 {
-    public interface IScore
+    public interface IRule1BO
     {
         Task<GenericReturn> UpdateAllScores();
 
