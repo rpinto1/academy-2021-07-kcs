@@ -16,7 +16,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompaniesController : GenericControllerReturn
+    public class CompaniesController : GenericController
     {
         private ICompaniesBO _companiesBO;
         private IGenericLogic _genericLogic;
