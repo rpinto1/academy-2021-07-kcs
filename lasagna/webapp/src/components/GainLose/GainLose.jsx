@@ -9,7 +9,7 @@ export default function GainLose() {
     
     
     var gainLoseURL = "http://localhost:3010/api/ExternalServices/gainlose";
-
+    //  var gainLoseURL = "http://localhost:3010/api/Companies/prices";
     return (
         <div>
             <GainLoseFetcher gainLoseURL={gainLoseURL} />

@@ -58,6 +58,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 return results;
             }
         }
+        public async Task<List<CompanyData>> SearchCompaniesPrice(bool down)
+        {
+
+            using (var context = new lasagnakcsContext())
+            {
+
+                var query = (from companies in context.Companies
+                             join daily in context.DailyInfos
+                             on companies.DailyInfoId equals daily.Id
+                             let change = (daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)
+                             let percentageChange = ((daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)) /(( daily.PreviousClose.Value == 0 || daily.PreviousClose == null) ? 10000000 : daily.PreviousClose )  *100
+                             select new CompanyData { DisplayName = companies.Name, Symbol = companies.Ticker, MarketChange =(double) change , MarketChangePercent = (double) percentageChange }) ;
+
+
+                
+                    return !down? await query.OrderByDescending(x=>x.MarketChangePercent).Take(10).ToListAsync() : await query.OrderBy(x => x.MarketChangePercent).Take(10).ToListAsync();
+
+
+
+
+            }
+        }
         public async Task<List<Industry>> SearchIndustiesBySector(string sectorName)
         {
             using (var context = new lasagnakcsContext())

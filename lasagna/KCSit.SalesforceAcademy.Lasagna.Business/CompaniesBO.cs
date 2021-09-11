@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
@@ -63,6 +64,25 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
 
                 return await _searchDao.SearchCompaniesByIndex(indexName,sectorName,industryName, page, countries);
+            }
+
+            );
+        }
+
+        public async Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser()
+        {
+
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+                var gainersResponse = await _searchDao.SearchCompaniesPrice(false);
+                var losersResponse = await _searchDao.SearchCompaniesPrice(true);
+
+                var gainLose = new GainLoseDBPoco { Gainers = gainersResponse, Losers = losersResponse };
+
+                return gainLose;
             }
 
             );
