@@ -9,11 +9,17 @@ header {
     padding: 5vh;
 }
 
-#search-list {
+.SearchBar {
+    overflow: auto;
+    position: absolute;
+    z-index: 3;
+}
+
+/*#search-list {
    overflow:auto;
    position: relative;
    z-index: 2;
-}
+}*/
 
 
 .content {
