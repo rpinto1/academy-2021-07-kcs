@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 {
-    public class GenericControllerReturn : ControllerBase
+    public class GenericController : ControllerBase
     {
         public IActionResult ReturnResult(GenericReturn action)
         {

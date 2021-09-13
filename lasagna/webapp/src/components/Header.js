@@ -10,7 +10,6 @@ export default function Header() {
       
         <header>
              
-            
             <div className="total-top">
                 <Logo />
 

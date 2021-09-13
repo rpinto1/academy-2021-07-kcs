@@ -16,10 +16,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         private readonly ILogger<ExternalServicesController> _logger;
 
         private readonly IExternalServicesBO _externalServicesBO;
-        private readonly GenericControllerReturn _genericControllerReturn;
+        private readonly GenericController _genericControllerReturn;
 
 
-        public ExternalServicesController(ILogger<ExternalServicesController> logger, IExternalServicesBO externalServicesBO, GenericControllerReturn genericControllerReturn)
+        public ExternalServicesController(ILogger<ExternalServicesController> logger, IExternalServicesBO externalServicesBO, GenericController genericControllerReturn)
         {
             _logger = logger;
             _externalServicesBO = externalServicesBO;

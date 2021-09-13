@@ -15,6 +15,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<CompanyScorePoco> SearchCompaniesByIndex(string indexName, string sectorName, string industryName, int page, List<string> countries);
 
         Task<List<CompanyPoco>> SearchCompaniesBySearchQuery(string search, int pageSize, int pageNumber);
+        Task<List<CompanyData>> SearchCompaniesPrice(bool down);
 
 
 
