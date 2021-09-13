@@ -9,11 +9,17 @@ header {
     padding: 5vh;
 }
 
-#search-list {
+.SearchBar {
+    overflow: auto;
+    position: absolute;
+    z-index: 3;
+}
+
+/*#search-list {
    overflow:auto;
    position: relative;
    z-index: 2;
-}
+}*/
 
 
 .content {
@@ -145,8 +151,16 @@ footer {
 .portfolio-section {
     display: flex;
     flex-direction: row;
-    margin: 5vw;
+    /* margin: 5vw; */
     
+}
+
+.five-vw-margin-lr{
+    margin: 0 5vw;
+}
+
+.two-vh-margin-ud{
+    padding: 5vh 0;
 }
 
 

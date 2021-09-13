@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import NameTicker from './NameTicker';
 import $ from 'jquery';
+import { Button } from 'semantic-ui-react';
+
 
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
     const [pattern, setPattern] = useState('');
-    let pageIndex = 0;
+    let [pageIndex, setPageIndex] = useState(0);
 
-    function indexPlus() {
-        alert(pageIndex);
-        pageIndex++;
-    }
-    function indexMinus() {
-        alert(pageIndex);
-        if (pageIndex != 0) { pageIndex--;}
-    }
+
+    {/*function description(nameTicker.ticker){
+       fetch("http://localhost:3010/api/Company/"+ ticker +"/description).then(result.json() => {
+            setDescription(data.result);
+            }}
+     */}
 
     useEffect(() => {
         fetch("http://localhost:3010/api/Companies/search/"+ pattern +"/"+ pageIndex).then(result => {
@@ -24,12 +24,11 @@ function SearchBar() {
             }
             result.json().then(data => {
                 if (data != null) {
-                    console.log(data);
                     setNameTicker(data.result);
                 }
             })
         })
-    }, [pattern]);
+    }, [pattern,pageIndex]);
 
     useEffect(() => {
         if(pattern == '') {
@@ -38,6 +37,7 @@ function SearchBar() {
             $("#search_list").show();
         }
     }, [pattern]);
+
     
 
     return (
@@ -49,19 +49,21 @@ function SearchBar() {
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
-                        onChange={test => setPattern(test.target.value)} />
+                        onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
                         <i class="search icon"></i> 
                 </div>
               
-                <div className="ui raised fluid text segment" id="search_list">       
+                <div className="ui raised fluid text segment" >       
                     {    nameTickers &&
-                         nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
+                        nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)
+
                     }
-                    
+                    <div style={{display:"flex",justifyContent:"center"}}>
+                        <Button circular icon='arrow left' size='tiny' onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}/>
+                        <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/>
+                    </div>
                 </div>
             </div>
-            <button onClick={indexPlus}>+</button>;
-            <button onClick={indexMinus}>-</button>;
         </div>
     );
 }

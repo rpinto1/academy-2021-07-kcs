@@ -11,7 +11,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 
         public int Year { get; set; }
 
-        public Decimal Roic { get; set; }
+        public decimal Roic { get; set; }
+
+        public decimal PriceToEarnings { get; set; }
 
     }
 

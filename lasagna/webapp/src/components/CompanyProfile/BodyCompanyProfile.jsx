@@ -1,18 +1,12 @@
 import React, { useState } from 'react'
-import { Radio, Container, Form } from 'semantic-ui-react';
+import { Radio, Container, Form, Table } from 'semantic-ui-react';
 import CompanyTitleAndLink from './CompanyTitleAndLink';
 import RuleOnegraph from './RuleOnegraph';
-import $ from 'jquery';
 
 
 
-export default function BodyCompanyProfile() {
-    
-    //Return on investment
-    // Sales growth rate
-    //Earnings per share
-    //Book value of equity per share 
-    //Free cash flow
+export default function BodyCompanyProfile({companyInfo}) {
+
     
     const [selected, setSelected] = useState({
         option: 'ROIC'
@@ -29,11 +23,15 @@ export default function BodyCompanyProfile() {
     return (
         <>
         <Container> 
-            <CompanyTitleAndLink />           
+            <CompanyTitleAndLink companyInfo={companyInfo}/>
         </Container>
-                <Container className="ui fluid two column divided grid ">
-
-                    <Form className = 'ui list' id="checkboxes-list" >
+        <Container>
+        <Table definition>
+            <Table.Body>
+                <Table.Row>
+                    <Table.Cell width={6}>
+                    
+                        <Form className = 'ui list' id="checkboxes-list" >
 
                             <Form.Field>
                                 <Radio 
@@ -71,11 +69,18 @@ export default function BodyCompanyProfile() {
                                 checked = {selected.option == 'FCF'}
                                 onChange={handleChange}/>                            
                             </Form.Field>
-
+                        </Form>
+                    </Table.Cell>
+                    <Table.Cell>
                         <RuleOnegraph selected={selected}/>
-                    </Form>
-
-                </Container>
+                     </Table.Cell>
+                </Table.Row>
+            </Table.Body>
+        </Table>
+                    
+        </Container>            
+                    
+            
     
         </>
     )

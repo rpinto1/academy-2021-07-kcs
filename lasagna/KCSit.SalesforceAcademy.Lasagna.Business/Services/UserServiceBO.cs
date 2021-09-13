@@ -74,7 +74,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
                 if (!result.Succeeded)
                 {
