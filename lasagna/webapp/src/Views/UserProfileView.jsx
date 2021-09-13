@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import UserHeader from '../components/UserHeader';
-import { Container, Table, Tab, Dropdown, Label, Menu, Icon } from 'semantic-ui-react'
-import DrawGraph from '../components/UserProfile/DrawGraph';
+import { Container, Dropdown, Menu, Input } from 'semantic-ui-react'
 import data from "./testData/data.json";
+import UserHeader from '../components/UserHeader';
+import PortfolioDetails from '../components/UserProfile/PortfolioDetails';
+import Footer from '../components/Footer';
 
 
 export default function UserProfileView() {
-
-    /*graph test*/
-    const testData =   [{ year: '1990', summary: 1000, cashflow: 150, debt: 100, dividends: 1000, eps: 250 , sales: -470 },
-                    { year: '1991', summary: 531, cashflow: 1150, debt: 350, dividends: 750, eps: 620 , sales: -275 },
-                    { year: '1992', summary: 1000, cashflow: 150, debt: 100, dividends: 1000, eps: 250 , sales: -15 },
-                    { year: '1993', summary: 2200, cashflow: 120, debt: 200, dividends: 700, eps: 500 , sales: 150 },];
-
-  
 
 
     const [activePortfolio, setActivePortfolio] = useState(0);
@@ -21,33 +14,38 @@ export default function UserProfileView() {
     const [activeCompany, setActiveCompany] = useState(0);
 
 
-    const dataNames = data.map((item, i) => {
+    const portfolioNames = data.map((item, i) => {
         return { index: i, text: item.portfolioName, value: i }
     });
 
-    const panes = [
-        { menuItem: 'Summary', render: () => <Tab.Pane> <DrawGraph indicator={data[activePortfolio]["portfolioCompanies"][activeCompany]["values"]} dataKey="summary" /> </Tab.Pane> },
-        { menuItem: 'Cashflow', render: () => <Tab.Pane> <DrawGraph indicator={data[activePortfolio]["portfolioCompanies"][activeCompany]["values"]} dataKey="cashflow" /> </Tab.Pane> },
-        { menuItem: 'Debt', render: () => <Tab.Pane><DrawGraph indicator={data[activePortfolio]["portfolioCompanies"][activeCompany]["values"]} dataKey="debt" /></Tab.Pane> },
-        { menuItem: 'Dividends', render: () => <Tab.Pane><DrawGraph indicator={data[activePortfolio]["portfolioCompanies"][activeCompany]["values"]} dataKey="dividends" /></Tab.Pane> },
-        { menuItem: 'EPS', render: () => <Tab.Pane><DrawGraph indicator={data[activePortfolio]["portfolioCompanies"][activeCompany]["values"]} dataKey="eps" /></Tab.Pane> },
-        { menuItem: 'Sales', render: () => <Tab.Pane><DrawGraph indicator={data[activePortfolio]["portfolioCompanies"][activeCompany]["values"]} dataKey="sales" /></Tab.Pane> },
-    ]
 
-
-    const handlePortfolioChange = (e, {value}) => {
-        
+    const handlePortfolioChange = (e, { value }) => {
         setActivePortfolio(value);
         setActiveCompany(0);
     };
 
 
-    const handleCompanyChange = (e, {index}) => {
+    const handleCompanyChange = (e, { index }) => {
         setActiveCompany(index);
     };
 
 
-    const PortfolioDetails = () => <Tab panes={panes} />
+    const Greeting = () => {
+        return (
+            <section className="greeting">
+                <article className="avatar">
+                    <img src="../blank-avatar-sm.jpg" alt="" />
+                </article>
+
+                <article>
+                    <h1>Hello, (UserName)!</h1>
+                    <a href="http://localhost:3010/user/edit">Edit my profile</a>
+                </article>
+            </section>
+        );
+    }
+
+    
 
 
     const PortfolioDropdown = () => (
@@ -56,36 +54,40 @@ export default function UserProfileView() {
             fluid
             selection
             clearable
-            options={dataNames}
+            options={portfolioNames}
             onChange={handlePortfolioChange}
         />
     );
 
+
     const PortfolioCompanies = () => {
         return (
-            <>
-                <Menu secondary vertical>
-                    {
-                        
-                        data[activePortfolio]["portfolioCompanies"].map((item, i) => {
-                            return (
-                                <Menu.Item
-                                    name={(item.name)}
-                                    active={activeCompany === i}
-                                    key={i}
-                                    index={i}
-                                    onClick={handleCompanyChange}
-                                />
-                            )
-
-                        })
-                    }
-                </Menu>
-            </>
+            <Menu secondary vertical>
+                {
+                    data[activePortfolio].portfolioCompanies.map((item, i) => {
+                        return (
+                            <Menu.Item
+                                name={(item.name)}
+                                active={activeCompany === i}
+                                key={i}
+                                index={i}
+                                onClick={handleCompanyChange} />
+                        );
+                    })
+                }
+            </Menu>
         );
     }
 
-    
+
+
+    const AddPortfolio = () => {
+        return <Input
+            icon={{ name: 'plus', circular: true, link: true }}
+            placeholder='Add Portfolio'
+            onChange={() => console.log('test')} />;
+    }
+
 
 
     return (
@@ -95,40 +97,37 @@ export default function UserProfileView() {
 
             <Container className="profile">
 
-                <section className="greeting">
-                    <article className="avatar">
-                        <img src="../blank-avatar-sm.jpg" alt="" />
-                    </article>
+                <Greeting />
 
-                    <article>
-                        <h1>Hello, (UserName)!</h1>
-                        <a href="http://localhost:3010/user/edit">Edit my profile</a>
-                    </article>
-                </section>
-
-                <section className="portfolio-section">
+                <section className="portfolio-section five-vw-margin-lr">
 
                     <section className="portfolio-list">
 
                         <PortfolioDropdown />
 
-                        <PortfolioCompanies />
+                        <PortfolioCompanies data={data}/>
 
                         <hr />
 
-                        <a href="http://localhost:3010/user/edit/portfolio">Edit portfolio</a>
+                        <a href={`http://localhost:3010/user/edit/portfolio/${data[activePortfolio].guid}`}>Edit portfolio</a> {/* GUID? */}
+
+                        <hr />
+
+                        <AddPortfolio />
 
                     </section> {/*end portfolio list*/}
 
                     <section className="portfolio-item-detail">
 
-                        <PortfolioDetails className="detail-table" />
+                        <PortfolioDetails data={data} activeCompany={activeCompany} activePortfolio={activePortfolio} className="detail-table" />
 
                     </section>
 
                 </section>{/*end portfolio section*/}
 
             </Container>
+
+            <Footer />
 
         </div>
     )
