@@ -6,6 +6,7 @@ using Rui;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Web;
 
 namespace Lasagna
 {
@@ -22,7 +23,7 @@ namespace Lasagna
             var load = new LoadPrice();
             var update = new UpdatePrice();
 
-            //update.UpdatePrices();
+            update.UpdatePrices();
 
 
 
@@ -67,9 +68,9 @@ namespace Lasagna
             //            break;
             //        // CA
             //        case 2:
-            //            canadaYahoo = company.Symbol + ".cn";
+            //            canadaYahoo = HttpUtility.UrlEncode(company.Symbol + ".cn");
             //            tickerYahoo = company.Symbol + ".TO";
-            //            extraTicker = company.Symbol + ".V";
+            //            extraTicker = HttpUtility.UrlEncode(company.Symbol + ".V");
             //            break;
             //        // AU
             //        case 3:
@@ -93,17 +94,10 @@ namespace Lasagna
             //            break;
             //    }
 
-            //    //var response = clientClass.GetAll("https://query1.finance.yahoo.com/v7/finance/quote?symbols=" + tickerYahoo);
             //    try
             //    {
-            //        //    var responseObject = JObject.Parse(response.Content)["quoteResponse"]["result"];
-            //        //    if (responseObject.HasValues)
-            //        //    {
-            //        //        company.YahooTicker = tickerYahoo;
-            //        //        listUpdatedCompanys.Add(company);
-            //        //        Console.WriteLine(tickerYahoo);
-            //        //        continue;
-            //        //    }
+
+            //        tickerYahoo = HttpUtility.UrlEncode(tickerYahoo);
 
             //        if (companyBD[companyIndex].CountryId == 2)
             //        {
@@ -143,9 +137,25 @@ namespace Lasagna
             //                continue;
             //            }
 
-            //            company.YahooTicker = null;
-            //            listUpdatedCompanys.Add(company);
+
+            //        }else
+            //        {
+
+            //            var response = clientClass.GetAll("https://query1.finance.yahoo.com/v7/finance/quote?symbols=" + tickerYahoo);
+            //            var responseObject = JObject.Parse(response.Content)["quoteResponse"]["result"];
+            //            if (responseObject.HasValues)
+            //            {
+            //                company.YahooTicker = tickerYahoo;
+            //                listUpdatedCompanys.Add(company);
+            //                Console.WriteLine(tickerYahoo);
+            //                continue;
+            //            }
             //        }
+
+            //        company.YahooTicker = null;
+            //        listUpdatedCompanys.Add(company);
+
+
             //    }
             //    catch (Exception)
             //    {

@@ -5,16 +5,14 @@ import $ from 'jquery';
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
     const [pattern, setPattern] = useState('');
-    let pageIndex = 0;
+    let [pageIndex, setPageIndex] = useState(0);
 
-    function indexPlus() {
-        alert(pageIndex);
-        pageIndex++;
-    }
-    function indexMinus() {
-        alert(pageIndex);
-        if (pageIndex != 0) { pageIndex--;}
-    }
+
+    {/*function description(nameTicker.ticker){
+       fetch("http://localhost:3010/api/Company/"+ ticker +"/description).then(result.json() => {
+            setDescription(data.result);
+            }}
+     */}
 
     useEffect(() => {
         fetch("http://localhost:3010/api/Companies/search/"+ pattern +"/"+ pageIndex).then(result => {
@@ -29,7 +27,7 @@ function SearchBar() {
                 }
             })
         })
-    }, [pattern]);
+    }, [pattern,pageIndex]);
 
     useEffect(() => {
         if(pattern == '') {
@@ -49,19 +47,22 @@ function SearchBar() {
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
-                        onChange={test => setPattern(test.target.value)} />
+                        //onChange={test => setPattern(test.target.value)} />
+                        onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
                         <i class="search icon"></i> 
                 </div>
               
                 <div className="ui raised fluid text segment" id="search_list">       
                     {    nameTickers &&
-                         nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
+                        nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)
                     }
-                    
+                    <div style={{display:"flex",justifyContent:"center"}}>
+                        <button onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}>-</button>
+                    page number={pageIndex}
+                        <button onClick={() => setPageIndex(prevState => prevState + 1)}>+</button>
+                    </div>
                 </div>
             </div>
-            <button onClick={indexPlus}>+</button>;
-            <button onClick={indexMinus}>-</button>;
         </div>
     );
 }

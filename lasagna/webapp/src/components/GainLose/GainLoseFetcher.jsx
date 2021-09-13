@@ -20,6 +20,7 @@ export default function GainLoseFetcher(props) {
 
  
     useEffect(() => {
+        console.log(fetchData(gainLoseURL))
         setAllData(fetchData(gainLoseURL));
     }, [gainLoseURL]);
 
