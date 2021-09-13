@@ -47,7 +47,8 @@ function SearchBar() {
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
-                        onChange={test => setPattern(test.target.value), setPageIndex(0)} />
+                        //onChange={test => setPattern(test.target.value)} />
+                        onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
                         <i class="search icon"></i> 
                 </div>
               
@@ -57,8 +58,8 @@ function SearchBar() {
                     }
                 </div>
             </div>
-            <button onClick={()=>setPageIndex(prevState => prevState+1)}>+</button>;
-            <button onClick={() => setPageIndex(prevState => prevState-1)}>-</button>;
+            <button onClick={() => { if (nameTickers.length/) {setPageIndex(prevState => prevState + 1)}>+</button>;
+            <button onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}>-</button>;
         </div>
     );
 }
