@@ -8,8 +8,8 @@ function NameTicker(props) {
         console.log(props);
     }
     return (
-            <Link to='/company/details/${props.nameTicker.ticker}'> 
-                <p>{props.nameTicker.name}</p>
+        <Link to='/company/details/${props.nameTicker.ticker}'>
+            <p>{props.nameTicker.name} ({props.nameTicker.ticker})</p>
             </Link>
     
 

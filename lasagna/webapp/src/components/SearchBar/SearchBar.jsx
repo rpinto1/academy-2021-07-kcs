@@ -54,13 +54,15 @@ function SearchBar() {
               
                 <div className="ui raised fluid text segment" id="search_list">       
                     {    nameTickers &&
-                         nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
+                        nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)
                     }
-                    
+                    <div style={{display:"flex",justifyContent:"center"}}>
+                        <button onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}>-</button>
+                    page number={pageIndex}
+                        <button onClick={() => setPageIndex(prevState => prevState + 1)}>+</button>
+                    </div>
                 </div>
             </div>
-            <button onClick={() => { if (nameTickers.length/) {setPageIndex(prevState => prevState + 1)}>+</button>;
-            <button onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}>-</button>;
         </div>
     );
 }
