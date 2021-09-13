@@ -27,24 +27,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
 
         Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int skip, int take);
 
-        IEnumerable<KeyRatiosPoco> GetKeyRatios(string ticker);
+        Task<IEnumerable<KeyRatiosPoco>> GetKeyRatios(string ticker);
 
-        IEnumerable<KeyRatiosPoco> GetKeyRatiosByBulk(List<string> tickers);
+        Task<IEnumerable<KeyRatiosPoco>> GetKeyRatiosByBulk(List<string> tickers);
 
-        IEnumerable<BalanceSheetPoco> GetBalanceSheet(string ticker);
+        Task<IEnumerable<BalanceSheetPoco>> GetBalanceSheet(string ticker);
 
-        IEnumerable<BalanceSheetPoco> GetBalanceSheetByBulk(List<string> tickers);
+        Task<IEnumerable<BalanceSheetPoco>> GetBalanceSheetByBulk(List<string> tickers);
 
-        IEnumerable<IncomeStatementPoco> GetIncomeStatement(string ticker);
+        Task<IEnumerable<IncomeStatementPoco>> GetIncomeStatement(string ticker);
 
-        IEnumerable<IncomeStatementPoco> GetIncomeStatementByBulk(List<string> tickers);
+        Task<IEnumerable<IncomeStatementPoco>> GetIncomeStatementByBulk(List<string> tickers);
 
-        DailyInfoPoco GetDailyInfo(string ticker);
+        Task<DailyInfoPoco> GetDailyInfo(string ticker);
 
-        IEnumerable<DailyInfoPoco> GetDailyInfoByBulk(List<string> tickers);
+        Task<IEnumerable<DailyInfoPoco>> GetDailyInfoByBulk(List<string> tickers);
 
-        ScorePoco GetScore(string ticker, int scoringMethodId);
+        Task<ScorePoco> GetScore(string ticker, int scoringMethodId);
 
-        IEnumerable<ScorePoco> GetScoreByBulk(List<string> tickers, int scoringMethodId);
+        Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
     }
 }
