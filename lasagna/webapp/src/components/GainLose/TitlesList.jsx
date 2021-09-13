@@ -6,7 +6,9 @@ export default function TitlesList({ data, className}) {
     let title = className === 'gain-items' ? 'Gainers' : 'Losers';
     
     if (data) {
-        
+        if(data["quotes"] != null){
+            data = data["quotes"];
+        }
         return (
             <section className={className}>
                 <h1>{ title }</h1>
@@ -20,7 +22,7 @@ export default function TitlesList({ data, className}) {
                     </thead>
                     <tbody>
                 {
-                    data["quotes"].map((item, i) => (
+                    data.map((item, i) => (
                         <tr key={i}>
                             <td>
                                 <span className="item-symbol">{`${item.symbol}`}</span>

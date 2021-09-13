@@ -59,7 +59,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 return results;
             }
         }
-        public async Task<List<CompanyData>> SearchCompaniesPrice(bool down)
+        public async Task<List<CompanyData>> SearchCompaniesPrice(bool down, List<string> countries)
         {
 
             using (var context = new lasagnakcsContext())
@@ -68,13 +68,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 var query = (from companies in context.Companies
                              join daily in context.DailyInfos
                              on companies.DailyInfoId equals daily.Id
+                             join country in (context.Countries.Where(c => countries.Contains(c.Name)).AsEnumerable())
+                            on companies.CountryId equals country.Id
+                            where daily.UpdatedOn.ToString() != "0001-01-01 00:00:00.0000000"
                              let change = (daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)
                              let percentageChange = ((daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)) /(( daily.PreviousClose.Value == 0 || daily.PreviousClose == null) ? 10000000 : daily.PreviousClose )  *100
-                             select new CompanyData { DisplayName = companies.Name, Symbol = companies.Ticker, MarketChange =(double) change , MarketChangePercent = (double) percentageChange }) ;
+                             select new CompanyData { DisplayName = companies.Name, Symbol = companies.Ticker, RegularMarketChange = change , RegularMarketChangePercent = (Decimal)  percentageChange }) ;
 
 
                 
-                    return !down? await query.OrderByDescending(x=>x.MarketChangePercent).Take(10).ToListAsync() : await query.OrderBy(x => x.MarketChangePercent).Take(10).ToListAsync();
+                    return !down? await query.OrderByDescending(x=>x.RegularMarketChangePercent).Take(10).ToListAsync() : await query.OrderBy(x => x.RegularMarketChangePercent).Take(10).ToListAsync();
 
 
 

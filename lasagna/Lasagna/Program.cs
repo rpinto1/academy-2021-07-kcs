@@ -23,8 +23,8 @@ namespace Lasagna
             var load = new LoadPrice();
             var update = new UpdatePrice();
 
-            update.UpdatePrices();
-
+            //update.UpdatePrices();
+            update.UpdateEps();
 
 
             //// search By canada to add .TO
