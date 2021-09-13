@@ -15,21 +15,19 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
+using Microsoft.AspNetCore.Http;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
     public class UserServiceBO : IUserServiceBO
     {
-        private readonly AppSettings _appSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly GenericBusinessLogic _genericBusinessLogic;
 
 
-        public UserServiceBO(IOptions<AppSettings> appSettings, GenericBusinessLogic genericBusinessLogic,
-            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserServiceBO(GenericBusinessLogic genericBusinessLogic, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            this._appSettings = appSettings.Value;
             this._genericBusinessLogic = genericBusinessLogic;
             this._userManager = userManager;
             this._signInManager = signInManager;
@@ -76,7 +74,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, model.RememberMe, false);
 
                 if (!result.Succeeded)
                 {
@@ -85,12 +83,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
                 var user = await _userManager.FindByEmailAsync(model.EmailAddress);
 
-                var newAccessToken = await _userManager.GenerateUserTokenAsync(user, "LasagnaApp", "AccessToken");
-                await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken", newAccessToken);
+                var AuthenticationToken = await _userManager.GenerateUserTokenAsync(user, "LasagnaApp", "AuthenticationToken");
+                await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AuthenticationToken", AuthenticationToken);
 
                 await _userManager.ResetAccessFailedCountAsync(user);
-
-                return new IdToken { Id = user.Id, Token = newAccessToken };
+                
+                return new IdToken { Id = user.Id, Token = AuthenticationToken };
             });
         }
 
@@ -107,10 +105,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     throw new Exception("User does not exist");
                 }
 
-                await _userManager.RemoveAuthenticationTokenAsync(user, "LasagnaApp", "AccessToken");
+                await _userManager.RemoveAuthenticationTokenAsync(user, "LasagnaApp", "AuthenticationToken");
 
 
-                //// How is this supposed to work??????
+                //// How is this supposed to work?????? SignOutAsync doesn't receive any parameter and it doesn't return anything!!!
+                //// wich user will this method logout???
                 //await _signInManager.SignOutAsync();
 
             });
@@ -168,12 +167,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn<IEnumerable<GetUsersPoco>>> GetAllUsers()
         {
-            return await _genericBusinessLogic.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(() =>
             {
                 var userInfo = from user in _userManager.Users.ToList()
                                select new GetUsersPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
 
-                return userInfo;
+                return Task.FromResult(userInfo);
             });
         }
 

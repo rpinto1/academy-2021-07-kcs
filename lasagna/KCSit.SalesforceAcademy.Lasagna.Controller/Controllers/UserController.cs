@@ -18,14 +18,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+    //[ValidateAntiForgeryToken]
     public class UserController : ControllerBase
     {
 
         private readonly IUserServiceBO _userService;
-        private readonly GenericControllerReturn _genericControllerReturn;
+        private readonly GenericController _genericControllerReturn;
 
 
-        public UserController(IUserServiceBO userService, GenericControllerReturn genericControllerReturn)
+        public UserController(IUserServiceBO userService, GenericController genericControllerReturn)
         {
             this._userService = userService;
             this._genericControllerReturn = genericControllerReturn;
@@ -55,7 +56,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/SignOut")]
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> SignOut(string userId)
         {
             var signOutResult = await _userService.SignOut(userId);
@@ -66,7 +67,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/Update")]
         [HttpPut]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Update(string userId, [FromBody] SignUpViewModel newModel)
         {
             var result = await _userService.Update(userId, newModel);

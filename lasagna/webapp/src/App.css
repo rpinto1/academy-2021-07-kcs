@@ -66,7 +66,7 @@ footer {
     margin: 0;
     display: flex-column;
     position: absolute;
-    bottom: -35%;
+    bottom: -40%;
 }
 
 
@@ -111,11 +111,55 @@ footer {
 }
 
 
-.our_info
-{
+.our_info {
     padding: 1%;
     text-align: justify;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
+#up-front{
+    position: absolute;
+    z-index: 100;
+    margin-left: 38%;
+    vertical-align: middle;
+}
+/* user profile view */
 
+/* .profile {                  
+    max-width: 70%;
+} */
+
+.greeting {
+    display: flex;
+    flex-direction: row;
+    padding: 1vw;
+    margin: 2vh;
+}    
+
+.greeting img {
+    max-width: 10vw;
+    padding: 0 1vw;
+    
+}
+
+.portfolio-section {
+    display: flex;
+    flex-direction: row;
+    /* margin: 5vw; */
+    
+}
+
+.five-vw-margin-lr{
+    margin: 0 5vw;
+}
+
+.two-vh-margin-ud{
+    padding: 5vh 0;
+}
+
+
+#checkboxes-list{
+    padding: 12vh;
+    align-content: center;
+    justify-content: center;
+}

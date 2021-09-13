@@ -434,10 +434,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("PreviousClose")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(10,4)");
 
                     b.Property<decimal?>("StockPrice")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(10,4)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("Uuid")
                         .ValueGeneratedOnAdd()

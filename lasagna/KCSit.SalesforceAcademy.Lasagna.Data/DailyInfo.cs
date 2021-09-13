@@ -19,6 +19,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public decimal ForwardPe { get; set; }
         public decimal EpsTTM { get; set; }
 
+        public DateTime UpdatedOn { get; set; }
+
         public virtual ICollection<Company> Companies { get; set; }
     }
 }

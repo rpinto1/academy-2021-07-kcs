@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import NameTicker from './NameTicker';
 import $ from 'jquery';
 
@@ -56,6 +56,7 @@ function SearchBar() {
                     {    nameTickers &&
                          nameTickers.map((nameTicker, index) => <NameTicker key={ index } nameTicker={ nameTicker } />) 
                     }
+                    
                 </div>
             </div>
             <button onClick={() => { if (nameTickers.length/) {setPageIndex(prevState => prevState + 1)}>+</button>;

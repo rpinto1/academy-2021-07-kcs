@@ -46,27 +46,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                     });
             });
 
-
+            services.AddResponseCaching();
             services.AddScoped<lasagnakcsContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>(option =>
-                { option.User.RequireUniqueEmail = true;
-                    option.Password.RequiredLength = 8;
-                    option.Password.RequireLowercase = true;
-                    option.Password.RequireUppercase = true;
-                    option.Password.RequireDigit = true;
-                    option.Password.RequireNonAlphanumeric = true;
-                    option.Password.RequiredUniqueChars = 5;
-                })
+            {
+                option.User.RequireUniqueEmail = true;
+                option.Password.RequiredLength = 8;
+                option.Password.RequireLowercase = true;
+                option.Password.RequireUppercase = true;
+                option.Password.RequireDigit = true;
+                option.Password.RequireNonAlphanumeric = true;
+                option.Password.RequiredUniqueChars = 5;
+            })
                 .AddEntityFrameworkStores<lasagnakcsContext>()
                 .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>));
 
-            services.AddAuthorization(options => {
+            services.AddAuthorization(options =>
+            {
                 options.AddPolicy("BasicUserPolicy", policy => policy.RequireRole("BasicUser", "PremiumUser", "Manager", "Admin"));
                 options.AddPolicy("PremiumUserPolicy", policy => policy.RequireRole("PremiumUser", "Manager", "Admin"));
                 options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager", "Admin"));
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             });
-
 
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 
@@ -75,10 +76,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
-            services.AddScoped<ICompaniesBO, CompaniesBO >();
+            services.AddScoped<ICompaniesBO, CompaniesBO>();
 
             services.AddScoped<GenericBusinessLogic>();
-            services.AddScoped<GenericControllerReturn>();
+            services.AddScoped<GenericController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,7 +104,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseResponseCaching();
 
 
             app.UseEndpoints(endpoints =>
@@ -113,7 +114,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            
+
         }
     }
 }

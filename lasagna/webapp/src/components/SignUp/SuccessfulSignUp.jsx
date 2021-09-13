@@ -1,13 +1,17 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { Message, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export default function SuccessfulSignUp() {
+
+
     return (
-        <Message>
-                <Message.Header>SUCESSS!!</Message.Header>
+        <Message id='up-front'>
+                <Message.Header >SUCESSS!!</Message.Header>
                 <p>Your user has been created.</p>
+                <Link to= '/signin'><Button className='ui small center floated teal button'>Go to Sign In!</Button></Link>
         </Message>
 
-        //maybe add a button to go to the user homepage and another to profile?
+        
     )
 }

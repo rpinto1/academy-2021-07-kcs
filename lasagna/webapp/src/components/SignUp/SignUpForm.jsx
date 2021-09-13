@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Form, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Footer from '../Footer';
@@ -37,7 +37,7 @@ export default function SignUpForm() {
     const handleSubmit = () => {
         let user_captcha = captchaInputRef.current.value;
   
-        if (validateCaptcha(user_captcha) == true) {
+        if (validateCaptcha(user_captcha) === true) {
 
         fetch(`http://localhost:3010/api/SignUp`, {
             method: 'POST',
@@ -70,17 +70,7 @@ export default function SignUpForm() {
 
     return (
     <>   
-    {
-            successfullSignUp && <SuccessfulSignUp id='floating-msg' />
-    }
-
-    {
-           dBError && <FailedSignUp id='floating-msg'/> 
-    }
-    {
-        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
-    }
-
+    
 
     <Container className= 'formulario'> 
          <h1> Create an account with us </h1>
@@ -107,6 +97,17 @@ export default function SignUpForm() {
             pattern="[\w+/\s*]{2,15}"
             required/>
         </Form.Field>
+        {
+            successfullSignUp && <SuccessfulSignUp id='floating-msg' />
+        }
+
+        {
+           dBError && <FailedSignUp id='floating-msg'/> 
+        }
+        {
+        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
+        }
+
         <Form.Field>
             <label>Password</label>
             <input
@@ -153,9 +154,6 @@ export default function SignUpForm() {
                 </div>
             </div> 
     
-        </Form.Field>
-        <Form.Field>
-            <Link to ='/forgottenpassword'><p>I don't remember my password.</p></Link>
         </Form.Field>
         <Form.Field>
             <Button type='submit'  className='ui small center teal button'>Submit</Button>

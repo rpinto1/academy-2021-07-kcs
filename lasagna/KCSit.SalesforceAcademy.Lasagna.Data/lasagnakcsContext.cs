@@ -18,7 +18,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         public lasagnakcsContext(DbContextOptions<lasagnakcsContext> options)
             : base(options)
         {
-            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = 1000;
+            ((IObjectContextAdapter)this).ObjectContext.CommandTimeout = int.MaxValue;
             
         }
 
