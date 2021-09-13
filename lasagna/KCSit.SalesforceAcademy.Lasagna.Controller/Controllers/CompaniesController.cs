@@ -8,6 +8,7 @@ using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
 using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,17 +16,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CompaniesController : ControllerBase
+    public class CompaniesController : GenericController
     {
         private ICompaniesBO _companiesBO;
         private IGenericLogic _genericLogic;
-        private GenericControllerReturn _genericCR;
 
-        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic, GenericControllerReturn genericCR)
+
+        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic)
         {
             _companiesBO = companiesBO;
             _genericLogic = genericLogic;
-            _genericCR = genericCR;
+
         }
 
 
@@ -54,7 +55,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             var newResult = new IndexSector{ Indices = indexList.Result, Sectors = sectorList.Result };
             var returnList = new GenericReturn<IndexSector> { Succeeded = true, Message = indexList.Message, 
                 Result = newResult };
-            return _genericCR.ReturnResult(returnList);
+            return ReturnResult(returnList);
         }
         // GET api/<CompaniesController>/industries/?
         [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true, VaryByQueryKeys = new [] {"sector" })]
@@ -64,7 +65,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             var industriesList =  _companiesBO.GetIndustries(sector);
 
 
-            return await _genericCR.ReturnResult(industriesList);
+            return await ReturnResult(industriesList);
         }
         // GET api/<CompaniesController>/industries/?
         [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -74,7 +75,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             var industriesList = _companiesBO.GetIndustries("");
 
 
-            return await _genericCR.ReturnResult(industriesList);
+            return await ReturnResult(industriesList);
         }
         [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("countries")]
@@ -83,7 +84,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             var countriesList = _genericLogic.GetAll<Country>();
 
 
-            return await _genericCR.ReturnResult(countriesList);
+            return await ReturnResult(countriesList);
         }
         // POST api/<CompaniesController>
         [HttpPost("IIS")]
@@ -91,8 +92,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
 
             var companies = _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page,value.Countries);
-            return await _genericCR.ReturnResult(companies);
+            return await ReturnResult(companies);
         }
+
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet("prices")]
+        public async Task<IActionResult> GetTopGainerOrLoser()
+        {
+
+            var gainLose = _companiesBO.GetTopGainerOrLoser();
+
+            return await ReturnResult(gainLose);
+        }
+
+
+
 
         // POST api/<CompaniesController>
         [HttpPost]

@@ -2,6 +2,7 @@
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
+using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 {
-    public class Rule1BO : IScore
+    public class Rule1BO : IRule1BO
     {
         // Indicator weight in the final score calculation
         private const decimal roicWeight = 0.30M;
@@ -31,11 +32,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
         private const decimal rate = 0.15M;
         private const int nper = 10;
 
-        private readonly GenericDAO _genericDao;
-        private readonly SearchDAO _searchDAO;
+        private readonly IGenericDAO _genericDao;
+        private readonly ISearchDAO _searchDAO;
         private readonly GenericBusinessLogic _genericBusinessLogic;
 
-        public Rule1BO(GenericDAO genericDao, SearchDAO searchDAO, GenericBusinessLogic genericBusinessLogic)
+        public Rule1BO(IGenericDAO genericDao, ISearchDAO searchDAO, GenericBusinessLogic genericBusinessLogic)
         {
             _genericDao = genericDao;
             _searchDAO = searchDAO;

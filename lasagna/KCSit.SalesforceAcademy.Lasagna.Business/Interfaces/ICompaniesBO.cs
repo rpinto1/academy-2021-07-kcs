@@ -14,5 +14,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers, int pageNumber);
 
         Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page, List<string> countries);
+        Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser();
     }
 }

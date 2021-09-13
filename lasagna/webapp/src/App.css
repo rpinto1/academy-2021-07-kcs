@@ -145,8 +145,16 @@ footer {
 .portfolio-section {
     display: flex;
     flex-direction: row;
-    margin: 5vw;
+    /* margin: 5vw; */
     
+}
+
+.five-vw-margin-lr{
+    margin: 0 5vw;
+}
+
+.two-vh-margin-ud{
+    padding: 5vh 0;
 }
 
 
