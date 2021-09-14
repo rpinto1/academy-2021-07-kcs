@@ -1,6 +1,8 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 using Rui;
 using System;
 using System.Collections.Generic;
@@ -68,7 +70,7 @@ namespace Lasagna
                         catch (Exception ex)
                         {
 
-                            WriteResult(ex.Message);
+                            WriteResult(ex.Message,"result");
                         }
 
                     }
@@ -122,14 +124,113 @@ namespace Lasagna
             genericDao.UpdateRange<DailyInfo>(listUpdatedDailyInfo);
 
         }
+        public void UpdatePricesQFS()
+        {
+
+  
+
+            var genericDao = new GenericDAO();
+            var searchDao = new SearchDAO();
+
+            var companyBD = genericDao.GetAll<Company>();
+            var companyDaily = genericDao.GetAll<DailyInfo>();
+            var counting = 0;
+            var list = new List<DailyPricePoco>();
+
+            var listUpdatedDailyInfo = new List<DailyInfo>();
+            for (int companyIndex = 0; companyIndex < companyBD.Count; companyIndex++)
+            {
+                var company = companyBD[companyIndex];
+
+                list.Add(new DailyPricePoco {Ticker = company.Ticker, Price = "QFS("+company.Ticker+", price)" });
+
+                if ((counting % 53 == 0 && counting > 0) || companyIndex == (companyBD.Count - 1))
+                {
+                    var client = new RestClient("https://public-api.quickfs.net/v1/data/batch");
+                    var request = new RestRequest(Method.POST);
+                    request.AddHeader("x-qfs-api-key", "d4089a95fc589f2d804c241f4f23b9732ff9ab6e");
+                    request.RequestFormat = DataFormat.Json;
+                    request.AddJsonBody(new { data = list  });
+
+                    var response = client.Execute(request);
+
+                    var responseObject = JObject.Parse(response.Content)["data"];
+                    var countingList = responseObject.Children().ToList().Count;
+                    Console.WriteLine(company +"  id: "+ company.Id );
+                    Console.WriteLine("----------");
+
+                    for (int responseIndex = 0; responseIndex < countingList; responseIndex++)
+                    {
+                        try
+                        {
+                            var companyIndexSecondary = companyBD.FindIndex(x => x.Ticker == responseObject[responseIndex]["Ticker"].ToString());
+                            var dailyInfoId = companyBD[companyIndexSecondary].DailyInfoId.Value;
+                            var daily = companyDaily.Find(x => x.Id == dailyInfoId);
+                            daily.PreviousClose = daily.StockPrice;
+                            Decimal numericNumber;
+                            Decimal.TryParse(responseObject[responseIndex]["Price"].ToString(), out numericNumber);
+                            daily.StockPrice = numericNumber;
+                            daily.UpdatedOn = DateTime.Now;
+
+                            // ADD
+                            //regularMarketPreviousClose
+                            //epsTrailingTwelveMonths
+                            //forwardPE
+                            //
+                            listUpdatedDailyInfo.Add(daily);
+                        }
+                        catch (Exception ex)
+                        {
+
+                            WriteResult(ex.Message,"qfsPrice");
+                        }
+
+                    }
+
+                    list.Clear();
+                    counting = 0;
+                    continue;
+                }
 
 
+                counting++;
+            }
+            genericDao.UpdateRange<DailyInfo>(listUpdatedDailyInfo);
 
-        public bool WriteResult(string result)
+        }
+        public void tryStuff()
+        {
+            var client = new RestClient("https://public-api.quickfs.net/v1/data/batch");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("x-qfs-api-key", "d4089a95fc589f2d804c241f4f23b9732ff9ab6e");
+            request.RequestFormat = DataFormat.Json;
+            var list = new List<DailyPricePoco>();
+
+            list.Add(new DailyPricePoco { Price = "QFS(AC:MM,price)", Ticker = "AC:MM" });
+            list.Add(new DailyPricePoco { Price = "QFS(MFRISCOA-1:MM,price)", Ticker = "MFRISCOA - 1:MM" });
+
+
+            request.AddJsonBody(new { data = list });
+
+            var response = client.Execute(request);
+
+            Console.WriteLine(response);
+            var responseObject = JObject.Parse(response.Content)["data"];
+            var countingList = responseObject.Children().ToList().Count;
+            Console.WriteLine(countingList);
+            Console.WriteLine(responseObject[0]);
+            Decimal numericNumber;
+            Console.WriteLine(Decimal.TryParse(responseObject[0]["Price"].ToString(), out numericNumber));
+            Console.WriteLine(numericNumber);
+            Console.WriteLine(Decimal.TryParse(responseObject[1]["Price"].ToString(), out numericNumber));
+            Console.WriteLine(numericNumber);
+        }
+
+        public bool WriteResult(string result,string file)
         {
             try
             {
-                using (StreamWriter sr = File.AppendText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\result.txt"))
+                using (StreamWriter sr = File.AppendText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\" + file +".txt"))
                 {
                     sr.WriteLine(result);
                     sr.Flush();

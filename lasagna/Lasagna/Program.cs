@@ -24,8 +24,9 @@ namespace Lasagna
             var update = new UpdatePrice();
 
             //update.UpdatePrices();
-            update.UpdateEps();
-
+            //update.UpdateEps();
+            //load.LoadEps();
+            //update.UpdatePricesQFS();
 
             //// search By canada to add .TO
             //var companies = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Rui\EmpresasSemTicker.json");
