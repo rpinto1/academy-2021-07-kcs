@@ -4,18 +4,9 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
-    public class KeyRatiosPoco
+   public class DailyPricePoco
     {
-
+        public string Price { get; set; }
         public string Ticker { get; set; }
-
-        public int Year { get; set; }
-
-        public decimal Roic { get; set; }
-
-        public decimal PriceToEarnings { get; set; }
-
     }
-
-
 }
