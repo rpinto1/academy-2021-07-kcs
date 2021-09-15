@@ -96,11 +96,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         }
 
         [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("prices")]
-        public async Task<IActionResult> GetTopGainerOrLoser()
+        [HttpGet("prices/{countries}")]
+        public async Task<IActionResult> GetTopGainerOrLoser(string countries)
         {
 
-            var gainLose = _companiesBO.GetTopGainerOrLoser();
+            var ok = JsonConvert.DeserializeObject<List<string>>(countries);
+            
+            var gainLose = _companiesBO.GetTopGainerOrLoser(ok);
 
             return await ReturnResult(gainLose);
         }

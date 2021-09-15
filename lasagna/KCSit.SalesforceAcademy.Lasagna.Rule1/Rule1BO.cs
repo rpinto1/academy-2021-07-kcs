@@ -34,9 +34,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 
         private readonly IGenericDAO _genericDao;
         private readonly ISearchDAO _searchDAO;
-        private readonly GenericBusinessLogic _genericBusinessLogic;
+        private readonly IGenericBusinessLogic _genericBusinessLogic;
 
-        public Rule1BO(IGenericDAO genericDao, ISearchDAO searchDAO, GenericBusinessLogic genericBusinessLogic)
+        public Rule1BO(IGenericDAO genericDao, ISearchDAO searchDAO, IGenericBusinessLogic genericBusinessLogic)
         {
             _genericDao = genericDao;
             _searchDAO = searchDAO;
@@ -50,11 +50,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
             {
                 Console.WriteLine(DateTime.Now + "   Ticker: " + ticker);
 
-                var KeyRatiosList = _searchDAO.GetKeyRatios(ticker).ToList();
+                var companyId = _searchDAO.Get(ticker);
 
-                var balanceSheetList = _searchDAO.GetBalanceSheet(ticker).ToList();
+                var KeyRatiosList = (await _searchDAO.GetKeyRatios(ticker)).ToList();
 
-                var incomeStatementList = _searchDAO.GetIncomeStatement(ticker).ToList();
+                var balanceSheetList = (await _searchDAO.GetBalanceSheet(ticker)).ToList();
+
+                var incomeStatementList = (await _searchDAO.GetIncomeStatement(ticker)).ToList();
 
                 var roic = (from kr in KeyRatiosList
                             select kr.Roic).ToList();
@@ -75,16 +77,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 
 
 
-                var dailyInfo = _searchDAO.GetDailyInfo(ticker);
+                var dailyInfo = await _searchDAO.GetDailyInfo(ticker);
 
                 var stickerPrice = CalculateStickerPrice(dailyInfo);
 
                 var marginOfSafety = stickerPrice / 2;
 
-                var companyId = _searchDAO.Get(ticker);
 
-
-                var scoreInfo = _searchDAO.GetScore(ticker, 1);
+                var scoreInfo = await _searchDAO.GetScore(ticker, 1);
 
                 var newScore = new Score
                 {
@@ -126,15 +126,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
                     List<string> tickersBulk = (from c in companiesBulk
                                                 select c.Ticker).ToList();
 
-                    var keyRatiosByBulk = _searchDAO.GetKeyRatiosByBulk(tickersBulk);
+                    var keyRatiosByBulk = await _searchDAO.GetKeyRatiosByBulk(tickersBulk);
 
-                    var balanceSheetByBulk = _searchDAO.GetBalanceSheetByBulk(tickersBulk);
+                    var balanceSheetByBulk = await _searchDAO.GetBalanceSheetByBulk(tickersBulk);
 
-                    var incomeStatementByBulk = _searchDAO.GetIncomeStatementByBulk(tickersBulk);
+                    var incomeStatementByBulk = await _searchDAO.GetIncomeStatementByBulk(tickersBulk);
 
-                    var dailyInfoByBulk = _searchDAO.GetDailyInfoByBulk(tickersBulk);
+                    var dailyInfoByBulk = await _searchDAO.GetDailyInfoByBulk(tickersBulk);
 
-                    var ScoreByBulk = _searchDAO.GetScoreByBulk(tickersBulk, 1);
+                    var ScoreByBulk = await _searchDAO.GetScoreByBulk(tickersBulk, 2);
 
                     var scoresResult = new List<Score>();
 
@@ -167,9 +167,35 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 
 
 
-                        var dailyInfo = dailyInfoByBulk.Where(d => d.Ticker.Equals(company.Ticker)).SingleOrDefault();
+                        //var dailyInfo = dailyInfoByBulk.Where(d => d.Ticker.Equals(company.Ticker)).SingleOrDefault();
 
-                        var stickerPrice = CalculateStickerPrice(dailyInfo);
+                        //var stickerPrice = CalculateStickerPrice(dailyInfo);
+
+                        //var marginOfSafety = stickerPrice / 2;
+
+                        //var scoreInfo = ScoreByBulk.Where(s => s.Ticker == company.Ticker).SingleOrDefault();
+
+                        //scoresResult.Add(new Score
+                        //{
+                        //    Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
+                        //    ScoringMethodId = 1,
+                        //    CompanyId = company.Id,
+                        //    Score1 = (double)score,
+                        //    StickerPrice = stickerPrice,
+                        //    MarginOfSafety = marginOfSafety,
+                        //    Uuid = Guid.NewGuid(),
+                        //    UpdatedOn = DateTime.Now
+                        //});
+
+
+
+
+                        var PriceToEarnings = (from kr in keyRatiosByBulk
+                                               where kr.Ticker.Equals(company.Ticker)
+                                               select kr.PriceToEarnings).ToList();
+
+
+                        var stickerPrice = CalculateStickerPrice(PriceToEarnings.ElementAt(0), eps.ElementAt(0));
 
                         var marginOfSafety = stickerPrice / 2;
 
@@ -178,7 +204,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
                         scoresResult.Add(new Score
                         {
                             Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
-                            ScoringMethodId = 1,
+                            ScoringMethodId = 2,
                             CompanyId = company.Id,
                             Score1 = (double)score,
                             StickerPrice = stickerPrice,
@@ -186,6 +212,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
                             Uuid = Guid.NewGuid(),
                             UpdatedOn = DateTime.Now
                         });
+
 
                         Console.WriteLine("\tScore: " + score.ToString("n2") + "      Sticker Price: " + stickerPrice + "\n");
 
@@ -196,10 +223,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
                         _genericDao.UpdateRange<Score>(scoresResult);
                     });
                 }
-            //});
-            return new GenericReturn { Succeeded = true, Message = "ok"};
-        }
-        
+                //});
+                return new GenericReturn { Succeeded = true, Message = "ok" };
+            }
+
 
 
 
@@ -316,7 +343,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 
             return fv / (decimal)(Math.Pow((double)(1 + rate), (double)nper));
         }
+        
+        private decimal CalculateStickerPrice(decimal pe, decimal epsFY0)
+        {
+            decimal feps = epsFY0 * (decimal)(Math.Pow(((double)(1 + rate)), (double)nper));
 
+            decimal fv = feps * pe;
+
+            return fv / (decimal)(Math.Pow((double)(1 + rate), (double)nper));
+        }
 
 
 

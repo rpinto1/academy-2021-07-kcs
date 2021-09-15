@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
-import FailedSignUp from '../SignUp/FailedSignUp';
+
 
 
 export default function SignInForm() {
@@ -20,11 +20,7 @@ export default function SignInForm() {
    const [redirect, setRedirect] = useState(false);
    //if user wishes to remain logged, token and id will be saved no localstorage, if not, on sessionstorage
    const [keepMeLogged, setKeepMeLogged] = useState(false);
-   //if the password on the input is not correct, user will receive this message
-   const [incorrectPassword, setIncorrectPassword] = useState(false);
-   //if there are issues with the DB, user will receive this message
-   const [dBError, setDBError] = useState(false);
-
+  
     const handleChange = (event) => {
       const { id, value } = event.target
       

@@ -71,5 +71,44 @@ namespace Lasagna
 
             genericDao.UpdateRange(listUpdatedCompanys);
         }
+        public void LoadEps()
+        {
+
+
+            var clientClass = new Client();
+
+            var genericDao = new GenericDAO();
+            var searchDao = new SearchDAO();
+
+            var companyBD = genericDao.GetAll<Company>();
+
+            var queryString = "";
+
+            var listUpdatedDailyInfo = new List<Company>();
+            for (int companyIndex = 0; companyIndex < companyBD.Count; companyIndex++)
+            {
+                var company = companyBD[companyIndex];
+                if (company.DailyInfoId != null)
+                {
+                    continue;
+                }
+
+                queryString = "https://public-api.quickfs.net/v1/data/" + HttpUtility.UrlEncode(company.Ticker) + "/eps_diluted?period=FY&api_key=d4089a95fc589f2d804c241f4f23b9732ff9ab6e";
+                var response = clientClass.GetAll(queryString);
+                var responseObject = JObject.Parse(response.Content)["data"];
+                if (responseObject.HasValues)
+                {
+                    Console.WriteLine(company.Name);
+                    var ok = new DailyInfo { EpsTTM = (decimal)responseObject[0], UpdatedOn = DateTime.Now, Uuid = Guid.NewGuid() };
+                    var ok2 = genericDao.Add<DailyInfo>(ok);
+
+                    company.DailyInfoId = ok2.Id;
+                    listUpdatedDailyInfo.Add(company);
+                }
+
+
+            }
+            genericDao.UpdateRange<Company>(listUpdatedDailyInfo);
+        }
     }
 }

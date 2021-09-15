@@ -434,10 +434,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("PreviousClose")
-                        .HasColumnType("decimal(10,4)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal?>("StockPrice")
-                        .HasColumnType("decimal(10,4)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -981,6 +981,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("Uuid")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

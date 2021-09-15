@@ -35,15 +35,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
             services.AddScoped<lasagnakcsContext>();
 
             services.AddScoped<ISearchDAO, SearchDAO>();
-            services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
             services.AddScoped<IGenericDAO, GenericDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
-
-            services.AddScoped<GenericBusinessLogic>();
-            services.AddScoped<GenericController>();
+            services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
 
             services.AddScoped<IRule1BO, Rule1BO>();
             services.AddMemoryCache();

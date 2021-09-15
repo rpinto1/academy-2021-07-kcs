@@ -69,7 +69,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             );
         }
 
-        public async Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser()
+        public async Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser(List<string> countries)
         {
 
 
@@ -77,8 +77,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             async () =>
             {
-                var gainersResponse = await _searchDao.SearchCompaniesPrice(false);
-                var losersResponse = await _searchDao.SearchCompaniesPrice(true);
+                var gainersResponse = await _searchDao.SearchCompaniesPrice(false, countries);
+                var losersResponse = await _searchDao.SearchCompaniesPrice(true, countries);
 
                 var gainLose = new GainLoseDBPoco { Gainers = gainersResponse, Losers = losersResponse };
 

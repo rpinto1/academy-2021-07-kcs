@@ -8,8 +8,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 
         public string Symbol { get; set; }
 
-        public Double MarketChange { get; set; }
+        public Decimal RegularMarketChange { get; set; }
 
-        public Double MarketChangePercent { get; set; }
+        public Decimal RegularMarketChangePercent { get; set; }
     }
 }

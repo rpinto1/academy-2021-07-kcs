@@ -17,19 +17,16 @@ using System.Threading.Tasks;
 namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 {
     //[Route("api/[controller]")]
-    [ApiController]
     //[ValidateAntiForgeryToken]
-    public class UserController : ControllerBase
+    public class UserController : GenericController
     {
 
         private readonly IUserServiceBO _userService;
-        private readonly GenericController _genericControllerReturn;
 
 
-        public UserController(IUserServiceBO userService, GenericController genericControllerReturn)
+        public UserController(IUserServiceBO userService)
         {
             this._userService = userService;
-            this._genericControllerReturn = genericControllerReturn;
         }
 
 
@@ -39,7 +36,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = _userService.SignUp(model);
 
-            return await _genericControllerReturn.ReturnResult(result);
+            return await ReturnResult(result);
         }
 
 
@@ -50,7 +47,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = await _userService.SignIn(model);
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
 
@@ -61,7 +58,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var signOutResult = await _userService.SignOut(userId);
 
-            return _genericControllerReturn.ReturnResult(signOutResult);
+            return ReturnResult(signOutResult);
         }
 
 
@@ -72,7 +69,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = await _userService.Update(userId, newModel);
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
 
@@ -89,7 +86,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = _userService.GetAllUsers();
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
 
@@ -103,7 +100,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = await _userService.AddClaim(userId, claim);
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
         [HttpPost]
@@ -113,7 +110,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = await _userService.RemoveClaim(userId, claim);
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
 
@@ -124,7 +121,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = await _userService.GetClaims(userId);
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
 
@@ -139,7 +136,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
             var result = await _userService.DeleteUser(userId);
 
-            return _genericControllerReturn.ReturnResult(result);
+            return ReturnResult(result);
         }
 
 

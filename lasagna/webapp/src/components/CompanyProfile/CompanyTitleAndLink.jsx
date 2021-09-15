@@ -1,24 +1,39 @@
-import React from 'react'
+import React from 'react';
+import { Header, Segment, Icon, Button, Container, Grid } from 'semantic-ui-react';
 
-export default function CompanyTitleAndLink() {
+export default function CompanyTitleAndLink({ companyInfo }) {
 
-    const companyName = 'Banco de Mexico';
+    const {name, ticker} = companyInfo;
+
     const baseUrl = `https://www.google.com/search?q="annual+report"+`;
-    const fixArr = companyName.split(' ').map(a => a+'+');
-    const append = baseUrl+fixArr;
-    
+    const fixedName = name.split(' ').map(word => word+"+").join('');
+    const append = baseUrl+fixedName;
 
-
-//Tambien recibe el nombre por props desde el click de la barra search.
 
     return (
-        
-            
         <div>
-        
-            <h1>Company.Name</h1>
-            <a href={append} > <p>Company.Name</p> </a>
+            <Header as='h2' attached='top' >
+                {name}
+            </Header>
+            <Segment attached>
+                <Grid columns={2} relaxed='very'>
+                    <Grid.Column>
+                         Annual investors' page: <a href={append} >{ticker}</a>
+                    </Grid.Column>
+                    <Grid.Column>
+                    <Button icon labelPosition ='left' size='tiny' floated='right'>
+                             <Icon disabled name='bell outline' color='black'/>
+                              Create alarm
+                        </Button>
+                        <Button icon labelPosition ='left' size='tiny' floated='right'>
+                             <Icon disabled name='heart outline' color='black'/>
+                              Add to your portfolio
+                        </Button>                
+                    </Grid.Column>
+                </Grid>
+            </Segment>
             
+           
            
 
 
