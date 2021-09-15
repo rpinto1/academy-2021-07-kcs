@@ -141,6 +141,12 @@ namespace Lasagna
             for (int companyIndex = 0; companyIndex < companyBD.Count; companyIndex++)
             {
                 var company = companyBD[companyIndex];
+
+                var companyDailyCheck = companyDaily.Find(x => x.Id == company.DailyInfoId);
+                if ((companyDailyCheck.StockPrice != 0 || companyDailyCheck.PreviousClose != 0) || companyDailyCheck.StockPrice != null || companyDailyCheck.PreviousClose != null)
+                {
+                    continue;
+                }
                 var query = "QFS(" + company.Ticker + ",price)";
                 Console.WriteLine(query);
                 list.Add(new DailyPricePoco { Price = query , Ticker = company.Ticker});

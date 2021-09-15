@@ -6,6 +6,8 @@ using KCSit.SalesforceAcademy.Lasagna.Controller.Controllers;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.EmailService;
+using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +36,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var emailConfig = Configuration
+            .GetSection("EmailConfiguration")
+            .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+
             services.AddControllersWithViews();
             services.AddCors(options =>
             {
@@ -80,6 +88,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
 
             services.AddScoped<GenericBusinessLogic>();
             services.AddScoped<GenericController>();
+
+
+            services.AddScoped<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

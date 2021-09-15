@@ -4,6 +4,8 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.EmailService;
+using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +24,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
 
         private readonly IUserServiceBO _userService;
+        private readonly IEmailSender _emailSender;
 
-
-        public UserController(IUserServiceBO userService)
+        public UserController(IUserServiceBO userService, IEmailSender emailSender)
         {
             this._userService = userService;
+            _emailSender = emailSender;
         }
 
 
@@ -141,5 +144,32 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
 
 
+
+        // --------------------------  Email  ---------------------------------------------------
+        [Route("api/SendEmail")]
+        [HttpGet]
+        public IActionResult SendEmail()
+        {
+            var message = new Message(new string[] { "ruifcosta96@gmail.com" }, "Test email", "This is the content from our email.");
+            _emailSender.SendEmail(message);
+
+            return Ok() ;
+        }
+
+        [Route("api/SendEmail/{email}")]
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok();
+            }
+
+            var messageToken = _userService.SendEmail(email);
+            var message = new Message(new string[] { email }, "Reset password" , ("This is the link to change password"+ messageToken));
+            await _emailSender.SendEmailAsync(message);
+            return NotFound();
+        }
     }
 }

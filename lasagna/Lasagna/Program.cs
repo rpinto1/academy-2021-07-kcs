@@ -23,10 +23,14 @@ namespace Lasagna
             var load = new LoadPrice();
             var update = new UpdatePrice();
 
-            //update.UpdatePrices();
+
             //update.UpdateEps();
             //load.LoadEps();
-            update.UpdatePricesQFS();
+
+            //Update Prices uncomment the 2 lines bellow
+            //update.UpdatePrices();
+            //update.UpdatePricesQFS();
+            
             //update.tryStuff();
 
             //// search By canada to add .TO

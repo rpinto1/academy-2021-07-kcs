@@ -263,7 +263,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
         }
 
+        // --------------------------  Email  ---------------------------------------------------
 
+        public async Task<GenericReturn> SendEmail(string email)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return null;
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                return token;
+
+
+            });
+        }
 
 
     }
