@@ -269,9 +269,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
             {
                 entity.ToTable("DailyInfo");
 
-                entity.Property(e => e.PreviousClose).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.PreviousClose).HasColumnType("decimal(10, 4)");
 
-                entity.Property(e => e.StockPrice).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.StockPrice).HasColumnType("decimal(10, 4)");
 
                 entity.Property(e => e.Uuid).HasDefaultValueSql("(newid())");
             });
