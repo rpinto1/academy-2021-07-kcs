@@ -141,8 +141,9 @@ namespace Lasagna
             for (int companyIndex = 0; companyIndex < companyBD.Count; companyIndex++)
             {
                 var company = companyBD[companyIndex];
-
-                list.Add(new DailyPricePoco {Ticker = company.Ticker, Price = "QFS("+company.Ticker+", price)" });
+                var query = "QFS(" + company.Ticker + ",price)";
+                Console.WriteLine(query);
+                list.Add(new DailyPricePoco { Price = query , Ticker = company.Ticker});
 
                 if ((counting % 53 == 0 && counting > 0) || companyIndex == (companyBD.Count - 1))
                 {
@@ -205,8 +206,9 @@ namespace Lasagna
             request.AddHeader("x-qfs-api-key", "d4089a95fc589f2d804c241f4f23b9732ff9ab6e");
             request.RequestFormat = DataFormat.Json;
             var list = new List<DailyPricePoco>();
-
-            list.Add(new DailyPricePoco { Price = "QFS(AC:MM,price)", Ticker = "AC:MM" });
+            var asdad = "AC:MM";
+            var query = "QFS("+asdad+",price)";
+            list.Add(new DailyPricePoco { Price = query , Ticker = "AC:MM" });
             list.Add(new DailyPricePoco { Price = "QFS(MFRISCOA-1:MM,price)", Ticker = "MFRISCOA - 1:MM" });
 
 
