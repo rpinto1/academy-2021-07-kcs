@@ -40,6 +40,7 @@ function SearchBar() {
 
     
 
+
     return (
         <div className="SearchBar">
 
@@ -52,17 +53,24 @@ function SearchBar() {
                         onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
                         <i class="search icon"></i> 
                 </div>
-              
-                <div className="ui raised fluid text segment" >       
-                    {    nameTickers &&
-                        nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)
 
-                    }
-                    <div style={{display:"flex",justifyContent:"center"}}>
+                {    (nameTickers.length > 0) &&
+
+                (<div className="ui raised fluid text segment" >       
+                    
+                
+                       { 
+                       nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)}
+
+                   
+                   
                         <Button circular icon='arrow left' size='tiny' onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}/>
                         <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/>
-                    </div>
-                </div>
+ 
+                    
+                </div>)
+                    
+                }
             </div>
         </div>
     );
