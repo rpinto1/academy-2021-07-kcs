@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import NameTicker from './NameTicker';
 import $ from 'jquery';
+import { Button } from 'semantic-ui-react';
+
 
 function SearchBar() {
     const [nameTickers, setNameTicker] = useState([]);
@@ -22,7 +24,6 @@ function SearchBar() {
             }
             result.json().then(data => {
                 if (data != null) {
-                    console.log(data);
                     setNameTicker(data.result);
                 }
             })
@@ -36,6 +37,7 @@ function SearchBar() {
             $("#search_list").show();
         }
     }, [pattern]);
+
     
 
     return (
@@ -47,19 +49,18 @@ function SearchBar() {
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
-                        //onChange={test => setPattern(test.target.value)} />
                         onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
                         <i class="search icon"></i> 
                 </div>
               
-                <div className="ui raised fluid text segment" id="search_list">       
+                <div className="ui raised fluid text segment" >       
                     {    nameTickers &&
                         nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)
+
                     }
                     <div style={{display:"flex",justifyContent:"center"}}>
-                        <button onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}>-</button>
-                    page number={pageIndex}
-                        <button onClick={() => setPageIndex(prevState => prevState + 1)}>+</button>
+                        <Button circular icon='arrow left' size='tiny' onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}/>
+                        <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/>
                     </div>
                 </div>
             </div>

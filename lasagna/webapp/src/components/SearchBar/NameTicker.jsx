@@ -2,22 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 
-function NameTicker(props) {
-    {
-        console.log('Inside name ticker');
-        console.log(props);
-    }
-    return (
-        <Link to='/company/details/${props.nameTicker.ticker}'>
-            <p>{props.nameTicker.name} ({props.nameTicker.ticker})</p>
-            </Link>
+function NameTicker({ nameTicker }) {
     
+       
+    const { name, ticker } = nameTicker;
+   
+    const url = '/company/details/' + ticker + '/' + name;
 
-       /*  <article>
-                 <a href={'localhost:3010/company/detail/'+props.nameTicker.ticker} target="_blank">
-                <p>{props.nameTicker.name}</p>
-            </a>
-        </article> */
+    return (
+        <Link to={url}>
+            <p>{ticker} - {name}</p>
+        </Link>
+    
 
     )
 }
