@@ -46,6 +46,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
             services.AddScoped<GenericController>();
 
             services.AddScoped<IRule1BO, Rule1BO>();
+            services.AddMemoryCache();
 
         }
 
