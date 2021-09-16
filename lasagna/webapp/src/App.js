@@ -38,7 +38,7 @@ function App() {
                 <Route path= '/user/homepage' component = {HomepageUserView} />
                 <Route path= '/recover/:user' component = {RecoverPasswordView} /> 
                 <Route path= '/user/homepage' component = {HomepageUserView} /> 
-                <Route path= '/user/portfolio/edit' component = {EditPortfolio} />
+                <Route path= '/user/portfolio/edit/:id' component = {EditPortfolio} />
             </Switch>  
            
            

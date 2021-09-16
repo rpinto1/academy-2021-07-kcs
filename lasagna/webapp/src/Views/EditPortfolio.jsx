@@ -2,17 +2,19 @@ import React, { useState , useEffect} from 'react'
 import { Image, List, Container, ListContent, Button, Checkbox } from 'semantic-ui-react';
 import Header from '../components/Header';
 import UserHeader from '../components/UserHeader';
+import { useParams } from 'react-router';
 
 
 
-export default function EditPortfolio({ id }) {
+export default function EditPortfolio( ) {
   
   const [portfolio, setPortfolio] = useState([]);
  
+  const id= useParams();
   let testId= "D9F7672B-ACB8-401B-8A8A-5577C74A2855"
   
   useEffect(() => {
-    fetch(`http://localhost:3010/api/companies/editportfolio?Id=${testId}`).then(result => {
+    fetch(`http://localhost:3010/api/companies/editportfolio?Id=${id}`).then(result => {
       if (result.status != 200) {
         console.log("error");
         return;
@@ -21,7 +23,6 @@ export default function EditPortfolio({ id }) {
         if (data != null) {
           console.log(data.result);
           setPortfolio(data.result);
-          
         }
       })
     })
