@@ -98,7 +98,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
                     UpdatedOn = DateTime.Now
                 };
 
-                //_genericDao.Update<Score>(newScore);
+                _genericDao.Update<Score>(newScore);
 
                 Console.WriteLine("\tScore: " + score.ToString("n2") + "      Sticker Price: " + stickerPrice + "\n");
             });
