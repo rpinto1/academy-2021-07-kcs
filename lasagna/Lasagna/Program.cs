@@ -28,8 +28,8 @@ namespace Lasagna
             //load.LoadEps();
 
             //Update Prices uncomment the 2 lines bellow
-            //update.UpdatePrices();
-            //update.UpdatePricesQFS();
+            update.UpdatePrices();
+            update.UpdatePricesQFS();
             
             //update.tryStuff();
 
