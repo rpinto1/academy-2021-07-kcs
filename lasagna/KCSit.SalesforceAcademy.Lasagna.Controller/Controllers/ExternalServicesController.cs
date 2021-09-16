@@ -1,5 +1,6 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,22 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 {
     [ApiController]
     [Route("api/[controller]")] 
-    public class ExternalServicesController : ControllerBase
+    public class ExternalServicesController : GenericController
     {
 
         private readonly ILogger<ExternalServicesController> _logger;
+        private IMemoryCache _cache;
 
         private readonly IExternalServicesBO _externalServicesBO;
-        private readonly GenericController _genericControllerReturn;
+        
 
 
-        public ExternalServicesController(ILogger<ExternalServicesController> logger, IExternalServicesBO externalServicesBO, GenericController genericControllerReturn)
+        public ExternalServicesController(ILogger<ExternalServicesController> logger, IMemoryCache cache, IExternalServicesBO externalServicesBO)
         {
             _logger = logger;
+            _cache = cache;
             _externalServicesBO = externalServicesBO;
-            _genericControllerReturn = genericControllerReturn;
+            
         }
 
 
@@ -33,7 +36,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             var result = _externalServicesBO.FetchGainLoseData();
 
-            return await _genericControllerReturn.ReturnResult(result);
+            return await ReturnResult(result);
 
         }
 
@@ -43,7 +46,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             var result = _externalServicesBO.FetchNewsData();
 
-            return await _genericControllerReturn.ReturnResult(result);
+            return await ReturnResult(result);
 
         }
 

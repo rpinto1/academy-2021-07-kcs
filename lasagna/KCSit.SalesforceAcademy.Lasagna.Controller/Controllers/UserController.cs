@@ -140,6 +140,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         }
 
 
+        //----------------------- Portfolios
+
+        [Route("api/GetPortfolio")]
+        [HttpDelete]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> GetPortfolio(string userId)
+        {
+            var result = await _userService.DeleteUser(userId);
+
+            return ReturnResult(result);
+        }
+
+
 
     }
 }
