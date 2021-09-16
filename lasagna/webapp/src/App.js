@@ -11,6 +11,7 @@ import CompanyProfileView from './Views/CompanyProfileView';
 import ForgottenPasswordView from './Views/ForgottenPasswordView';
 import UserProfileView from './Views/UserProfileView';
 import HomepageUserView from './Views/HomepageUser';
+import EditPortfolio from './Views/EditPortfolio';
 
 
 
@@ -34,6 +35,7 @@ function App() {
                 <Route path='/forgottenpassword' component={ForgottenPasswordView} />
                 <Route path= '/user/profile' component = {UserProfileView} />
                 <Route path= '/user/homepage' component = {HomepageUserView} /> 
+                <Route path= '/user/portfolio/edit' component = {EditPortfolio} />
             </Switch>  
            
            
