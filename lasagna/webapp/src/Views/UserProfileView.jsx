@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Dropdown, Menu, Input } from 'semantic-ui-react'
-import data from "./testData/data.json";
+//import data from "./testData/data.json";
 import UserHeader from '../components/UserHeader';
 import PortfolioDetails from '../components/UserProfile/PortfolioDetails';
 import Footer from '../components/Footer';
+import EditPortfolio from './EditPortfolio';
 
 
 export default function UserProfileView() {
 
+    const [data, setData] = useState([]);
 
     const [activePortfolio, setActivePortfolio] = useState(0);
 
     const [activeCompany, setActiveCompany] = useState(0);
 
+    const testUserId = "062399bc-fd17-415d-9eac-448b26f2ea2c";
 
-    const portfolioNames = data.map((item, i) => {
-        return { index: i, text: item.portfolioName, value: i }
-    });
+    const url = `http://localhost:3010/api/Companies/portfolio?userId=${testUserId}`;
+
+
+    useEffect(() => {
+        fetch(url).then(result => {
+            if (result.status != 200) {
+                console.log("error");
+                return;
+            }
+            result.json().then(data => {
+                if (data != null) {
+                    setData(data.result);
+                    console.log(data.result);
+                }
+            })
+        })
+    }, []);
 
 
     const handlePortfolioChange = (e, { value }) => {
@@ -29,6 +46,11 @@ export default function UserProfileView() {
         setActiveCompany(index);
     };
 
+
+    
+    const portfolioNames = data.map((item, i) => {
+        return { index: i, text: item.portfolioName, value: i }
+    });
 
     const Greeting = () => {
         return (
@@ -45,8 +67,6 @@ export default function UserProfileView() {
         );
     }
 
-    
-
 
     const PortfolioDropdown = () => (
         <Dropdown
@@ -61,55 +81,72 @@ export default function UserProfileView() {
 
 
     const PortfolioCompanies = () => {
+        if (data.length > 0) {
+            return (
+                <Menu secondary vertical>
+                    {
+                        data[activePortfolio].portfolioCompanies.map((item, i) => {
+                            return (
+                                <Menu.Item
+                                    name={(item.name)}
+                                    active={activeCompany === i}
+                                    key={i}
+                                    index={i}
+                                    onClick={handleCompanyChange} />
+                            );
+                        })
+                    }
+                </Menu>
+            );
+        }
+
         return (
             <Menu secondary vertical>
-                {
-                    data[activePortfolio].portfolioCompanies.map((item, i) => {
-                        return (
-                            <Menu.Item
-                                name={(item.name)}
-                                active={activeCompany === i}
-                                key={i}
-                                index={i}
-                                onClick={handleCompanyChange} />
-                        );
-                    })
-                }
+                <Menu.Item
+                    name="Loading..."
+                    active="true"
+                    index="1"
+                />
             </Menu>
         );
     }
 
+    const postNewPortfolio = (e) => {
+
+        /* let request = fetch("localhost:3010/api/CreatePortfolio", { 
+            method: "POST", 
+            body: { 
+                name: e.target.value 
+            } 
+        }) */
+
+        console.log(e.target);
+
+    };
 
 
     const AddPortfolio = () => {
         return <Input
             icon={{ name: 'plus', circular: true, link: true }}
             placeholder='Add Portfolio'
-            onChange={() => console.log('test')} />;
+            onSubmit={() => console.log('test')} />;
     }
 
 
-
-    return (
-
-        <div>
-            <UserHeader />
-
-            <Container className="profile">
-
-                <Greeting />
-
+    const PortfolioBody = () => {
+        if (data.length > 0) {
+            return (
                 <section className="portfolio-section five-vw-margin-lr">
 
                     <section className="portfolio-list">
 
                         <PortfolioDropdown />
 
-                        <PortfolioCompanies data={data}/>
+                        <PortfolioCompanies data={data} />
 
                         <hr />
 
-                        <a href={`http://localhost:3010/user/edit/portfolio/${data[activePortfolio].guid}`}>Edit portfolio</a> {/* GUID? */}
+                        <EditPortfolio id={data[activePortfolio].portfolioId} />
 
                         <hr />
 
@@ -123,7 +160,29 @@ export default function UserProfileView() {
 
                     </section>
 
-                </section>{/*end portfolio section*/}
+                </section>
+            );
+
+        }
+
+        return (
+            <h1>Loading...</h1>
+        );
+    }
+
+
+
+    return (
+
+        <div>
+            <UserHeader />
+
+            <Container className="profile">
+
+                <Greeting />
+
+                <PortfolioBody />
+                
 
             </Container>
 
