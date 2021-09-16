@@ -140,12 +140,39 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpGet("search/{search}/{searchPageIndex}")]
         public async Task<IActionResult> GetSearch(string search, int searchPageIndex)
         {
-            //passar o searchPageIndex como parâmetro
-            //devolver o GenericReturn
-            //mudar a assinatura do método para ser um IActionResult
-            //return Ok(genericReturn)
+            
             var genericReturn = await _companiesBO.GetCompaniesNamesTickers(search, searchPageIndex);
+
             return Ok(genericReturn);
         }
+
+
+        [HttpGet("portfolio")]
+        public async Task<IActionResult> GetPortfolios(Guid userId)
+        {
+           
+            var genericReturn = await _companiesBO.GetPortfolios(userId);
+
+            return Ok(genericReturn);
+        }
+
+
+        [HttpGet("portfolioCompanies")]
+        public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
+        {
+           
+            var genericReturn = await _companiesBO.GetCompaniesByPortfolio(portfolioId);
+
+            return Ok(genericReturn);
+        }
+
+        [HttpGet("portfolioCompanyValues")]
+        public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
+        {
+            var genericReturn = await _companiesBO.GetCompanyValuesByTicker(ticker);
+
+            return Ok(genericReturn);
+        }
+
     }
 }

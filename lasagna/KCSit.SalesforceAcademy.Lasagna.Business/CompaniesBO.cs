@@ -8,21 +8,22 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
+using System.Linq;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
     public class CompaniesBO : ICompaniesBO
     {
 
-        private ISearchDAO _searchDao;
-        private IGenericDAO _genericDao;
+        private ISearchDAO _searchDAO;
+        private IGenericDAO _genericDAO;
         private IGenericBusinessLogic _genericBusiness;
 
 
         public CompaniesBO(ISearchDAO searchDao, IGenericDAO genericDao, IGenericBusinessLogic genericBusiness)
         {
-            _searchDao = searchDao;
-            _genericDao = genericDao;
+            _searchDAO = searchDao;
+            _genericDAO = genericDao;
             _genericBusiness = genericBusiness;
         }
        
@@ -35,7 +36,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
 
-                return await _searchDao.SearchCompaniesBySearchQuery(companiesNamesTickers, pageSize, pageNumber);
+                return await _searchDAO.SearchCompaniesBySearchQuery(companiesNamesTickers, pageSize, pageNumber);
             }
 
             );
@@ -48,7 +49,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
 
-                return await _searchDao.SearchIndustiesBySector(sectorName);
+                return await _searchDAO.SearchIndustiesBySector(sectorName);
             }
 
             );
@@ -63,7 +64,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
 
-                return await _searchDao.SearchCompaniesByIndex(indexName,sectorName,industryName, page, countries);
+                return await _searchDAO.SearchCompaniesByIndex(indexName,sectorName,industryName, page, countries);
             }
 
             );
@@ -72,13 +73,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         public async Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser(List<string> countries)
         {
 
-
             return await _genericBusiness.GenericTransaction(
 
             async () =>
             {
-                var gainersResponse = await _searchDao.SearchCompaniesPrice(false, countries);
-                var losersResponse = await _searchDao.SearchCompaniesPrice(true, countries);
+                var gainersResponse = await _searchDAO.SearchCompaniesPrice(false, countries);
+                var losersResponse = await _searchDAO.SearchCompaniesPrice(true, countries);
 
                 var gainLose = new GainLoseDBPoco { Gainers = gainersResponse, Losers = losersResponse };
 
@@ -88,5 +88,62 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             );
         }
 
+        public async Task<GenericReturn<List<PortfolioPoco>>> GetPortfolios(Guid userId)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+                var portfolios = await _searchDAO.GetPortfolios(userId);
+
+                foreach(PortfolioPoco portfolio in portfolios)
+                {
+                    portfolio.PortfolioCompanies = GetCompaniesByPortfolio(portfolio.PortfolioId).Result.Result;
+                }
+
+
+                return portfolios;
+
+            });
+        }
+
+
+        public async Task<GenericReturn<List<PortfolioCompanyPoco>>> GetCompaniesByPortfolio(Guid portfolioId)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+                List<PortfolioCompanyPoco> companies = (List<PortfolioCompanyPoco>) await _searchDAO.GetCompaniesByPortfolio(portfolioId);
+
+                foreach (PortfolioCompanyPoco company in companies)
+                {
+                    company.Values = GetCompanyValuesByTicker(company.Ticker).Result.Result;
+                }
+
+
+                return companies;
+
+            });
+        }
+
+
+
+        public async Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+                List<PortfolioCompanyValuesPoco> values = (List<PortfolioCompanyValuesPoco>)await _searchDAO.GetCompanyValuesByTicker(ticker);
+
+                return values;
+
+            });
+
+        }
     }
 }
