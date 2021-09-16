@@ -75,11 +75,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
-        // DELETE /<>
-        [HttpDelete("{id}")]
-        public void Delete(int id) { }
-
-
 
 
 

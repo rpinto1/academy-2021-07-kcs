@@ -25,5 +25,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker);
 
+        Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id);    //RAúl
     }
 }

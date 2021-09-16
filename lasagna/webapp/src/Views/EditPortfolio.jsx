@@ -1,68 +1,91 @@
-import React,{useState} from 'react'
+import React, { useState , useEffect} from 'react'
 import { Image, List, Container, ListContent, Button, Checkbox } from 'semantic-ui-react';
 import Header from '../components/Header';
 import UserHeader from '../components/UserHeader';
 
 
 
-export default function EditPortfolio(props) {
+export default function EditPortfolio({ id }) {
+  
   const [portfolio, setPortfolio] = useState([]);
+ 
+  let testId= "D9F7672B-ACB8-401B-8A8A-5577C74A2855"
+  
+  useEffect(() => {
+    fetch(`http://localhost:3010/api/companies/editportfolio?Id=${testId}`).then(result => {
+      if (result.status != 200) {
+        console.log("error");
+        return;
+      }
+      result.json().then(data => {
+        if (data != null) {
+          console.log(data.result);
+          setPortfolio(data.result);
+          
+        }
+      })
+    })
+  }, []);
 
-    const Greeting = () => {
-        return (
-            <section className="greeting">
-                <article className="avatar">
-                    <img src="../blank-avatar-sm.jpg" alt="" />
-                </article>
 
-                <article>
-                    <h1>Hello, (UserName)!</h1>
-                    {/* portfolio name */}
-                    <input value='name of portfolio'/> <button onClick >delete Portfolio</button>
-
-                </article>
-            </section>
-        );
-    }
-
+  const Greeting = () => {
     return (
-        <div>
-            <UserHeader/>
-            <Greeting/>
-            <Container>
-            <List celled>
-    <List.Item>
-        <List.Content floated="right">
-        <Button icon="trash alternate" size="medium"/>
-        </List.Content>
-      <Image avatar src='/images/avatar/small/helen.jpg' />
-      <List.Content>
-        <List.Header>Snickerdoodle</List.Header>
-        <Checkbox label='This checkbox comes pre-checked' defaultChecked />
-        {/* portfolio.map((portfolio, index) => <portfolio key={index} portfolio={portfolio} />) */}
-        An excellent companion
-      </List.Content>
-    </List.Item>
-    <List.Item>
-      <Image avatar src='/images/avatar/small/daniel.jpg' />
-      <List.Content>
-        <List.Header>Poodle</List.Header>A poodle, it's pretty basic
-      </List.Content>
-    </List.Item>
-    <List.Item>
-      <Image avatar src='/images/avatar/small/daniel.jpg' />
-      <List.Content>
-        <List.Header>Paulo</List.Header>
-        He's also a dog
-      </List.Content>
-    </List.Item>
-  </List><Container textAlign="center">
-        <Button >Save</Button>
-        <Button >Cancel</Button>
+      <section className="greeting">
+        <article className="avatar">
+          <img src="../blank-avatar-sm.jpg" alt="" />
+        </article>
+
+        <article>
+          <h1>Hello, (UserName)!</h1>
+          {/* portfolio name */}
+          <input defaultValue='name of portfolio' /> <button  >delete Portfolio</button>
+
+        </article>
+      </section>
+    );
+  }
+
+  return (
+    <div>
+
+      <UserHeader />
+      <Greeting />
+      <Container>
+        <List celled>
+          {portfolio.map((item, index) => {
+            <List.Item key={index}>
+              <List.Content floated="right">
+                <Button icon="trash alternate" size="medium" />
+              </List.Content>
+              <List.Content>
+                <List.Header>{item.ticker}</List.Header>
+                <p>{item.name}</p>
+                <Checkbox label='Delete' />
+
+              </List.Content>
+            </List.Item>
+          })
+          }
+          <List.Item>
+            <Image avatar src='/images/avatar/small/daniel.jpg' />
+            <List.Content>
+              <List.Header>Poodle</List.Header>A poodle, it's pretty basic
+            </List.Content>
+          </List.Item>
+          <List.Item>
+            <Image avatar src='/images/avatar/small/daniel.jpg' />
+            <List.Content>
+              <List.Header>Paulo</List.Header>
+              He's also a dog
+            </List.Content>
+          </List.Item>
+        </List><Container textAlign="center">
+          <Button >Save</Button>
+          <Button >Cancel</Button>
         </Container>
-                </Container>
-                
-        </div>
-    )
+      </Container>
+
+    </div>
+  )
 }
 

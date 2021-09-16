@@ -174,5 +174,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
+        //------------------------------------------Raúl----------------------------------------------
+
+        //// DELETE /<>
+        //[HttpDelete("{Id}")]
+        //public void Delete(int id) { }
+
+
+        // api/companies/portfolio/Id
+        [HttpGet("editportfolio")]
+        public async Task<IActionResult> GetPortfolio(Guid Id)
+        {
+
+            var genericReturn = await _companiesBO.GetPortfolio(Id);
+
+            return Ok(genericReturn);
+        }
     }
 }
