@@ -246,6 +246,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                         .ToListAsync();
             }
         }
+
+        public async Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int Id)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await (from company in context.Companies 
+                              join PortfolioCompany in context.PortfolioCompanies
+                              on company.Id equals PortfolioCompany.CompanyId
+                              where PortfolioCompany.PortfolioId==Id
+                              select new CompanyPoco
+                              {
+                                  Id = company.Id,
+                                  Ticker = company.Ticker,
+                                  Name = company.Name
+                              })
+                        .ToListAsync();
+            }
+        }
         public async Task<IEnumerable<KeyRatiosPoco>> GetKeyRatios(string ticker)
         {
             using (var context = new lasagnakcsContext())

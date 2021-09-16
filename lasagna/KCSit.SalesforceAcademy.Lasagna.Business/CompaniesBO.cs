@@ -145,5 +145,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
 
         }
+
+        //-----------------------------------------------Raúl-----------------------------------
+
+        public async Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id)
+        {
+            return await _genericBusiness.GenericTransaction(async () =>
+            {
+                var result = await _searchDAO.GetCompaniesByPortfolio(Id);
+                             
+
+                return result;
+            });
+        }
     }
 }

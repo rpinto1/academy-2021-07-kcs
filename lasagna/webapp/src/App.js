@@ -12,6 +12,8 @@ import ForgottenPasswordView from './Views/ForgottenPasswordView';
 import UserProfileView from './Views/UserProfileView';
 import HomepageUserView from './Views/HomepageUser';
 import RecoverPasswordView from './Views/RecoverPasswordView';
+import EditPortfolio from './Views/EditPortfolio';
+
 
 
 
@@ -35,6 +37,8 @@ function App() {
                 <Route path= '/user/profile' component = {UserProfileView} />
                 <Route path= '/user/homepage' component = {HomepageUserView} />
                 <Route path= '/recover/:user' component = {RecoverPasswordView} /> 
+                <Route path= '/user/homepage' component = {HomepageUserView} /> 
+                <Route path= '/user/portfolio/edit' component = {EditPortfolio} />
             </Switch>  
            
            
