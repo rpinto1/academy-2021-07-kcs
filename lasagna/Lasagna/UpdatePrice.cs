@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Rui;
@@ -132,17 +133,22 @@ namespace Lasagna
             var genericDao = new GenericDAO();
             var searchDao = new SearchDAO();
 
-            var companyBD = genericDao.GetAll<Company>();
+
+
+            var companyJson = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\listQFSUpdate.json");
+            var companyBD = JsonConvert.DeserializeObject<List<Company>>(companyJson);
             var companyDaily = genericDao.GetAll<DailyInfo>();
             var counting = 0;
             var list = new List<DailyPricePoco>();
+
 
             var listUpdatedDailyInfo = new List<DailyInfo>();
             for (int companyIndex = 0; companyIndex < companyBD.Count; companyIndex++)
             {
                 var company = companyBD[companyIndex];
+
                 var query = "QFS(" + company.Ticker + ",price)";
-                Console.WriteLine(query);
+
                 list.Add(new DailyPricePoco { Price = query , Ticker = company.Ticker});
 
                 if ((counting % 53 == 0 && counting > 0) || companyIndex == (companyBD.Count - 1))

@@ -263,23 +263,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
         }
 
-        //---------------- Portfolios
+        // --------------------------  Email  ---------------------------------------------------
 
-        public async Task<GenericReturn> GetPortfolios(string userId)
+        public async Task<GenericReturn> SendEmail(string email)
         {
-
-            //select all portfolios where ID == userID
-
-
-            return await _genericBusinessLogic.GenericTransaction(() =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                var userInfo = from user in _userManager.Users.ToList()
-                               select new GetUsersPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    return null;
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                return token;
 
-                return Task.FromResult(userInfo);
+
             });
         }
-
 
 
     }

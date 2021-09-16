@@ -35,5 +35,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         public Task<GenericReturn<IList<Claim>>> GetClaims(string userId);
 
         public Task<GenericReturn> DeleteUser(string userId);
+
+        // --------------------------  Email  ---------------------------------------------------
+
+        public Task<GenericReturn> SendEmail(string email);
+
+
+
     }
 }

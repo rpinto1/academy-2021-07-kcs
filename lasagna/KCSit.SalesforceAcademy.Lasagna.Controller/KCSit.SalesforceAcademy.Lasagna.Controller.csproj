@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.Business\KCSit.SalesforceAcademy.Lasagna.Business.csproj" />
+    <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.EmailService\KCSit.SalesforceAcademy.Lasagna.EmailService.csproj" />
   </ItemGroup>
 
 
