@@ -22,7 +22,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
+        public async Task<int> GetAsync(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var company = await context.Set<Company>().Where(item => item.Ticker == ticker).SingleOrDefaultAsync();
 
+                return company.Id;
+            }
+        }
 
         public Industry GetIndustry(string name)
         {
@@ -531,10 +539,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                               {
                                   PortfolioId = portfolio.Uuid,
                                   PortfolioName = portfolio.Name,
-                                  //PortfolioCompanies = GetCompaniesByPortfolio(portfolio.Uuid).Result
+                                  
                               })
 
-                        //.Take(20)
                         .ToListAsync();
             }
         }
@@ -555,7 +562,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                               {
                                   Ticker = company.Ticker,
                                   Name = company.Name,
-                                  //Values = GetCompanyValuesByTicker(company.Ticker).Result
                                   
                               })
 
@@ -606,6 +612,23 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 }
 
                 return await Task.FromResult(list);
+            }
+        }
+
+        public async Task<int> GetPortfolioId(Guid portfolioUuid)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+
+                var activePortfolio = await (
+                    from portfolio in context.Portfolios
+                    where portfolio.Uuid == portfolioUuid
+
+                    select new Portfolio())
+                    .ToListAsync();
+
+                return activePortfolio.GetEnumerator().Current.Id;
+
             }
         }
 
