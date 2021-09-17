@@ -5,13 +5,13 @@ import { useParams } from 'react-router';
 
 export default function RecoverPasswordView() {
 
-    const userInfo = useParams();
+    const {user, email} = useParams();
 
     return (
         <div>
         <Header />
        
-       <RecoverForm user = {userInfo} />
+       <RecoverForm user = {user} email={email} />
 
         </div>
     )

@@ -106,7 +106,7 @@ console.log(loggedUser);
         { redirect &&
             <Redirect to='/user/homepage' />
         }
-
+        
         </Container>
 
 

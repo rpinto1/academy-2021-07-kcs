@@ -39,8 +39,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         // --------------------------  Email  ---------------------------------------------------
 
         public Task<GenericReturn> SendEmail(string email);
-
-
+        public Task<GenericReturn> ResetPassword(string email, string token, string password);
 
     }
 }

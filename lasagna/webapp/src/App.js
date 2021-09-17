@@ -36,7 +36,7 @@ function App() {
                 <Route path='/forgottenpassword' component={ForgottenPasswordView} />
                 <Route path= '/user/profile' component = {UserProfileView} />
                 <Route path= '/user/homepage' component = {HomepageUserView} />
-                <Route path= '/recover/:user' component = {RecoverPasswordView} /> 
+                <Route path= '/recover/:user/:email' component = {RecoverPasswordView} /> 
                 <Route path= '/user/homepage' component = {HomepageUserView} /> 
                 <Route path= '/user/portfolio/edit/:id' component = {EditPortfolio} />
             </Switch>  
