@@ -146,7 +146,7 @@ export default function UserProfileView() {
 
                         <hr />
 
-                        <a href={`http://localhost:3010/user/edit/portfolio/${data[activePortfolio].portfolioId}`}>Edit portfolio</a>
+                        <a href={`http://localhost:3000/user/portfolio/edit/${data[activePortfolio].portfolioId}`}>Edit portfolio</a>
 
                         <hr />
 
