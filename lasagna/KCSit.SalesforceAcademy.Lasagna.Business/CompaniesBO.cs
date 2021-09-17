@@ -9,6 +9,7 @@ using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using System.Linq;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
@@ -146,6 +147,53 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
         }
 
+        public async Task<GenericReturn> CreatePortfolio(PortfolioViewModel portfolio)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+                var toInsert = new Portfolio
+                {
+                    UserId = portfolio.UserId.ToString(),
+                    Name = portfolio.Name,
+                    Uuid = new Guid()
+
+                };
+
+                var newPortfolio = await _genericDAO.AddAsync(toInsert);
+
+                return;
+
+            });
+
+        }
+
+        public async Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                var newPortfolio = await _searchDAO.GetCompaniesByPortfolio(portfolioId);
+
+                var portfolioCompany = new PortfolioCompany()
+                {
+                    CompanyId = await _searchDAO.GetAsync(ticker),
+                    PortfolioId = await _searchDAO.GetPortfolioId(portfolioId)
+                };
+
+                var added = _genericDAO.AddAsync(portfolioCompany);
+
+            });
+
+        }
+
+        //
+
         //-----------------------------------------------Raúl-----------------------------------
 
         public async Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id)
@@ -153,8 +201,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             return await _genericBusiness.GenericTransaction(async () =>
             {
                 var result = await _searchDAO.GetCompaniesByPortfolio(Id);
-                             
-
+                
                 return result;
             });
         }

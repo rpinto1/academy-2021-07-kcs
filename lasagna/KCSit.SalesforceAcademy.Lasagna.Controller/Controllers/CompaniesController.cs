@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
@@ -173,6 +174,27 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             return Ok(genericReturn);
         }
+
+
+        [HttpPost("createPortfolio")]
+        public async Task<IActionResult> CreatePortfolio([FromBody] PortfolioViewModel portfolio)
+        {
+            
+            var genericReturn = await _companiesBO.CreatePortfolio(portfolio);
+
+            return Ok(genericReturn);
+        }
+
+        [HttpPost("addCompanyToPortfolio")]
+        public async Task<IActionResult> AddCompanyToPortfolio([FromBody] CompanyToPortfolioViewModel data)
+        {
+
+            var genericReturn = await _companiesBO.AddCompanyToPortfolio(data.PortfolioUuid, data.Ticker);
+
+            return Ok(genericReturn);
+        }
+
+
 
         //------------------------------------------Raúl----------------------------------------------
 
