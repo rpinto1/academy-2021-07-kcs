@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
@@ -174,11 +175,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-        //------------------------------------------Raúl----------------------------------------------
 
-        //// DELETE /<>
-        //[HttpDelete("{Id}")]
-        //public void Delete(int id) { }
+        [HttpPost("createPortfolio")]
+        public async Task<IActionResult> CreatePortfolio([FromBody] PortfolioViewModel portfolio)
+        {
+            
+            var genericReturn = await _companiesBO.CreatePortfolio(portfolio);
+
+            return Ok(genericReturn);
+        }
+
+        [HttpPost("addCompanyToPortfolio")]
+        public async Task<IActionResult> AddCompanyToPortfolio([FromBody] CompanyToPortfolioViewModel data)
+        {
+
+            var genericReturn = await _companiesBO.AddCompanyToPortfolio(data.PortfolioUuid, data.Ticker);
+
+            return Ok(genericReturn);
+        }
+
+
+
+        //------------------------------------------Raúl----------------------------------------------
 
 
         // api/companies/portfolio/Id
@@ -189,6 +207,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             var genericReturn = await _companiesBO.GetPortfolio(Id);
 
             return Ok(genericReturn);
+        }
+
+        [HttpDelete("editportfolio")]
+        public void DeletePortfolio(Guid id)
+        {
+        }
+
+        [HttpPut("editportfolio")]
+        public void PutPortfolio(Guid Id)
+        {
         }
     }
 }
