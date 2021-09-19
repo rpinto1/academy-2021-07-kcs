@@ -26,13 +26,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly GenericBusinessLogic _genericBusiness;
         private readonly GenericBusinessLogic _genericBusinessLogic;
         private readonly IEmailSender _emailSender;
 
         public UserServiceBO(GenericBusinessLogic genericBusinessLogic, IEmailSender emailSender, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            this._genericBusiness = genericBusinessLogic;
+            this._genericBusinessLogic = genericBusinessLogic;
             this._userManager = userManager;
             this._signInManager = signInManager;
             _emailSender = emailSender;
@@ -40,7 +39,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 var user = new ApplicationUser()
                 {
@@ -76,7 +75,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn<IdToken>> SignIn(SignInViewModel model)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
 
@@ -99,7 +98,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> SignOut(string userId)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
 
                 var user = await _userManager.FindByIdAsync(userId);
@@ -123,7 +122,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> Update(string userId, SignUpViewModel newModel)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
 
 
@@ -168,7 +167,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn<IEnumerable<UserPoco>>> GetUsers(string queryString)
         {
-            return await _genericBusiness.GenericTransaction(() =>
+            return await _genericBusinessLogic.GenericTransaction(() =>
             {
                 var firstNameFilter = "";
                 var lastNameFilter = "";
@@ -176,35 +175,38 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
                 if (String.IsNullOrEmpty(queryString))
                 {
-                    //queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
-                    queryString = "";
+                    queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
+                    //queryString = "";
                 }
 
                 // "?filter={"firstName":"joan","email":"mmm"}&range=[0,24]&sort=["id","ASC"]"
                 var filter = HttpUtility.ParseQueryString(queryString).Get("filter");
 
-                var firstNameIndex = filter.IndexOf("firstName");
-                if (firstNameIndex != -1)
+                if (filter != null)
                 {
-                    var firstNameValueStartIndex = filter.IndexOf(":", firstNameIndex) + 2;
-                    var firstNameValueEndIndex = filter.IndexOf("\"", firstNameValueStartIndex);
-                    firstNameFilter = filter.Substring(firstNameValueStartIndex, firstNameValueEndIndex - firstNameValueStartIndex);
-                }
+                    var firstNameIndex = filter.IndexOf("firstName");
+                    if (firstNameIndex != -1)
+                    {
+                        var firstNameValueStartIndex = filter.IndexOf(":", firstNameIndex) + 2;
+                        var firstNameValueEndIndex = filter.IndexOf("\"", firstNameValueStartIndex);
+                        firstNameFilter = filter.Substring(firstNameValueStartIndex, firstNameValueEndIndex - firstNameValueStartIndex);
+                    }
 
-                var lastNameIndex = filter.IndexOf("lastName");
-                if (lastNameIndex != -1)
-                {
-                    var lastNameValueStartIndex = filter.IndexOf(":", lastNameIndex) + 2;
-                    var lastNameValueEndIndex = filter.IndexOf("\"", lastNameValueStartIndex);
-                    lastNameFilter = filter.Substring(lastNameValueStartIndex, lastNameValueEndIndex - lastNameValueStartIndex);
-                }
+                    var lastNameIndex = filter.IndexOf("lastName");
+                    if (lastNameIndex != -1)
+                    {
+                        var lastNameValueStartIndex = filter.IndexOf(":", lastNameIndex) + 2;
+                        var lastNameValueEndIndex = filter.IndexOf("\"", lastNameValueStartIndex);
+                        lastNameFilter = filter.Substring(lastNameValueStartIndex, lastNameValueEndIndex - lastNameValueStartIndex);
+                    }
 
-                var emailIndex = filter.IndexOf("email");
-                if (emailIndex != -1)
-                {
-                    var emailValueStartIndex = filter.IndexOf(":", emailIndex) + 2;
-                    var emailValueEndIndex = filter.IndexOf("\"", emailValueStartIndex);
-                    emailFilter = filter.Substring(emailValueStartIndex, emailValueEndIndex - emailValueStartIndex);
+                    var emailIndex = filter.IndexOf("email");
+                    if (emailIndex != -1)
+                    {
+                        var emailValueStartIndex = filter.IndexOf(":", emailIndex) + 2;
+                        var emailValueEndIndex = filter.IndexOf("\"", emailValueStartIndex);
+                        emailFilter = filter.Substring(emailValueStartIndex, emailValueEndIndex - emailValueStartIndex);
+                    }
                 }
 
                 // [0, 9],  [10, 19],  [20, 25] ...
@@ -229,13 +231,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                                       .Skip(skip)
                                       .Take(take)
                                       .ToList()
-                                      select new UserPoco
-                                      {
-                                          Id = user.Id,
-                                          FirstName = user.FirstName,
-                                          LastName = user.LastName,
-                                          Email = user.Email
-                                      };
+                               select new UserPoco
+                               {
+                                   Id = user.Id,
+                                   FirstName = user.FirstName,
+                                   LastName = user.LastName,
+                                   Email = user.Email
+                               };
 
                 return Task.FromResult(userInfo);
             });
@@ -244,7 +246,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn<UserPoco>> GetUser(string userId)
         {
-            return await _genericBusiness.GenericTransaction(() =>
+            return await _genericBusinessLogic.GenericTransaction(() =>
             {
                 if (String.IsNullOrEmpty(userId))
                 {
@@ -262,7 +264,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> AddClaim(string userId, Claim claim)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
 
                 var user = await _userManager.FindByIdAsync(userId);
@@ -279,7 +281,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> RemoveClaim(string userId, Claim claim)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
 
                 var user = await _userManager.FindByIdAsync(userId);
@@ -296,7 +298,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn<IList<Claim>>> GetClaims(string userId)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
 
                 var user = await _userManager.FindByIdAsync(userId);
@@ -319,7 +321,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         public async Task<GenericReturn> DeleteUser(string userId)
         {
-            return await _genericBusiness.GenericTransaction(async () =>
+            return await _genericBusinessLogic.GenericTransaction(async () =>
             {
                 var user = await _userManager.FindByIdAsync(userId);
 
@@ -352,14 +354,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 if (user == null)
                     throw new Exception("");
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                
+
                 var message = new Message(new string[] { email }, "Reset password", token, email);
 
                 await _emailSender.SendEmailAsync(message);
-               
+
             });
         }
-        public async Task<GenericReturn> ResetPassword(string email,string token, string password)
+        public async Task<GenericReturn> ResetPassword(string email, string token, string password)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
@@ -367,10 +369,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 if (user == null)
                     throw new Exception("Error");
                 var resetPassResult = await _userManager.ResetPasswordAsync(user, token, password);
-            if (!resetPassResult.Succeeded)
-            {
+                if (!resetPassResult.Succeeded)
+                {
                     throw new Exception("Error");
-            }
+                }
             });
         }
     }
