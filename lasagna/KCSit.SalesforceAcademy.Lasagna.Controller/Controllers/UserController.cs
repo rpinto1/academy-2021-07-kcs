@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -78,17 +79,26 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         // --------------------------  PremiumUser  ---------------------------------------------------
 
-
-        [HttpGet]
-        [Route("api/GetAllUsers")]
-        [Authorize(Policy = "PremiumUserPolicy")]
-        public Task<IActionResult> GetAllUsers()
+        /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
+        [Route("api/Users")]
+        //[Authorize(Policy = "PremiumUserPolicy")]
+        public Task<IActionResult> GetUsers()
         {
-            var result = _userService.GetAllUsers();
+            var queryString = HttpContext.Request.QueryString.Value;
+
+            var result = _userService.GetUsers(queryString);
 
             return ReturnResult(result);
         }
 
+        [Route("api/Users/{userId}")]
+        //[Authorize(Policy = "PremiumUserPolicy")]
+        public Task<IActionResult> GetUser(string userId)
+        {
+            var result = _userService.GetUser(userId);
+
+            return ReturnResult(result);
+        }
 
 
         // --------------------------  Manager  ---------------------------------------------------

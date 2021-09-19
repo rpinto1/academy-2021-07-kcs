@@ -261,7 +261,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                               where company.Ticker.Equals(ticker)
                               orderby report.Year descending
 
-                              select new KeyRatiosPoco
+                             select new KeyRatiosPoco
                               {
                                   Ticker = company.Ticker,
                                   Year = (int?)report.Year ?? 0,
