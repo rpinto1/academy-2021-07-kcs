@@ -4,6 +4,8 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.EmailService;
+using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +25,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
 
         private readonly IUserServiceBO _userService;
-
+      
 
         public UserController(IUserServiceBO userService)
         {
             this._userService = userService;
+            
         }
 
 
@@ -72,7 +75,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             return ReturnResult(result);
         }
-
 
 
 
@@ -149,6 +151,61 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+
+        //----------------------- Portfolios
+
+        [Route("api/GetPortfolio")]
+        [HttpDelete]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> GetPortfolio(string userId)
+        {
+            var result = await _userService.DeleteUser(userId);
+
+            return ReturnResult(result);
+        }
+
+
+
+
+        // --------------------------  Email  ---------------------------------------------------
+
+
+        [Route("api/SendEmail/{email}")]
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+
+
+
+            if (email != @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
+            {
+                return NotFound();
+            }
+
+
+            var resetToken = await _userService.SendEmail(email);
+            if (resetToken == null)
+            {
+                return Ok();
+            }
+
+            return Ok();
+        }
+
+        [Route("api/recover")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
+        {
+            var resetToken = await _userService.ResetPassword(resetPasswordModel.Email,resetPasswordModel.Token,resetPasswordModel.Password);
+            if (resetToken.Succeeded == false)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
 
 
     }

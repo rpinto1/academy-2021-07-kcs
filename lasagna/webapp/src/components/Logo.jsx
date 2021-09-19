@@ -5,7 +5,7 @@ export default function Logo() {
     return (
     
         <div className='logo'>
-            <Link exact to='/'> <img src='../logo.jpg' /> </Link>
+            <Link exact="true" to='/'> <img src='../logo.jpg' /> </Link>
         </div>
     
     )

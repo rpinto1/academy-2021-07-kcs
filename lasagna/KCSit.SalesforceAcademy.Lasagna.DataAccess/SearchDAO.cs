@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections;
 
+
 namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 {
     public class SearchDAO : ISearchDAO
@@ -21,7 +22,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
+        public async Task<int> GetAsync(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var company = await context.Set<Company>().Where(item => item.Ticker == ticker).SingleOrDefaultAsync();
 
+                return company.Id;
+            }
+        }
 
         public Industry GetIndustry(string name)
         {
@@ -242,6 +251,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
                         .Skip(skip)
                         .Take(take)
+                        .ToListAsync();
+            }
+        }
+
+        public async Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int Id)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await (from company in context.Companies 
+                              join PortfolioCompany in context.PortfolioCompanies
+                              on company.Id equals PortfolioCompany.CompanyId
+                              where PortfolioCompany.PortfolioId==Id
+                              select new CompanyPoco
+                              {
+                                  Id = company.Id,
+                                  Ticker = company.Ticker,
+                                  Name = company.Name
+                              })
                         .ToListAsync();
             }
         }
@@ -499,6 +526,111 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
+
+        public async Task<List<PortfolioPoco>> GetPortfolios(Guid userId)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+
+                return await (from portfolio in context.Portfolios
+                              where portfolio.UserId == userId.ToString()
+
+                              select new PortfolioPoco
+                              {
+                                  PortfolioId = portfolio.Uuid,
+                                  PortfolioName = portfolio.Name,
+                                  
+                              })
+
+                        .ToListAsync();
+            }
+        }
+
+        public async Task<List<PortfolioCompanyPoco>> GetCompaniesByPortfolio(Guid portfolioUuid)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await (from portfolio in context.Portfolios
+                              join portfolioCompany in context.PortfolioCompanies
+                              on portfolio.Id equals portfolioCompany.PortfolioId 
+                              join company in context.Companies
+                              on portfolioCompany.CompanyId equals company.Id
+                              
+                              where portfolio.Uuid == portfolioUuid
+
+                              select new PortfolioCompanyPoco
+                              {
+                                  Ticker = company.Ticker,
+                                  Name = company.Name,
+                                  
+                              })
+
+                        //.Take(20)
+                        .ToListAsync();
+            }
+        }
+
+        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+
+                var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
+                var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
+                var incomeStatementList = (await GetIncomeStatement(ticker)).ToList();
+
+                var roic = (from kr in keyRatiosList
+                            select kr.Roic).ToList();
+
+                var equity = (from bs in balanceSheetList
+                              select bs.Equity).ToList();
+
+                var eps = (from incStat in incomeStatementList
+                           select incStat.Eps).ToList();
+
+                var sales = (from incStat in incomeStatementList
+                             select incStat.Sales).ToList();
+
+                var cash = (from bs in balanceSheetList
+                            select bs.Cash).ToList();
+
+                var list = new List<PortfolioCompanyValuesPoco>();
+
+
+                for (int i = 0; i < keyRatiosList.Count; i++)
+                {
+                    list.Add(new PortfolioCompanyValuesPoco
+                    {
+                        Year = keyRatiosList[i].Year,
+                        ROIC = roic[i],
+                        Equity = equity[i],
+                        EPS = eps[i],
+                        Sales = sales[i],
+                        Cash = cash[i]
+                    });
+
+                }
+
+                return await Task.FromResult(list);
+            }
+        }
+
+        public async Task<int> GetPortfolioId(Guid portfolioUuid)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+
+                var activePortfolio = await (
+                    from portfolio in context.Portfolios
+                    where portfolio.Uuid == portfolioUuid
+
+                    select new Portfolio())
+                    .ToListAsync();
+
+                return activePortfolio.GetEnumerator().Current.Id;
+
+            }
+        }
 
     }
 }

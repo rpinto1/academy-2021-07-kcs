@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using Microsoft.AspNetCore.Http;
+using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using System.Web;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
@@ -25,14 +27,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly GenericBusinessLogic _genericBusiness;
+        private readonly GenericBusinessLogic _genericBusinessLogic;
+        private readonly IEmailSender _emailSender;
 
-
-        public UserServiceBO(GenericBusinessLogic genericBusinessLogic, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserServiceBO(GenericBusinessLogic genericBusinessLogic, IEmailSender emailSender, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this._genericBusiness = genericBusinessLogic;
             this._userManager = userManager;
             this._signInManager = signInManager;
-
+            _emailSender = emailSender;
         }
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
@@ -159,9 +162,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
 
         }
-
-
-
 
 
         // --------------------------  PremiumUser  ---------------------------------------------------
@@ -342,8 +342,36 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
         }
 
+        // --------------------------  Email  ---------------------------------------------------
 
+        public async Task<GenericReturn> SendEmail(string email)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    throw new Exception("");
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                
+                var message = new Message(new string[] { email }, "Reset password", token, email);
 
-
+                await _emailSender.SendEmailAsync(message);
+               
+            });
+        }
+        public async Task<GenericReturn> ResetPassword(string email,string token, string password)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    throw new Exception("Error");
+                var resetPassResult = await _userManager.ResetPasswordAsync(user, token, password);
+            if (!resetPassResult.Succeeded)
+            {
+                    throw new Exception("Error");
+            }
+            });
+        }
     }
 }

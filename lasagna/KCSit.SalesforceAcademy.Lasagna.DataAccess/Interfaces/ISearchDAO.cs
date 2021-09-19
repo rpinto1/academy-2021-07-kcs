@@ -1,5 +1,6 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
     public interface ISearchDAO
     {
         int Get(string ticker);
+
+        Task<int> GetAsync(string ticker);
+
         Industry GetIndustry(string name);
         // SubIndustry GetSub(string name);
         Task<List<Industry>> SearchIndustiesBySector(string sectorName);
@@ -46,5 +50,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<ScorePoco> GetScore(string ticker, int scoringMethodId);
 
         Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
+
+        Task<List<PortfolioPoco>> GetPortfolios(Guid userId);
+
+        Task<List<PortfolioCompanyPoco>> GetCompaniesByPortfolio(Guid portfolioId);
+
+        Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker);
+
+        Task<int> GetPortfolioId(Guid portfolioUuid);
     }
 }

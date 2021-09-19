@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
@@ -140,12 +141,82 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpGet("search/{search}/{searchPageIndex}")]
         public async Task<IActionResult> GetSearch(string search, int searchPageIndex)
         {
-            //passar o searchPageIndex como parâmetro
-            //devolver o GenericReturn
-            //mudar a assinatura do método para ser um IActionResult
-            //return Ok(genericReturn)
+            
             var genericReturn = await _companiesBO.GetCompaniesNamesTickers(search, searchPageIndex);
+
             return Ok(genericReturn);
+        }
+
+
+        [HttpGet("portfolio")]
+        public async Task<IActionResult> GetPortfolios(Guid userId)
+        {
+           
+            var genericReturn = await _companiesBO.GetPortfolios(userId);
+
+            return Ok(genericReturn);
+        }
+
+
+        [HttpGet("portfolioCompanies")]
+        public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
+        {
+           
+            var genericReturn = await _companiesBO.GetCompaniesByPortfolio(portfolioId);
+
+            return Ok(genericReturn);
+        }
+
+        [HttpGet("portfolioCompanyValues")]
+        public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
+        {
+            var genericReturn = await _companiesBO.GetCompanyValuesByTicker(ticker);
+
+            return Ok(genericReturn);
+        }
+
+
+        [HttpPost("createPortfolio")]
+        public async Task<IActionResult> CreatePortfolio([FromBody] PortfolioViewModel portfolio)
+        {
+            
+            var genericReturn = await _companiesBO.CreatePortfolio(portfolio);
+
+            return Ok(genericReturn);
+        }
+
+        [HttpPost("addCompanyToPortfolio")]
+        public async Task<IActionResult> AddCompanyToPortfolio([FromBody] CompanyToPortfolioViewModel data)
+        {
+
+            var genericReturn = await _companiesBO.AddCompanyToPortfolio(data.PortfolioUuid, data.Ticker);
+
+            return Ok(genericReturn);
+        }
+
+
+
+        //------------------------------------------Raúl----------------------------------------------
+
+
+        // api/companies/portfolio/Id
+        [HttpGet("editportfolio")]
+        public async Task<IActionResult> GetPortfolio(Guid Id)
+        {
+
+            var genericReturn = await _companiesBO.GetPortfolio(Id);
+
+            return Ok(genericReturn);
+        }
+
+        [HttpDelete("editportfolio")]
+        public void DeletePortfolio(Guid id)
+        {
+        }
+
+        [HttpPut("editportfolio")]
+        public void PutPortfolio(Guid Id)
+        {
         }
     }
 }
