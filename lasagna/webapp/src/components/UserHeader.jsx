@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Logo from './Logo';
 import SearchBar from './SearchBar/SearchBar';
-import { urlGetUser } from '../components/UserProfile/UserManager';
+import { urlGetUser } from './UserManager';
 
 
 export default function UserHeader() {

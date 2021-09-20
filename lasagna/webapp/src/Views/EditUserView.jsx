@@ -4,7 +4,7 @@ import UserHeader from '../components/UserHeader';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Captcha from '../components/SignUp/Captcha';
-import { token, urlGetUser, urlUpdateUser } from '../components/UserProfile/UserManager';
+import { token, urlGetUser, urlUpdateUser } from '../components/UserManager';
 
 export default function EditUserView() {
 
