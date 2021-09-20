@@ -206,6 +206,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
         }
 
+        public async Task<GenericReturn<CompanyScorePoco>> GetCompanyByIISAuthenticated(string sectorName, string indexName, string industryName, int page, List<string> countries)
+        {
 
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDAO.SearchCompaniesByIndexAuthenticated(indexName, sectorName, industryName, page, countries);
+            }
+
+            );
+        }
     }
 }
