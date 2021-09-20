@@ -18,6 +18,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page, List<string> countries);
 
+        Task<GenericReturn<CompanyScorePoco>> GetCompanyByIISAuthenticated(string sectorName, string indexName, string industryName, int page, List<string> countries);
+
         Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser(List<string> countries);
 
         Task<GenericReturn<List<PortfolioPoco>>> GetPortfolios(Guid userId);

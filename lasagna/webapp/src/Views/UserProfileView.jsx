@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Dropdown, Menu, Input, Form, Message, Button } from 'semantic-ui-react'
 //import data from "./testData/data.json";
+import {Link} from 'react-router-dom';
 import UserHeader from '../components/UserHeader';
 import PortfolioDetails from '../components/UserProfile/PortfolioDetails';
 import Footer from '../components/Footer';
@@ -68,7 +69,7 @@ export default function UserProfileView() {
 
                 <article>
                     <h1>Hello, (UserName)!</h1>
-                    <a href="http://localhost:3010/user/edit">Edit my profile</a>
+                    <Link to='/user/profile/edit'>Edit my profile</Link>
                 </article>
             </section>
         );

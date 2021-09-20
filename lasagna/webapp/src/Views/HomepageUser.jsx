@@ -8,14 +8,8 @@ export default function HomepageUser() {
         <div>
             <UserHeader />
            <h1> User HomePage </h1>
-           {
-               hello && localStorage.getItem('id')
-            
-           }
-
-           {
-               hello && sessionStorage.getItem('token')
-           }
+         
+         
         </div>
     )
 }

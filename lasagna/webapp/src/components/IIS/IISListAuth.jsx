@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
-import Pagination from './Pagination'
+import Pagination from './Pagination';
+//import { token } from '../UserProfile/UserManager';
 
 
 
-export const IISList = () => {
+export const IISListAuth = () => {
 
 
 const [index, setindex] = useState([{key: "", text: "--None--", value: ""}])
@@ -20,7 +21,7 @@ const [companyCount, setcompanyCount] = useState(0)
 const [currentPage, setcurrentPage] = useState(1)
 const [companies, setcompanies] = useState([])
 const countriesPicked = useSelector(state => state.countries)
-
+//const [token, setToken] = useState("")
 
 const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
     key: x["name"],
@@ -44,11 +45,12 @@ const handlePageNext = (operator)=>{
     )}
 
     const fetchCompanys = async (page = -1) => {
-        const rawResponse = fetch(`http://localhost:3010/api/Companies/IIS`, {
+        const rawResponse = fetch(`http://localhost:3010/api/Companies/authenticated`, {
             method: 'POST',
             headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',    
+                //"Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({Sectorname : sectorValue,
                                 Indexname: indexValue,
@@ -59,15 +61,14 @@ const handlePageNext = (operator)=>{
         });
         const content = rawResponse.then(response => {
             if(response.ok){
+                console.log(response);
             return response.json();
             }
             return [];  
             
-        });
-        content.then(data => {
-
-            setcompanies(data["result"]["companyPocos"])
-            setcompanyCount(data["result"]["count"])
+        }).then(data => {
+            setcompanies(data.result.companyPocosAuthenticated)
+            setcompanyCount(data.result.count)
         })
 
         if (page == -1){
@@ -143,7 +144,14 @@ const handlePageNext = (operator)=>{
         }, [sectorValue]);
 
         useEffect(() => {
-            try {
+        /*     let sessionToken = sessionStorage.getItem("token");
+            let localToken = localStorage.getItem("token");
+            if(sessionToken == null){
+                setToken(localToken);
+            }else{
+                setToken(sessionToken);
+            } */
+            try { 
                 var data = fetch(`http://localhost:3010/api/Companies/indexSector`)
                 .then(response => response.json());
                 data.then(data => turnIntoOptions(data,"result","indices"))
@@ -155,7 +163,6 @@ const handlePageNext = (operator)=>{
                 console.log(error)
             }
         }, []);
-
 
 
 return (
@@ -170,9 +177,12 @@ return (
         <Table celled >
             <Table.Header >
             <Table.Row textAlign="center"> 
-                <Table.HeaderCell width="3">Ticker</Table.HeaderCell>
-                <Table.HeaderCell width="7">Company name</Table.HeaderCell>
-                <Table.HeaderCell width="3">Previous Close</Table.HeaderCell>
+                <Table.HeaderCell width="2">Ticker</Table.HeaderCell>
+                <Table.HeaderCell width="4">Company name</Table.HeaderCell>
+                <Table.HeaderCell width="2">Score</Table.HeaderCell>
+                <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
+                <Table.HeaderCell width="2">Margin Of Safety</Table.HeaderCell>
+                <Table.HeaderCell width="2">Previous Close</Table.HeaderCell>
                 <Table.HeaderCell>Profile</Table.HeaderCell>
             </Table.Row>
             </Table.Header>
