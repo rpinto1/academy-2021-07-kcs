@@ -58,5 +58,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker);
 
         Task<int> GetPortfolioId(Guid portfolioUuid);
+
+        void DeletePortfolioId(Guid Uuid);
+
+        void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
     }
 }

@@ -206,6 +206,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
         }
 
+        public void DeletePortfolio(Guid Id)
+        {
+          _searchDAO.DeletePortfolioId(Id);
+        }
+
+        public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
+        {
+            _searchDAO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
+        }
 
     }
 }
