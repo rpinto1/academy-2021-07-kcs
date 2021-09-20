@@ -24,6 +24,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         void Update<T>(T generic) where T : class;
         Task UpdateAsync<T>(T generic) where T : class;
         void UpdateRange<T>(List<T> generic) where T : class;
-    
+
+        Task<int> GetCount<T>() where T : class;
     }
 }
