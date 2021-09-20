@@ -4,30 +4,24 @@ import UserHeader from '../components/UserHeader';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Captcha from '../components/SignUp/Captcha';
-
+import { token, urlGetUser, urlUpdateUser } from '../components/UserProfile/UserManager';
 
 export default function EditUserView() {
 
     //all updateable except for emailaddress.
     const [dbUserInfo, setDBUserInfo] = useState({});
-
-    
-
-    const userId  = ((localStorage.getItem('id')) ? localStorage.getItem('id') : sessionStorage.getItem('id'));
-    const token = ((localStorage.getItem('token')) ? localStorage.getItem('token') : sessionStorage.getItem('token'));
-
-    const urlGetUser = `http://localhost:3010/api/Users/${userId}`;
-    const urlUpdateUser = `http://localhost:3010/api/Update?userId=${userId}`;
+    const [userName, setUserName] = useState('');
 
     useEffect(() =>
         fetch(urlGetUser, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         }
     }).then(res => res.json())
        .then(data => {
+        setUserName(data.result.firstName)
         setDBUserInfo({
             Id: data.result.id,
             FirstName: data.result.firstName,
@@ -45,7 +39,7 @@ export default function EditUserView() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token} `
+            'Authorization': `Basic ${token}`
 
         },
         body: JSON.stringify(dbUserInfo)
@@ -64,6 +58,7 @@ const handleChange = (event) => {
 
 
 console.log(dbUserInfo);
+console.log(token);
 
 
 
@@ -73,7 +68,7 @@ console.log(dbUserInfo);
         <UserHeader />
 
         <Container className= 'formulario'> 
-             <h1> {dbUserInfo.FirstName}, let's update your account </h1>
+             <h1> {userName}, let's update your account </h1>
             <Form onSubmit={handleEditUpdate}> 
             <Form.Field>
                 <label>First Name</label>
