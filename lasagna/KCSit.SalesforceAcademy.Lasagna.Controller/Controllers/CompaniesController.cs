@@ -10,6 +10,7 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using Newtonsoft.Json;
 using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -93,6 +94,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         {
 
             var companies = _companiesBO.GetCompanyByIIS(value.SectorName,value.IndexName,value.IndustryName,value.Page,value.Countries);
+            return await ReturnResult(companies);
+        }
+
+
+        
+        [HttpPost("authenticated")]
+        [Authorize]
+        public async Task<IActionResult> PostSearchCompaniesIISAuthenticated([FromBody] DropDownParameters value)
+        {
+
+            var companies = _companiesBO.GetCompanyByIISAuthenticated(value.SectorName, value.IndexName, value.IndustryName, value.Page, value.Countries);
             return await ReturnResult(companies);
         }
 

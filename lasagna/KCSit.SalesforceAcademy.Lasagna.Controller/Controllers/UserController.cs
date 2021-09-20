@@ -84,6 +84,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
         [Route("api/Users")]
         //[Authorize(Policy = "PremiumUserPolicy")]
+        //[Authorize(Policy = "AdminPolicy")]
         public Task<IActionResult> GetUsers()
         {
             var queryString = HttpContext.Request.QueryString.Value;
@@ -143,7 +144,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/DeleteUser")]
         [HttpDelete]
-        [Authorize(Policy = "AdminPolicy")]
+        //[Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> DeleteUser(string userId)
         {
             var result = await _userService.DeleteUser(userId);

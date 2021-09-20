@@ -13,6 +13,7 @@ import UserProfileView from './Views/UserProfileView';
 import HomepageUserView from './Views/HomepageUser';
 import RecoverPasswordView from './Views/RecoverPasswordView';
 import EditPortfolio from './Views/EditPortfolio';
+import EditUserView from './Views/EditUserView';
 
 
 
@@ -34,7 +35,8 @@ function App() {
                 <Route path ='/aboutus' component ={AboutUsView} />
                 <Route path= '/company/details/:ticker/:name' component={CompanyProfileView} />
                 <Route path='/forgottenpassword' component={ForgottenPasswordView} />
-                <Route path= '/user/profile' component = {UserProfileView} />
+                <Route exact path= '/user/profile' component = {UserProfileView} />
+                <Route path= '/user/profile/edit' component = {EditUserView} />
                 <Route path= '/user/homepage' component = {HomepageUserView} />
                 <Route path= '/recover/:user/:email' component = {RecoverPasswordView} /> 
                 <Route path= '/user/homepage' component = {HomepageUserView} /> 

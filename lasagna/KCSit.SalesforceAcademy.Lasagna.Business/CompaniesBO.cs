@@ -216,5 +216,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             _searchDAO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
         }
 
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                return await _searchDAO.SearchCompaniesByIndexAuthenticated(indexName, sectorName, industryName, page, countries);
+            }
+
+            );
+        }
     }
 }

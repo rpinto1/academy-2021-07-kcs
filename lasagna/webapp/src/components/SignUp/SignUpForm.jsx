@@ -35,6 +35,7 @@ export default function SignUpForm() {
 
 
     const handleSubmit = () => {
+
         let user_captcha = captchaInputRef.current.value;
   
         if (validateCaptcha(user_captcha) === true) {
@@ -66,7 +67,7 @@ export default function SignUpForm() {
     
 
     
-   
+   //needs to validate password here. 
 
     return (
     <>   
@@ -113,7 +114,7 @@ export default function SignUpForm() {
             <input
             type= 'password' 
             placeholder='Create your password' 
-            value = {newUser.password}
+            value = {newUser.Password}
             onChange={handleChange}
             id='Password'
             pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}' 

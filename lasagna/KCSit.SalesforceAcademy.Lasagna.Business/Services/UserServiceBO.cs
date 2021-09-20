@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Http;
 using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using System.Web;
+using System.Text.Json;
+
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
@@ -37,7 +39,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             _emailSender = emailSender;
         }
 
-        public async Task<GenericReturn> SignUp(SignUpViewModel model)
+        public async Task<GenericReturn<UserPoco>> SignUp(SignUpViewModel model)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
@@ -69,7 +71,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 };
                 await _userManager.AddClaimsAsync(user, claims);
 
-
+                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
             });
         }
 
@@ -165,81 +167,70 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         // --------------------------  PremiumUser  ---------------------------------------------------
 
-        public async Task<GenericReturn<IEnumerable<UserPoco>>> GetUsers(string queryString)
+        public async Task<GenericReturn<UserPocoList>> GetUsers(string queryString)
         {
             return await _genericBusinessLogic.GenericTransaction(() =>
             {
-                var firstNameFilter = "";
-                var lastNameFilter = "";
-                var emailFilter = "";
+                var filter = new Filter();
+                var skip = 0;
+                var take = 0;
+                var orderByField = "";
+                var orderByDirection = "Ascending";
 
-                if (String.IsNullOrEmpty(queryString))
+                queryString ??= "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
+
+                // ?filter={}&range=[0,9]&sort=["id","ASC"]
+                // "?filter={"firstName":"joana","email":"joana@lasagna.pt"}&range=[0,24]&sort=["id","ASC"]"
+                var filterStr = HttpUtility.ParseQueryString(queryString).Get("filter");
+
+                if (filterStr != null)
                 {
-                    queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
-                    //queryString = "";
-                }
-
-                // "?filter={"firstName":"joan","email":"mmm"}&range=[0,24]&sort=["id","ASC"]"
-                var filter = HttpUtility.ParseQueryString(queryString).Get("filter");
-
-                if (filter != null)
-                {
-                    var firstNameIndex = filter.IndexOf("firstName");
-                    if (firstNameIndex != -1)
-                    {
-                        var firstNameValueStartIndex = filter.IndexOf(":", firstNameIndex) + 2;
-                        var firstNameValueEndIndex = filter.IndexOf("\"", firstNameValueStartIndex);
-                        firstNameFilter = filter.Substring(firstNameValueStartIndex, firstNameValueEndIndex - firstNameValueStartIndex);
-                    }
-
-                    var lastNameIndex = filter.IndexOf("lastName");
-                    if (lastNameIndex != -1)
-                    {
-                        var lastNameValueStartIndex = filter.IndexOf(":", lastNameIndex) + 2;
-                        var lastNameValueEndIndex = filter.IndexOf("\"", lastNameValueStartIndex);
-                        lastNameFilter = filter.Substring(lastNameValueStartIndex, lastNameValueEndIndex - lastNameValueStartIndex);
-                    }
-
-                    var emailIndex = filter.IndexOf("email");
-                    if (emailIndex != -1)
-                    {
-                        var emailValueStartIndex = filter.IndexOf(":", emailIndex) + 2;
-                        var emailValueEndIndex = filter.IndexOf("\"", emailValueStartIndex);
-                        emailFilter = filter.Substring(emailValueStartIndex, emailValueEndIndex - emailValueStartIndex);
-                    }
+                    filter = JsonSerializer.Deserialize<Filter>(filterStr);
+                    filter.firstName ??= "";
+                    filter.lastName ??= "";
+                    filter.email ??= "";
                 }
 
                 // [0, 9],  [10, 19],  [20, 25] ...
                 var range = HttpUtility.ParseQueryString(queryString).Get("range");
-                var first = int.Parse(range.Substring(1, range.IndexOf(",") - range.IndexOf("[") - 1));
-                var last = int.Parse(range.Substring(range.IndexOf(",") + 1, range.IndexOf("]") - range.IndexOf(",") - 1));
-                var skip = first;
-                var take = last - first + 1;
+                if (range != null)
+                {
+                    var first = int.Parse(range.Substring(1, range.IndexOf(",") - range.IndexOf("[") - 1));
+                    var last = int.Parse(range.Substring(range.IndexOf(",") + 1, range.IndexOf("]") - range.IndexOf(",") - 1));
+                    skip = first;
+                    take = last - first + 1;
+                }
 
+                // sort=["id","ASC"]"
                 var sort = HttpUtility.ParseQueryString(queryString).Get("sort");
-                var orderByField = sort.Split("\"")[1];
-                orderByField = orderByField.ToUpper().ElementAt(0) + orderByField.Substring(1);
-                var orderByDirection = sort.Contains("ASC") ? "Ascending" : "Descending";
+                if (sort != null)
+                {
+                    orderByField = sort.Split("\"")[1];
+                    orderByField = orderByField.ToUpper().ElementAt(0) + orderByField.Substring(1);
+                    orderByDirection = sort.Contains("ASC") ? "Ascending" : "Descending";
+                }
 
 
 
-                var userInfo = from user in _userManager.Users
-                                      .Where(u => u.FirstName.ToLower().Contains(firstNameFilter.ToLower()) &&
-                                                  u.LastName.ToLower().Contains(lastNameFilter.ToLower()) &&
-                                                  u.Email.ToLower().Contains(emailFilter.ToLower()))
-                                      .OrderBy(orderByField, orderByDirection)
-                                      .Skip(skip)
-                                      .Take(take)
-                                      .ToList()
-                               select new UserPoco
-                               {
-                                   Id = user.Id,
-                                   FirstName = user.FirstName,
-                                   LastName = user.LastName,
-                                   Email = user.Email
-                               };
+                var users = from user in _userManager.Users
+                            .Where(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
+                                        u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
+                                        u.Email.ToLower().Contains(filter.email.ToLower()))
+                            .OrderBy(orderByField, orderByDirection)
+                            .Skip(skip)
+                            .Take(take)
+                            .ToList()
+                            select new UserPoco
+                            {
+                                Id = user.Id,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Email = user.Email
+                            };
 
-                return Task.FromResult(userInfo);
+                var result = new UserPocoList { Users = users, Total = users.Count() };
+
+                return Task.FromResult(result);
             });
         }
 
