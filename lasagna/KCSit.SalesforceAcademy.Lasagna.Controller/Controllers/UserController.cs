@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -172,22 +173,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/SendEmail/{email}")]
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(string email)
         {
 
 
-
-            if (email != @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
+            try
             {
+                MailAddress m = new MailAddress(email);
+            }
+            catch (Exception)
+            {
+
                 return NotFound();
             }
-
-
+            
             var resetToken = await _userService.SendEmail(email);
-            if (resetToken == null)
+            if (resetToken.Succeeded == false)
             {
-                return Ok();
+                return NotFound();
             }
 
             return Ok();
