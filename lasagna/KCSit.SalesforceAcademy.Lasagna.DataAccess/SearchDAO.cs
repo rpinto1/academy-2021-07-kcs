@@ -570,7 +570,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker)
+        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker) //to PortfolioDAO
         {
             using (var context = new lasagnakcsContext())
             {
@@ -579,34 +579,34 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
                 var incomeStatementList = (await GetIncomeStatement(ticker)).ToList();
 
-                var roic = (from kr in keyRatiosList
-                            select kr.Roic).ToList();
+                //var roic = (from kr in keyRatiosList
+                //            select kr.Roic).ToList();
 
-                var equity = (from bs in balanceSheetList
-                              select bs.Equity).ToList();
+                //var equity = (from bs in balanceSheetList
+                //              select bs.Equity).ToList();
 
-                var eps = (from incStat in incomeStatementList
-                           select incStat.Eps).ToList();
+                //var eps = (from incStat in incomeStatementList
+                //           select incStat.Eps).ToList();
 
-                var sales = (from incStat in incomeStatementList
-                             select incStat.Sales).ToList();
+                //var sales = (from incStat in incomeStatementList
+                //             select incStat.Sales).ToList();
 
-                var cash = (from bs in balanceSheetList
-                            select bs.Cash).ToList();
+                //var cash = (from bs in balanceSheetList
+                //            select bs.Cash).ToList();
 
                 var list = new List<PortfolioCompanyValuesPoco>();
 
 
-                for (int i = 0; i < keyRatiosList.Count; i++)
+                for (int i = keyRatiosList.Count - 1 ; i > 0; i--)
                 {
                     list.Add(new PortfolioCompanyValuesPoco
                     {
                         Year = keyRatiosList[i].Year,
-                        ROIC = roic[i],
-                        Equity = equity[i],
-                        EPS = eps[i],
-                        Sales = sales[i],
-                        Cash = cash[i]
+                        ROIC = keyRatiosList[i].Roic,
+                        Equity = balanceSheetList[i].Equity,
+                        EPS = incomeStatementList[i].Eps,
+                        Sales = incomeStatementList[i].Sales,
+                        Cash = balanceSheetList[i].Cash
                     });
 
                 }

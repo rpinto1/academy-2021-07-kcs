@@ -147,7 +147,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
         }
 
-        public async Task<GenericReturn> CreatePortfolio(PortfolioViewModel portfolio)
+        public async Task<GenericReturn> CreatePortfolio(string userId, string portfolioName)
         {
 
             return await _genericBusiness.GenericTransaction(
@@ -156,8 +156,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
                 var toInsert = new Portfolio
                 {
-                    UserId = portfolio.UserId.ToString(),
-                    Name = portfolio.Name,
+                    UserId = userId,
+                    Name = portfolioName,
                     Uuid = new Guid()
 
                 };
