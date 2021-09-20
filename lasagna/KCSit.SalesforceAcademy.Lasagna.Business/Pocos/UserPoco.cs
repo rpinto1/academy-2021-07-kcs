@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 {
-    public class GetUsersPoco
+    public class UserPoco
     {
         public string Id { get; set; }
 

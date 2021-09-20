@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,12 +25,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
 
         private readonly IUserServiceBO _userService;
-        private readonly IEmailSender _emailSender;
+      
 
-        public UserController(IUserServiceBO userService, IEmailSender emailSender)
+        public UserController(IUserServiceBO userService)
         {
             this._userService = userService;
-            _emailSender = emailSender;
+            
         }
 
 
@@ -80,17 +81,26 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         // --------------------------  PremiumUser  ---------------------------------------------------
 
-
-        [HttpGet]
-        [Route("api/GetAllUsers")]
-        [Authorize(Policy = "PremiumUserPolicy")]
-        public Task<IActionResult> GetAllUsers()
+        /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
+        [Route("api/Users")]
+        //[Authorize(Policy = "PremiumUserPolicy")]
+        public Task<IActionResult> GetUsers()
         {
-            var result = _userService.GetAllUsers();
+            var queryString = HttpContext.Request.QueryString.Value;
+
+            var result = _userService.GetUsers(queryString);
 
             return ReturnResult(result);
         }
 
+        [Route("api/Users/{userId}")]
+        //[Authorize(Policy = "PremiumUserPolicy")]
+        public Task<IActionResult> GetUser(string userId)
+        {
+            var result = _userService.GetUser(userId);
+
+            return ReturnResult(result);
+        }
 
 
         // --------------------------  Manager  ---------------------------------------------------
@@ -158,30 +168,45 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
 
         // --------------------------  Email  ---------------------------------------------------
-        [Route("api/SendEmail")]
-        [HttpGet]
-        public IActionResult SendEmail()
-        {
-            var message = new Message(new string[] { "ruifcosta96@gmail.com" }, "Test email", "This is the content from our email.");
-            _emailSender.SendEmail(message);
 
-            return Ok() ;
-        }
 
         [Route("api/SendEmail/{email}")]
         [HttpGet]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(string email)
         {
-            if (!ModelState.IsValid)
+
+
+
+            if (email != @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
+            {
+                return NotFound();
+            }
+
+
+            var resetToken = await _userService.SendEmail(email);
+            if (resetToken == null)
             {
                 return Ok();
             }
 
-            var messageToken = _userService.SendEmail(email);
-            var message = new Message(new string[] { email }, "Reset password" , ("This is the link to change password"+ messageToken));
-            await _emailSender.SendEmailAsync(message);
-            return NotFound();
+            return Ok();
         }
+
+        [Route("api/recover")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
+        {
+            var resetToken = await _userService.ResetPassword(resetPasswordModel.Email,resetPasswordModel.Token,resetPasswordModel.Password);
+            if (resetToken.Succeeded == false)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
+
     }
 }

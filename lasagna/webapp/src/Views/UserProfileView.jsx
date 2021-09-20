@@ -16,6 +16,7 @@ export default function UserProfileView() {
 
     const [activeCompany, setActiveCompany] = useState(0);
 
+    //replace with localStorage.getItem("id")
     const testUserId = "062399bc-fd17-415d-9eac-448b26f2ea2c";
 
     const url = `http://localhost:3010/api/Companies/portfolio?userId=${testUserId}`;
@@ -30,7 +31,6 @@ export default function UserProfileView() {
             result.json().then(data => {
                 if (data != null) {
                     setData(data.result);
-                    console.log(data.result);
                 }
             })
         })
@@ -114,12 +114,12 @@ export default function UserProfileView() {
 
     const postNewPortfolio = (e) => {
 
-        /* let request = fetch("localhost:3010/api/CreatePortfolio", { 
+        let request = fetch("localhost:3010/api/Companies/CreatePortfolio", { 
             method: "POST", 
             body: { 
                 name: e.target.value 
             } 
-        }) */
+        })
 
         console.log(e.target);
 
@@ -147,7 +147,7 @@ export default function UserProfileView() {
 
                         <hr />
 
-                        <a href={`http://localhost:3010/user/edit/portfolio/${data[activePortfolio].portfolioId}`}>Edit portfolio</a>
+                        <a href={`http://localhost:3000/user/portfolio/edit/${data[activePortfolio].portfolioId}`}>Edit portfolio</a>
 
                         <hr />
 

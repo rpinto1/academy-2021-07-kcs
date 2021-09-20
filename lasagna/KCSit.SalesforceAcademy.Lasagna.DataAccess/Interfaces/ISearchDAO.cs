@@ -10,6 +10,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
     public interface ISearchDAO
     {
         int Get(string ticker);
+
+        Task<int> GetAsync(string ticker);
+
         Industry GetIndustry(string name);
         // SubIndustry GetSub(string name);
         Task<List<Industry>> SearchIndustiesBySector(string sectorName);
@@ -53,5 +56,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<PortfolioCompanyPoco>> GetCompaniesByPortfolio(Guid portfolioId);
 
         Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker);
+
+        Task<int> GetPortfolioId(Guid portfolioUuid);
+        Task<CompanyScorePoco> SearchCompaniesByIndexAuthenticated(string indexName, string sectorName, string industryName, int page, List<string> countries);
     }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import UserHeader from '../components/UserHeader';
+import AdminComp from '../components/AdminComp';
 
 export default function AdminView() {
 
@@ -9,23 +10,7 @@ export default function AdminView() {
     return (
         <div>
             <UserHeader />
-            <div class="ui vertical pointing menu">
-                <a class="active item">
-                    Users
-                </a>
-                <a class="item">
-                    Tickers
-                </a>
-                <a class="item">
-                    ...
-                </a>
-                <a class="item">
-                    ...
-                </a>
-                <a class="item">
-                    ...
-                </a>
-            </div>
+            <AdminComp />
         </div>
     )
 }

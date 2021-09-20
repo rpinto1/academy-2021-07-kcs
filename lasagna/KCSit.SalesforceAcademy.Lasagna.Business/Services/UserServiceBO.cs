@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using Microsoft.AspNetCore.Http;
+using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.EmailService;
+using System.Web;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
@@ -24,14 +27,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly GenericBusinessLogic _genericBusinessLogic;
+        private readonly IEmailSender _emailSender;
 
-
-        public UserServiceBO(GenericBusinessLogic genericBusinessLogic, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserServiceBO(GenericBusinessLogic genericBusinessLogic, IEmailSender emailSender, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this._genericBusinessLogic = genericBusinessLogic;
             this._userManager = userManager;
             this._signInManager = signInManager;
-
+            _emailSender = emailSender;
         }
 
         public async Task<GenericReturn> SignUp(SignUpViewModel model)
@@ -87,7 +90,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AuthenticationToken", AuthenticationToken);
 
                 await _userManager.ResetAccessFailedCountAsync(user);
-                
+
                 return new IdToken { Id = user.Id, Token = AuthenticationToken };
             });
         }
@@ -162,19 +165,100 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         // --------------------------  PremiumUser  ---------------------------------------------------
 
-        public async Task<GenericReturn<IEnumerable<GetUsersPoco>>> GetAllUsers()
+        public async Task<GenericReturn<IEnumerable<UserPoco>>> GetUsers(string queryString)
         {
             return await _genericBusinessLogic.GenericTransaction(() =>
             {
-                var userInfo = from user in _userManager.Users.ToList()
-                               select new GetUsersPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                var firstNameFilter = "";
+                var lastNameFilter = "";
+                var emailFilter = "";
+
+                if (String.IsNullOrEmpty(queryString))
+                {
+                    queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
+                    //queryString = "";
+                }
+
+                // "?filter={"firstName":"joan","email":"mmm"}&range=[0,24]&sort=["id","ASC"]"
+                var filter = HttpUtility.ParseQueryString(queryString).Get("filter");
+
+                if (filter != null)
+                {
+                    var firstNameIndex = filter.IndexOf("firstName");
+                    if (firstNameIndex != -1)
+                    {
+                        var firstNameValueStartIndex = filter.IndexOf(":", firstNameIndex) + 2;
+                        var firstNameValueEndIndex = filter.IndexOf("\"", firstNameValueStartIndex);
+                        firstNameFilter = filter.Substring(firstNameValueStartIndex, firstNameValueEndIndex - firstNameValueStartIndex);
+                    }
+
+                    var lastNameIndex = filter.IndexOf("lastName");
+                    if (lastNameIndex != -1)
+                    {
+                        var lastNameValueStartIndex = filter.IndexOf(":", lastNameIndex) + 2;
+                        var lastNameValueEndIndex = filter.IndexOf("\"", lastNameValueStartIndex);
+                        lastNameFilter = filter.Substring(lastNameValueStartIndex, lastNameValueEndIndex - lastNameValueStartIndex);
+                    }
+
+                    var emailIndex = filter.IndexOf("email");
+                    if (emailIndex != -1)
+                    {
+                        var emailValueStartIndex = filter.IndexOf(":", emailIndex) + 2;
+                        var emailValueEndIndex = filter.IndexOf("\"", emailValueStartIndex);
+                        emailFilter = filter.Substring(emailValueStartIndex, emailValueEndIndex - emailValueStartIndex);
+                    }
+                }
+
+                // [0, 9],  [10, 19],  [20, 25] ...
+                var range = HttpUtility.ParseQueryString(queryString).Get("range");
+                var first = int.Parse(range.Substring(1, range.IndexOf(",") - range.IndexOf("[") - 1));
+                var last = int.Parse(range.Substring(range.IndexOf(",") + 1, range.IndexOf("]") - range.IndexOf(",") - 1));
+                var skip = first;
+                var take = last - first + 1;
+
+                var sort = HttpUtility.ParseQueryString(queryString).Get("sort");
+                var orderByField = sort.Split("\"")[1];
+                orderByField = orderByField.ToUpper().ElementAt(0) + orderByField.Substring(1);
+                var orderByDirection = sort.Contains("ASC") ? "Ascending" : "Descending";
+
+
+
+                var userInfo = from user in _userManager.Users
+                                      .Where(u => u.FirstName.ToLower().Contains(firstNameFilter.ToLower()) &&
+                                                  u.LastName.ToLower().Contains(lastNameFilter.ToLower()) &&
+                                                  u.Email.ToLower().Contains(emailFilter.ToLower()))
+                                      .OrderBy(orderByField, orderByDirection)
+                                      .Skip(skip)
+                                      .Take(take)
+                                      .ToList()
+                               select new UserPoco
+                               {
+                                   Id = user.Id,
+                                   FirstName = user.FirstName,
+                                   LastName = user.LastName,
+                                   Email = user.Email
+                               };
 
                 return Task.FromResult(userInfo);
             });
         }
 
 
+        public async Task<GenericReturn<UserPoco>> GetUser(string userId)
+        {
+            return await _genericBusinessLogic.GenericTransaction(() =>
+            {
+                if (String.IsNullOrEmpty(userId))
+                {
+                    throw new Exception("User not found.");
+                }
+                var user = _userManager.Users.Where(u => u.Id == userId).SingleOrDefault();
 
+                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+
+                return Task.FromResult(userPoco);
+            });
+        }
 
         // --------------------------  Manager  ---------------------------------------------------
 
@@ -268,14 +352,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user == null)
-                    return null;
+                    throw new Exception("");
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                return token;
 
+                var message = new Message(new string[] { email }, "Reset password", token, email);
+
+                await _emailSender.SendEmailAsync(message);
 
             });
         }
-
-
+        public async Task<GenericReturn> ResetPassword(string email, string token, string password)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                    throw new Exception("Error");
+                var resetPassResult = await _userManager.ResetPasswordAsync(user, token, password);
+                if (!resetPassResult.Succeeded)
+                {
+                    throw new Exception("Error");
+                }
+            });
+        }
     }
 }

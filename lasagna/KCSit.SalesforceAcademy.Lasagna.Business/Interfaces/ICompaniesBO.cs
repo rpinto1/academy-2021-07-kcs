@@ -1,5 +1,6 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<CompanyScorePoco>> GetCompanyByIIS(string sectorName, string indexName, string industryName, int page, List<string> countries);
 
+        Task<GenericReturn<CompanyScorePoco>> GetCompanyByIISAuthenticated(string sectorName, string indexName, string industryName, int page, List<string> countries);
+
         Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser(List<string> countries);
 
         Task<GenericReturn<List<PortfolioPoco>>> GetPortfolios(Guid userId);
@@ -24,6 +27,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         Task<GenericReturn<List<PortfolioCompanyPoco>>> GetCompaniesByPortfolio(Guid portfolioId);
 
         Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker);
+
+        Task<GenericReturn> CreatePortfolio(PortfolioViewModel portfolio);
+
+        Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker);
 
         Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id);    //RAúl
     }

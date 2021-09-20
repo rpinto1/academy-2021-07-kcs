@@ -12,14 +12,12 @@ function App() {
     return (
              
         <div>
-         
-            
+                     
             <Switch>
                 <Route exact path ='/' component={HomepageView} />  
                 <Route path ='/signin' component ={SignInView} />
                 <Route path= '/admin' component = {AdminView} /> 
             </Switch>  
-
 
         </div>
       

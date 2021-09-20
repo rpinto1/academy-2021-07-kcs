@@ -26,7 +26,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
 
 
-        public Task<GenericReturn<IEnumerable<GetUsersPoco>>> GetAllUsers();
+        public Task<GenericReturn<IEnumerable<UserPoco>>> GetUsers(string queryString);
+
+        public Task<GenericReturn<UserPoco>> GetUser(string userId);
 
         public Task<GenericReturn> AddClaim(string userId, Claim claim);
 
@@ -39,8 +41,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         // --------------------------  Email  ---------------------------------------------------
 
         public Task<GenericReturn> SendEmail(string email);
-
-
+        public Task<GenericReturn> ResetPassword(string email, string token, string password);
 
     }
 }
