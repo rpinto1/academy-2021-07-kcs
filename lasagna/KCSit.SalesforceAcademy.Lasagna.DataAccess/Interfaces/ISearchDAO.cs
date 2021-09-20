@@ -34,5 +34,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker);
 
         Task<int> GetPortfolioId(Guid portfolioUuid);
+        Task<CompanyScorePoco> SearchCompaniesByIndexAuthenticated(string indexName, string sectorName, string industryName, int page, List<string> countries);
     }
 }

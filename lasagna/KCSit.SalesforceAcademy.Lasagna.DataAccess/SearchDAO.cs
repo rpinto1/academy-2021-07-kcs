@@ -144,6 +144,46 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
+        public async Task<CompanyScorePoco> SearchCompaniesByIndexAuthenticated(string indexName, string sectorName, string industryName, int page, List<string> countries)
+        {
+            var pageSize = 10;
+            using (var context = new lasagnakcsContext())
+            {
+
+                var query = (from company in context.Companies
+                             join country in (context.Countries.Where(c => countries.Contains(c.Name)).AsEnumerable())
+                             on company.CountryId equals country.Id
+                             join dailyInfo in context.DailyInfos
+                             on company.DailyInfoId equals dailyInfo.Id into LJDI
+                             from dailyInfo in LJDI.DefaultIfEmpty()
+                             join companyIndice in context.CompanyIndices
+                             on company.Id equals companyIndice.CompanyId into LJCI
+                             from companyIndex in LJCI.DefaultIfEmpty()
+                             join indice in context.Indices
+                             on companyIndex.IndexId equals indice.Id into LJI
+                             from index in LJI.DefaultIfEmpty()
+                             join score in context.Scores
+                             on company.Id equals score.CompanyId into LJS
+                             from score in LJS.DefaultIfEmpty()
+                             join sector in context.Sectors
+                             on company.SectorId equals sector.Id
+                             join industry in context.Industries
+                             on company.IndustryId equals industry.Id
+                             where index.Name.ToLower().Contains(indexName.ToLower()) &&
+                             sector.Name.ToLower().Contains(sectorName.ToLower()) &&
+                             industry.Name.ToLower().Contains(industryName.ToLower())
+                             && score.ScoringMethodId == 1
+                             group company by new CompanyPocoAuthenticated { Name = company.Name, Ticker = company.Ticker, Price = dailyInfo.StockPrice, Score = score.Score1, StickerPrice=score.StickerPrice, MarginSafety = score.MarginOfSafety} into companies
+                             orderby companies.Key.Score descending
+                             select new CompanyPocoAuthenticated { Name = companies.Key.Name, Ticker = companies.Key.Ticker, Price = companies.Key.Price, Score = companies.Key.Score, StickerPrice = companies.Key.StickerPrice, MarginSafety = companies.Key.MarginSafety });
+
+                var countResults = await query.CountAsync();
+                var results = await query.Skip(pageSize * (page - 1)).Take(pageSize).ToListAsync();
+                var objectok = new CompanyScorePoco { CompanyPocosAuthenticated = results, Count = countResults };
+                return objectok;
+            }
+        }
+
         //public List<(Song song, string artist)> SearchSongByName(string songName)
         //{
         //    using( var context = new academykcsContext())
