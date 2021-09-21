@@ -13,7 +13,7 @@ export default function EditPortfolio() {
   const id = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:3010/api/companies/editportfolio?Id=${id.id}`).then(result => {
+    fetch(`http://localhost:3010/api/companies/GetPortfolio?Id=${id.id}`).then(result => {
       if (result.status != 200) {
         console.log("error");
         return;
@@ -26,12 +26,12 @@ export default function EditPortfolio() {
     })
   }, []);
 
-  async function myFunction(event,url,edit) {
+  async function buttonHandlerDelete() {
     var txt;
-    var r = confirm("Press a button!");
+    var r = Window.confirm("Press ok if you wish to delete the folder!");
     if (r == true) {
-      var result = await fetch(url, {
-        method: edit,
+      var result = await fetch(`http://localhost:3010/api/companies/deletePortfolio?Id=${id.id}`, {
+        method: "DELETE",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -47,7 +47,31 @@ export default function EditPortfolio() {
     }
     document.getElementById("demo").innerHTML = txt;
   }
-  
+
+  async function buttonHandlerSave() {
+    var txt;
+    var r = Window.confirm("Press ok if you wish to save the folder!");
+    if (r == true) {
+      var result = await fetch(`http://localhost:3010/api/companies/updatePortfolio?Id=${id.id}`, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }       });
+        if(result.ok){
+          txt = "Done!";
+        }
+        else {
+          txt = "Failed!";
+        }
+    } else {
+      txt = "You Canceled!";
+    }
+    document.getElementById("demo").innerHTML = txt;
+  }
+ 
+
+
     return (<>
       
      
@@ -61,7 +85,7 @@ export default function EditPortfolio() {
 
         <article>
           <h1>Hello, (UserName)!</h1>
-          <input defaultValue='name of portfolio' /> <button onClick={myFunction} >delete Portfolio</button>
+          <input defaultValue='name of portfolio' /> <button onClick={buttonHandlerDelete} >delete Portfolio</button>
         </article>
       </section>
         <Container>
@@ -80,7 +104,7 @@ export default function EditPortfolio() {
             )}
           </List>
           <Container textAlign="center">
-            <Button onclick={myFunction}>Save</Button>
+            <Button onclick={buttonHandlerSave}>Save</Button>
             <Button >Cancel</Button>
           </Container>
         </Container>
