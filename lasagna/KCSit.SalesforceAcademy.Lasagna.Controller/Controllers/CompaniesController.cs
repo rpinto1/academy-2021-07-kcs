@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Caching.Memory;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,12 +24,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
     {
         private ICompaniesBO _companiesBO;
         private IGenericLogic _genericLogic;
+        private readonly IMemoryCache _memoryCache;
+        private string cacheKey;
 
 
-        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic)
+        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic,IMemoryCache memoryCache)
         {
             _companiesBO = companiesBO;
             _genericLogic = genericLogic;
+            _memoryCache = memoryCache;
 
         }
 
@@ -161,7 +164,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("portfolio")]
         public async Task<IActionResult> GetPortfolios(Guid userId)
         {
@@ -171,7 +174,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("portfolioCompanies")]
         public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
         {
@@ -181,6 +184,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("portfolioCompanyValues")]
         public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
         {
@@ -189,21 +193,30 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-
+        
         [HttpPost("createPortfolio")]
         public async Task<IActionResult> CreatePortfolio([FromBody] PortfolioViewModel portfolio)
         {
             
-            var genericReturn = await _companiesBO.CreatePortfolio(portfolio);
+            var genericReturn = await _companiesBO.CreatePortfolio(
+                portfolio.UserId.ToString(), 
+                portfolio.Name
+                //replace with some form of DTO -- signature safe
+                );
 
             return Ok(genericReturn);
         }
+
 
         [HttpPost("addCompanyToPortfolio")]
         public async Task<IActionResult> AddCompanyToPortfolio([FromBody] CompanyToPortfolioViewModel data)
         {
 
-            var genericReturn = await _companiesBO.AddCompanyToPortfolio(data.PortfolioUuid, data.Ticker);
+            var genericReturn = await _companiesBO.AddCompanyToPortfolio(
+                data.PortfolioUuid, 
+                data.Ticker
+                //DTO
+                );
 
             return Ok(genericReturn);
         }
