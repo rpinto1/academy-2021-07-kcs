@@ -347,6 +347,81 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
 
 
+        public void DeletePortfolioId(Guid Uuid)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var remove = (from portfolio in context.Portfolios
+                              join portfolioCompany in context.PortfolioCompanies
+                              on portfolio.Id equals portfolioCompany.PortfolioId
+
+                              where portfolio.Uuid == Uuid
+
+                              select portfolioCompany
+                              ).ToList();
+
+                if (remove != null)
+                {
+                    foreach (PortfolioCompany portfolioCompany in remove)
+                    { context.PortfolioCompanies.Remove(portfolioCompany); }
+
+                }
+
+                var removep = (from portfolio in context.Portfolios
+
+                               where portfolio.Uuid == Uuid
+
+                               select portfolio
+                              ).FirstOrDefault();
+                if (removep != null)
+                {
+                    context.Portfolios.Remove(removep);
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var remove = (from portfolio in context.Portfolios
+                              join portfolioCompany in context.PortfolioCompanies
+                              on portfolio.Id equals portfolioCompany.PortfolioId
+                              join companies in (context.Companies.Where(c => Tickers.Contains(c.Ticker)).AsEnumerable())
+                              on portfolioCompany.CompanyId equals companies.Id
+                              where portfolio.Uuid == Uuid
+                              select portfolioCompany
+                              ).ToList();
+
+                if (remove != null)
+                {
+                    foreach (PortfolioCompany portfolioCompany in remove)
+                    { context.PortfolioCompanies.Remove(portfolioCompany); }
+
+                }
+
+
+                var update = (from portfolio in context.Portfolios
+
+                              where portfolio.Uuid == Uuid
+
+                              select portfolio
+                              ).FirstOrDefault();
+                if (update != null)
+                {
+                    update.Name = PortfolioName;
+                    context.Portfolios.Update(update);
+                }
+                context.SaveChanges();
+            }
+        }
+
+
+        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
 
                 //var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
                 //var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
