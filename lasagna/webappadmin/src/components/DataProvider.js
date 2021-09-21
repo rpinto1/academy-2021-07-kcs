@@ -21,7 +21,6 @@ export default {
         return httpClient(url).then(({ headers, json }) => ({
             data: json.result.users,
             total: json.result.total
-            // total: json.result.length
         }));
     },
 
