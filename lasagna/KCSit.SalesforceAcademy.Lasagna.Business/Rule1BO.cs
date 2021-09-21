@@ -1,4 +1,5 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Rule1
+namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
     public class Rule1BO : IRule1BO
     {

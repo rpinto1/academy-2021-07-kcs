@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
-import Pagination from './Pagination';
-//import { token } from '../UserProfile/UserManager';
+import Pagination from './Pagination'
+import TableHeaderAuth from './TableHeaderAuth'
+import { token } from '../UserManager';
+
 
 
 
@@ -45,12 +47,13 @@ const handlePageNext = (operator)=>{
     )}
 
     const fetchCompanys = async (page = -1) => {
+        console.log(token)
         const rawResponse = fetch(`http://localhost:3010/api/Companies/authenticated`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',    
-                //"Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({Sectorname : sectorValue,
                                 Indexname: indexValue,
@@ -175,17 +178,7 @@ return (
 
         
         <Table celled >
-            <Table.Header >
-            <Table.Row textAlign="center"> 
-                <Table.HeaderCell width="2">Ticker</Table.HeaderCell>
-                <Table.HeaderCell width="4">Company name</Table.HeaderCell>
-                <Table.HeaderCell width="2">Score</Table.HeaderCell>
-                <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
-                <Table.HeaderCell width="2">Margin Of Safety</Table.HeaderCell>
-                <Table.HeaderCell width="2">Previous Close</Table.HeaderCell>
-                <Table.HeaderCell>Profile</Table.HeaderCell>
-            </Table.Row>
-            </Table.Header>
+            <TableHeaderAuth />
             {companyResults()}
             <Table.Footer>
             <Table.Row>
