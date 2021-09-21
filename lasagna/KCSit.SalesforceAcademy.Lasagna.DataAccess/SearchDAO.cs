@@ -297,10 +297,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker)
-        {
-            using (var context = new lasagnakcsContext())
-            {
 
                 //var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
                 //var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
