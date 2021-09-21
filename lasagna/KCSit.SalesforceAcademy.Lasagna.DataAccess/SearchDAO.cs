@@ -302,51 +302,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             using (var context = new lasagnakcsContext())
             {
 
-                //////////////await (from company in context.Companies
-                //////////////       join yearlyReport in context.YearlyReports
-                //////////////       on company.Id equals yearlyReport.CompanyId
+                
 
-                //////////////       join keyRatios in context.KeyRatios
-                //////////////       on yearlyReport.KeyRatioId equals keyRatios.Id
-                //////////////       into keyRatiosTable
 
-                //////////////       join balanceSheet in context.BalanceSheets
-                //////////////       on yearlyReport.BalanceSheetId equals balanceSheet.Id
-                //////////////       into balanceSheetTable
 
-                //////////////       join incomeStatement in context.IncomeStatements
-                //////////////       on yearlyReport.IncomeStatementId equals incomeStatement.Id
-                //////////////       into incomeStatementTable
 
-                //////////////       where company.Ticker.Equals(ticker)
-                //////////////       orderby yearlyReport.Year ascending
 
-                //////////////       select new //KeyRatiosPoco
-                //////////////       {
-                //////////////           Ticker = company.Ticker,
-                //////////////           Year = (int?)yearlyReport.Year ?? 0,
-                //////////////           Roic = (decimal?)keyRatios.ReturnOnInvestedCapital ?? 0,
-                //////////////           Equity = (decimal?)balanceSheet.ShareholdersEquity ?? 0,
-                //////////////           Cash = (decimal?)balanceSheet.CashAndEquivalents ?? 0,
-                //////////////           Eps = (decimal?)incomeStatement.Epsbasic ?? 0,
-                //////////////           Sales = (decimal?)incomeStatement.Revenue ?? 0
-                //////////////       })
 
-                //////////////       .Take(20)
-                //////////////       .ToListAsync();
 
 
 
             }
+
         }
-
-
-
-
-
-
-
-
 
         public void DeletePortfolioId(Guid Uuid)
         {
@@ -419,7 +387,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker)
+        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker) //to PortfolioDAO
         {
             using (var context = new lasagnakcsContext())
             {
@@ -427,21 +395,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 //var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
                 //var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
                 //var incomeStatementList = (await GetIncomeStatement(ticker)).ToList();
-
-                //var roic = (from kr in keyRatiosList
-                //            select kr.Roic).ToList();
-
-                //var equity = (from bs in balanceSheetList
-                //              select bs.Equity).ToList();
-
-                //var eps = (from incStat in incomeStatementList
-                //           select incStat.Eps).ToList();
-
-                //var sales = (from incStat in incomeStatementList
-                //             select incStat.Sales).ToList();
-
-                //var cash = (from bs in balanceSheetList
-                //            select bs.Cash).ToList();
 
                 var list = new List<PortfolioCompanyValuesPoco>();
 
@@ -458,9 +411,56 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 //        Cash = cash[i]
                 //    });
 
-                //}
+                for (int i = keyRatiosList.Count - 1 ; i > 0; i--)
+                {
+                    list.Add(new PortfolioCompanyValuesPoco
+                    {
+                        Year = keyRatiosList[i].Year,
+                        ROIC = keyRatiosList[i].Roic,
+                        Equity = balanceSheetList[i].Equity,
+                        EPS = incomeStatementList[i].Eps,
+                        Sales = incomeStatementList[i].Sales,
+                        Cash = balanceSheetList[i].Cash
+                    });
+
+                }
 
                 return await Task.FromResult(list);
+
+
+                //////////////await (from company in context.Companies
+                //////////////       join yearlyReport in context.YearlyReports
+                //////////////       on company.Id equals yearlyReport.CompanyId
+
+                //////////////       join keyRatios in context.KeyRatios
+                //////////////       on yearlyReport.KeyRatioId equals keyRatios.Id
+                //////////////       into keyRatiosTable
+
+                //////////////       join balanceSheet in context.BalanceSheets
+                //////////////       on yearlyReport.BalanceSheetId equals balanceSheet.Id
+                //////////////       into balanceSheetTable
+
+                //////////////       join incomeStatement in context.IncomeStatements
+                //////////////       on yearlyReport.IncomeStatementId equals incomeStatement.Id
+                //////////////       into incomeStatementTable
+
+                //////////////       where company.Ticker.Equals(ticker)
+                //////////////       orderby yearlyReport.Year ascending
+
+                //////////////       select new //KeyRatiosPoco
+                //////////////       {
+                //////////////           Ticker = company.Ticker,
+                //////////////           Year = (int?)yearlyReport.Year ?? 0,
+                //////////////           Roic = (decimal?)keyRatios.ReturnOnInvestedCapital ?? 0,
+                //////////////           Equity = (decimal?)balanceSheet.ShareholdersEquity ?? 0,
+                //////////////           Cash = (decimal?)balanceSheet.CashAndEquivalents ?? 0,
+                //////////////           Eps = (decimal?)incomeStatement.Epsbasic ?? 0,
+                //////////////           Sales = (decimal?)incomeStatement.Revenue ?? 0
+                //////////////       })
+
+                //////////////       .Take(20)
+                //////////////       .ToListAsync();
+
             }
         }
 
