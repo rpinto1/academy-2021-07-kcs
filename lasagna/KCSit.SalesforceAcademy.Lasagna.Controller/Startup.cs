@@ -85,11 +85,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
-            services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
+            services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericDAO, GenericDAO>();
+            services.AddScoped<IPortfoliosDAO, PortfoliosDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO>();
+            services.AddScoped<IPortfoliosBO, PortfoliosBO>();
 
             services.AddScoped<GenericBusinessLogic>();
             services.AddScoped<GenericController>();

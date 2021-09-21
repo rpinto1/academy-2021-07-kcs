@@ -22,20 +22,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<CompanyData>> SearchCompaniesPrice(bool down, List<string> countries);
 
 
-
-
-
-
-
-        Task<List<PortfolioPoco>> GetPortfolios(Guid userId);
-
-        Task<List<PortfolioCompanyPoco>> GetCompaniesByPortfolio(Guid portfolioId);
-
-        Task<int> GetPortfolioId(Guid portfolioUuid);
-
-        void DeletePortfolioId(Guid Uuid);
-
-        void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
         Task<CompanyScorePoco> SearchCompaniesByIndexAuthenticated(string indexName, string sectorName, string industryName, int page, List<string> countries);
     }
 }
