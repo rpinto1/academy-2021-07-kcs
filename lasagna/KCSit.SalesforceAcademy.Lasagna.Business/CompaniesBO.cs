@@ -28,7 +28,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             _genericDAO = genericDao;
             _genericBusiness = genericBusiness;
         }
-       
+
 
         public async Task<GenericReturn<List<CompanyPoco>>> GetCompaniesNamesTickers(string companiesNamesTickers, int pageNumber)
         {
@@ -66,7 +66,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
 
-                return await _searchDAO.SearchCompaniesByIndex(indexName,sectorName,industryName, page, countries);
+                return await _searchDAO.SearchCompaniesByIndex(indexName, sectorName, industryName, page, countries);
             }
 
             );
@@ -99,7 +99,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
                 var portfolios = await _searchDAO.GetPortfolios(userId);
 
-                foreach(PortfolioPoco portfolio in portfolios)
+                foreach (PortfolioPoco portfolio in portfolios)
                 {
                     portfolio.PortfolioCompanies = GetCompaniesByPortfolio(portfolio.PortfolioId).Result.Result;
                 }
@@ -118,7 +118,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             async () =>
             {
-                List<PortfolioCompanyPoco> companies = (List<PortfolioCompanyPoco>) await _searchDAO.GetCompaniesByPortfolio(portfolioId);
+                List<PortfolioCompanyPoco> companies = (List<PortfolioCompanyPoco>)await _searchDAO.GetCompaniesByPortfolio(portfolioId);
 
                 foreach (PortfolioCompanyPoco company in companies)
                 {
@@ -247,14 +247,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             return await _genericBusiness.GenericTransaction(async () =>
             {
                 var result = await _searchDAO.GetCompaniesByPortfolio(Id);
-                
+
                 return result;
             });
         }
 
         public void DeletePortfolio(Guid Id)
         {
-          _searchDAO.DeletePortfolioId(Id);
+            _searchDAO.DeletePortfolioId(Id);
         }
 
         public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
@@ -263,19 +263,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
 
 
-        public Task<GenericReturn<CompanyScorePoco>> GetCompanyByIISAuthenticated(string sectorName, string indexName, string industryName, int page, List<string> countries)
+        public async Task<GenericReturn<CompanyScorePoco>> GetCompanyByIISAuthenticated(string sectorName, string indexName, string industryName, int page, List<string> countries)
         {
 
             return await _genericBusiness.GenericTransaction(
 
-            async () =>
-            {
-
-                return await _searchDAO.SearchCompaniesByIndexAuthenticated(indexName, sectorName, industryName, page, countries);
-            }
+            async () => { return await _searchDAO.SearchCompaniesByIndexAuthenticated(indexName, sectorName, industryName, page, countries); }
 
             );
-        }
+
         }
     }
 }
