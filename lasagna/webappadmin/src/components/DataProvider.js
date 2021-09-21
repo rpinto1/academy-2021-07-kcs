@@ -19,8 +19,9 @@ export default {
         // http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]                     - Real URL sent to BE
 
         return httpClient(url).then(({ headers, json }) => ({
-            data: json.result,
-            total: json.result.length
+            data: json.result.users,
+            total: json.result.total
+            // total: json.result.length
         }));
     },
 
@@ -73,15 +74,15 @@ export default {
     },
 
     create: (resource, params) =>
-        httpClient(`${apiUrl}/${resource}`, {
+        {
+            httpClient(`${apiUrl}/SignUp`, {
             method: 'POST',
-            body: JSON.stringify(params.data),
-        }).then(({ json }) => ({
-            data: { ...params.data, id: json.result.id },
-        })),
+            body: JSON.stringify({...params.data, "emailAddress" : params.data.email, "password" : "Test1234%", "confirmPassword" : "Test1234%"}),
+        }).then(({ json }) => ({ data: json.result }))
+    },
 
     delete: (resource, params) =>
-        httpClient(`${apiUrl}/${resource}/${params.id}`, {
+        httpClient(`${apiUrl}/DeleteUser?userId=${params.id}`, {
             method: 'DELETE',
         }).then(({ json }) => ({ data: json.result })),
 

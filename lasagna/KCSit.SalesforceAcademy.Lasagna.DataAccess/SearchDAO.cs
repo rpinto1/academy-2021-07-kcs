@@ -78,14 +78,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              on companies.DailyInfoId equals daily.Id
                              join country in (context.Countries.Where(c => countries.Contains(c.Name)).AsEnumerable())
                             on companies.CountryId equals country.Id
-                            where daily.UpdatedOn.ToString() != "0001-01-01 00:00:00.0000000"
+                             where daily.UpdatedOn.ToString() != "0001-01-01 00:00:00.0000000"
                              let change = (daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)
-                             let percentageChange = ((daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)) /(( daily.PreviousClose.Value == 0 || daily.PreviousClose == null) ? 10000000 : daily.PreviousClose )  *100
-                             select new CompanyData { DisplayName = companies.Name, Symbol = companies.Ticker, RegularMarketChange = change , RegularMarketChangePercent = (Decimal)  percentageChange }) ;
+                             let percentageChange = ((daily.StockPrice ?? 0) - (daily.PreviousClose ?? 0)) / ((daily.PreviousClose.Value == 0 || daily.PreviousClose == null) ? 10000000 : daily.PreviousClose) * 100
+                             select new CompanyData { DisplayName = companies.Name, Symbol = companies.Ticker, RegularMarketChange = change, RegularMarketChangePercent = (Decimal)percentageChange });
 
 
-                
-                    return !down? await query.OrderByDescending(x=>x.RegularMarketChangePercent).Take(10).ToListAsync() : await query.OrderBy(x => x.RegularMarketChangePercent).Take(10).ToListAsync();
+
+                return !down ? await query.OrderByDescending(x => x.RegularMarketChangePercent).Take(10).ToListAsync() : await query.OrderBy(x => x.RegularMarketChangePercent).Take(10).ToListAsync();
 
 
 
@@ -251,320 +251,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
 
 
-        public async Task<int> GetCompaniesCount()
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              select company.Id).CountAsync();
-            }
-        }
 
-
-        public async Task<IEnumerable> GetCompanies()
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              select new CompanyPoco
-                              {
-                                  Id = company.Id,
-                                  Ticker = company.Ticker,
-                                  Name = company.Name
-                              })
-
-                        .ToListAsync();
-            }
-        }
-
-        public async Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int skip, int take)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              select new CompanyPoco
-                              {
-                                  Id = company.Id,
-                                  Ticker = company.Ticker,
-                                  Name = company.Name
-                              })
-
-                        .Skip(skip)
-                        .Take(take)
-                        .ToListAsync();
-            }
-        }
-
-        public async Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int Id)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies 
-                              join PortfolioCompany in context.PortfolioCompanies
-                              on company.Id equals PortfolioCompany.CompanyId
-                              where PortfolioCompany.PortfolioId==Id
-                              select new CompanyPoco
-                              {
-                                  Id = company.Id,
-                                  Ticker = company.Ticker,
-                                  Name = company.Name
-                              })
-                        .ToListAsync();
-            }
-        }
-        public async Task<IEnumerable<KeyRatiosPoco>> GetKeyRatios(string ticker)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join yearlyReport in context.YearlyReports
-                              on company.Id equals yearlyReport.CompanyId
-                              into reports
-
-                              from report in reports
-                              join keyRatios in context.KeyRatios
-                              on report.KeyRatioId equals keyRatios.Id
-
-                              where company.Ticker.Equals(ticker)
-                              orderby report.Year descending
-
-                             select new KeyRatiosPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  Year = (int?)report.Year ?? 0,
-                                  Roic = (decimal?)keyRatios.ReturnOnInvestedCapital ?? 0,
-                                  PriceToEarnings = (decimal?)keyRatios.PriceToEarnings ?? 0,
-                              })
-
-                        .Take(20)
-                        .ToListAsync();
-            }
-        }
-
-
-        public async Task<IEnumerable<KeyRatiosPoco>> GetKeyRatiosByBulk(List<string> tickers)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies.Where(c => tickers.Contains(c.Ticker))
-                              join yearlyReport in context.YearlyReports
-                              on company.Id equals yearlyReport.CompanyId
-                              into reports
-
-                              from report in reports
-                              join keyRatios in context.KeyRatios
-                              on report.KeyRatioId equals keyRatios.Id
-
-                              where tickers.Contains(company.Ticker)
-                              orderby company.Ticker, report.Year descending
-
-                              select new KeyRatiosPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  Year = (int?)report.Year ?? 0,
-                                  Roic = (decimal?)keyRatios.ReturnOnInvestedCapital ?? 0,
-                                  PriceToEarnings = (decimal?)keyRatios.PriceToEarnings ?? 0,
-                              })
-
-                        .Take(20 * tickers.Count)
-                        .ToListAsync();
-            }
-        }
-
-        public async Task<IEnumerable<BalanceSheetPoco>> GetBalanceSheet(string ticker)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join yearlyReport in context.YearlyReports
-                              on company.Id equals yearlyReport.CompanyId
-                              into reports
-
-                              from report in reports
-                              join balanceSheet in context.BalanceSheets
-                              on report.BalanceSheetId equals balanceSheet.Id
-
-                              where company.Ticker.Equals(ticker)
-                              orderby report.Year descending
-
-                              select new BalanceSheetPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  Year = (int?)report.Year ?? 0,
-                                  Equity = (decimal?)balanceSheet.ShareholdersEquity ?? 0,
-                                  Cash = (decimal?)balanceSheet.CashAndEquivalents ?? 0
-                              })
-
-                        .Take(20)
-                        .ToListAsync();
-            }
-        }
-
-
-        public async Task<IEnumerable<BalanceSheetPoco>> GetBalanceSheetByBulk(List<string> tickers)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies.Where(c => tickers.Contains(c.Ticker))
-                              join yearlyReport in context.YearlyReports
-                              on company.Id equals yearlyReport.CompanyId
-                              into reports
-
-                              from report in reports
-                              join balanceSheet in context.BalanceSheets
-                              on report.BalanceSheetId equals balanceSheet.Id
-
-                              where tickers.Contains(company.Ticker)
-                              orderby company.Ticker, report.Year descending
-
-                              select new BalanceSheetPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  Year = (int?)report.Year ?? 0,
-                                  Equity = (decimal?)balanceSheet.ShareholdersEquity ?? 0,
-                                  Cash = (decimal?)balanceSheet.CashAndEquivalents ?? 0
-                              })
-
-                        .Take(20 * tickers.Count)
-                        .ToListAsync();
-            }
-        }
-
-
-        public async Task<IEnumerable<IncomeStatementPoco>> GetIncomeStatement(string ticker)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join yearlyReport in context.YearlyReports
-                              on company.Id equals yearlyReport.CompanyId
-                              into reports
-
-                              from report in reports
-                              join incomeStatement in context.IncomeStatements
-                              on report.IncomeStatementId equals incomeStatement.Id
-
-                              where company.Ticker.Equals(ticker)
-                              orderby report.Year descending
-
-                              select new IncomeStatementPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  Year = (int?)report.Year ?? 0,
-                                  Eps = (decimal?)incomeStatement.Epsbasic ?? 0,
-                                  Sales = (decimal?)incomeStatement.Revenue ?? 0
-                              })
-
-                        .Take(20)
-                        .ToListAsync();
-            }
-        }
-
-
-        public async Task<IEnumerable<IncomeStatementPoco>> GetIncomeStatementByBulk(List<string> tickers)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies.Where(c => tickers.Contains(c.Ticker))
-                              join yearlyReport in context.YearlyReports
-                              on company.Id equals yearlyReport.CompanyId
-                              into reports
-
-                              from report in reports
-                              join incomeStatement in context.IncomeStatements
-                              on report.IncomeStatementId equals incomeStatement.Id
-
-                              where tickers.Contains(company.Ticker)
-                              orderby company.Ticker, report.Year descending
-
-                              select new IncomeStatementPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  Year = (int?)report.Year ?? 0,
-                                  Eps = (decimal?)incomeStatement.Epsbasic ?? 0,
-                                  Sales = (decimal?)incomeStatement.Revenue ?? 0
-                              })
-
-                        .Take(20 * tickers.Count)
-                        .ToListAsync();
-            }
-        }
-
-
-
-        public async Task<DailyInfoPoco> GetDailyInfo(string ticker)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join dailyInfo in context.DailyInfos
-                              //on company.Id equals dailyInfo.Id
-                              on company.DailyInfoId equals dailyInfo.Id
-                              where company.Ticker.Equals(ticker)
-
-                              select new DailyInfoPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  ForwardPe = (decimal?)dailyInfo.ForwardPe ?? 0,
-                                  EpsTTM = (decimal?)dailyInfo.EpsTTM ?? 0
-                              }).FirstOrDefaultAsync();
-            }
-        }
-
-        public async Task<IEnumerable<DailyInfoPoco>> GetDailyInfoByBulk(List<string> tickers)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join dailyInfo in context.DailyInfos
-                              //on company.DailyInfoId equals dailyInfo.Id
-                              on company.Id equals dailyInfo.Id
-                              where tickers.Contains(company.Ticker)
-
-                              select new DailyInfoPoco
-                              {
-                                  Ticker = company.Ticker,
-                                  ForwardPe = (decimal?)dailyInfo.ForwardPe ?? 0,
-                                  EpsTTM = (decimal?)dailyInfo.EpsTTM ?? 0
-                              }).ToListAsync();
-            }
-        }
-
-        public async Task<ScorePoco> GetScore(string ticker, int scoringMethodId)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join score in context.Scores
-                              on company.Id equals score.CompanyId
-                              where company.Ticker.Equals(ticker) &&
-                                  score.ScoringMethodId == scoringMethodId
-                              select new ScorePoco
-                              {
-                                  Ticker = company.Ticker,
-                                  ScoreId = score.Id
-                              }
-                        ).SingleOrDefaultAsync();
-            }
-        }
-
-        public async Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId)
-        {
-            using (var context = new lasagnakcsContext())
-            {
-                return await (from company in context.Companies
-                              join score in context.Scores
-                              on company.Id equals score.CompanyId
-                              where tickers.Contains(company.Ticker) &&
-                                  score.ScoringMethodId == scoringMethodId
-                              select new ScorePoco
-                              {
-                                  Ticker = company.Ticker,
-                                  ScoreId = score.Id
-                              }
-                        ).ToListAsync();
-            }
-        }
 
 
         public async Task<List<PortfolioPoco>> GetPortfolios(Guid userId)
@@ -579,7 +266,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                               {
                                   PortfolioId = portfolio.Uuid,
                                   PortfolioName = portfolio.Name,
-                                  
+
                               })
 
                         .ToListAsync();
@@ -592,17 +279,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             {
                 return await (from portfolio in context.Portfolios
                               join portfolioCompany in context.PortfolioCompanies
-                              on portfolio.Id equals portfolioCompany.PortfolioId 
+                              on portfolio.Id equals portfolioCompany.PortfolioId
                               join company in context.Companies
                               on portfolioCompany.CompanyId equals company.Id
-                              
+
                               where portfolio.Uuid == portfolioUuid
 
                               select new PortfolioCompanyPoco
                               {
                                   Ticker = company.Ticker,
                                   Name = company.Name,
-                                  
+
                               })
 
                         //.Take(20)
@@ -610,14 +297,135 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
+        public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+
+                //////////////await (from company in context.Companies
+                //////////////       join yearlyReport in context.YearlyReports
+                //////////////       on company.Id equals yearlyReport.CompanyId
+                       
+                //////////////       join keyRatios in context.KeyRatios
+                //////////////       on yearlyReport.KeyRatioId equals keyRatios.Id
+                //////////////       into keyRatiosTable
+
+                //////////////       join balanceSheet in context.BalanceSheets
+                //////////////       on yearlyReport.BalanceSheetId equals balanceSheet.Id
+                //////////////       into balanceSheetTable
+
+                //////////////       join incomeStatement in context.IncomeStatements
+                //////////////       on yearlyReport.IncomeStatementId equals incomeStatement.Id
+                //////////////       into incomeStatementTable
+
+                //////////////       where company.Ticker.Equals(ticker)
+                //////////////       orderby yearlyReport.Year ascending
+
+                //////////////       select new //KeyRatiosPoco
+                //////////////       {
+                //////////////           Ticker = company.Ticker,
+                //////////////           Year = (int?)yearlyReport.Year ?? 0,
+                //////////////           Roic = (decimal?)keyRatios.ReturnOnInvestedCapital ?? 0,
+                //////////////           Equity = (decimal?)balanceSheet.ShareholdersEquity ?? 0,
+                //////////////           Cash = (decimal?)balanceSheet.CashAndEquivalents ?? 0,
+                //////////////           Eps = (decimal?)incomeStatement.Epsbasic ?? 0,
+                //////////////           Sales = (decimal?)incomeStatement.Revenue ?? 0
+                //////////////       })
+
+                //////////////       .Take(20)
+                //////////////       .ToListAsync();
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public void DeletePortfolioId(Guid Uuid)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var remove = (from portfolio in context.Portfolios
+                              join portfolioCompany in context.PortfolioCompanies
+                              on portfolio.Id equals portfolioCompany.PortfolioId
+
+                              where portfolio.Uuid == Uuid
+
+                              select portfolioCompany
+                              ).ToList();
+
+                if (remove != null)
+                {
+                    foreach (PortfolioCompany portfolioCompany in remove)
+                    { context.PortfolioCompanies.Remove(portfolioCompany); }
+
+                }
+
+                var removep = (from portfolio in context.Portfolios
+
+                               where portfolio.Uuid == Uuid
+
+                               select portfolio
+                              ).FirstOrDefault();
+                if (removep != null)
+                {
+                    context.Portfolios.Remove(removep);
+                }
+                context.SaveChanges();
+            }
+        }
+
+        public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var remove = (from portfolio in context.Portfolios
+                              join portfolioCompany in context.PortfolioCompanies
+                              on portfolio.Id equals portfolioCompany.PortfolioId
+                              join companies in (context.Companies.Where(c => Tickers.Contains(c.Ticker)).AsEnumerable())
+                              on portfolioCompany.CompanyId equals companies.Id
+                              where portfolio.Uuid == Uuid
+                              select portfolioCompany
+                              ).ToList();
+
+                if (remove != null)
+                {
+                    foreach (PortfolioCompany portfolioCompany in remove)
+                    { context.PortfolioCompanies.Remove(portfolioCompany); }
+
+                }
+
+
+                var update = (from portfolio in context.Portfolios
+
+                              where portfolio.Uuid == Uuid
+
+                              select portfolio
+                              ).FirstOrDefault();
+                if (update != null)
+                {
+                    update.Name = PortfolioName;
+                    context.Portfolios.Update(update);
+                }
+                context.SaveChanges();
+            }
+        }
+
+
         public async Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker) //to PortfolioDAO
         {
             using (var context = new lasagnakcsContext())
             {
 
-                var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
-                var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
-                var incomeStatementList = (await GetIncomeStatement(ticker)).ToList();
+                //var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
+                //var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
+                //var incomeStatementList = (await GetIncomeStatement(ticker)).ToList();
 
                 //var roic = (from kr in keyRatiosList
                 //            select kr.Roic).ToList();
@@ -637,6 +445,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 var list = new List<PortfolioCompanyValuesPoco>();
 
 
+                //for (int i = 0; i < keyRatiosList.Count; i++)
+                //{
+                //    list.Add(new PortfolioCompanyValuesPoco
+                //    {
+                //        Year = keyRatiosList[i].Year,
+                //        ROIC = roic[i],
+                //        Equity = equity[i],
+                //        EPS = eps[i],
+                //        Sales = sales[i],
+                //        Cash = cash[i]
+                //    });
                 for (int i = keyRatiosList.Count - 1 ; i > 0; i--)
                 {
                     list.Add(new PortfolioCompanyValuesPoco
@@ -649,7 +468,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                         Cash = balanceSheetList[i].Cash
                     });
 
-                }
+                //}
 
                 return await Task.FromResult(list);
             }

@@ -235,14 +235,21 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-        [HttpDelete("editportfolio")]
-        public void DeletePortfolio(Guid id)
+        // api/companies/deleteportfolio/{id}
+        [HttpDelete("deleteportfolio/{id}")]
+        public async Task<IActionResult> DeletePortfolio(Guid id)
         {
+             _companiesBO.DeletePortfolio(id);
+
+            return Ok();
         }
 
-        [HttpPut("editportfolio")]
-        public void PutPortfolio(Guid Id)
+        [HttpPost("updateportfolio")]
+        public async Task<IActionResult> UpdatePortfolio(Guid Uuid, List<string> Tickers, String PortfolioName)
         {
+            _companiesBO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
+
+            return Ok();
         }
     }
 }
