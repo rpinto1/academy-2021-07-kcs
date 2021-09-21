@@ -4,8 +4,7 @@ import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
 import TableHeaderAuth from './TableHeaderAuth'
-import Pagination from './Pagination';
-//import { token } from '../UserProfile/UserManager';
+import { token } from '../UserManager';
 
 
 
@@ -48,6 +47,7 @@ const handlePageNext = (operator)=>{
     )}
 
     const fetchCompanys = async (page = -1) => {
+        console.log(token)
         const rawResponse = fetch(`http://localhost:3010/api/Companies/authenticated`, {
             method: 'POST',
             headers: {

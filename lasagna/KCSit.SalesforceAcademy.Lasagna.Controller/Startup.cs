@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Controller
 {
@@ -58,6 +59,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<lasagnakcsContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
+                
                 option.User.RequireUniqueEmail = true;
                 option.Password.RequiredLength = 8;
                 option.Password.RequireLowercase = true;
@@ -77,6 +79,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager", "Admin"));
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             });
+
+
 
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 

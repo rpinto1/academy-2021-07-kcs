@@ -53,7 +53,11 @@ export default function SignInForm() {
           'Content-Type': 'application/json'
       },
       body: JSON.stringify(user)
-     }).then(res => res.json())
+     }).then(res =>{
+       console.log(res)
+       console.log(res.headers.get('Set-Cookie'))
+      res.json()
+     } )
      .then(data => {
       setLoggedUser(data.result)
       setRedirect(true)
@@ -103,9 +107,9 @@ console.log(loggedUser);
               <Button type="submit" id="submit_btn" >Sign in</Button>
             </Form>
         
-        { redirect &&
+        {/* { redirect &&
             <Redirect to='/user/homepage' />
-        }
+        } */}
         
         </Container>
 
