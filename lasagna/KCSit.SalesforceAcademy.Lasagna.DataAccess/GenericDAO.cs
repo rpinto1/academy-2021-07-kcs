@@ -200,6 +200,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
             }
         }
+
+
+        public async Task<int> GetCount<T>() where T : class
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await context.Set<T>().CountAsync();
+            }
+        }
+
     }
 
 

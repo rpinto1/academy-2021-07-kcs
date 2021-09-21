@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,ReactDOM } from 'react'
 import { Image, List, Container, ListContent, Button, Checkbox } from 'semantic-ui-react';
 import Header from '../components/Header';
 import UserHeader from '../components/UserHeader';
@@ -26,7 +26,27 @@ export default function EditPortfolio() {
     })
   }, []);
 
-
+  async function myFunction(event,url,edit) {
+    var txt;
+    var r = confirm("Press a button!");
+    if (r == true) {
+      var result = await fetch(url, {
+        method: edit,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }       });
+        if(result.ok){
+          txt = "Done!";
+        }
+        else {
+          txt = "Failed!";
+        }
+    } else {
+      txt = "You Canceled!";
+    }
+    document.getElementById("demo").innerHTML = txt;
+  }
   
     return (<>
       
@@ -41,7 +61,7 @@ export default function EditPortfolio() {
 
         <article>
           <h1>Hello, (UserName)!</h1>
-          <input defaultValue='name of portfolio' /> <button  >delete Portfolio</button>
+          <input defaultValue='name of portfolio' /> <button onClick={myFunction} >delete Portfolio</button>
         </article>
       </section>
         <Container>
@@ -60,7 +80,7 @@ export default function EditPortfolio() {
             )}
           </List>
           <Container textAlign="center">
-            <Button >Save</Button>
+            <Button onclick={myFunction}>Save</Button>
             <Button >Cancel</Button>
           </Container>
         </Container>
