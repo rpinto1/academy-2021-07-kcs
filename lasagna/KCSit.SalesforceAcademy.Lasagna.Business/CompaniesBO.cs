@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using KCSit.SalesforceAcademy.Lasagna.Data;
-using Index = KCSit.SalesforceAcademy.Lasagna.Data.Index;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
-using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
-using System.Linq;
-using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
-using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
@@ -133,65 +127,65 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
 
 
-        public async Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker)
-        {
+        //public async Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker)
+        //{
 
-            return await _genericBusiness.GenericTransaction(
+        //    return await _genericBusiness.GenericTransaction(
 
-            async () =>
-            {
-                //List<PortfolioCompanyValuesPoco> values = (List<PortfolioCompanyValuesPoco>)await _searchDAO.GetCompanyValuesByTicker(ticker);
+        //    async () =>
+        //    {
+        //        //List<PortfolioCompanyValuesPoco> values = (List<PortfolioCompanyValuesPoco>)await _searchDAO.GetCompanyValuesByTicker(ticker);
 
-                //return values;
-
-
-
-                var rule1DAO = new Rule1DAO();
-
-                var keyRatiosList = (await rule1DAO.GetKeyRatios(ticker)).ToList();
-                var balanceSheetList = (await rule1DAO.GetBalanceSheet(ticker)).ToList();
-                var incomeStatementList = (await rule1DAO.GetIncomeStatement(ticker)).ToList();
-
-                var roic = (from kr in keyRatiosList
-                            select kr.Roic).ToList();
-
-                var equity = (from bs in balanceSheetList
-                              select bs.Equity).ToList();
-
-                var eps = (from incStat in incomeStatementList
-                           select incStat.Eps).ToList();
-
-                var sales = (from incStat in incomeStatementList
-                             select incStat.Sales).ToList();
-
-                var cash = (from bs in balanceSheetList
-                            select bs.Cash).ToList();
-
-                var list = new List<PortfolioCompanyValuesPoco>();
-
-
-                for (int i = 0; i < keyRatiosList.Count; i++)
-                {
-                    list.Add(new PortfolioCompanyValuesPoco
-                    {
-                        Year = keyRatiosList[i].Year,
-                        ROIC = roic[i],
-                        Equity = equity[i],
-                        EPS = eps[i],
-                        Sales = sales[i],
-                        Cash = cash[i]
-                    });
-
-                }
-
-
-                return await Task.FromResult(list);
+        //        //return values;
 
 
 
-            });
+        //        var rule1DAO = new Rule1DAO();
 
-        }
+        //        var keyRatiosList = (await rule1DAO.GetKeyRatios(ticker)).ToList();
+        //        var balanceSheetList = (await rule1DAO.GetBalanceSheet(ticker)).ToList();
+        //        var incomeStatementList = (await rule1DAO.GetIncomeStatement(ticker)).ToList();
+
+        //        var roic = (from kr in keyRatiosList
+        //                    select kr.Roic).ToList();
+
+        //        var equity = (from bs in balanceSheetList
+        //                      select bs.Equity).ToList();
+
+        //        var eps = (from incStat in incomeStatementList
+        //                   select incStat.Eps).ToList();
+
+        //        var sales = (from incStat in incomeStatementList
+        //                     select incStat.Sales).ToList();
+
+        //        var cash = (from bs in balanceSheetList
+        //                    select bs.Cash).ToList();
+
+        //        var list = new List<PortfolioCompanyValuesPoco>();
+
+
+        //        for (int i = 0; i < keyRatiosList.Count; i++)
+        //        {
+        //            list.Add(new PortfolioCompanyValuesPoco
+        //            {
+        //                Year = keyRatiosList[i].Year,
+        //                ROIC = roic[i],
+        //                Equity = equity[i],
+        //                EPS = eps[i],
+        //                Sales = sales[i],
+        //                Cash = cash[i]
+        //            });
+
+        //        }
+
+
+        //        return await Task.FromResult(list);
+
+
+
+        //    });
+
+        //}
 
         public async Task<GenericReturn> CreatePortfolio(string userId, string portfolioName)
         {
