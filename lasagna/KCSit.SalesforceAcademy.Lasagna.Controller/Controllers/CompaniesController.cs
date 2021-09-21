@@ -25,7 +25,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         private string cacheKey;
 
 
-        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic,IMemoryCache memoryCache)
+        public CompaniesController(ICompaniesBO companiesBO, IGenericLogic genericLogic, IMemoryCache memoryCache)
         {
             _companiesBO = companiesBO;
             _genericLogic = genericLogic;
@@ -161,93 +161,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("portfolio")]
-        public async Task<IActionResult> GetPortfolios(Guid userId)
-        {
-           
-            var genericReturn = await _companiesBO.GetPortfolios(userId);
-
-            return Ok(genericReturn);
-        }
-
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("portfolioCompanies")]
-        public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
-        {
-           
-            var genericReturn = await _companiesBO.GetCompaniesByPortfolio(portfolioId);
-
-            return Ok(genericReturn);
-        }
-
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
-        [HttpGet("portfolioCompanyValues")]
-        public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
-        {
-            var genericReturn = await _companiesBO.GetCompanyValuesByTicker(ticker);
-
-            return Ok(genericReturn);
-        }
-
         
-        [HttpPost("createPortfolio")]
-        public async Task<IActionResult> CreatePortfolio([FromBody] PortfolioViewModel portfolio)
-        {
-            
-            var genericReturn = await _companiesBO.CreatePortfolio(
-                portfolio.UserId.ToString(), 
-                portfolio.Name
-                //replace with some form of DTO -- signature safe
-                );
-
-            return Ok(genericReturn);
-        }
-
-
-        [HttpPost("addCompanyToPortfolio")]
-        public async Task<IActionResult> AddCompanyToPortfolio([FromBody] CompanyToPortfolioViewModel data)
-        {
-
-            var genericReturn = await _companiesBO.AddCompanyToPortfolio(
-                data.PortfolioUuid, 
-                data.Ticker
-                //DTO
-                );
-
-            return Ok(genericReturn);
-        }
-
-
-
-        //------------------------------------------Raúl----------------------------------------------
-
-
-        // api/companies/portfolio/Id
-        [HttpGet("editportfolio")]
-        public async Task<IActionResult> GetPortfolio(Guid Id)
-        {
-
-            var genericReturn = await _companiesBO.GetPortfolio(Id);
-
-            return Ok(genericReturn);
-        }
-
-        // api/companies/deleteportfolio/{id}
-        [HttpDelete("deleteportfolio/{id}")]
-        public async Task<IActionResult> DeletePortfolio(Guid id)
-        {
-             _companiesBO.DeletePortfolio(id);
-
-            return Ok();
-        }
-
-        [HttpPost("updateportfolio")]
-        public async Task<IActionResult> UpdatePortfolio(Guid Uuid, List<string> Tickers, String PortfolioName)
-        {
-            _companiesBO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
-
-            return Ok();
-        }
     }
 }
