@@ -262,8 +262,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             _searchDAO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
         }
 
-
-            return await _genericBusiness.GenericTransaction(
+        public Task<GenericReturn<CompanyScorePoco>> GetCompanyByIISAuthenticated(string sectorName, string indexName, string industryName, int page, List<string> countries);
+        {
+        return await _genericBusiness.GenericTransaction(
 
             async () =>
             {
@@ -273,5 +274,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             );
         }
-    }
+
+
+
+
+
+
+
+
+
+
+
+}
 }

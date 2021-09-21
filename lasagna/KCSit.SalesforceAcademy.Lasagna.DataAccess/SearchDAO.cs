@@ -305,7 +305,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 //////////////await (from company in context.Companies
                 //////////////       join yearlyReport in context.YearlyReports
                 //////////////       on company.Id equals yearlyReport.CompanyId
-                       
+
                 //////////////       join keyRatios in context.KeyRatios
                 //////////////       on yearlyReport.KeyRatioId equals keyRatios.Id
                 //////////////       into keyRatiosTable
@@ -337,7 +337,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
 
 
-
+            }
+        }
 
 
 
