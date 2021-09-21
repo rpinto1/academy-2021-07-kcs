@@ -54,84 +54,44 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                         .ToListAsync();
 
 
-                //var keyRatiosList = (await GetKeyRatios(ticker)).ToList();
-                //var balanceSheetList = (await GetBalanceSheet(ticker)).ToList();
-                //var incomeStatementList = (await GetIncomeStatement(ticker)).ToList();
-
-                //var list = new List<PortfolioCompanyValuesPoco>();
-
-
-                //for (int i = 0; i < keyRatiosList.Count; i++)
-                //{
-                //    list.Add(new PortfolioCompanyValuesPoco
-                //    {
-                //        Year = keyRatiosList[i].Year,
-                //        ROIC = roic[i],
-                //        Equity = equity[i],
-                //        EPS = eps[i],
-                //        Sales = sales[i],
-                //        Cash = cash[i]
-                //    });
-
-                //for (int i = keyRatiosList.Count - 1; i > 0; i--)
-                //{
-                //    list.Add(new PortfolioCompanyValuesPoco
-                //    {
-                //        Year = keyRatiosList[i].Year,
-                //        ROIC = keyRatiosList[i].Roic,
-                //        Equity = balanceSheetList[i].Equity,
-                //        EPS = incomeStatementList[i].Eps,
-                //        Sales = incomeStatementList[i].Sales,
-                //        Cash = balanceSheetList[i].Cash
-                //    });
-
-                //}
-
-                //return await Task.FromResult(list);
-
-
-                //////////////await (from company in context.Companies
-                //////////////       join yearlyReport in context.YearlyReports
-                //////////////       on company.Id equals yearlyReport.CompanyId
-
-                //////////////       join keyRatios in context.KeyRatios
-                //////////////       on yearlyReport.KeyRatioId equals keyRatios.Id
-                //////////////       into keyRatiosTable
-
-                //////////////       join balanceSheet in context.BalanceSheets
-                //////////////       on yearlyReport.BalanceSheetId equals balanceSheet.Id
-                //////////////       into balanceSheetTable
-
-                //////////////       join incomeStatement in context.IncomeStatements
-                //////////////       on yearlyReport.IncomeStatementId equals incomeStatement.Id
-                //////////////       into incomeStatementTable
-
-                //////////////       where company.Ticker.Equals(ticker)
-                //////////////       orderby yearlyReport.Year ascending
-
-                //////////////       select new //KeyRatiosPoco
-                //////////////       {
-                //////////////           Ticker = company.Ticker,
-                //////////////           Year = (int?)yearlyReport.Year ?? 0,
-                //////////////           Roic = (decimal?)keyRatios.ReturnOnInvestedCapital ?? 0,
-                //////////////           Equity = (decimal?)balanceSheet.ShareholdersEquity ?? 0,
-                //////////////           Cash = (decimal?)balanceSheet.CashAndEquivalents ?? 0,
-                //////////////           Eps = (decimal?)incomeStatement.Epsbasic ?? 0,
-                //////////////           Sales = (decimal?)incomeStatement.Revenue ?? 0
-                //////////////       })
-
-                //////////////       .Take(20)
-                //////////////       .ToListAsync();
-
-
-
-
-
             }
         }
 
 
+        public async Task<PortfolioPoco> GetPortfolioWithCompanies(Guid portfolioUuid)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var companies = await GetCompaniesByPortfolio(portfolioUuid);
 
+                var query = await (from portfolio in context.Portfolios
+                                       //join portfolioCompany in context.PortfolioCompanies
+                                       //on portfolio.Id equals portfolioCompany.PortfolioId
+                                       //join company in context.Companies
+                                       //on portfolioCompany.CompanyId equals company.Id
+                                       //into portfolioCompanies
+
+                                       where portfolio.Uuid == portfolioUuid
+
+                                       select new PortfolioPoco
+                                       {
+                                           PortfolioId = portfolio.Uuid,
+                                           PortfolioName = portfolio.Name,
+                                           
+                                       })
+                                       .ToListAsync();
+
+                var toReturn = query.SingleOrDefault();
+
+                toReturn.PortfolioCompanies = companies;
+
+                return toReturn;
+                
+
+            }
+
+
+        }
 
         public void DeletePortfolioId(Guid Uuid)
         {

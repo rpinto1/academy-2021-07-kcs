@@ -40,7 +40,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
         {
 
-            var genericReturn = await _portfoliosBO.GetCompaniesByPortfolio(portfolioId);
+            //var genericReturn = await _portfoliosBO.GetCompaniesByPortfolio(portfolioId);
+            var genericReturn = await _portfoliosBO.GetPortfolioWithCompanies(portfolioId);
 
             return Ok(genericReturn);
         }

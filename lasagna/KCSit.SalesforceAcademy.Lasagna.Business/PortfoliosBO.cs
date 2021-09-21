@@ -56,13 +56,30 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
                 List<PortfolioCompanyPoco> companies = (List<PortfolioCompanyPoco>)await _portfoliosDAO.GetCompaniesByPortfolio(portfolioId);
 
-                foreach (PortfolioCompanyPoco company in companies)
-                {
-                    company.Values = GetCompanyValuesByTicker(company.Ticker).Result.Result;
-                }
+                //foreach (PortfolioCompanyPoco company in companies)
+                //{
+                //    company.Values = GetCompanyValuesByTicker(company.Ticker).Result.Result;
+                //}
 
 
                 return companies;
+
+            });
+        }
+
+        public async Task<GenericReturn<PortfolioPoco>> GetPortfolioWithCompanies(Guid portfolioId)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+                PortfolioPoco portfolio = await _portfoliosDAO.GetPortfolioWithCompanies(portfolioId);
+
+                
+
+
+                return portfolio;
 
             });
         }
