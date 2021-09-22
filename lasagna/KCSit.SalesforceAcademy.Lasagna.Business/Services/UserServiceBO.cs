@@ -1,21 +1,14 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Data;
-using KCSit.SalesforceAcademy.Lasagna.Business.Settings;
-using KCSit.SalesforceAcademy.Lasagna.Business;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
-using Microsoft.AspNetCore.Http;
 using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using System.Web;
@@ -179,7 +172,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 var orderByField = "";
                 var orderByDirection = "Ascending";
 
-                queryString ??= "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
+                if (String.IsNullOrEmpty(queryString))
+                {
+                    queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
+                }
+
 
                 // ?filter={}&range=[0,9]&sort=["id","ASC"]
                 // "?filter={"firstName":"joana","email":"joana@lasagna.pt"}&range=[0,24]&sort=["id","ASC"]"
@@ -213,7 +210,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 }
 
 
-
                 var users = from user in _userManager.Users
                             .Where(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
                                         u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
@@ -230,7 +226,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                                 EmailAddress = user.Email
                             };
 
-                var result = new UserPocoList { Users = users, Total = users.Count() };
+                var Total = _userManager.Users.Count(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
+                                                          u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
+                                                          u.Email.ToLower().Contains(filter.email.ToLower()));
+
+                var result = new UserPocoList { Users = users, Total = Total };
 
                 return Task.FromResult(result);
             });
@@ -245,9 +245,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 {
                     throw new Exception("User not found.");
                 }
+
                 var user = _userManager.Users.Where(u => u.Id == userId).SingleOrDefault();
 
-                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.Email };
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
 
                 return Task.FromResult(userPoco);
             });
@@ -334,6 +340,48 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     }
                     throw new Exception(errorMsg);
                 }
+
+                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+
+            });
+        }
+
+
+        public async Task<GenericReturn> DeleteUsers(string queryString)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var ids = queryString.Substring(7, queryString.Length - 9).Split(",");
+
+                //var user = new ApplicationUser();
+                var users = new List<UserPoco>();
+
+                foreach (string id in ids)
+                {
+                    var user = await _userManager.FindByIdAsync(id.Substring(1, id.Length - 2));
+
+                    if (user == null)
+                    {
+                        throw new Exception("User does not exist");
+                    }
+
+                    var result = await _userManager.DeleteAsync(user);
+
+                    if (!result.Succeeded)
+                    {
+                        string errorMsg = "";
+                        foreach (var error in result.Errors)
+                        {
+                            errorMsg = String.Concat(errorMsg, error.Description, " ");
+                        }
+                        throw new Exception(errorMsg);
+                    }
+
+                    users.Add(new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email });
+                }
+
+                return users;
+
             });
         }
 

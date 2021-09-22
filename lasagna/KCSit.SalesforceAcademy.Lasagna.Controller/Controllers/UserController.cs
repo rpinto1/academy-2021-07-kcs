@@ -86,6 +86,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
         [HttpGet]
         [Route("api/Users")]
+        [HttpGet]
         //[Authorize(Policy = "PremiumUserPolicy")]
         //[Authorize(Policy = "AdminPolicy")]
         public Task<IActionResult> GetUsers()
@@ -99,6 +100,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpGet]
         [Route("api/Users/{userId}")]
+        [HttpGet]
         //[Authorize(Policy = "PremiumUserPolicy")]
         public Task<IActionResult> GetUser(string userId)
         {
@@ -156,6 +158,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+        [Route("api/DeleteUsers")]
+        [HttpDelete]
+        //[Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> DeleteUsers(string filter)
+        {
+            var result = await _userService.DeleteUsers(filter);
+
+            return ReturnResult(result);
+        }
 
         //----------------------- Portfolios
 

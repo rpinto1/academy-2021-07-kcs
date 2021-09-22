@@ -1,6 +1,6 @@
 import * as React from "react";
  import { Admin, Resource  } from 'react-admin';
-import { UserList, UserEdit, UserCreate, UserDelete } from './users';
+import { UserList, UserEdit, UserCreate } from './users';
 import { scoreList, scoreEdit, scoreCreate } from './scores';
 import jsonServerProvider from 'ra-data-json-server';
 import UserIcon from '@material-ui/icons/Group';
