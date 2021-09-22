@@ -24,6 +24,8 @@ namespace Lasagna
             var genericDao = new GenericDAO();
             var searchDao = new SearchDAO();
 
+            var companyJson = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\listQFSUpdate.json");
+            var companyBD1 = JsonConvert.DeserializeObject<List<Company>>(companyJson);
             var companyBD = genericDao.GetAll<Company>();
             var companyDaily = genericDao.GetAll<DailyInfo>();
             var counting = 0;
@@ -34,6 +36,10 @@ namespace Lasagna
             {
                 var company = companyBD[companyIndex];
                 if (company.YahooTicker == null)
+                {
+                    continue;
+                }
+                if (companyBD1.FindIndex(element => element.Id == company.Id) > 0)
                 {
                     continue;
                 }

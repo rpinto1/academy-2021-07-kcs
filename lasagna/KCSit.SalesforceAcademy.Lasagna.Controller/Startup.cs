@@ -49,9 +49,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://www.localhost:3000")
                                .AllowAnyMethod()
-                               .AllowAnyHeader();
+                               .AllowAnyHeader()
+                               .AllowCredentials();
                     });
             });
 
@@ -59,7 +60,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<lasagnakcsContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
-                
                 option.User.RequireUniqueEmail = true;
                 option.Password.RequiredLength = 8;
                 option.Password.RequireLowercase = true;
@@ -67,6 +67,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 option.Password.RequireDigit = true;
                 option.Password.RequireNonAlphanumeric = true;
                 option.Password.RequiredUniqueChars = 5;
+                option.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultEmailProvider;
             })
                 .AddEntityFrameworkStores<lasagnakcsContext>()
                 .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>)

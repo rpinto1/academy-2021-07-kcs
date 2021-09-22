@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
+import TableHeaderAuth from './TableHeaderAuth'
+import { token } from '../UserManager';
 import TableHeaderNormal from './TableHeaderNormal'
+
 
 
 
@@ -21,7 +24,7 @@ const [companyCount, setcompanyCount] = useState(0)
 const [currentPage, setcurrentPage] = useState(1)
 const [companies, setcompanies] = useState([])
 const countriesPicked = useSelector(state => state.countries)
-
+//const [token, setToken] = useState("")
 
 const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
     key: x["name"],
@@ -30,13 +33,13 @@ const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
 })) }
 
 const handlePageClick = ({target}) => {
-    setcurrentPage(eval(target.textContent))
+    setcurrentPage(parseInt(target.textContent))
 }
 
 const handlePageNext = (operator)=>{
     setcurrentPage((prevState)=> {
-        if((prevState > 1 || operator != "-")&& (prevState < companyCount/10 || operator == "-") ){
-            return eval(prevState + operator + 1)
+        if((prevState > 1 || operator !== "-")&& (prevState < companyCount/10 || operator === "-") ){
+            return parseInt(prevState + operator + 1)
         }else{
             return prevState;
         }
@@ -44,13 +47,22 @@ const handlePageNext = (operator)=>{
     }
     )}
 
+    const headersToken = token===null ?  {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',    
+        "Authorization": `Bearer ${token}`
+    }
+
     const fetchCompanys = async (page = -1) => {
-        const rawResponse = fetch(`http://localhost:3010/api/Companies/IIS`, {
+        console.log(token)
+        const fetchUrl = token===null?  `http://localhost:3010/api/Companies/IIS`:`http://localhost:3010/api/Companies/authenticated`;
+        const rawResponse =fetch(fetchUrl, {
             method: 'POST',
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
+            headers : headersToken,
+            credentials: 'same-origin',
             body: JSON.stringify({Sectorname : sectorValue,
                                 Indexname: indexValue,
                                 Industryname: industryValue,
@@ -58,30 +70,30 @@ const handlePageNext = (operator)=>{
                                 Countries:countriesPicked
                                 })
         });
-        const content = rawResponse.then(response => {
+        rawResponse.then(response => {
             if(response.ok){
+                console.log(response);
             return response.json();
             }
             return [];  
             
-        });
-        content.then(data => {
-
-            setcompanies(data["result"]["companyPocos"])
-            setcompanyCount(data["result"]["count"])
+        }).then(data => {
+            const dataToUse = token===null? data["result"]["companyPocos"] : data.result.companyPocosAuthenticated
+            setcompanies(dataToUse)
+            setcompanyCount(data.result.count)
         })
 
-        if (page == -1){
+        if (page === -1){
             setcurrentPage(1);
         }
         };
 
         const companyResults = ()=> {
-            if(companies.length == 0){
+            if(companies.length === 0){
                 return(
                     <Table.Body className="table">
                         <Table.Row>
-                            <Table.Cell colSpan={6}>
+                            <Table.Cell colSpan={10}>
                             <Segment className="tableSegment" textAlign="center" size="small">
                                 <Header icon>
                                 <Icon name='search' />
@@ -144,7 +156,14 @@ const handlePageNext = (operator)=>{
         }, [sectorValue]);
 
         useEffect(() => {
-            try {
+        /*     let sessionToken = sessionStorage.getItem("token");
+            let localToken = localStorage.getItem("token");
+            if(sessionToken == null){
+                setToken(localToken);
+            }else{
+                setToken(sessionToken);
+            } */
+            try { 
                 var data = fetch(`http://localhost:3010/api/Companies/indexSector`)
                 .then(response => response.json());
                 data.then(data => turnIntoOptions(data,"result","indices"))
@@ -158,7 +177,6 @@ const handlePageNext = (operator)=>{
         }, []);
 
 
-
 return (
     <Segment padded textAlign='left' className='segment'>
         <h1>List of Companies</h1>
@@ -169,7 +187,7 @@ return (
 
         
         <Table celled >
-            <TableHeaderNormal/>
+       { token===null? <TableHeaderNormal/> : <TableHeaderAuth />}
             {companyResults()}
             <Table.Footer>
             <Table.Row>

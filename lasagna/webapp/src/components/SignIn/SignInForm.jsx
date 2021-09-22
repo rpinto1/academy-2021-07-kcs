@@ -50,14 +50,12 @@ export default function SignInForm() {
       method: 'POST',
       headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Credentials': true
       },
+      credentials: 'include',
       body: JSON.stringify(user)
-     }).then(res =>{
-       console.log(res)
-       console.log(res.headers.get('Set-Cookie'))
-      res.json()
-     } )
+     }).then(res =>res.json())
      .then(data => {
       setLoggedUser(data.result)
       setRedirect(true)
