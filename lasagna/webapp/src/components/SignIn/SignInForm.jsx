@@ -108,9 +108,9 @@ export default function SignInForm() {
                 <Button type="submit" id="submit_btn" >Sign in</Button>
             </Form>
 
-            { redirect &&
+            {/* { redirect &&
             <Redirect to='/user/homepage' />
-        }
+        } */}
 
         </Container>
 

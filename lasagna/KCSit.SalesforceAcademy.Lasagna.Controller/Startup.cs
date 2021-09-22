@@ -51,8 +51,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                     {
                         builder.WithOrigins("http://www.localhost:3000")
                                .AllowAnyMethod()
-                               .AllowAnyHeader()
-                               .AllowCredentials();
+                               .AllowAnyHeader();
                     });
             });
 
