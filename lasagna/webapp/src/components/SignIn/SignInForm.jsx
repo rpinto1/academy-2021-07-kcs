@@ -59,7 +59,8 @@ export default function SignInForm() {
       res.json()
      } )
      .then(data => {
-      setLoggedUser(data.result)
+       console.log(data)
+      setLoggedUser(data.response)
       setRedirect(true)
     })
     .catch(error => console.log(error))

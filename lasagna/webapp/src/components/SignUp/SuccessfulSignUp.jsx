@@ -6,7 +6,7 @@ export default function SuccessfulSignUp() {
 
 
     return (
-        <Message id='up-front'>
+        <Message className="ui floating message" id='up-front'>
                 <Message.Header >SUCESSS!!</Message.Header>
                 <p>Your user has been created.</p>
                 <Link to= '/signin'><Button className='ui small center floated teal button'>Go to Sign In!</Button></Link>

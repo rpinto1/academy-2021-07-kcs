@@ -73,9 +73,10 @@ export default function SignUpForm() {
     };
     
     const verifyPasswords = () => {
-        if(newUser.Password === newUser.ConfirmPassword){
-            setPasswordsMatch(prevState => ({...prevState, match: true}));
-        } else {
+        if(newUser.Password == newUser.ConfirmPassword){
+            setPasswordsMatch({showMessage: false, match: true});
+        } 
+        else {
             setPasswordsMatch(prevState => ({...prevState, showMessage: true}));
         }     
     };
