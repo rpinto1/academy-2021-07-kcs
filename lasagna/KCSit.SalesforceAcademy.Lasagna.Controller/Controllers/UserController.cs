@@ -4,6 +4,7 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -68,10 +69,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/Update")]
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> Update(string userId, [FromBody] SignUpViewModel newModel)
+        //[Authorize]
+        public async Task<IActionResult> Update([FromBody] EditUserViewModel newModel)
         {
-            var result = await _userService.Update(userId, newModel);
+            var result = await _userService.Update(newModel);
 
             return ReturnResult(result);
         }
