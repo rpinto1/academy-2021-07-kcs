@@ -10,8 +10,17 @@ export default function EditUserView() {
 
     //all updateable except for emailaddress.
     const [dbUserInfo, setDBUserInfo] = useState({
+        OldPassword: '',
+        NewPassword: '',
+        ConfirmNewPassword: ''
     });
+
     const [userName, setUserName] = useState('');
+
+    const [passwordsMatch, setPasswordsMatch] = useState({
+        match: false,
+        showMessage: false
+    });
 
     useEffect(() =>
         fetch(urlGetUser, {
@@ -23,48 +32,49 @@ export default function EditUserView() {
     }).then(res => res.json())
        .then(data => {
         setUserName(data.result.firstName)
-        setDBUserInfo({
+        setDBUserInfo(prevState => ({
+            ...prevState,
             Id: data.result.id,
             FirstName: data.result.firstName,
             LastName: data.result.lastName,
-            EmailAddress: data.result.emailAddress,
-            OldPassword: '',
-            NewPassword: '',
-            ConfirmNewPassword: ''
-        })
+            EmailAddress: data.result.emailAddress
+        }))
       })
       .catch(error => console.log(error)), []);
 
       
 
     const handleEditUpdate = () => {
+        if (passwordsMatch){
         fetch(urlUpdateUser, {
         method: 'PUT',
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
+//            "Authorization": "Bearer " + token
 
         },
         body: JSON.stringify(dbUserInfo)
        }).then(res => res.json())
       .catch(error => console.log(error))
-      
+    }
   };
 
-const handleChange = (event) => {
-    const { id, value } = event.target 
-    setDBUserInfo(prevState => ({
-        ...prevState,
-        [id]: value     
-    }));
-};
+    const handleChange = (event) => {
+        const { id, value } = event.target 
+        setDBUserInfo(prevState => ({
+            ...prevState,
+            [id]: value     
+        }));
+    };
 
-
-console.log(dbUserInfo);
-console.log(token);
-
-
+    const verifyPasswords = () => {
+        if(dbUserInfo.NewPassword === dbUserInfo.ConfirmPassword){
+            setPasswordsMatch(prevState => ({...prevState, match: true}));
+        } else {
+            setPasswordsMatch(prevState => ({...prevState, showMessage: true}));
+        }     
+    };
 
 
     return (
@@ -116,6 +126,14 @@ console.log(token);
                 onChange={handleChange}
                 id='ConfirmPassword'/>
             </Form.Field>
+            {
+            passwordsMatch.showMessage && 
+
+            <div class="ui bottom attached negative message">
+            <i class="close icon"></i>
+                Confirm password needs to match your new password!
+            </div>
+        }
             <Form.Field>
                 <label>E-mail</label>
                 <input 

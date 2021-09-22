@@ -80,8 +80,7 @@ export default function SignUpForm() {
         }     
     };
     
-console.log(newUser.ConfirmPassword);
-console.log(newUser.Password);
+
 
     return (
     <>   
