@@ -27,7 +27,7 @@ export const UserEdit = props => (
 export const UserCreate = props => (
     <Create {...props}>
         <SimpleForm>
-            <TextInput disabled source="id" />
+            {/* <TextInput disabled source="id" /> */}
             <TextInput source="firstName" />
             <TextInput source="lastName" />
             <TextInput source="email" />

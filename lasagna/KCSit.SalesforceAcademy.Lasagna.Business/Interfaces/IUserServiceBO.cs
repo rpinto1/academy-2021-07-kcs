@@ -34,7 +34,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         public Task<GenericReturn> DeleteUser(string userId);
 
-
+        public Task<GenericReturn> DeleteUsers(string queryString);
 
 
 
