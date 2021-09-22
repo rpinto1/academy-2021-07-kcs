@@ -151,7 +151,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Route("api/DeleteUser")]
         [HttpDelete]
         //[Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser(Guid userId)
         {
             var result = await _userService.DeleteUser(userId);
 
@@ -175,7 +175,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetPortfolio(string userId)
         {
-            var result = await _userService.DeleteUser(userId);
+            //var result = await _userService.DeleteUser(userId);
+            var result = await _userService.DeleteUser(Guid.Parse(userId));
 
             return ReturnResult(result);
         }

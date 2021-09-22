@@ -24,7 +24,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.ViewModels
         [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Invalid Email Address")]
         //[DataType(DataType.EmailAddress)]
         [Display(Name = "Email Address")]
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

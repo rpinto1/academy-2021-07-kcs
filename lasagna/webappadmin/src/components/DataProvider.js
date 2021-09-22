@@ -78,7 +78,6 @@ export default {
 
             return httpClient(`${apiUrl}/SignUp`, {
             method: 'POST',
-            // body: JSON.stringify({...params.data, "emailAddress" : params.data.email, "password" : defaultPassword, "confirmPassword" : defaultPassword}),
             body: JSON.stringify({...params.data, "password" : defaultPassword, "confirmPassword" : defaultPassword}),
         }).then(({ json }) => ({ data: json.result }))
     },

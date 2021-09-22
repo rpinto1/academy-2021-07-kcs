@@ -14,7 +14,7 @@ using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using System.Web;
 using System.Text.Json;
 using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
-
+using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 {
@@ -22,14 +22,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly GenericBusinessLogic _genericBusinessLogic;
+        private readonly IPortfoliosDAO _portfoliosDAO;
+        private readonly IGenericBusinessLogic _genericBusinessLogic;
         private readonly IEmailSender _emailSender;
 
-        public UserServiceBO(GenericBusinessLogic genericBusinessLogic, IEmailSender emailSender, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public UserServiceBO(IGenericBusinessLogic genericBusinessLogic, IEmailSender emailSender, 
+            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            IPortfoliosDAO portfoliosDAO )
         {
             this._genericBusinessLogic = genericBusinessLogic;
             this._userManager = userManager;
             this._signInManager = signInManager;
+            this._portfoliosDAO = portfoliosDAO;
             _emailSender = emailSender;
         }
 
@@ -41,8 +45,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    UserName = model.EmailAddress,
-                    Email = model.EmailAddress
+                    Email = model.Email,
+                    UserName = model.Email,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -73,14 +77,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                var result = await _signInManager.PasswordSignInAsync(model.EmailAddress, model.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
                 if (!result.Succeeded)
                 {
                     throw new Exception("Invalid Sign In credentials");
                 }
 
-                var user = await _userManager.FindByEmailAsync(model.EmailAddress);
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
                 var AuthenticationToken = await _userManager.GenerateUserTokenAsync(user, "LasagnaApp", "AuthenticationToken");
                 await _userManager.SetAuthenticationTokenAsync(user, "LasagnaApp", "AuthenticationToken", AuthenticationToken);
@@ -128,7 +132,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     throw new Exception("User does not exist");
                 }
 
-                if (user.Email != newModel.EmailAddress)
+                if (user.Email != newModel.Email)
                 {
                     throw new Exception("User can not change email address");
                 }
@@ -318,15 +322,22 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
         // --------------------------  ADMIN  ---------------------------------------------------
 
-        public async Task<GenericReturn> DeleteUser(string userId)
+        public async Task<GenericReturn> DeleteUser(Guid userId)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                var user = await _userManager.FindByIdAsync(userId);
+                var user = await _userManager.FindByIdAsync(userId.ToString());
 
                 if (user == null)
                 {
                     throw new Exception("User does not exist");
+                }
+
+                var portfolios = await _portfoliosDAO.GetPortfolios(userId);
+
+                foreach (PortfolioPoco portfolio in portfolios)
+                {
+                    _portfoliosDAO.DeletePortfolioId(portfolio.PortfolioId);
                 }
 
                 var result = await _userManager.DeleteAsync(user);
@@ -351,37 +362,25 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                var ids = queryString.Substring(7, queryString.Length - 9).Split(",");
+                var idStr = queryString.Substring(7, queryString.Length - 9).Split(",");
 
-                //var user = new ApplicationUser();
-                var users = new List<UserPoco>();
+                var deletedUsers = new List<Guid>();
 
-                foreach (string id in ids)
+                foreach (string id in idStr)
                 {
-                    var user = await _userManager.FindByIdAsync(id.Substring(1, id.Length - 2));
+                    var uuid = Guid.Parse(JsonSerializer.Deserialize<string>(id));
 
-                    if (user == null)
-                    {
-                        throw new Exception("User does not exist");
-                    }
-
-                    var result = await _userManager.DeleteAsync(user);
+                    var result = await DeleteUser(uuid);
 
                     if (!result.Succeeded)
                     {
-                        string errorMsg = "";
-                        foreach (var error in result.Errors)
-                        {
-                            errorMsg = String.Concat(errorMsg, error.Description, " ");
-                        }
-                        throw new Exception(errorMsg);
+                        throw new Exception(result.Message);
                     }
 
-                    users.Add(new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email });
+                    deletedUsers.Add(uuid);
                 }
 
-                return users;
-
+                return deletedUsers;
             });
         }
 
