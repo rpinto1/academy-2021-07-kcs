@@ -21,6 +21,12 @@ export default function SignUpForm() {
 
     const captchaInputRef = useRef('');
 
+    const [passwordsMatch, setPasswordsMatch] = useState({
+        match: false,
+        showMessage: false
+    });
+    
+
     const handleChange = (event) => {
         const { id, value } = event.target 
         setNewUser(prevState => ({
@@ -34,11 +40,12 @@ export default function SignUpForm() {
     const [dBError, setDBError] = useState(false);
 
 
+
     const handleSubmit = () => {
 
         let user_captcha = captchaInputRef.current.value;
   
-        if (validateCaptcha(user_captcha) === true) {
+        if (validateCaptcha(user_captcha) === true && passwordsMatch.match === true) {
 
         fetch(`http://localhost:3010/api/SignUp`, {
             method: 'POST',
@@ -65,9 +72,16 @@ export default function SignUpForm() {
         }
     };
     
-
+    const verifyPasswords = () => {
+        if(newUser.Password === newUser.ConfirmPassword){
+            setPasswordsMatch(prevState => ({...prevState, match: true}));
+        } else {
+            setPasswordsMatch(prevState => ({...prevState, showMessage: true}));
+        }     
+    };
     
-   //needs to validate password here. 
+console.log(newUser.ConfirmPassword);
+console.log(newUser.Password);
 
     return (
     <>   
@@ -128,9 +142,19 @@ export default function SignUpForm() {
             placeholder='Rewrite your password' 
             value= {newUser.ConfirmPassword}
             onChange={handleChange}
+            onBlur={verifyPasswords}
             id='ConfirmPassword'
             required/>
         </Form.Field>
+        {
+            passwordsMatch.showMessage && 
+
+            <div class="ui bottom attached negative message">
+            <i class="close icon"></i>
+                Your passwords need to match!
+            </div>
+        }
+        
         <Form.Field>
             <label>E-mail</label>
             <input 
@@ -163,7 +187,6 @@ export default function SignUpForm() {
         
         </Form>
        
-
         </Container>
         <Footer />
         </>
