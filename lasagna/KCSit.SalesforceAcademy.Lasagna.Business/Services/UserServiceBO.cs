@@ -72,7 +72,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 };
                 await _userManager.AddClaimsAsync(user, claims);
 
-                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.Email };
             });
         }
 
@@ -227,7 +227,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                                 Id = user.Id,
                                 FirstName = user.FirstName,
                                 LastName = user.LastName,
-                                Email = user.Email
+                                EmailAddress = user.Email
                             };
 
                 var result = new UserPocoList { Users = users, Total = users.Count() };
@@ -247,7 +247,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 }
                 var user = _userManager.Users.Where(u => u.Id == userId).SingleOrDefault();
 
-                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.Email };
 
                 return Task.FromResult(userPoco);
             });
