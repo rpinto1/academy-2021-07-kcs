@@ -20,6 +20,7 @@ using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using System.Web;
 using System.Text.Json;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
@@ -71,7 +72,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 };
                 await _userManager.AddClaimsAsync(user, claims);
 
-                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.Email };
             });
         }
 
@@ -114,7 +115,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
 
                 //// How is this supposed to work?????? SignOutAsync doesn't receive any parameter and it doesn't return anything!!!
-                //// wich user will this method logout???
+                //// which user will this method logout???
                 //await _signInManager.SignOutAsync();
 
             });
@@ -122,12 +123,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
 
 
 
-        public async Task<GenericReturn> Update(string userId, SignUpViewModel newModel)
+        public async Task<GenericReturn> Update(EditUserViewModel newModel)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-
-
+                var userId = newModel.Id;
                 var user = await _userManager.FindByIdAsync(userId);
 
                 if (user == null)
@@ -135,7 +135,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     throw new Exception("User does not exist");
                 }
 
-                // make sure user is not allowed to change is email address
                 if (user.Email != newModel.EmailAddress)
                 {
                     throw new Exception("User can not change email address");
@@ -152,13 +151,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 }
 
                 // Current Password must come as input parameter from a new model !!!!!!!!!!!!
-                //var passwordResult = await _userManager.ChangePasswordAsync(user, "Test1234%", newModel.Password);
-                var passwordResult = await _userManager.ChangePasswordAsync(user, user.PasswordHash, newModel.Password);
-                if (!passwordResult.Succeeded)
-                {
-                    throw new Exception(passwordResult.Errors.First().Description.ToString());
-                }
+               
+                if (!string.IsNullOrEmpty(newModel.NewPassword)) {
 
+                    var passwordResult = await _userManager.ChangePasswordAsync(user, newModel.OldPassword, newModel.NewPassword);
+                    
+                    if (!passwordResult.Succeeded)
+                    {
+                        throw new Exception(passwordResult.Errors.First().Description.ToString());
+                    }
+                }
 
             });
 
@@ -225,7 +227,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                                 Id = user.Id,
                                 FirstName = user.FirstName,
                                 LastName = user.LastName,
-                                Email = user.Email
+                                EmailAddress = user.Email
                             };
 
                 var result = new UserPocoList { Users = users, Total = users.Count() };
@@ -245,7 +247,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 }
                 var user = _userManager.Users.Where(u => u.Id == userId).SingleOrDefault();
 
-                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.Email };
 
                 return Task.FromResult(userPoco);
             });

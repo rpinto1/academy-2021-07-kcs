@@ -1,6 +1,7 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -16,7 +17,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         public Task<GenericReturn> SignOut(string userId);
 
-        public Task<GenericReturn> Update(string userId, SignUpViewModel newModel);
+        public Task<GenericReturn> Update(EditUserViewModel newModel);
 
 
 
@@ -44,4 +45,5 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         public Task<GenericReturn> ResetPassword(string email, string token, string password);
 
     }
+
 }
