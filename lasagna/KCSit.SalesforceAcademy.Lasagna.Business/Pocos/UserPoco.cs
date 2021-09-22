@@ -12,7 +12,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 
         public string LastName { get; set; }
 
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
 
     }
 }
