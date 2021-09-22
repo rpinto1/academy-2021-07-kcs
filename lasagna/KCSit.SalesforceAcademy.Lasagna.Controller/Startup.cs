@@ -49,7 +49,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://www.localhost:3000")
+                        builder.AllowAnyOrigin()
                                .AllowAnyMethod()
                                .AllowAnyHeader();
                     });
