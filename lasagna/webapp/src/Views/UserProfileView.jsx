@@ -19,14 +19,14 @@ export default function UserProfileView() {
 
 
 
-    const userId = localStorage.getItem("id");
+    //const userId = localStorage.getItem("id");
 
     const token = localStorage.getItem("token");
 
-    //const testUserId = "0753c920-cfe1-456c-a4c6-36de26ae40b8";
+    const userId = "0753c920-cfe1-456c-a4c6-36de26ae40b8";
 
 
-    const url = `http://localhost:3010/api/Companies/portfolio?userId=${userId}`;
+    const url = `http://localhost:3010/api/Portfolios/portfolio?userId=${userId}`;
 
 
     useEffect(() => {
@@ -135,7 +135,7 @@ export default function UserProfileView() {
         }
 
 
-        const request = fetch("localhost:3010/api/Companies/CreatePortfolio", options);
+        const request = fetch("localhost:3010/api/Portfolios/CreatePortfolio", options);
 
         //console.log(options);
     };

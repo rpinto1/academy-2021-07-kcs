@@ -4,6 +4,7 @@ using KCSit.SalesforceAcademy.Lasagna.Business.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using KCSit.SalesforceAcademy.Lasagna.EmailService;
 using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -68,10 +70,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/Update")]
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> Update(string userId, [FromBody] SignUpViewModel newModel)
+        //[Authorize]
+        public async Task<IActionResult> Update([FromBody] EditUserViewModel newModel)
         {
-            var result = await _userService.Update(userId, newModel);
+            var result = await _userService.Update(newModel);
 
             return ReturnResult(result);
         }
@@ -82,6 +84,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         // --------------------------  PremiumUser  ---------------------------------------------------
 
         /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
+        [HttpGet]
         [Route("api/Users")]
         [HttpGet]
         //[Authorize(Policy = "PremiumUserPolicy")]
@@ -95,6 +98,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+        [HttpGet]
         [Route("api/Users/{userId}")]
         [HttpGet]
         //[Authorize(Policy = "PremiumUserPolicy")]
@@ -184,22 +188,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/SendEmail/{email}")]
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(string email)
         {
 
 
-
-            if (email != @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")
+            try
             {
+                MailAddress m = new MailAddress(email);
+            }
+            catch (Exception)
+            {
+
                 return NotFound();
             }
-
-
+            
             var resetToken = await _userService.SendEmail(email);
-            if (resetToken == null)
+            if (resetToken.Succeeded == false)
             {
-                return Ok();
+                return NotFound();
             }
 
             return Ok();
@@ -207,10 +213,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/recover")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
         {
-            var resetToken = await _userService.ResetPassword(resetPasswordModel.Email,resetPasswordModel.Token,resetPasswordModel.Password);
+            var token = HttpUtility.UrlDecode(resetPasswordModel.Token);
+            var resetToken = await _userService.ResetPassword(resetPasswordModel.Email,token,resetPasswordModel.Password);
             if (resetToken.Succeeded == false)
             {
                 return NotFound();

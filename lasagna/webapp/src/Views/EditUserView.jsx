@@ -9,7 +9,8 @@ import { token, urlGetUser, urlUpdateUser } from '../components/UserManager';
 export default function EditUserView() {
 
     //all updateable except for emailaddress.
-    const [dbUserInfo, setDBUserInfo] = useState({});
+    const [dbUserInfo, setDBUserInfo] = useState({
+    });
     const [userName, setUserName] = useState('');
 
     useEffect(() =>
@@ -26,7 +27,10 @@ export default function EditUserView() {
             Id: data.result.id,
             FirstName: data.result.firstName,
             LastName: data.result.lastName,
-            EmailAddress: data.result.emailAddress
+            EmailAddress: data.result.emailAddress,
+            OldPassword: '',
+            NewPassword: '',
+            ConfirmNewPassword: ''
         })
       })
       .catch(error => console.log(error)), []);
@@ -37,9 +41,9 @@ export default function EditUserView() {
         fetch(urlUpdateUser, {
         method: 'PUT',
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Basic ${token}`
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
 
         },
         body: JSON.stringify(dbUserInfo)
@@ -92,7 +96,7 @@ console.log(token);
                 type= 'password' 
                 placeholder='Input your current password' 
                 onChange = {handleChange}
-                id='Password'
+                id='OldPassword'
                 pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}' 
                 required/>
             </Form.Field>

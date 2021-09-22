@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 
 namespace KCSit.SalesforceAcademy.Lasagna.EmailService
 {
@@ -16,7 +17,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.EmailService
             To = new List<MailboxAddress>();
             To.AddRange(to.Select(x => new MailboxAddress(x)));
             Subject = subject;
-            Content = "This is the link to recover the password --> < a href =\"http://www.localhost:3000/recover/"+content+"/"+mail +"\">Recover</a>";
+            Content = "This is the link to recover the password --> http://www.localhost:3000/recover/" + HttpUtility.UrlEncode(content)+"/"+mail;
         }
     }
 }

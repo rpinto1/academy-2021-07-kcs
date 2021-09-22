@@ -11,7 +11,7 @@ export default function UserHeader() {
     const [firstName, setFirstName] = useState('');
 
     const handleLogOut = ()=>{
-    if(sessionStorage.getItem('id') != null || sessionStorage('token') != null) {
+    if(sessionStorage.getItem('id') != null || sessionStorage.getItem('token') != null) {
         //removes all items saved at the time
         sessionStorage.clear();
         }
