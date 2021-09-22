@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Rule1
+namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 {
     public interface IRule1BO
     {

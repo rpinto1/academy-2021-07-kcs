@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.Business\KCSit.SalesforceAcademy.Lasagna.Business.csproj" />
     <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.Controller\KCSit.SalesforceAcademy.Lasagna.Controller.csproj" />
+    <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.DataAccess\KCSit.SalesforceAcademy.Lasagna.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

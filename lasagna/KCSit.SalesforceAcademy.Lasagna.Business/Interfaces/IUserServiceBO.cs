@@ -11,7 +11,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 {
     public interface IUserServiceBO
     {
-        public Task<GenericReturn> SignUp(SignUpViewModel model);
+        public Task<GenericReturn<UserPoco>> SignUp(SignUpViewModel model);
 
         public Task<GenericReturn<IdToken>> SignIn(SignInViewModel model);
 
@@ -23,11 +23,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
 
         // --------------------------  ADMIN  ---------------------------------------------------
-
-
-
-
-        public Task<GenericReturn<IEnumerable<UserPoco>>> GetUsers(string queryString);
+        public Task<GenericReturn<UserPocoList>> GetUsers(string queryString);
 
         public Task<GenericReturn<UserPoco>> GetUser(string userId);
 
@@ -38,6 +34,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
         public Task<GenericReturn<IList<Claim>>> GetClaims(string userId);
 
         public Task<GenericReturn> DeleteUser(string userId);
+
+
+
+
 
         // --------------------------  Email  ---------------------------------------------------
 

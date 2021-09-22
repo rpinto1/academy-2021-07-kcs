@@ -40,6 +40,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
 
             services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericDAO, GenericDAO>();
+            services.AddScoped<IRule1DAO, Rule1DAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
 

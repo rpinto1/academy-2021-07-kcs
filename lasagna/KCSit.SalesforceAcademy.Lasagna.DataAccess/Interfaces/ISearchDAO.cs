@@ -22,42 +22,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<CompanyData>> SearchCompaniesPrice(bool down, List<string> countries);
 
 
-
-
-
-        Task<int> GetCompaniesCount();
-
-        Task<IEnumerable> GetCompanies();
-
-        Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int skip, int take);
-
-        Task<IEnumerable<KeyRatiosPoco>> GetKeyRatios(string ticker);
-
-        Task<IEnumerable<KeyRatiosPoco>> GetKeyRatiosByBulk(List<string> tickers);
-
-        Task<IEnumerable<BalanceSheetPoco>> GetBalanceSheet(string ticker);
-
-        Task<IEnumerable<BalanceSheetPoco>> GetBalanceSheetByBulk(List<string> tickers);
-
-        Task<IEnumerable<IncomeStatementPoco>> GetIncomeStatement(string ticker);
-
-        Task<IEnumerable<IncomeStatementPoco>> GetIncomeStatementByBulk(List<string> tickers);
-
-        Task<DailyInfoPoco> GetDailyInfo(string ticker);
-
-        Task<IEnumerable<DailyInfoPoco>> GetDailyInfoByBulk(List<string> tickers);
-
-        Task<ScorePoco> GetScore(string ticker, int scoringMethodId);
-
-        Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
-
-        Task<List<PortfolioPoco>> GetPortfolios(Guid userId);
-
-        Task<List<PortfolioCompanyPoco>> GetCompaniesByPortfolio(Guid portfolioId);
-
-        Task<List<PortfolioCompanyValuesPoco>> GetCompanyValuesByTicker(string ticker);
-
-        Task<int> GetPortfolioId(Guid portfolioUuid);
         Task<CompanyScorePoco> SearchCompaniesByIndexAuthenticated(string indexName, string sectorName, string industryName, int page, List<string> countries);
     }
 }

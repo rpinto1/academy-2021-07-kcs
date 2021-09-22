@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Controller
 {
@@ -58,6 +59,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             services.AddScoped<lasagnakcsContext>();
             services.AddIdentity<ApplicationUser, IdentityRole>(option =>
             {
+                
                 option.User.RequireUniqueEmail = true;
                 option.Password.RequiredLength = 8;
                 option.Password.RequireLowercase = true;
@@ -67,7 +69,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 option.Password.RequiredUniqueChars = 5;
             })
                 .AddEntityFrameworkStores<lasagnakcsContext>()
-                .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>));
+                .AddTokenProvider("LasagnaApp", typeof(DataProtectorTokenProvider<ApplicationUser>)
+                ).AddDefaultTokenProviders();
 
             services.AddAuthorization(options =>
             {
@@ -77,14 +80,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             });
 
+
+
             services.AddScoped<IUserServiceBO, UserServiceBO>();
 
             services.AddScoped<IExternalServicesBO, ExternalServicesBO>();
-            services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
+            services.AddScoped<ISearchDAO, SearchDAO>();
             services.AddScoped<IGenericDAO, GenericDAO>();
+            services.AddScoped<IPortfoliosDAO, PortfoliosDAO>();
             services.AddScoped<IGenericLogic, GenericLogic>();
             services.AddScoped<ICompaniesBO, CompaniesBO>();
+            services.AddScoped<IPortfoliosBO, PortfoliosBO>();
 
             services.AddScoped<GenericBusinessLogic>();
             services.AddScoped<GenericController>();

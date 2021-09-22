@@ -22,16 +22,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser(List<string> countries);
 
-        Task<GenericReturn<List<PortfolioPoco>>> GetPortfolios(Guid userId);
         
-        Task<GenericReturn<List<PortfolioCompanyPoco>>> GetCompaniesByPortfolio(Guid portfolioId);
-
-        Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker);
-
-        Task<GenericReturn> CreatePortfolio(PortfolioViewModel portfolio);
-
-        Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker);
-
-        Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id);    //RAúl
     }
 }

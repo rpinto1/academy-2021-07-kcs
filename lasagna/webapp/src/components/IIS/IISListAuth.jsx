@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
+import TableHeaderAuth from './TableHeaderAuth'
+import { token } from '../UserManager';
+
 
 
 
@@ -20,7 +23,7 @@ const [companyCount, setcompanyCount] = useState(0)
 const [currentPage, setcurrentPage] = useState(1)
 const [companies, setcompanies] = useState([])
 const countriesPicked = useSelector(state => state.countries)
-const [token, setToken] = useState("")
+//const [token, setToken] = useState("")
 
 const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
     key: x["name"],
@@ -44,12 +47,13 @@ const handlePageNext = (operator)=>{
     )}
 
     const fetchCompanys = async (page = -1) => {
+        console.log(token)
         const rawResponse = fetch(`http://localhost:3010/api/Companies/authenticated`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',    
-            "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({Sectorname : sectorValue,
                                 Indexname: indexValue,
@@ -65,11 +69,9 @@ const handlePageNext = (operator)=>{
             }
             return [];  
             
-        });
-        content.then(data => {
-            console.log(data);
-            setcompanies(data["result"]["companyPocosAuthenticated"])
-            setcompanyCount(data["result"]["count"])
+        }).then(data => {
+            setcompanies(data.result.companyPocosAuthenticated)
+            setcompanyCount(data.result.count)
         })
 
         if (page == -1){
@@ -145,14 +147,14 @@ const handlePageNext = (operator)=>{
         }, [sectorValue]);
 
         useEffect(() => {
-            let sessionToken = sessionStorage.getItem("token");
+        /*     let sessionToken = sessionStorage.getItem("token");
             let localToken = localStorage.getItem("token");
             if(sessionToken == null){
                 setToken(localToken);
             }else{
                 setToken(sessionToken);
-            }
-            try {
+            } */
+            try { 
                 var data = fetch(`http://localhost:3010/api/Companies/indexSector`)
                 .then(response => response.json());
                 data.then(data => turnIntoOptions(data,"result","indices"))
@@ -176,17 +178,7 @@ return (
 
         
         <Table celled >
-            <Table.Header >
-            <Table.Row textAlign="center"> 
-                <Table.HeaderCell width="2">Ticker</Table.HeaderCell>
-                <Table.HeaderCell width="4">Company name</Table.HeaderCell>
-                <Table.HeaderCell width="2">Score</Table.HeaderCell>
-                <Table.HeaderCell width="2">Sticker Price</Table.HeaderCell>
-                <Table.HeaderCell width="2">Margin Of Safety</Table.HeaderCell>
-                <Table.HeaderCell width="2">Previous Close</Table.HeaderCell>
-                <Table.HeaderCell>Profile</Table.HeaderCell>
-            </Table.Row>
-            </Table.Header>
+            <TableHeaderAuth />
             {companyResults()}
             <Table.Footer>
             <Table.Row>

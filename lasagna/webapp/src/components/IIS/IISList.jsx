@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
+import TableHeaderNormal from './TableHeaderNormal'
 
 
 
@@ -168,14 +169,7 @@ return (
 
         
         <Table celled >
-            <Table.Header >
-            <Table.Row textAlign="center"> 
-                <Table.HeaderCell width="3">Ticker</Table.HeaderCell>
-                <Table.HeaderCell width="7">Company name</Table.HeaderCell>
-                <Table.HeaderCell width="3">Previous Close</Table.HeaderCell>
-                <Table.HeaderCell>Profile</Table.HeaderCell>
-            </Table.Row>
-            </Table.Header>
+            <TableHeaderNormal/>
             {companyResults()}
             <Table.Footer>
             <Table.Row>
