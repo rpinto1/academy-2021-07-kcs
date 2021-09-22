@@ -7,8 +7,8 @@ import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 export default function SignInForm() {
 
     const [user, setUser] = useState({
-      EmailAddress: '',
-      Password: '', 
+        EmailAddress: '',
+        Password: '',
     });
 
     const [loggedUser, setLoggedUser] = useState({
@@ -16,11 +16,11 @@ export default function SignInForm() {
         token: ''
     });
 
-   //if all went well, the user is redirected to the user homepage
-   const [redirect, setRedirect] = useState(false);
-   //if user wishes to remain logged, token and id will be saved no localstorage, if not, on sessionstorage
-   const [keepMeLogged, setKeepMeLogged] = useState(false);
-  
+    //if all went well, the user is redirected to the user homepage
+    const [redirect, setRedirect] = useState(false);
+    //if user wishes to remain logged, token and id will be saved no localstorage, if not, on sessionstorage
+    const [keepMeLogged, setKeepMeLogged] = useState(false);
+
     const handleChange = (event) => {
       const { id, value } = event.target
       
@@ -77,41 +77,41 @@ console.log(loggedUser);
       return (
         <Container className= 'formulario'>
             <h1>Sign in to your account</h1>
-            <Form onSubmit= {handleSubmit}>
-            <Form.Field> 
-                <label htmlFor="username">Username: </label>
-                <input
-                type="text"
-                value={user.EmailAddress}
-                placeholder="Enter your email address here"
-                id="EmailAddress"
-                onChange={handleChange}
-              />
-            </Form.Field>  
+            <Form onSubmit={handleSubmit}>
+                <Form.Field>
+                    <label htmlFor="username">Username: </label>
+                    <input
+                        type="text"
+                        value={user.EmailAddress}
+                        placeholder="Enter your email address here"
+                        id="EmailAddress"
+                        onChange={handleChange}
+                    />
+                </Form.Field>
 
-            <Form.Field> 
-                <label htmlFor="password">Password: </label>
-                <input
-                type="password"
-                value={user.Password}
-                placeholder="Enter your password here"
-                id="Password"
-                onChange={handleChange}
-                />
-            </Form.Field> 
-            <Form.Field>
-              <Link to ='/forgottenpassword'><p>I don't remember my password.</p></Link>
-            </Form.Field>
-            <Form.Field>
-              <Checkbox label='Keep me logged in!' onClick ={handleKeepMeLogged} />
-            </Form.Field>
-              <Button type="submit" id="submit_btn" >Sign in</Button>
+                <Form.Field>
+                    <label htmlFor="password">Password: </label>
+                    <input
+                        type="password"
+                        value={user.Password}
+                        placeholder="Enter your password here"
+                        id="Password"
+                        onChange={handleChange}
+                    />
+                </Form.Field>
+                <Form.Field>
+                    <Link to='/forgottenpassword'><p>I don't remember my password.</p></Link>
+                </Form.Field>
+                <Form.Field>
+                    <Checkbox label='Keep me logged in!' onClick={handleKeepMeLogged} />
+                </Form.Field>
+                <Button type="submit" id="submit_btn" >Sign in</Button>
             </Form>
-        
-        {/* { redirect &&
+
+            {/* { redirect &&
             <Redirect to='/user/homepage' />
         } */}
-        
+
         </Container>
 
 

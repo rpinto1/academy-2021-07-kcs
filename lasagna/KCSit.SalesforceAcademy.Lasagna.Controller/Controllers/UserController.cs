@@ -84,6 +84,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         // --------------------------  PremiumUser  ---------------------------------------------------
 
         /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
+        [HttpGet]
         [Route("api/Users")]
         //[Authorize(Policy = "PremiumUserPolicy")]
         //[Authorize(Policy = "AdminPolicy")]
@@ -96,6 +97,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+        [HttpGet]
         [Route("api/Users/{userId}")]
         //[Authorize(Policy = "PremiumUserPolicy")]
         public Task<IActionResult> GetUser(string userId)
@@ -200,10 +202,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [Route("api/recover")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
         {
-            var resetToken = await _userService.ResetPassword(resetPasswordModel.Email,resetPasswordModel.Token,resetPasswordModel.Password);
+            var token = HttpUtility.UrlDecode(resetPasswordModel.Token);
+            var resetToken = await _userService.ResetPassword(resetPasswordModel.Email,token,resetPasswordModel.Password);
             if (resetToken.Succeeded == false)
             {
                 return NotFound();

@@ -95,7 +95,7 @@ export default function RecoverForm({user, email}) {
     
             </Container>
             { redirect &&
-            <Redirect to='/user/homepage' />
+            <Redirect to='/' />
         }
             </Container>
     )
