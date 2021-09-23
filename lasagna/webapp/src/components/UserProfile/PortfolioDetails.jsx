@@ -1,14 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DrawGraph from './DrawGraph';
-import { Tab } from 'semantic-ui-react'
+import { Tab, Placeholder } from 'semantic-ui-react'
 
-export default function PortfolioDetails({ data, activeCompany, activePortfolio }) {
+export default function PortfolioDetails({ data }) {
+
+    const [doneLoading, setDoneLoading] = useState(false);
 
     const Graph = ({ dataKey }) => {
-        return data.length > 0
-            ? (<DrawGraph data={data[activePortfolio].portfolioCompanies[activeCompany].values} dataKey={dataKey} />)
-            : (<p>Loading...</p>);
+        return data != null
+            ? (
+                data.length > 0
+
+                    ? (<DrawGraph data={data} dataKey={dataKey} />)
+                    : (<p>No Company Loaded</p>)
+
+            )
+            : (
+                <Placeholder fluid>
+                    <Placeholder.Header image>
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Paragraph>
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                    </Placeholder.Paragraph>
+                </Placeholder>
+            );
     }
+
+
 
 
     const panes = [
@@ -19,6 +42,9 @@ export default function PortfolioDetails({ data, activeCompany, activePortfolio 
         { menuItem: 'Sales', render: () => <Tab.Pane> <Graph dataKey="sales" /> </Tab.Pane> },
         { menuItem: 'Cash', render: () => <Tab.Pane> <Graph dataKey="cash" /> </Tab.Pane> },
     ];
+
+
+
 
     return (
         <Tab panes={panes} renderActiveOnly={true} className="five-vw-margin-lr" />
