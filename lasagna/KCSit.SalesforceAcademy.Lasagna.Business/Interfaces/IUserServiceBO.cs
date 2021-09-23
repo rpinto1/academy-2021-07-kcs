@@ -21,6 +21,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         public Task<GenericReturn> AdminUpdate(string userId, AdminUpdateViewModel newModel);
 
+        public Task<GenericReturn<UserPoco>> AdminCreate(AdminUpdateViewModel model);
+
 
         public Task<GenericReturn<UserPocoList>> GetUsers(string queryString);
 

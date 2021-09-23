@@ -9,19 +9,14 @@ export default {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         const query = {
+            role: JSON.stringify(params.role),
             sort: JSON.stringify([field, order]),
             range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
             filter: JSON.stringify(params.filter),
         };
 
-
-        // const roleURL = `${apiUrl}/GetClaims?userId=${stringify(query)}`;
-
-        // const role = httpClient(url).then(({ headers, json }) => ({
-        //     data: json.result.users,
-        //     total: json.result.total
-        // }));
-
+        console.log("PARAMS: " + JSON.stringify(params));
+        console.log("QUERY: " + JSON.stringify(query));
 
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
@@ -32,9 +27,12 @@ export default {
     },
 
     getOne: (resource, params) => {
-        return httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-            data: json.result,
-        }))
+        // console.log("GetOne Params: " + JSON.stringify(params));
+        return httpClient(`${apiUrl}/${resource}/${params.id}`)
+        .then(({ json }) => {
+            // console.log("GetOne Result: " + JSON.stringify(json.result));
+            return { data: json.result, }
+        })
     },
 
     getMany: (resource, params) => {
@@ -88,16 +86,14 @@ export default {
 
     create: (resource, params) =>
         {
-            const defaultPassword = "Test1234%";
-
-            return httpClient(`${apiUrl}/SignUp`, {
+            return httpClient(`${apiUrl}/AdminCreate`, {
             method: 'POST',
-            body: JSON.stringify({...params.data, "password" : defaultPassword, "confirmPassword" : defaultPassword}),
+            body: JSON.stringify({...params.data}),
         }).then(({ json }) => ({ data: json.result }))
     },
 
     delete: (resource, params) => {
-        console.log("DELETE Params: " + JSON.stringify(params));
+        // console.log("DELETE Params: " + JSON.stringify(params));
         return httpClient(`${apiUrl}/DeleteUser?userId=${params.id}`, {
             method: 'DELETE',
         }).then(({ json }) => {

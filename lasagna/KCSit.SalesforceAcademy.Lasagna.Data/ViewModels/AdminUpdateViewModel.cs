@@ -26,6 +26,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.ViewModels
         [Display(Name = "Email Address")]
         public string Email { get; set; }
 
+        public string Role { get; set; }
 
     }
 }
