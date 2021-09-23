@@ -7,7 +7,7 @@ import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 export default function SignInForm() {
 
     const [user, setUser] = useState({
-        EmailAddress: '',
+        Email: '',
         Password: '',
     });
 
@@ -82,9 +82,9 @@ console.log(loggedUser);
                     <label htmlFor="username">Username: </label>
                     <input
                         type="text"
-                        value={user.EmailAddress}
+                        value={user.Email}
                         placeholder="Enter your email address here"
-                        id="EmailAddress"
+                        id="Email"
                         onChange={handleChange}
                     />
                 </Form.Field>

@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Data
+namespace KCSit.SalesforceAcademy.Lasagna.Data.ViewModels
 {
-    public class SignUpViewModel
+    public class AdminUpdateViewModel
     {
+        [Required]
+        public string Id { get; set; }
+
         [Required]
         [StringLength(maximumLength: 15, MinimumLength = 2, ErrorMessage = "First Name must have 2 to 15 characters")]
         [RegularExpression(@"^([a-zA-Z]+)$", ErrorMessage = "First Name has invalid characters")]
@@ -22,16 +25,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data
         //[DataType(DataType.EmailAddress)]
         [Display(Name = "Email Address")]
         public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Compare("Password")]
-        [Display(Name = "Confirm Password")]
-        public string ConfirmPassword { get; set; }
 
 
     }

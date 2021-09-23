@@ -10,38 +10,60 @@ import Footer from '../components/Footer';
 export default function UserProfileView() {
 
     const [data, setData] = useState([]);
-
     const [activePortfolio, setActivePortfolio] = useState(0);
-
     const [activeCompany, setActiveCompany] = useState(0);
 
-    const [newPortfolioName, setNewPortfolioName] = useState("");
+    const [activeCompanyValues, setActiveCompanyValues] = useState([]);
 
+    const [finishedLoading, setFinishedLoading] = useState(false)
+    const [noPortfolioInfo, setNoPortfolioInfo] = useState(false);
+    const [noCompanies, setNoCompanies] = useState(false);
 
-
-    //const userId = localStorage.getItem("id");
+    const userId = localStorage.getItem("id");
 
     const token = localStorage.getItem("token");
-
-    const userId = "0753c920-cfe1-456c-a4c6-36de26ae40b8";
-
 
     const url = `http://localhost:3010/api/Portfolios/portfolio?userId=${userId}`;
 
 
-    useEffect(() => {
-        fetch(url).then(result => {
-            if (result.status != 200) {
-                console.log("error");
-                return;
-            }
-            result.json().then(data => {
+
+    const fetchAndSet = (url, setterFunc) => {
+
+        (async function () {
+            try {
+                const response = await fetch(url)
+
+                const data = await response.json();
+
                 if (data != null) {
-                    setData(data.result);
+                    setterFunc(() => data.result);
+                    console.log("fetched data: ", data.result)
                 }
-            })
-        })
+
+            } catch (e) {
+                console.error("Error while fetching: ", e);
+            }
+        })()
+    }
+
+
+    useEffect(() => {
+
+        (() => {
+            fetchAndSet(url, setData);
+
+            if (data.length === 0) {
+                setNoPortfolioInfo(() => true);
+            } else if (data[activePortfolio].portfolioCompanies.length === 0) {
+                setNoCompanies(() => true);
+            }
+
+            setFinishedLoading(() => true);
+
+        })();
+
     }, []);
+
 
 
     const handlePortfolioChange = (e, { value }) => {
@@ -52,12 +74,23 @@ export default function UserProfileView() {
 
     const handleCompanyChange = (e, { index }) => {
         setActiveCompany(index);
+        setActiveCompanyValues(() => fetchAndSet(`http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${data[activePortfolio].portfolioCompanies[index].ticker}`, setActiveCompanyValues));
     };
 
 
-    const portfolioNames = data.map((item, i) => {
-        return { index: i, text: item.portfolioName, value: i };
-    });
+    const dropdownOptions = () => {
+
+        if (data.length > 0) {
+            let options = data.map((item, i) => {
+                return { index: i, text: item.portfolioName, value: i };
+            });
+            return options;
+        }
+
+        return [{ index: 0, text: 'Loading data...', value: 0, disabled: true }];
+
+    }
+
 
     const Greeting = () => {
         return (
@@ -77,12 +110,13 @@ export default function UserProfileView() {
 
     const PortfolioDropdown = () => (
         <Dropdown
-            placeholder={data.length > 0 ? 'Select Portfolio' : 'Loading data...'}
+            placeholder={data.length > 0 ? 'Select Portfolio' : (noPortfolioInfo ? 'No Portfolios' : 'Loading data...')}
             fluid
             selection
-            clearable
-            options={data.length > 0 ? portfolioNames : [{ index: 0, text: 'Loading data...', value: 0 }]}
+            loading={finishedLoading ? false : true}
+            options={dropdownOptions()}
             onChange={handlePortfolioChange}
+
         />
     );
 
@@ -91,8 +125,11 @@ export default function UserProfileView() {
 
         return (
             <Menu secondary vertical>
-                {
-                    data.length > 0
+                {data.length > 0
+
+                    ?
+                    data[activePortfolio].portfolioCompanies.length > 0
+
                         ?
                         data[activePortfolio].portfolioCompanies.map((item, i) => {
                             return (
@@ -107,11 +144,17 @@ export default function UserProfileView() {
 
                         :
                         <Menu.Item
-                            name="Loading..."
-                            active="true"
-                            index="0"
+                            name={finishedLoading ? "No Companies" : "Loading..."}
+                            active={true}
+                            index={1}
                         />
-                }
+
+                    :
+                    <Menu.Item
+                        name={noPortfolioInfo ? "No Portfolios" : "Loading..."}
+                        active={true}
+                        index={1}
+                    />}
             </Menu>
         );
 
@@ -125,8 +168,8 @@ export default function UserProfileView() {
             userId: userId
         }
 
-        const options = { 
-            method: "POST", 
+        const options = {
+            method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -135,7 +178,17 @@ export default function UserProfileView() {
         }
 
 
-        const request = fetch("localhost:3010/api/Portfolios/CreatePortfolio", options);
+        let request;
+
+        (async () => {
+            request = await fetch("http://localhost:3010/api/Portfolios/createPortfolio", options)
+            console.log(request)
+
+            if (request.ok) {
+                fetchAndSet(url, setData);
+            }
+        })()
+
 
         //console.log(options);
     };
@@ -146,10 +199,8 @@ export default function UserProfileView() {
         const [formField, setFormField] = useState("");
 
         return (
-            <Form onSubmit={createNewPortfolio}>
-
+            <Form onSubmit={createNewPortfolio} loading={finishedLoading? false : true}>
                 <Form.Field>
-
                     <input
                         type="text"
                         placeholder="New Portfolio Name"
@@ -159,9 +210,7 @@ export default function UserProfileView() {
                 </Form.Field>
                 <Button>Submit</Button>
             </Form>
-
         );
-
     }
 
 
@@ -169,42 +218,35 @@ export default function UserProfileView() {
 
         <div>
             <UserHeader />
-
             <Container className="profile">
 
                 <Greeting />
 
                 <section className="portfolio-section five-vw-margin-lr">
+                    <section className="portfolio-list">
 
-                <section className="portfolio-list">
+                        <PortfolioDropdown />
 
+                        <PortfolioCompanies data={data} />
 
-                    <PortfolioDropdown />
+                        <hr />
+                        {
+                            data.length > 0 && (
+                                <>
+                                    <a href={`http://localhost:3000/user/portfolio/edit/${data[activePortfolio].portfolioId}`}>Edit portfolio</a>
+                                    <hr />
+                                </>)
+                        }
 
-                    <PortfolioCompanies data={data} />
+                        <AddPortfolio />
 
-                    <hr />
+                    </section>
 
-                    {
-                        data.length > 0 && (
-                            <>
-                                <a href={`http://localhost:3000/user/portfolio/edit/${data[activePortfolio].portfolioId}`}>Edit portfolio</a>
-                                <hr />
-                            </>)
-                    }
-
-                    <AddPortfolio />
-
-
-                </section> 
-
-                <section className="portfolio-item-detail">
-
-                    <PortfolioDetails data={data} activeCompany={activeCompany} activePortfolio={activePortfolio} className="detail-table" />
+                    <section className="portfolio-item-detail">
+                        <PortfolioDetails data={activeCompanyValues} className="detail-table" />
+                    </section>
 
                 </section>
-
-            </section>
 
             </Container>
 

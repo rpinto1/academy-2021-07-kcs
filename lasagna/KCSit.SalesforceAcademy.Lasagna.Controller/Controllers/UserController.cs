@@ -78,7 +78,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+        [Route("api/AdminUpdate")]
+        [HttpPut]
+        //[Authorize]
+        public async Task<IActionResult> AdminUpdate(string userId, [FromBody] AdminUpdateViewModel newModel)
+        {
+            var result = await _userService.AdminUpdate(userId, newModel);
 
+            return ReturnResult(result);
+        }
 
 
         // --------------------------  PremiumUser  ---------------------------------------------------
@@ -86,7 +94,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         /// http://localhost:3010/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
         [HttpGet]
         [Route("api/Users")]
-        //[Authorize(Policy = "PremiumUserPolicy")]
+        [HttpGet]
+        //[Authorize(Policy = "ManagerPolicy")]
         //[Authorize(Policy = "AdminPolicy")]
         public Task<IActionResult> GetUsers()
         {
@@ -99,6 +108,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpGet]
         [Route("api/Users/{userId}")]
+        [HttpGet]
         //[Authorize(Policy = "PremiumUserPolicy")]
         public Task<IActionResult> GetUser(string userId)
         {
@@ -112,7 +122,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpPost]
         [Route("api/AddClaim")]
-        [Authorize(Policy = "ManagerPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> AddClaim(string userId, [FromBody] Claim claim)
         {
             var result = await _userService.AddClaim(userId, claim);
@@ -122,7 +132,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpPost]
         [Route("api/RemoveClaim")]
-        [Authorize(Policy = "ManagerPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> RemoveClaim(string userId, [FromBody] Claim claim)
         {
             var result = await _userService.RemoveClaim(userId, claim);
@@ -133,7 +143,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpGet]
         [Route("api/GetClaims")]
-        [Authorize(Policy = "ManagerPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> GetClaims(string userId)
         {
             var result = await _userService.GetClaims(userId);
@@ -149,13 +159,22 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Route("api/DeleteUser")]
         [HttpDelete]
         //[Authorize(Policy = "AdminPolicy")]
-        public async Task<IActionResult> DeleteUser(string userId)
+        public async Task<IActionResult> DeleteUser(Guid userId)
         {
             var result = await _userService.DeleteUser(userId);
 
             return ReturnResult(result);
         }
 
+        [Route("api/DeleteUsers")]
+        [HttpDelete]
+        //[Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> DeleteUsers(string filter)
+        {
+            var result = await _userService.DeleteUsers(filter);
+
+            return ReturnResult(result);
+        }
 
         //----------------------- Portfolios
 
@@ -164,7 +183,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<IActionResult> GetPortfolio(string userId)
         {
-            var result = await _userService.DeleteUser(userId);
+            //var result = await _userService.DeleteUser(userId);
+            var result = await _userService.DeleteUser(Guid.Parse(userId));
 
             return ReturnResult(result);
         }

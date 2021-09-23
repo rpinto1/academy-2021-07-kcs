@@ -19,10 +19,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         public Task<GenericReturn> Update(EditUserViewModel newModel);
 
+        public Task<GenericReturn> AdminUpdate(string userId, AdminUpdateViewModel newModel);
 
 
-
-        // --------------------------  ADMIN  ---------------------------------------------------
         public Task<GenericReturn<UserPocoList>> GetUsers(string queryString);
 
         public Task<GenericReturn<UserPoco>> GetUser(string userId);
@@ -33,9 +32,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         public Task<GenericReturn<IList<Claim>>> GetClaims(string userId);
 
-        public Task<GenericReturn> DeleteUser(string userId);
+        public Task<GenericReturn> DeleteUser(Guid userId);
 
-
+        public Task<GenericReturn> DeleteUsers(string queryString);
 
 
 

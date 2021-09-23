@@ -6,7 +6,7 @@ import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 export default function SignInForm() {
 
     const [user, setUser] = useState({
-      EmailAddress: '',
+      Email: '',
       Password: '', 
     });
 
@@ -38,7 +38,7 @@ export default function SignInForm() {
   };
     
   const saveUser = () => {
-    console.log(loggedUser.id)
+    console.log("Loged User ID: " + JSON.stringify(loggedUser.id))
     if(keepMeLogged) {
       localStorage.setItem('id', loggedUser.id.toString());
       localStorage.setItem('token', loggedUser.token.toString());
@@ -58,6 +58,7 @@ export default function SignInForm() {
       body: JSON.stringify(user)
      }).then(res => res.json())
      .then(data => {
+       console.log("SignIn Result: " + JSON.stringify(data.result))
       setLoggedUser(data.result)
       setRedirect(true)
     })
@@ -69,8 +70,8 @@ export default function SignInForm() {
       saveUser()
     },[loggedUser]);
 
-console.log(user);
-console.log(loggedUser);
+console.log("User: " + JSON.stringify(user));
+console.log("loggedUser: " + JSON.stringify(loggedUser));
 
       return (
         <Container className= 'formulario'>
@@ -80,9 +81,9 @@ console.log(loggedUser);
                 <label htmlFor="username">Username: </label>
                 <input
                 type="text"
-                value={user.EmailAddress}
+                value={user.Email}
                 placeholder="Enter your email address here"
-                id="EmailAddress"
+                id="Email"
                 onChange={handleChange}
               />
             </Form.Field>  

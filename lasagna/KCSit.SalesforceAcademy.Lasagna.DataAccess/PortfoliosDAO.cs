@@ -79,13 +79,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                            PortfolioName = portfolio.Name,
                                            
                                        })
-                                       .ToListAsync();
+                                       .SingleOrDefaultAsync();
 
-                var toReturn = query.SingleOrDefault();
+                query.PortfolioCompanies = companies;
 
-                toReturn.PortfolioCompanies = companies;
-
-                return toReturn;
+                return query;
                 
 
             }
@@ -127,7 +125,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
+        public void UpdatePortfolioId( Guid Uuid, List<string> Tickers, String PortfolioName)
         {
             using (var context = new lasagnakcsContext())
             {
