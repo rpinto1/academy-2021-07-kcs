@@ -249,35 +249,29 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                             .Skip(skip)
                             .Take(take)
                             .ToList()
+
                             select new UserPoco
                             {
                                 Id = user.Id,
                                 FirstName = user.FirstName,
                                 LastName = user.LastName,
                                 Email = user.Email,
-                                //Role = _userManager.GetClaimsAsync(user).Result.First()
                             };
+
 
                 var Total = _userManager.Users.Count(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
                                                           u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
                                                           u.Email.ToLower().Contains(filter.email.ToLower()));
 
-                //for (int i = 0; i < users.Count(); i++)
-                //{
-                //    var appUser = _userManager.FindByIdAsync(users.ElementAt(i).Id).Result;
-                //    var claims = _userManager.GetClaimsAsync(appUser).Result;
-                //    users.ElementAt(i).Role = claims.First();
-                //}
+                var usersList = users.ToList();
+                for (int i = 0; i < usersList.Count; i++)
+                {
+                    var appUser = _userManager.FindByIdAsync(usersList[i].Id).Result;
+                    var claims = _userManager.GetClaimsAsync(appUser).Result;
+                    usersList[i].Role = claims.First().Value;
+                }
 
-
-                //foreach (UserPoco user in users)
-                //{
-                //    var appUser = _userManager.FindByIdAsync(user.Id).Result;
-                //    var claims = _userManager.GetClaimsAsync(appUser).Result;
-                //    user.Role = claims.First();
-                //}
-
-                var result = new UserPocoList { Users = users, Total = Total };
+                var result = new UserPocoList { Users = usersList.AsEnumerable(), Total = Total };
 
                 return Task.FromResult(result);
             });

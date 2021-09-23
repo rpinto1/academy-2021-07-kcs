@@ -248,6 +248,44 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         //    }
         //}
 
+        public async Task<IEnumerable<KeyRatioAndIncomeStatementPoco>> SearchCompaniesIncomeStatements(string ticker)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await (from company in context.Companies
+                              join yearlyReport in context.YearlyReports
+                              on company.Id equals yearlyReport.CompanyId
+                              join incomeStatement in context.IncomeStatements
+                              on yearlyReport.IncomeStatementId equals incomeStatement.Id
+                              join keyRatio in context.KeyRatios
+                              on yearlyReport.KeyRatioId equals keyRatio.Id
+                              where company.Ticker.Equals(ticker)
+                              orderby yearlyReport.Year descending
+
+                              select new KeyRatioAndIncomeStatementPoco
+                              {
+                                  Ticker = company.Ticker,
+                                  Year = (int?)yearlyReport.Year ?? 0,
+                                  Revenue = (decimal?)incomeStatement.Revenue ?? 0,
+                                  RevenueGrowth = (decimal?)keyRatio.RevenueGrowth ?? 0,
+                                  GrossProfit = (decimal?)incomeStatement.GrossProfit ?? 0,
+                                  GrossMargin = (decimal?)keyRatio.GrossMargin ?? 0,
+                                  OperatingProfit = (decimal?)incomeStatement.OperatingProfit ?? 0,
+                                  OperatingMargin = (decimal?)keyRatio.OperatingMargin ?? 0,
+                                  //earnings
+                                  //eps
+                                  DividendsPerShare = (decimal?)keyRatio.DividendsPerShare ?? 0,
+                                  //Dividend Growth
+                                  ReturnOnAssets = (decimal?)keyRatio.ReturnOnAssets ?? 0,
+                                  ReturnOnEquity = (decimal?)keyRatio.ReturnOnEquity ?? 0,
+                                  ReturnOnInvestedCapital = (decimal?)keyRatio.ReturnOnInvestedCapital ?? 0
+                              })
+
+                        .Take(20)
+                        .ToListAsync();
+            }
+        }
+
 
     }
 }

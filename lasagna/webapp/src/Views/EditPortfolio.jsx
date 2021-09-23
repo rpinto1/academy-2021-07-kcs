@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactDOM } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, List, Container, ListContent, Button, Checkbox } from 'semantic-ui-react';
 import Header from '../components/Header';
 import UserHeader from '../components/UserHeader';
@@ -13,8 +13,6 @@ export default function EditPortfolio() {
   const [companies, setCompanies] = useState([]);
 
   const [toDelete, setToDelete] = useState([]);
-
-  let ready = false;
 
   const id = useParams();
 
@@ -50,7 +48,6 @@ export default function EditPortfolio() {
           if (data != null) {
             setPortfolio(() => data.result);
             setCompanies(() => data.result.portfolioCompanies);
-            ready = true;
             console.log(data.result)
           }
 
@@ -123,7 +120,7 @@ export default function EditPortfolio() {
       setToDelete(() => toDelete.filter(item => item !== companyTicker));
     }
 
-    console.log('items to delete: ', toDelete, checked);
+    //console.log('items to delete: ', toDelete, checked);
 
   };
 
@@ -132,7 +129,7 @@ export default function EditPortfolio() {
     setCompanies(() => companies.filter(item => item.ticker !== companyTicker));
     setToDelete(() => [...toDelete, companyTicker]);
 
-    console.log('companies: ', companies, 'to delete: ', toDelete)
+    //console.log('companies: ', companies, 'to delete: ', toDelete)
 
   };
 
@@ -156,7 +153,6 @@ export default function EditPortfolio() {
       <Container>
         {toDelete.length > 0 && <Button onClick={buttonHandlerSave}>Delete selected</Button>}
         {companies.length > 0 &&
-          //console.log('in body of page ', portfolio)
             (<List celled>
               {companies.map((item, index) =>
                 <List.Item key={index}>

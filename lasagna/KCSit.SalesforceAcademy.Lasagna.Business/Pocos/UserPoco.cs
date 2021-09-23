@@ -15,7 +15,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 
         public string Email { get; set; }
 
-        public Claim Role { get; set; }
+        public string Role { get; set; }
 
     }
 }

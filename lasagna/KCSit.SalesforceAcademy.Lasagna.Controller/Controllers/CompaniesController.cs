@@ -156,12 +156,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpGet("search/{search}/{searchPageIndex}")]
         public async Task<IActionResult> GetSearch(string search, int searchPageIndex)
         {
-            
+
             var genericReturn = await _companiesBO.GetCompaniesNamesTickers(search, searchPageIndex);
 
             return Ok(genericReturn);
         }
+        [HttpGet("search/{ticker}")]
+        public async Task<IActionResult> GetIncomeStatement(string ticker)
+            {
 
-        
+                var genericReturn = await _companiesBO.GetCompaniesIncomeStatement(ticker);
+
+                return Ok(genericReturn);
+            }
     }
 }

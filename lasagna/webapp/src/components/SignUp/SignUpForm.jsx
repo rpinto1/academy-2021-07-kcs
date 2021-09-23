@@ -14,7 +14,7 @@ export default function SignUpForm() {
     const [newUser, setNewUser] = useState({
         FirstName: '',
         LastName: '',
-        EmailAddress:'',
+        Email:'',
         Password: '',
         ConfirmPassword: ''    
     });
@@ -160,9 +160,9 @@ console.log(newUser.Password);
             <input 
             type= 'email' 
             placeholder='Write your e-mail address' 
-            value = {newUser.EmailAddress} 
+            value = {newUser.Email} 
             onChange={handleChange}
-            id='EmailAddress'
+            id='Email'
             required/>
         </Form.Field>
         <Form.Field>
