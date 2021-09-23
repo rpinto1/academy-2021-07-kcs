@@ -79,13 +79,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                            PortfolioName = portfolio.Name,
                                            
                                        })
-                                       .ToListAsync();
+                                       .SingleOrDefaultAsync();
 
-                var toReturn = query.SingleOrDefault();
+                query.PortfolioCompanies = companies;
 
-                toReturn.PortfolioCompanies = companies;
-
-                return toReturn;
+                return query;
                 
 
             }
