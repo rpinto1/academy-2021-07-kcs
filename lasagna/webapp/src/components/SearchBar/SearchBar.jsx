@@ -51,7 +51,7 @@ function SearchBar() {
                         placeholder="Search for a company"
                         value={pattern}
                         onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
-                        <i class="search icon"></i> 
+                        <i className="search icon"></i> 
                 </div>
 
                 {    (nameTickers.length > 0) &&
