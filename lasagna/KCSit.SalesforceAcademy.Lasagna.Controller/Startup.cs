@@ -98,6 +98,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
 
 
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IRule1DAO, Rule1DAO>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
