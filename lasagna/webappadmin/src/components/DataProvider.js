@@ -13,6 +13,16 @@ export default {
             range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
             filter: JSON.stringify(params.filter),
         };
+
+
+        // const roleURL = `${apiUrl}/GetClaims?userId=${stringify(query)}`;
+
+        // const role = httpClient(url).then(({ headers, json }) => ({
+        //     data: json.result.users,
+        //     total: json.result.total
+        // }));
+
+
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
         return httpClient(url).then(({ headers, json }) => ({
@@ -56,10 +66,14 @@ export default {
     },
 
     update: (resource, params) => {
-        // httpClient(`${apiUrl}/${resource}/${params.id}`, {
-        //     method: 'PUT',
-        //     body: JSON.stringify(params.data),
-        // }).then(({ json }) => ({ data: json.result }))
+        // console.log("UPDATE Params: " + JSON.stringify(params.data));
+        return httpClient(`${apiUrl}/AdminUpdate?userId=${params.id}`, {
+            method: 'PUT',
+            body: JSON.stringify(params.data),
+        }).then(({ json }) => {
+            // console.log("UPDATE Result: " + JSON.stringify(json.result));
+            return { data: { id: json.result} }
+        })
     },
 
     updateMany: (resource, params) => {
@@ -83,6 +97,7 @@ export default {
     },
 
     delete: (resource, params) => {
+        console.log("DELETE Params: " + JSON.stringify(params));
         return httpClient(`${apiUrl}/DeleteUser?userId=${params.id}`, {
             method: 'DELETE',
         }).then(({ json }) => {

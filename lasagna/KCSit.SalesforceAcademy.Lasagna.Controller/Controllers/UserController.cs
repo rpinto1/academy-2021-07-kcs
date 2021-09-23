@@ -78,7 +78,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+        [Route("api/AdminUpdate")]
+        [HttpPut]
+        //[Authorize]
+        public async Task<IActionResult> AdminUpdate(string userId, [FromBody] AdminUpdateViewModel newModel)
+        {
+            var result = await _userService.AdminUpdate(userId, newModel);
 
+            return ReturnResult(result);
+        }
 
 
         // --------------------------  PremiumUser  ---------------------------------------------------
@@ -87,7 +95,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpGet]
         [Route("api/Users")]
         [HttpGet]
-        //[Authorize(Policy = "PremiumUserPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         //[Authorize(Policy = "AdminPolicy")]
         public Task<IActionResult> GetUsers()
         {
@@ -114,7 +122,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpPost]
         [Route("api/AddClaim")]
-        [Authorize(Policy = "ManagerPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> AddClaim(string userId, [FromBody] Claim claim)
         {
             var result = await _userService.AddClaim(userId, claim);
@@ -124,7 +132,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpPost]
         [Route("api/RemoveClaim")]
-        [Authorize(Policy = "ManagerPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> RemoveClaim(string userId, [FromBody] Claim claim)
         {
             var result = await _userService.RemoveClaim(userId, claim);
@@ -135,7 +143,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
         [HttpGet]
         [Route("api/GetClaims")]
-        [Authorize(Policy = "ManagerPolicy")]
+        //[Authorize(Policy = "ManagerPolicy")]
         public async Task<IActionResult> GetClaims(string userId)
         {
             var result = await _userService.GetClaims(userId);

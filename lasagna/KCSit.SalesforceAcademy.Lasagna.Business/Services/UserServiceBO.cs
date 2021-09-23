@@ -158,17 +158,44 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                         throw new Exception(passwordResult.Errors.First().Description.ToString());
                     }
                 }
-
             });
-
         }
 
+
+        public async Task<GenericReturn> AdminUpdate(string userId, AdminUpdateViewModel newModel)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception("User does not exist");
+                }
+
+                if (user.Email != newModel.Email)
+                {
+                    throw new Exception("User can not change email address");
+                }
+
+                // user data is ok. Update user
+                user.FirstName = newModel.FirstName;
+                user.LastName = newModel.LastName;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    throw new Exception(result.Errors.First().Description.ToString());
+                }
+                return userId;
+            });
+        }
 
         // --------------------------  PremiumUser  ---------------------------------------------------
 
         public async Task<GenericReturn<UserPocoList>> GetUsers(string queryString)
         {
-            return await _genericBusinessLogic.GenericTransaction(() =>
+            return await _genericBusinessLogic.GenericTransaction( () =>
             {
                 var filter = new Filter();
                 var skip = 0;
@@ -227,12 +254,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                                 Id = user.Id,
                                 FirstName = user.FirstName,
                                 LastName = user.LastName,
-                                Email = user.Email
+                                Email = user.Email,
+                                //Role = _userManager.GetClaimsAsync(user).Result.First()
                             };
 
                 var Total = _userManager.Users.Count(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
                                                           u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
                                                           u.Email.ToLower().Contains(filter.email.ToLower()));
+
+                //for (int i = 0; i < users.Count(); i++)
+                //{
+                //    var appUser = _userManager.FindByIdAsync(users.ElementAt(i).Id).Result;
+                //    var claims = _userManager.GetClaimsAsync(appUser).Result;
+                //    users.ElementAt(i).Role = claims.First();
+                //}
+
+
+                //foreach (UserPoco user in users)
+                //{
+                //    var appUser = _userManager.FindByIdAsync(user.Id).Result;
+                //    var claims = _userManager.GetClaimsAsync(appUser).Result;
+                //    user.Role = claims.First();
+                //}
 
                 var result = new UserPocoList { Users = users, Total = Total };
 

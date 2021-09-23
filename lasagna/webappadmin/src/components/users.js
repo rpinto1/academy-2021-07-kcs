@@ -9,6 +9,7 @@ export const UserList = props => (
             <TextField source="firstName" label="First Name" />
             <TextField source="lastName" label="Last Name" />
             <EmailField source="email" />
+            <TextField source="role" />
         </Datagrid>
     </List>
 );
