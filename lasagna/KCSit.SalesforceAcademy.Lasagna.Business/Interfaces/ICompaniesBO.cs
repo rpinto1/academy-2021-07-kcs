@@ -22,6 +22,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<GainLoseDBPoco>> GetTopGainerOrLoser(List<string> countries);
 
-        
+        Task<GenericReturn<List<KeyRatioAndIncomeStatementValuesPoco>>> GetCompaniesIncomeStatement(string ticker);
     }
 }

@@ -84,7 +84,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
         }
 
-        public async Task<GenericReturn> CreatePortfolio(string userId, string portfolioName)
+        public async Task<GenericReturn<Portfolio>> CreatePortfolio(string userId, string portfolioName)
         {
 
             return await _genericBusiness.GenericTransaction(
@@ -95,13 +95,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 {
                     UserId = userId,
                     Name = portfolioName,
-                    Uuid = new Guid()
+                    Uuid = Guid.NewGuid()
 
                 };
 
-                var newPortfolio = await _genericDAO.AddAsync(toInsert);
+                var result = await _genericDAO.AddAsync(toInsert);
 
-                return;
+                return result;
+
+
+
+                
 
             });
 
@@ -160,6 +164,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 
                 var rule1DAO = new Rule1DAO();
 
+                
                 var keyRatiosList = await rule1DAO.GetKeyRatios(ticker);
                 var balanceSheetList = await rule1DAO.GetBalanceSheet(ticker);
                 var incomeStatementList = await rule1DAO.GetIncomeStatement(ticker);

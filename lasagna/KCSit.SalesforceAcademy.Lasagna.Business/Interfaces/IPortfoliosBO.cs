@@ -1,4 +1,5 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker);
 
-        Task<GenericReturn> CreatePortfolio(string userId, string portfolioName);
+        Task<GenericReturn<Portfolio>> CreatePortfolio(string userId, string portfolioName);
 
         Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker);
 

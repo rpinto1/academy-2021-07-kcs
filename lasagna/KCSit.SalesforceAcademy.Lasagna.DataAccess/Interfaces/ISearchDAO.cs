@@ -21,7 +21,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<List<CompanyPoco>> SearchCompaniesBySearchQuery(string search, int pageSize, int pageNumber);
         Task<List<CompanyData>> SearchCompaniesPrice(bool down, List<string> countries);
 
-
+        Task<IEnumerable<KeyRatioAndIncomeStatementPoco>> SearchCompaniesIncomeStatements(string ticker);
         Task<CompanyScorePoco> SearchCompaniesByIndexAuthenticated(string indexName, string sectorName, string industryName, int page, List<string> countries);
     }
 }
