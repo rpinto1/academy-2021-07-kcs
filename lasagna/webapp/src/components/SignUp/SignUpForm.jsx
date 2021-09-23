@@ -119,8 +119,9 @@ export default function SignUpForm() {
         {
            dBError && <FailedSignUp id='floating-msg'/> 
         }
+
         {
-        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
+            accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
         }
 
         <Form.Field>
@@ -165,6 +166,7 @@ export default function SignUpForm() {
             id='Email'
             required/>
         </Form.Field>
+        
         <Form.Field>
           <Captcha />
           <div className="container">
