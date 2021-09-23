@@ -8,6 +8,10 @@ export const scoreList = props => (
             <TextField source="id" />
             <TextField source="Ticker" />
             <TextField source="Name" />
+            <TextField source="Price" />    
+
+            {/* SearchCompaniesBySearchQuery(string search, int pageSize, int pageNumber) */}
+
             <TextField source="ExchangeId" />
             <TextField source="SectorId" />
             <TextField source="IndustryId" />

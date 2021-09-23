@@ -24,13 +24,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IPortfoliosDAO _portfoliosDAO;
         private readonly IGenericBusinessLogic _genericBusinessLogic;
+        private readonly IGenericDAO _genericDAO;
         private readonly IEmailSender _emailSender;
 
-        public UserServiceBO(IGenericBusinessLogic genericBusinessLogic, IEmailSender emailSender, 
+        public UserServiceBO(IGenericBusinessLogic genericBusinessLogic, IGenericDAO genericDAO,
             UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            IPortfoliosDAO portfoliosDAO )
+             IEmailSender emailSender, IPortfoliosDAO portfoliosDAO)
         {
             this._genericBusinessLogic = genericBusinessLogic;
+            this._genericDAO = genericDAO;
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._portfoliosDAO = portfoliosDAO;
@@ -61,15 +63,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     throw new Exception(errorMsg);
                 }
 
-                var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Role, "BasicUser"),
-                    //new Claim(ClaimTypes.Role, "PremiumUser"),
-                    //new Claim(ClaimTypes.Role, "Manager"),
-                    //new Claim(ClaimTypes.Role, "Admin")
-                };
+                var claims = new List<Claim> { new Claim(ClaimTypes.Role, "Basic User") };
+
                 await _userManager.AddClaimsAsync(user, claims);
 
-                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, Role = "Basic User" };
             });
         }
 
@@ -148,11 +146,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 }
 
                 // Current Password must come as input parameter from a new model !!!!!!!!!!!!
-               
-                if (!string.IsNullOrEmpty(newModel.NewPassword)) {
+
+                if (!string.IsNullOrEmpty(newModel.NewPassword))
+                {
 
                     var passwordResult = await _userManager.ChangePasswordAsync(user, newModel.OldPassword, newModel.NewPassword);
-                    
+
                     if (!passwordResult.Succeeded)
                     {
                         throw new Exception(passwordResult.Errors.First().Description.ToString());
@@ -161,6 +160,40 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
         }
 
+
+        public async Task<GenericReturn<UserPoco>> AdminCreate(AdminUpdateViewModel model)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                const string defaultPassword = "Test1234%";
+
+                var user = new ApplicationUser()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    UserName = model.Email,
+                };
+
+                var result = await _userManager.CreateAsync(user, defaultPassword);
+
+                if (!result.Succeeded)
+                {
+                    string errorMsg = "";
+                    foreach (var error in result.Errors)
+                    {
+                        errorMsg = String.Concat(errorMsg, error.Description, " ");
+                    }
+                    throw new Exception(errorMsg);
+                }
+
+                var claims = new List<Claim> { new Claim(ClaimTypes.Role, model.Role) };
+
+                await _userManager.AddClaimsAsync(user, claims);
+
+                return new UserPoco { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, Role = model.Role };
+            });
+        }
 
         public async Task<GenericReturn> AdminUpdate(string userId, AdminUpdateViewModel newModel)
         {
@@ -182,6 +215,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                 user.FirstName = newModel.FirstName;
                 user.LastName = newModel.LastName;
 
+                var claims = await _userManager.GetClaimsAsync(user);
+                await _userManager.RemoveClaimsAsync(user, claims);
+                var newClaims = new List<Claim> { new Claim(ClaimTypes.Role, newModel.Role) };
+                await _userManager.AddClaimsAsync(user, newClaims);
+
                 var result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
@@ -191,90 +229,123 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
             });
         }
 
+
+
         // --------------------------  PremiumUser  ---------------------------------------------------
 
         public async Task<GenericReturn<UserPocoList>> GetUsers(string queryString)
         {
-            return await _genericBusinessLogic.GenericTransaction( () =>
-            {
-                var filter = new Filter();
-                var skip = 0;
-                var take = 0;
-                var orderByField = "";
-                var orderByDirection = "Ascending";
-
-                if (String.IsNullOrEmpty(queryString))
-                {
-                    queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
-                }
+            return await _genericBusinessLogic.GenericTransaction(() =>
+           {
+               if (String.IsNullOrEmpty(queryString))
+               {
+                   queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22id%22%2C%22ASC%22%5D";
+               }
 
 
-                // ?filter={}&range=[0,9]&sort=["id","ASC"]
-                // "?filter={"firstName":"joana","email":"joana@lasagna.pt"}&range=[0,24]&sort=["id","ASC"]"
-                var filterStr = HttpUtility.ParseQueryString(queryString).Get("filter");
+               // ?filter={}&range=[0,9]&sort=["id","ASC"]
+               // "?filter={"firstName":"joana","email":"joana@lasagna.pt"}&range=[0,24]&sort=["id","ASC"]"
+               var filterStr = HttpUtility.ParseQueryString(queryString).Get("filter");
 
-                if (filterStr != null)
-                {
-                    filter = JsonSerializer.Deserialize<Filter>(filterStr);
-                    filter.firstName ??= "";
-                    filter.lastName ??= "";
-                    filter.email ??= "";
-                }
+               var filter = new Filter();
+               if (filterStr != null)
+               {
+                   filter = JsonSerializer.Deserialize<Filter>(filterStr);
+                   filter.firstName ??= "";
+                   filter.lastName ??= "";
+                   filter.email ??= "";
+                   filter.role ??= "";
+               }
 
-                // [0, 9],  [10, 19],  [20, 25] ...
-                var range = HttpUtility.ParseQueryString(queryString).Get("range");
-                if (range != null)
-                {
-                    var first = int.Parse(range.Substring(1, range.IndexOf(",") - range.IndexOf("[") - 1));
-                    var last = int.Parse(range.Substring(range.IndexOf(",") + 1, range.IndexOf("]") - range.IndexOf(",") - 1));
-                    skip = first;
-                    take = last - first + 1;
-                }
+               // [0, 9],  [10, 19],  [20, 25] ...
+               var skip = 0;
+               var take = 0;
+               var rangeStr = HttpUtility.ParseQueryString(queryString).Get("range");
+               if (rangeStr != null)
+               {
+                   var first = int.Parse(rangeStr.Substring(1, rangeStr.IndexOf(",") - rangeStr.IndexOf("[") - 1));
+                   var last = int.Parse(rangeStr.Substring(rangeStr.IndexOf(",") + 1, rangeStr.IndexOf("]") - rangeStr.IndexOf(",") - 1));
+                   skip = first;
+                   take = last - first + 1;
+               }
 
-                // sort=["id","ASC"]"
-                var sort = HttpUtility.ParseQueryString(queryString).Get("sort");
-                if (sort != null)
-                {
-                    orderByField = sort.Split("\"")[1];
-                    orderByField = orderByField.ToUpper().ElementAt(0) + orderByField.Substring(1);
-                    orderByDirection = sort.Contains("ASC") ? "Ascending" : "Descending";
-                }
-
-
-                var users = from user in _userManager.Users
-                            .Where(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
-                                        u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
-                                        u.Email.ToLower().Contains(filter.email.ToLower()))
-                            .OrderBy(orderByField, orderByDirection)
-                            .Skip(skip)
-                            .Take(take)
-                            .ToList()
-
-                            select new UserPoco
-                            {
-                                Id = user.Id,
-                                FirstName = user.FirstName,
-                                LastName = user.LastName,
-                                Email = user.Email,
-                            };
+               // sort=["id","ASC"]"
+               var orderByField = "";
+               var orderByDirection = "Ascending";
+               var sortStr = HttpUtility.ParseQueryString(queryString).Get("sort");
+               if (sortStr != null)
+               {
+                   orderByField = sortStr.Split("\"")[1];
+                   orderByField = orderByField.ToUpper().ElementAt(0) + orderByField.Substring(1);
+                   orderByDirection = sortStr.Contains("ASC") ? "Ascending" : "Descending";
+               }
 
 
-                var Total = _userManager.Users.Count(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
-                                                          u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
-                                                          u.Email.ToLower().Contains(filter.email.ToLower()));
 
-                var usersList = users.ToList();
-                for (int i = 0; i < usersList.Count; i++)
-                {
-                    var appUser = _userManager.FindByIdAsync(usersList[i].Id).Result;
-                    var claims = _userManager.GetClaimsAsync(appUser).Result;
-                    usersList[i].Role = claims.First().Value;
-                }
+               //////var users = from user in _userManager.Users
+               //////            .Where(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
+               //////                        u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
+               //////                        u.Email.ToLower().Contains(filter.email.ToLower()))
+               //////            .OrderBy(orderByField, orderByDirection)
+               //////            .Skip(skip)
+               //////            .Take(take)
+               //////            .ToList()
 
-                var result = new UserPocoList { Users = usersList.AsEnumerable(), Total = Total };
+               //////            select new UserPoco
+               //////            {
+               //////                Id = user.Id,
+               //////                FirstName = user.FirstName,
+               //////                LastName = user.LastName,
+               //////                Email = user.Email,
+               //////            };
 
-                return Task.FromResult(result);
-            });
+
+               //////var Total = _userManager.Users.Count(u => u.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
+               //////                                          u.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
+               //////                                          u.Email.ToLower().Contains(filter.email.ToLower()));
+
+               //////var usersList = users.ToList();
+               //////for (int i = 0; i < usersList.Count; i++)
+               //////{
+               //////    var appUser = _userManager.FindByIdAsync(usersList[i].Id).Result;
+               //////    var claims = _userManager.GetClaimsAsync(appUser).Result;
+               //////    usersList[i].Role = claims.First().Value;
+               //////}
+
+               //////var result = new UserPocoList { Users = usersList.AsEnumerable(), Total = Total };
+
+               //////return Task.FromResult(result);
+
+
+
+               using (var context = new lasagnakcsContext())
+               {
+                   var users = (from user in context.Users
+                                join claims in context.UserClaims
+                                on user.Id equals claims.UserId
+                                where user.FirstName.ToLower().Contains(filter.firstName.ToLower()) &&
+                                      user.LastName.ToLower().Contains(filter.lastName.ToLower()) &&
+                                      user.Email.ToLower().Contains(filter.email.ToLower()) &&
+                                      claims.ClaimValue.Contains(filter.role)
+
+                                select new UserPoco
+                                {
+                                    Id = user.Id,
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName,
+                                    Email = user.Email,
+                                    Role = claims.ClaimValue,
+                                })
+
+                                .OrderBy(orderByField, orderByDirection)
+                                .Skip(skip)
+                                .Take(take)
+                                .ToList();
+
+                   return Task.FromResult(new UserPocoList { Users = users, Total = users.Count() });
+               }
+
+           });
         }
 
 
@@ -294,7 +365,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
                     throw new Exception("User does not exist");
                 }
 
-                var userPoco = new UserPoco { Id = userId, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email };
+                var userPoco = new UserPoco { 
+                    Id = userId, 
+                    FirstName = user.FirstName, 
+                    LastName = user.LastName, 
+                    Email = user.Email, 
+                    Role = _userManager.GetClaimsAsync(user).Result.First().Value 
+                };
 
                 return Task.FromResult(userPoco);
             });

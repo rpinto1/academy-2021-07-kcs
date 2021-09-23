@@ -88,6 +88,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return ReturnResult(result);
         }
 
+        [Route("api/AdminCreate")]
+        [HttpPost]
+        public async Task<IActionResult> AdminCreate([FromBody] AdminUpdateViewModel model)
+        {
+            var result = _userService.AdminCreate(model);
+
+            return await ReturnResult(result);
+        }
+
+
 
         // --------------------------  PremiumUser  ---------------------------------------------------
 

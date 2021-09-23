@@ -1,5 +1,5 @@
 import * as React from "react";
-import { List, Datagrid, TextField, EmailField, ReferenceField, EditButton, 
+import { List, Datagrid, TextField, EmailField, ReferenceField, EditButton,
     Edit, Create, SimpleForm, ReferenceInput, SelectInput, TextInput, SearchInput } from 'react-admin';
 
 export const UserList = props => (
@@ -21,6 +21,14 @@ export const UserEdit = props => (
             <TextInput source="firstName" />
             <TextInput source="lastName" />
             <TextInput disabled source="email" />
+            <SelectInput source="role" 
+                choices={[
+                    {id: "Basic User", name: "Basic User"}, 
+                    {id: "Premium User", name: "Premium User"},
+                    {id: "Manager", name: "Manager"}, 
+                    {id: "Admin", name: "Admin"}]}
+                // initialValue={"Basic User"}
+                />
         </SimpleForm>
     </Edit>
 );
@@ -32,6 +40,13 @@ export const UserCreate = props => (
             <TextInput source="firstName" />
             <TextInput source="lastName" />
             <TextInput source="email" />
+            <SelectInput source="role" 
+                choices={[
+                    {id: "Basic User", name: "Basic User"}, 
+                    {id: "Premium User", name: "Premium User"},
+                    {id: "Manager", name: "Manager"}, 
+                    {id: "Admin", name: "Admin"}]}
+                initialValue={"Basic User"}/>
         </SimpleForm>
     </Create>
 );
@@ -40,5 +55,13 @@ const userFilters = [
     <TextInput label="First Name" source="firstName" />,    
     <TextInput label="Last Name" source="lastName" />,    
     <TextInput label="Email" source="email" />,    
+    <SelectInput source="role" 
+        choices={[
+            {id: "Basic User", name: "Basic User"}, 
+            {id: "Premium User", name: "Premium User"},
+            {id: "Manager", name: "Manager"}, 
+            {id: "Admin", name: "Admin"}]
+        }
+    />
 ];
 
