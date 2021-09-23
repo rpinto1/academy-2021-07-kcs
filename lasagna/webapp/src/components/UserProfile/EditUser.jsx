@@ -69,7 +69,7 @@ export default function EditUser() {
 
     const verifyPasswords = () => {
         if(dbUserInfo.NewPassword === dbUserInfo.ConfirmNewPassword){
-            setPasswordsMatch(prevState => ({showMessage: false, match: true}));
+            setPasswordsMatch({showMessage: false, match: true});
         } else {
             setPasswordsMatch(prevState => ({...prevState, showMessage: true}));
         }     

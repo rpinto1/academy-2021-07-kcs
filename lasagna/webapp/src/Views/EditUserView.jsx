@@ -12,9 +12,8 @@ export default function EditUserView() {
 
     return (
         <>   
-        <UserHeader />
-
-       <EditUser />
+            <UserHeader />
+            <EditUser />
             <Footer /> 
         </>
     )

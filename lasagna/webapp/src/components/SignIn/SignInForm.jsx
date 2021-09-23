@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
-
+import axios from "axios";
 
 
 export default function SignInForm() {
@@ -14,7 +14,7 @@ export default function SignInForm() {
     const [loggedUser, setLoggedUser] = useState({
         id: '',
         token: ''
-    });
+});
 
     //if all went well, the user is redirected to the user homepage
     const [redirect, setRedirect] = useState(false);
@@ -35,7 +35,7 @@ export default function SignInForm() {
   };
     
   const saveUser = () => {
-    console.log(loggedUser.id)
+
     if(keepMeLogged) {
       localStorage.setItem('id', loggedUser.id.toString());
       localStorage.setItem('token', loggedUser.token.toString());
@@ -45,7 +45,7 @@ export default function SignInForm() {
       sessionStorage.setItem('token', loggedUser.token.toString());
   };
 
-  const handleSubmit = () => {
+ /*  const handleSubmit = () => {
       fetch(`http://localhost:3010/api/SignIn`, {
       method: 'POST',
       headers: {
@@ -54,8 +54,8 @@ export default function SignInForm() {
       },
       body: JSON.stringify(user)
      }).then(res =>{
-       console.log(res)
-       console.log(res.headers.get('Set-Cookie'))
+      // console.log(res)
+       //console.log(res.headers.get('Set-Cookie'))
       res.json()
      } )
      .then(data => {
@@ -65,7 +65,15 @@ export default function SignInForm() {
     })
     .catch(error => console.log(error))
     
-};  
+};   */
+
+    const headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
+    const handleSubmit = () => axios.post(`http://localhost:3010/api/SignIn`, user, headers)
+                        .then(res => {
+                            setLoggedUser(res.data.result)
+                            console.log(res.cookies)})
+                        .catch(error => console.log(error))
+
 
     useEffect(() =>{
       saveUser()
