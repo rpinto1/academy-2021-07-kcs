@@ -49,8 +49,7 @@ export default function EditUser() {
         method: 'PUT',
         headers: {
             "Accept": "application/json",
-            "Content-Type": "application/json",
-//            "Authorization": "Bearer " + token
+            "Content-Type": "application/json"
 
         },
         body: JSON.stringify(dbUserInfo)
@@ -75,6 +74,7 @@ export default function EditUser() {
         }     
     };
 
+    console.log(dbUserInfo)
 
     return (
         <Container className= 'formulario'> 
@@ -85,6 +85,7 @@ export default function EditUser() {
            <input 
            type= 'text' 
            placeholder={dbUserInfo.FirstName}
+           value={dbUserInfo.FirstName}
            onChange = {handleChange}
            id='FirstName'/>
        </Form.Field>
@@ -93,6 +94,7 @@ export default function EditUser() {
            <input 
            type= 'text' 
            placeholder={dbUserInfo.LastName}
+           value={dbUserInfo.LastName}
            onChange = {handleChange}
            id='LastName'/>
        </Form.Field>
@@ -100,7 +102,8 @@ export default function EditUser() {
            <label>Password <span className='tiny'>- Required</span></label>
            <input
            type= 'password' 
-           placeholder='Input your current password' 
+           placeholder='Input your current password'
+           value={dbUserInfo.OldPassword} 
            onChange = {handleChange}
            id='OldPassword'
            pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,50}' 
@@ -112,6 +115,7 @@ export default function EditUser() {
            type ='password'
            placeholder='Write your new password' 
            onChange={handleChange}
+           value = {dbUserInfo.NewPassword}
            id='NewPassword'/>
        </Form.Field>
        <Form.Field>
@@ -119,18 +123,19 @@ export default function EditUser() {
            <input 
            type ='password'
            placeholder='Rewrite your password' 
+           value = {dbUserInfo.ConfirmPassword}
            onChange={handleChange}
            onBlur={verifyPasswords}
            id='ConfirmPassword'/>
        </Form.Field>
        {
-       passwordsMatch.showMessage && 
+            passwordsMatch.showMessage && 
 
-       <div class="ui bottom attached negative message">
-       <i class="close icon"></i>
-           Confirm password needs to match your new password!
-       </div>
-   }
+            <div class="ui bottom attached negative message">
+            <i class="close icon"></i>
+                Confirm password needs to match your new password!
+            </div>
+        }
        <Form.Field>
            <label>E-mail</label>
            <input 

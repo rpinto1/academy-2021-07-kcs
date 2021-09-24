@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button } from 'semantic-ui-react';
 import Logo from './Logo';
 import SearchBar from './SearchBar/SearchBar';
-import { urlGetUser } from './UserManager';
+import { urlGetUser, headers} from './UserManager';
 
 
 export default function UserHeader() {
@@ -17,19 +18,12 @@ export default function UserHeader() {
         }
     }   
 
-useEffect(() =>
-        fetch(urlGetUser, {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-    }).then(res => res.json())
-       .then(data => {
-        setFirstName(data.result.firstName)
-      })
-      .catch(error => console.log(error)), []);
-
+    useEffect(() => axios.get(urlGetUser, headers)
+    .then(res => {
+        const userInfo = res.data.result;
+        setFirstName(userInfo.firstName);
+    })
+    .catch(error => console.log(error)),[firstName])
 
     return (
       

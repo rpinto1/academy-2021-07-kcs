@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { Button, Checkbox, Container, Form } from 'semantic-ui-react';
 import axios from "axios";
+import { headers } from '../UserManager';
 
 
 export default function SignInForm() {
@@ -67,11 +68,12 @@ export default function SignInForm() {
     
 };   */
 
-    const headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
+    
     const handleSubmit = () => axios.post(`http://localhost:3010/api/SignIn`, user, headers)
                         .then(res => {
-                            setLoggedUser(res.data.result)
-                            console.log(res.cookies)})
+                            setLoggedUser(res.data.result);
+                            setRedirect(true)
+                        })
                         .catch(error => console.log(error))
 
 
@@ -116,9 +118,9 @@ console.log(loggedUser);
                 <Button type="submit" id="submit_btn" >Sign in</Button>
             </Form>
 
-            {/* { redirect &&
+        { redirect &&
             <Redirect to='/user/homepage' />
-        } */}
+        }
 
         </Container>
 
