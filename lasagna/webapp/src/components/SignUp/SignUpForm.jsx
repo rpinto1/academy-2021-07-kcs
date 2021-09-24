@@ -73,15 +73,15 @@ export default function SignUpForm() {
     };
     
     const verifyPasswords = () => {
-        if(newUser.Password === newUser.ConfirmPassword){
-            setPasswordsMatch(prevState => ({...prevState, match: true}));
-        } else {
+        if(newUser.Password == newUser.ConfirmPassword){
+            setPasswordsMatch({showMessage: false, match: true});
+        } 
+        else {
             setPasswordsMatch(prevState => ({...prevState, showMessage: true}));
         }     
     };
     
-console.log(newUser.ConfirmPassword);
-console.log(newUser.Password);
+
 
     return (
     <>   
@@ -119,8 +119,9 @@ console.log(newUser.Password);
         {
            dBError && <FailedSignUp id='floating-msg'/> 
         }
+
         {
-        accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
+            accountAlreadyExists && <AccAlreadyExists id='floating-msg' />
         }
 
         <Form.Field>
@@ -165,6 +166,7 @@ console.log(newUser.Password);
             id='Email'
             required/>
         </Form.Field>
+        
         <Form.Field>
           <Captcha />
           <div className="container">

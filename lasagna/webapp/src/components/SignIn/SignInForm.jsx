@@ -22,60 +22,60 @@ export default function SignInForm() {
     const [keepMeLogged, setKeepMeLogged] = useState(false);
 
     const handleChange = (event) => {
-        const { id, value } = event.target
+      const { id, value } = event.target
+      
+      setUser(prevState => ({
+          ...prevState,
+          [id]: value     
+      }));
+      };
+     
+  const handleKeepMeLogged = (event) => {
+      setKeepMeLogged(!keepMeLogged);
+  };
+    
+  const saveUser = () => {
+    console.log(loggedUser.id)
+    if(keepMeLogged) {
+      localStorage.setItem('id', loggedUser.id.toString());
+      localStorage.setItem('token', loggedUser.token.toString());
+      return;
+    } 
+      sessionStorage.setItem('id', loggedUser.id.toString());
+      sessionStorage.setItem('token', loggedUser.token.toString());
+  };
 
-        setUser(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
-    };
+  const handleSubmit = () => {
+      fetch(`http://localhost:3010/api/SignIn`, {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+     }).then(res =>{
+       console.log(res)
+       console.log(res.headers.get('Set-Cookie'))
+      res.json()
+     } )
+     .then(data => {
+       console.log(data)
+      setLoggedUser(data.response)
+      setRedirect(true)
+    })
+    .catch(error => console.log(error))
+    
+};  
 
-    const handleKeepMeLogged = (event) => {
-        setKeepMeLogged(!keepMeLogged);
-    };
+    useEffect(() =>{
+      saveUser()
+    },[loggedUser]);
 
-    const saveUser = () => {
-        console.log(loggedUser.id)
-        if (keepMeLogged) {
-            localStorage.setItem('id', loggedUser.id.toString());
-            localStorage.setItem('token', loggedUser.token.toString());
-            return;
-        }
-        sessionStorage.setItem('id', loggedUser.id.toString());
-        sessionStorage.setItem('token', loggedUser.token.toString());
-    };
+console.log(user);
+console.log(loggedUser);
 
-    const handleSubmit = () => {
-        fetch(`http://localhost:3010/api/SignIn`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }).then(res => {
-            console.log('test: ', res);
-            console.log(res.headers.get('Set-Cookie'));
-            return res.json();
-        })
-            .then(data => {
-                console.log('data ', data);
-                setLoggedUser(data.result);
-                setRedirect(true)
-            })
-            .catch(error => console.log(error))
-
-    };
-
-    useEffect(() => {
-        saveUser()
-    }, [loggedUser]);
-
-    console.log(user);
-    console.log(loggedUser);
-
-    return (
-        <Container className='formulario'>
+      return (
+        <Container className= 'formulario'>
             <h1>Sign in to your account</h1>
             <Form onSubmit={handleSubmit}>
                 <Form.Field>

@@ -38,6 +38,10 @@ function SearchBar() {
         }
     }, [pattern]);
 
+    const handleSearchBar = () => {
+            $("#search_list").hide();
+    };
+
     
 
 
@@ -50,13 +54,18 @@ function SearchBar() {
                         type="text"
                         placeholder="Search for a company"
                         value={pattern}
-                        onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} />
+                        onChange={(test) => { setPattern(test.target.value); setPageIndex(0);  }} 
+                        />
                         <i className="search icon"></i> 
                 </div>
 
                 {    (nameTickers.length > 0) &&
 
-                (<div className="ui raised fluid text segment" >       
+                (<div className="ui raised fluid text segment" 
+                //please, do not erase id. thx!
+                            id='search_list' 
+                            onClick={handleSearchBar}
+                >       
                     
                 
                        { 
