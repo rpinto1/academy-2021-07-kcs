@@ -11,6 +11,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 
         public string Ticker { get; set; }
 
+        public string Score { get; set; }
+
         public List<PortfolioCompanyValuesPoco> Values { get; set; }
 
     }
