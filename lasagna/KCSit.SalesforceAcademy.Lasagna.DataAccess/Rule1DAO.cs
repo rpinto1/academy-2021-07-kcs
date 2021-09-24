@@ -245,7 +245,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public async Task<ScorePoco> GetScore(string ticker, int scoringMethodId)
+        public async Task<ScorePoco> GetScoreId(string ticker, int scoringMethodId)
         {
             using (var context = new lasagnakcsContext())
             {
@@ -260,6 +260,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                   ScoreId = score.Id
                               }
                         ).SingleOrDefaultAsync();
+            }
+        }
+
+        public async Task<double> GetScore(string ticker, int scoringMethodId)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await ((from company in context.Companies
+                                       join score in context.Scores
+                                       on company.Id equals score.CompanyId
+                                       where company.Ticker.Equals(ticker) &&
+                                           score.ScoringMethodId == scoringMethodId
+                                       select score.Score1).SingleOrDefaultAsync()) ?? 0;
             }
         }
 
@@ -278,6 +291,46 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                   ScoreId = score.Id
                               }
                         ).ToListAsync();
+            }
+        }
+
+
+        public async Task<CompanyScorePoco> GetInfo(AdminRule1Parameters parameters)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                var query = (from company in context.Companies
+                             join country in (context.Countries.Where(c => parameters.Countries.Contains(c.Name)).AsEnumerable())
+                             on company.CountryId equals country.Id
+                             join dailyInfo in context.DailyInfos
+                             on company.DailyInfoId equals dailyInfo.Id into LJDI
+                             from dailyInfo in LJDI.DefaultIfEmpty()
+                             join companyIndice in context.CompanyIndices
+                             on company.Id equals companyIndice.CompanyId into LJCI
+                             from companyIndex in LJCI.DefaultIfEmpty()
+                             join indice in context.Indices
+                             on companyIndex.IndexId equals indice.Id into LJI
+                             from index in LJI.DefaultIfEmpty()
+                             join score in context.Scores
+                             on company.Id equals score.CompanyId into LJS
+                             from score in LJS.DefaultIfEmpty()
+                             join sector in context.Sectors
+                             on company.SectorId equals sector.Id
+                             join industry in context.Industries
+                             on company.IndustryId equals industry.Id
+                             where index.Name.ToLower().Contains(parameters.IndexName.ToLower()) &&
+                             sector.Name.ToLower().Contains(parameters.SectorName.ToLower()) &&
+                             industry.Name.ToLower().Contains(parameters.IndustryName.ToLower())
+                             && score.ScoringMethodId == 1
+                             group company by new CompanyPocoAuthenticated { Name = company.Name, Ticker = company.Ticker, Price = dailyInfo.StockPrice, Score = score.Score1, StickerPrice = score.StickerPrice, MarginSafety = score.MarginOfSafety } into companies
+                             orderby companies.Key.Score descending
+                             select new CompanyPocoAuthenticated { Name = companies.Key.Name, Ticker = companies.Key.Ticker, Price = companies.Key.Price, Score = companies.Key.Score, StickerPrice = companies.Key.StickerPrice, MarginSafety = companies.Key.MarginSafety });
+
+                var countResults = await query.CountAsync();
+                //var results = await query.Skip(parameters.Take * (parameters.Skip - 1)).Take(parameters.Take).ToListAsync();
+                var results = await query.Skip(parameters.Skip).Take(parameters.Take).ToListAsync();
+                var objectok = new CompanyScorePoco { CompanyPocosAuthenticated = results, Count = countResults };
+                return objectok;
             }
         }
 

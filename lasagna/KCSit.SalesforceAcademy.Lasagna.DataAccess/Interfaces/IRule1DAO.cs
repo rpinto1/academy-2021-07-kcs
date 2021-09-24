@@ -30,10 +30,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
 
         Task<IEnumerable<DailyInfoPoco>> GetDailyInfoByBulk(List<string> tickers);
 
-        Task<ScorePoco> GetScore(string ticker, int scoringMethodId);
+        Task<ScorePoco> GetScoreId(string ticker, int scoringMethodId);
+        Task<double> GetScore(string ticker, int scoringMethodId);
 
         Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
 
+        Task<CompanyScorePoco> GetInfo(AdminRule1Parameters parameters);
 
     }
 }

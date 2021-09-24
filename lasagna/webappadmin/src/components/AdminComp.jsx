@@ -1,10 +1,10 @@
 import * as React from "react";
- import { Admin, Resource  } from 'react-admin';
-import { UserList, UserEdit, UserCreate } from './users';
-import { scoreList, scoreEdit, scoreCreate } from './scores';
+import { Admin, Resource  } from 'react-admin';
+import { UserList, UserEdit, UserCreate } from './Users';
+import { Rule1List } from './Rule1';
 import jsonServerProvider from 'ra-data-json-server';
 import UserIcon from '@material-ui/icons/Group';
-import scoreIcon from '@material-ui/icons/Book';
+import Rule1Icon from '@material-ui/icons/Book';
 import dataProvider from './DataProvider';
 
 // const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
@@ -12,8 +12,9 @@ import dataProvider from './DataProvider';
 
 const AdminComp = () => (
     <Admin dataProvider={dataProvider}>
-        <Resource name="users" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon} />
-        <Resource name="scores" list={scoreList} edit={scoreEdit} create={scoreCreate} icon={scoreIcon} />
+        <Resource name="Users" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon} />
+        <Resource name="Rule1" label="ttt" list={Rule1List} icon={Rule1Icon} />
+        {/* <Resource name="scores" list={scoreList} edit={scoreEdit} create={scoreCreate} icon={scoreIcon} /> */}
     </Admin>
     );
 

@@ -69,7 +69,17 @@ const handlePageNext = (operator)=>{
                                 Page:currentPage,
                                 Countries:countriesPicked
                                 })
-        });
+        }
+        );
+
+        console.log("---------------------" + JSON.stringify({Sectorname : sectorValue,
+            Indexname: indexValue,
+            Industryname: industryValue,
+            Page:currentPage,
+            Countries:countriesPicked
+            }))
+
+
         rawResponse.then(response => {
             if(response.ok){
                 console.log(response);
