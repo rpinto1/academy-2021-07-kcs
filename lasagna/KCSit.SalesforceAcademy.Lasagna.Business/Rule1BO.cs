@@ -46,6 +46,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             _genericBusinessLogic = genericBusinessLogic;
         }
 
+        public async Task<GenericReturn> GetRule1Info(AdminRule1Parameters parameters)
+        {
+            return await _genericBusinessLogic.GenericTransaction(async () =>
+            {                
+               return _rule1DAO.GetInfo(parameters);
+            });
+        }
+
+
+
+
+
 
         public async Task<GenericReturn> UpdateScore(string ticker)
         {
@@ -87,7 +99,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var marginOfSafety = stickerPrice / 2;
 
 
-                var scoreInfo = await _rule1DAO.GetScore(ticker, 1);
+                var scoreInfo = await _rule1DAO.GetScoreId(ticker, 1);
 
                 var newScore = new Score
                 {

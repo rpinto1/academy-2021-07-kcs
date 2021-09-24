@@ -120,7 +120,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
+        public void UpdatePortfolioId( Guid Uuid, List<string> Tickers, String PortfolioName)
         {
             using (var context = new lasagnakcsContext())
             {

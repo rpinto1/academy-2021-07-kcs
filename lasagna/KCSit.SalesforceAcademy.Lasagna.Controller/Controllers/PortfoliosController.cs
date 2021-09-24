@@ -108,7 +108,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         }
 
         [HttpPost("updateportfolio")]
-        public async Task<IActionResult> UpdatePortfolio(Guid Uuid, List<string> Tickers, String PortfolioName)
+        public async Task<IActionResult> UpdatePortfolio( Guid Uuid,  List<string> Tickers,  String PortfolioName)
         {
             _portfoliosBO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
 

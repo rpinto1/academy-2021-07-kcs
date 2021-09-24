@@ -1,121 +1,130 @@
-import { fetchUtils } from 'react-admin';
-import { stringify } from 'query-string';
-
-const apiUrl = 'http://localhost:3010/api';
-const httpClient = fetchUtils.fetchJson;
+import dataProviderUser from './DataProviderUsers';
+import dataProviderRule1 from './DataProviderRule1';
 
 export default {
     getList: (resource, params) => {
-        const { page, perPage } = params.pagination;
-        const { field, order } = params.sort;
-        const query = {
-            sort: JSON.stringify([field, order]),
-            range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-            filter: JSON.stringify(params.filter),
-        };
 
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.getList(resource, params);
 
-        // const roleURL = `${apiUrl}/GetClaims?userId=${stringify(query)}`;
-
-        // const role = httpClient(url).then(({ headers, json }) => ({
-        //     data: json.result.users,
-        //     total: json.result.total
-        // }));
-
-
-        const url = `${apiUrl}/${resource}?${stringify(query)}`;
-
-        return httpClient(url).then(({ headers, json }) => ({
-            data: json.result.users,
-            total: json.result.total
-        }));
+            case 'Rule1':
+                return dataProviderRule1.getList(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     getOne: (resource, params) => {
-        return httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
-            data: json.result,
-        }))
+
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.getOne(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.getOne(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     getMany: (resource, params) => {
-        // const query = {
-        //     filter: JSON.stringify({ id: params.ids }),
-        // };
-        // console.log("GET MANY: " + JSON.stringify(query));
-        // const url = `${apiUrl}/${resource}?${stringify(query)}`;
-        // return httpClient(url).then(({ json }) => ({ data: json.result }));
+
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.getMany(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.getMany(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     getManyReference: (resource, params) => {
-        // const { page, perPage } = params.pagination;
-        // const { field, order } = params.sort;
-        // const query = {
-        //     sort: JSON.stringify([field, order]),
-        //     range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-        //     filter: JSON.stringify({
-        //         ...params.filter,
-        //         [params.target]: params.id,
-        //     }),
-        // };
-        // const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-        // return httpClient(url).then(({ headers, json }) => ({
-        //     data: json.result,
-        //     total: json.result.length
-        // }));
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.getManyReference(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.getManyReference(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     update: (resource, params) => {
-        // console.log("UPDATE Params: " + JSON.stringify(params.data));
-        return httpClient(`${apiUrl}/AdminUpdate?userId=${params.id}`, {
-            method: 'PUT',
-            body: JSON.stringify(params.data),
-        }).then(({ json }) => {
-            // console.log("UPDATE Result: " + JSON.stringify(json.result));
-            return { data: { id: json.result} }
-        })
+
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.update(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.update(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     updateMany: (resource, params) => {
-        // const query = {
-        //     filter: JSON.stringify({ id: params.ids}),
-        // };
-        // return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
-        //     method: 'PUT',
-        //     body: JSON.stringify(params.data),
-        // }).then(({ json }) => ({ data: json.result }));
+
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.updateMany(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.updateMany(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
-    create: (resource, params) =>
-        {
-            const defaultPassword = "Test1234%";
+    create: (resource, params) => {
 
-            return httpClient(`${apiUrl}/SignUp`, {
-            method: 'POST',
-            body: JSON.stringify({...params.data, "password" : defaultPassword, "confirmPassword" : defaultPassword}),
-        }).then(({ json }) => ({ data: json.result }))
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.create(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.create(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     delete: (resource, params) => {
-        console.log("DELETE Params: " + JSON.stringify(params));
-        return httpClient(`${apiUrl}/DeleteUser?userId=${params.id}`, {
-            method: 'DELETE',
-        }).then(({ json }) => {
-            // console.log("DELETE RESULT: " + JSON.stringify(json.result))
-            return { data: json.result }
-        });        
+
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.delete(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.delete(resource, params);
+            
+            default:
+                return "";
+          }
     },
 
     deleteMany: (resource, params) => {
-        const query = {
-            filter: JSON.stringify({ id: params.ids}),
-        };
-        // console.log("QUERY: " + JSON.stringify(query));
-        return httpClient(`${apiUrl}/DeleteUsers?${stringify(query)}`, {
-            method: 'DELETE',
-        }).then(({ json }) => {
-            // console.log("DELETE MANY RESULT: " + JSON.stringify(json.result));
-            return { data: json.result }
-        });
+
+        switch(resource) {
+            case 'Users':
+                return dataProviderUser.deleteMany(resource, params);
+
+            case 'Rule1':
+                return dataProviderRule1.deleteMany(resource, params);
+            
+            default:
+                return "";
+          }
     }
 }

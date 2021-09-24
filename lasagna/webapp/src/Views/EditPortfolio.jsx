@@ -3,6 +3,7 @@ import { Image, List, Container, ListContent, Button, Checkbox } from 'semantic-
 import Header from '../components/Header';
 import UserHeader from '../components/UserHeader';
 import { useParams } from 'react-router';
+import { forInStatement } from '@babel/types';
 
 
 
@@ -13,6 +14,8 @@ export default function EditPortfolio() {
   const [companies, setCompanies] = useState([]);
 
   const [toDelete, setToDelete] = useState([]);
+
+  const [toDeleteTest, setToDeleteTest] = useState([]);
 
   const id = useParams();
 
@@ -124,6 +127,12 @@ export default function EditPortfolio() {
 
   };
 
+  const handleRemoveChecked = () => {
+    
+    
+    setCompanies(() => companies.filter((item) => !(toDelete.includes(item.ticker))));
+  }
+
   const handleRemoveItem = (e, { companyTicker }) => {
 
     setCompanies(() => companies.filter(item => item.ticker !== companyTicker));
@@ -151,7 +160,7 @@ export default function EditPortfolio() {
         </article>
       </section>
       <Container>
-        {toDelete.length > 0 && <Button onClick={buttonHandlerSave}>Delete selected</Button>}
+        {toDelete.length > 0 && <Button onClick={handleRemoveChecked}>Delete selected</Button>}
         {companies.length > 0 &&
             (<List celled>
               {companies.map((item, index) =>
