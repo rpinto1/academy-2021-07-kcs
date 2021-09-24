@@ -101,7 +101,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         }
 
 
-        
+        [Authorize]
         [HttpPost("authenticated")]
         //[Authorize(Policy = "BasicUserPolicy")]
         public async Task<IActionResult> PostSearchCompaniesIISAuthenticated([FromBody] DropDownParameters value)
