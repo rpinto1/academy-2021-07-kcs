@@ -11,6 +11,7 @@ using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,9 +50,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
                                .AllowAnyMethod()
-                               .AllowAnyHeader();
+                               .AllowAnyHeader()
+                               .AllowCredentials();
                     });
             });
 
@@ -79,7 +81,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
                 options.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager", "Admin"));
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             });
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Unspecified;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
+                options.LoginPath = "/signin";
+
+            });
 
 
             services.AddScoped<IUserServiceBO, UserServiceBO>();
@@ -125,6 +136,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller
             app.UseAuthorization();
             app.UseResponseCaching();
 
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.None,
+            };
+
+            app.UseCookiePolicy(cookiePolicyOptions);
 
             app.UseEndpoints(endpoints =>
             {
