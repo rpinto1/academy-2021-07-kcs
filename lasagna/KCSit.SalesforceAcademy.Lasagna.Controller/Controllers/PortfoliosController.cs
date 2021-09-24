@@ -35,7 +35,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.Client, NoStore = true)]
         [HttpGet("portfolioCompanies")]
         public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
         {
@@ -46,7 +46,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
             return Ok(genericReturn);
         }
 
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.Client, NoStore = false)]
         [HttpGet("portfolioCompanyValues")]
         public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
         {

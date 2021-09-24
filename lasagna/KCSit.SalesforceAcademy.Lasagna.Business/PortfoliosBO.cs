@@ -16,13 +16,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         private IPortfoliosDAO _portfoliosDAO;
         private ISearchDAO _searchDAO;
         private IGenericDAO _genericDAO;
+        private IRule1DAO _rule1DAO;
+        private IRule1BO _rule1BO;
         private IGenericBusinessLogic _genericBusiness;
 
-        public PortfoliosBO(IPortfoliosDAO portfoliosDAO, ISearchDAO searchDAO, IGenericDAO genericDAO, IGenericBusinessLogic genericBusiness)
+        public PortfoliosBO(IPortfoliosDAO portfoliosDAO, ISearchDAO searchDAO, IGenericDAO genericDAO, IRule1DAO rule1DAO, IRule1BO rule1BO, IGenericBusinessLogic genericBusiness)
         {
             _portfoliosDAO = portfoliosDAO;
             _searchDAO = searchDAO;
             _genericDAO = genericDAO;
+            _rule1DAO = rule1DAO;
+            _rule1BO = rule1BO;
             _genericBusiness = genericBusiness;
         }
 
@@ -74,9 +78,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             async () =>
             {
-                PortfolioPoco portfolio = await _portfoliosDAO.GetPortfolioWithCompanies(portfolioId);
+                PortfolioPoco portfolio = await _portfoliosDAO.GetPortfolioWithoutCompanies(portfolioId);
 
-                
+
 
 
                 return portfolio;
@@ -103,22 +107,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
                 return result;
 
-
-
-                
-
             });
-
         }
 
         public async Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker)
         {
-
             return await _genericBusiness.GenericTransaction(
 
             async () =>
             {
-
                 var newPortfolio = await _portfoliosDAO.GetCompaniesByPortfolio(portfolioId);
 
                 var portfolioCompany = new PortfolioCompany()
@@ -130,7 +127,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var added = _genericDAO.AddAsync(portfolioCompany);
 
             });
-
         }
 
         public async Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id)
@@ -162,12 +158,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
                 
-                var rule1DAO = new Rule1DAO();
-
-                
-                var keyRatiosList = await rule1DAO.GetKeyRatios(ticker);
-                var balanceSheetList = await rule1DAO.GetBalanceSheet(ticker);
-                var incomeStatementList = await rule1DAO.GetIncomeStatement(ticker);
+                var keyRatiosList = await _rule1DAO.GetKeyRatios(ticker);
+                var balanceSheetList = await _rule1DAO.GetBalanceSheet(ticker);
+                var incomeStatementList = await _rule1DAO.GetIncomeStatement(ticker);
 
                 var roic = (from kr in keyRatiosList
                             select kr.Roic).ToList();
@@ -184,10 +177,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var cash = (from bs in balanceSheetList
                             select bs.Cash).ToList();
 
+                
                 var list = new List<PortfolioCompanyValuesPoco>();
 
 
-                for (int i = 0; i < keyRatiosList.Count(); i++)
+                for (int i = keyRatiosList.Count() - 1; i > 0; i--)
                 {
                     list.Add(new PortfolioCompanyValuesPoco
                     {
