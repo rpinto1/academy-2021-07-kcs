@@ -1,5 +1,6 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
 using KCSit.SalesforceAcademy.Lasagna.Controller.Controllers;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
             _rule1BO = rule1BO;
         }
 
-        [Route("admin/UpdateScore")]
+        [Route("api/Rule1/GetInfo")]
+        [HttpPost]
+        public async Task<IActionResult> GetRule1Info([FromBody] AdminRule1Parameters parameters)
+        {
+            var result = await _rule1BO.GetRule1Info(parameters);
+
+            return ReturnResult(result);
+        }
+
+        [Route("api/Rule1/UpdateScore")]
         [HttpGet]
         public async Task<IActionResult> UpdateScore(string ticker)
         {
@@ -27,7 +37,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Rule1
             return ReturnResult(result);
         }
 
-        [Route("admin/UpdateAllScores")]
+        [Route("api/Rule1/UpdateAllScores")]
         [HttpGet]
         public async Task<IActionResult> UpdateAllScores()
         {
