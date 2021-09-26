@@ -161,12 +161,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
 
             return Ok(genericReturn);
         }
+
+        [ResponseCache(Duration = 500, Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet("search/{ticker}")]
         public async Task<IActionResult> GetIncomeStatement(string ticker)
             {
-
                 var genericReturn = await _companiesBO.GetCompaniesIncomeStatement(ticker);
-
                 return Ok(genericReturn);
             }
     }
