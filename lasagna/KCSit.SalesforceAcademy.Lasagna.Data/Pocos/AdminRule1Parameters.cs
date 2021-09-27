@@ -7,13 +7,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
     public class AdminRule1Parameters
     {
 
-        public List<string> Countries { get; set; }
-        public string IndexName { get; set; }
-        public string SectorName { get; set; }
-        public string IndustryName { get; set; }
-        public int Skip { get; set; }
-        public int Take { get; set; }
-        public string OrderByField { get; set; }
-        public string OrderByDirection { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+        public string country { get; set; }
+        public string exchange { get; set; }
+        public string sector { get; set; }
+        public string industry { get; set; }
+        public string currency { get; set; }
+
+
     }
 }

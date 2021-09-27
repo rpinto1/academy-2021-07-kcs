@@ -9,7 +9,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace KCSit.SalesforceAcademy.Lasagna.Business
 {
@@ -46,20 +48,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             _genericBusinessLogic = genericBusinessLogic;
         }
 
-        public async Task<GenericReturn> GetRule1Info(AdminRule1Parameters parameters)
+
+
+        public async Task<GenericReturn> GetRule1Info(string queryString)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
-            {                
-               return _rule1DAO.GetInfo(parameters);
+            {
+                return await _rule1DAO.GetInfo(queryString);
             });
         }
 
 
 
-
-
-
-        public async Task<GenericReturn> UpdateScore(string ticker)
+        public async Task<GenericReturn> UpdateOneScore(string ticker)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
@@ -106,141 +107,141 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                     Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
                     ScoringMethodId = 1,
                     CompanyId = companyId,
-                    Score1 = (double)score,
-                    StickerPrice = stickerPrice,
-                    MarginOfSafety = marginOfSafety,
+                    Score1 = (double)(Math.Truncate(score * 100) / 100),
+                    StickerPrice = Math.Truncate(stickerPrice * 100) / 100,
+                    MarginOfSafety = Math.Truncate(marginOfSafety * 100) / 100,
                     Uuid = Guid.NewGuid(),
                     UpdatedOn = DateTime.Now
                 };
 
                 _genericDao.Update<Score>(newScore);
 
+
                 Console.WriteLine("\tScore: " + score.ToString("n2") + "      Sticker Price: " + stickerPrice + "\n");
+
             });
         }
 
+        public async Task<GenericReturn<List<string>>> UpdateManyScores(string tickersQueryStr)
+        {
+            //return await _genericBusinessLogic.GenericTransaction(async () =>
+            //{
 
+            const int scoringMethod = 1;
+
+            var tickerStr = HttpUtility.ParseQueryString(tickersQueryStr).Get("tickers");
+
+            var tickers = JsonSerializer.Deserialize<string[]>(tickerStr);
+
+            var bulkSize = 200;
+
+            var result = new List<string>();
+
+            for (int updatedTickersCounter = 0; updatedTickersCounter < tickers.Length; updatedTickersCounter += bulkSize)
+            {
+                var tickersBulk = tickers.Skip(updatedTickersCounter).Take(bulkSize);
+
+                var updatedTickers = await UpdateScoresByBulk(tickersBulk.ToList(), scoringMethod);
+
+                result.AddRange(updatedTickers);
+            }
+
+            return new GenericReturn<List<string>> { Succeeded = true, Result = result };
+            //});
+        }
 
         public async Task<GenericReturn> UpdateAllScores()
         {
             //return await _genericBusinessLogic.GenericTransaction(async () =>
             //{
+            const int scoringMethod = 1;
+
             var bulkSize = 200;
-            int updatedCompaniesCounter;
 
             var companiesCount = await _genericDao.GetCount<Company>();
 
-            for (updatedCompaniesCounter = 0; updatedCompaniesCounter < companiesCount; updatedCompaniesCounter += bulkSize)
+            for (int updatedCompaniesCounter = 0; updatedCompaniesCounter < companiesCount; updatedCompaniesCounter += bulkSize)
             {
-                Console.WriteLine("-----------------------------------------------------------------------------------");
-                Console.WriteLine("--------------------------------- Loop number: " + (updatedCompaniesCounter / bulkSize) + " ---------------------------------");
-                Console.WriteLine("-----------------------------------------------------------------------------------\n");
+                var tickersBulk = await _rule1DAO.GetTickersByBulk(updatedCompaniesCounter, bulkSize);
 
-                var companiesBulk = await _rule1DAO.GetCompaniesByBulk(updatedCompaniesCounter, bulkSize);
-
-                List<string> tickersBulk = (from c in companiesBulk
-                                            select c.Ticker).ToList();
-
-                var keyRatiosByBulk = await _rule1DAO.GetKeyRatiosByBulk(tickersBulk);
-
-                var balanceSheetByBulk = await _rule1DAO.GetBalanceSheetByBulk(tickersBulk);
-
-                var incomeStatementByBulk = await _rule1DAO.GetIncomeStatementByBulk(tickersBulk);
-
-                var dailyInfoByBulk = await _rule1DAO.GetDailyInfoByBulk(tickersBulk);
-
-                var ScoreByBulk = await _rule1DAO.GetScoreByBulk(tickersBulk, 2);
-
-                var scoresResult = new List<Score>();
-
-                foreach (CompanyPoco company in companiesBulk)
-                {
-
-                    Console.WriteLine(DateTime.Now + "   Id: " + company.Id + "   Ticker: " + company.Ticker + "   Name: " + company.Name);
-
-                    var roic = (from kr in keyRatiosByBulk
-                                where kr.Ticker.Equals(company.Ticker)
-                                select kr.Roic).ToList();
-
-                    var equity = (from bs in balanceSheetByBulk
-                                  where bs.Ticker.Equals(company.Ticker)
-                                  select bs.Equity).ToList();
-
-                    var eps = (from incStat in incomeStatementByBulk
-                               where incStat.Ticker.Equals(company.Ticker)
-                               select incStat.Eps).ToList();
-
-                    var sales = (from incStat in incomeStatementByBulk
-                                 where incStat.Ticker.Equals(company.Ticker)
-                                 select incStat.Sales).ToList();
-
-                    var cash = (from bs in balanceSheetByBulk
-                                where bs.Ticker.Equals(company.Ticker)
-                                select bs.Cash).ToList();
-
-                    var score = CalculateScore(roic, equity, eps, sales, cash);
-
-
-
-                    //var dailyInfo = dailyInfoByBulk.Where(d => d.Ticker.Equals(company.Ticker)).SingleOrDefault();
-
-                    //var stickerPrice = CalculateStickerPrice(dailyInfo);
-
-                    //var marginOfSafety = stickerPrice / 2;
-
-                    //var scoreInfo = ScoreByBulk.Where(s => s.Ticker == company.Ticker).SingleOrDefault();
-
-                    //scoresResult.Add(new Score
-                    //{
-                    //    Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
-                    //    ScoringMethodId = 1,
-                    //    CompanyId = company.Id,
-                    //    Score1 = (double)score,
-                    //    StickerPrice = stickerPrice,
-                    //    MarginOfSafety = marginOfSafety,
-                    //    Uuid = Guid.NewGuid(),
-                    //    UpdatedOn = DateTime.Now
-                    //});
-
-
-
-
-                    var PriceToEarnings = (from kr in keyRatiosByBulk
-                                           where kr.Ticker.Equals(company.Ticker)
-                                           select kr.PriceToEarnings).ToList();
-
-
-                    var stickerPrice = CalculateStickerPrice(PriceToEarnings.ElementAt(0), eps.ElementAt(0));
-
-                    var marginOfSafety = stickerPrice / 2;
-
-                    var scoreInfo = ScoreByBulk.Where(s => s.Ticker == company.Ticker).SingleOrDefault();
-
-                    scoresResult.Add(new Score
-                    {
-                        Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
-                        ScoringMethodId = 2,
-                        CompanyId = company.Id,
-                        Score1 = (double)score,
-                        StickerPrice = stickerPrice,
-                        MarginOfSafety = marginOfSafety,
-                        Uuid = Guid.NewGuid(),
-                        UpdatedOn = DateTime.Now
-                    });
-
-
-                    Console.WriteLine("\tScore: " + score.ToString("n2") + "      Sticker Price: " + stickerPrice + "\n");
-
-                }
-
-                await _genericBusinessLogic.GenericTransaction(async () =>
-                {
-                    _genericDao.UpdateRange<Score>(scoresResult);
-                });
+                await UpdateScoresByBulk(tickersBulk.ToList(), scoringMethod);
             }
             //});
             return new GenericReturn { Succeeded = true, Message = "ok" };
         }
+
+        private async Task<List<string>> UpdateScoresByBulk(List<string> tickersBulk, int scoringMethod)
+        {
+            var companiesBulk = await _rule1DAO.GetCompaniesByTickerList(tickersBulk);
+
+            var keyRatiosByBulk = await _rule1DAO.GetKeyRatiosByBulk(tickersBulk);
+
+            var balanceSheetByBulk = await _rule1DAO.GetBalanceSheetByBulk(tickersBulk);
+
+            var incomeStatementByBulk = await _rule1DAO.GetIncomeStatementByBulk(tickersBulk);
+
+            var ScoreByBulk = await _rule1DAO.GetScoreByBulk(tickersBulk, scoringMethod);
+
+            var scoresResult = new List<Score>();
+
+            foreach (CompanyPoco company in companiesBulk)
+            {
+                var roic = (from kr in keyRatiosByBulk
+                            where kr.Ticker.Equals(company.Ticker)
+                            select kr.Roic).ToList();
+
+                var equity = (from bs in balanceSheetByBulk
+                              where bs.Ticker.Equals(company.Ticker)
+                              select bs.Equity).ToList();
+
+                var eps = (from incStat in incomeStatementByBulk
+                           where incStat.Ticker.Equals(company.Ticker)
+                           select incStat.Eps).ToList();
+
+                var sales = (from incStat in incomeStatementByBulk
+                             where incStat.Ticker.Equals(company.Ticker)
+                             select incStat.Sales).ToList();
+
+                var cash = (from bs in balanceSheetByBulk
+                            where bs.Ticker.Equals(company.Ticker)
+                            select bs.Cash).ToList();
+
+                var score = CalculateScore(roic, equity, eps, sales, cash);
+
+
+                var PriceToEarnings = (from kr in keyRatiosByBulk
+                                       where kr.Ticker.Equals(company.Ticker)
+                                       select kr.PriceToEarnings).ToList();
+
+                var stickerPrice = CalculateStickerPrice(PriceToEarnings.ElementAt(0), eps.ElementAt(0));
+
+                var marginOfSafety = stickerPrice / 2;
+
+                var scoreInfo = ScoreByBulk.Where(s => s.Ticker == company.Ticker).SingleOrDefault();
+
+                scoresResult.Add(new Score
+                {
+                    Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
+                    ScoringMethodId = scoringMethod,
+                    CompanyId = company.Id,
+                    Score1 = (double)(Math.Truncate(score * 100) / 100),
+                    StickerPrice = Math.Truncate(stickerPrice * 100) / 100,
+                    MarginOfSafety = Math.Truncate(marginOfSafety * 100) / 100,
+                    Uuid = Guid.NewGuid(),
+                    UpdatedOn = DateTime.Parse(String.Format("{0:G}", DateTime.Now)),
+                });
+            }
+
+            await _genericBusinessLogic.GenericTransaction(async () =>
+            {
+                _genericDao.UpdateRange<Score>(scoresResult);
+            });
+
+            return tickersBulk;
+        }
+
+
+
 
 
 
