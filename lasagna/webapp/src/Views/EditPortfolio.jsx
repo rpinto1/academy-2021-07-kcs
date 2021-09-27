@@ -96,7 +96,7 @@ export default function EditPortfolio() {
         var txt;
         var r = window.confirm("Press ok if you wish to delete the folder!");
         if (r == true) {
-            var result = await fetch(`http://localhost:3010/api/Portfolios/deletePortfolio?Id=${id.id}`, {
+            var result = await fetch(`http://localhost:3010/api/Portfolios/deleteportfolio/${id.id}`, {
                 method: "DELETE",
                 headers: {
                     'Accept': 'application/json',
