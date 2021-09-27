@@ -50,10 +50,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpGet("portfolioCompanyValues")]
         public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
         {
-            var genericReturn = await _portfoliosBO.GetCompanyValuesByTicker(ticker);
+            var genericReturn = 
+                //await _portfoliosBO.GetCompanyValuesByTicker(ticker);
+                await _portfoliosBO.GetValuesAndScoreByTicker(ticker);
+                //await _portfoliosBO.GetCompanyValuesByTicker(ticker);
+
 
             return Ok(genericReturn);
         }
+
+
 
 
         [HttpPost("createPortfolio")]

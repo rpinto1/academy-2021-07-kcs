@@ -17,16 +17,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         private ISearchDAO _searchDAO;
         private IGenericDAO _genericDAO;
         private IRule1DAO _rule1DAO;
-        private IRule1BO _rule1BO;
+        
         private IGenericBusinessLogic _genericBusiness;
 
-        public PortfoliosBO(IPortfoliosDAO portfoliosDAO, ISearchDAO searchDAO, IGenericDAO genericDAO, IRule1DAO rule1DAO, IRule1BO rule1BO, IGenericBusinessLogic genericBusiness)
+        public PortfoliosBO(IPortfoliosDAO portfoliosDAO, ISearchDAO searchDAO, IGenericDAO genericDAO, IRule1DAO rule1DAO, IGenericBusinessLogic genericBusiness)
         {
             _portfoliosDAO = portfoliosDAO;
             _searchDAO = searchDAO;
             _genericDAO = genericDAO;
             _rule1DAO = rule1DAO;
-            _rule1BO = rule1BO;
+            
             _genericBusiness = genericBusiness;
         }
 
@@ -79,9 +79,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             async () =>
             {
                 PortfolioPoco portfolio = await _portfoliosDAO.GetPortfolioWithoutCompanies(portfolioId);
-
-
-
 
                 return portfolio;
 
@@ -200,5 +197,81 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
 
         }
+
+        public async Task<GenericReturn<PortfolioCompanyPoco>> GetValuesAndScoreByTicker(string ticker)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                var keyRatiosList = await _rule1DAO.GetKeyRatios(ticker);
+                var balanceSheetList = await _rule1DAO.GetBalanceSheet(ticker);
+                var incomeStatementList = await _rule1DAO.GetIncomeStatement(ticker);
+
+                var roic = (from kr in keyRatiosList
+                            select kr.Roic).ToList();
+
+                var equity = (from bs in balanceSheetList
+                              select bs.Equity).ToList();
+
+                var eps = (from incStat in incomeStatementList
+                           select incStat.Eps).ToList();
+
+                var sales = (from incStat in incomeStatementList
+                             select incStat.Sales).ToList();
+
+                var cash = (from bs in balanceSheetList
+                            select bs.Cash).ToList();
+
+
+                var list = new List<PortfolioCompanyValuesPoco>();
+
+
+                for (int i = keyRatiosList.Count() - 1; i > 0; i--)
+                {
+                    list.Add(new PortfolioCompanyValuesPoco
+                    {
+                        Year = keyRatiosList.ElementAt(i).Year,
+                        ROIC = roic.ElementAt(i),
+                        Equity = equity.ElementAt(i),
+                        EPS = eps.ElementAt(i),
+                        Sales = sales.ElementAt(i),
+                        Cash = cash.ElementAt(i)
+                    });
+
+                }
+
+                var score = await _rule1DAO.GetScore(ticker, 1);
+
+                var toReturn = new PortfolioCompanyPoco()
+                {
+                    Score = score,
+                    Values = list
+                };
+
+                return await Task.FromResult(toReturn);
+
+            });
+
+        }
+
+        public async Task<GenericReturn<double>> GetScoreByTicker(string ticker)
+        {
+
+            return await _genericBusiness.GenericTransaction(
+
+            async () =>
+            {
+
+                var score = await _rule1DAO.GetScore(ticker, 1);
+
+                return score;
+
+            });
+
+        }
+
     }
 }

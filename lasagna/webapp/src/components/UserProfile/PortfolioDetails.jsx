@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import DrawGraph from './DrawGraph';
-import { Tab, Placeholder } from 'semantic-ui-react'
+import { Tab, Placeholder, Header } from 'semantic-ui-react'
 
-export default function PortfolioDetails({ data }) {
+export default function PortfolioDetails({ data, score }) {
 
     const [doneLoading, setDoneLoading] = useState(false);
 
@@ -35,7 +35,7 @@ export default function PortfolioDetails({ data }) {
 
 
     const panes = [
-        { menuItem: 'Summary', render: () => <Tab.Pane> Score data </Tab.Pane> },
+        { menuItem: 'Summary', render: () => <Tab.Pane> <h1> Score: <span className={score < 0 ? 'negative' : 'positive'}>{Number(score).toFixed(2)}%</span> </h1> </Tab.Pane> },
         { menuItem: 'ROIC', render: () => <Tab.Pane> <Graph dataKey="roic" /> </Tab.Pane> },
         { menuItem: 'Equity', render: () => <Tab.Pane> <Graph dataKey="equity" /> </Tab.Pane> },
         { menuItem: 'EPS', render: () => <Tab.Pane> <Graph dataKey="eps" /> </Tab.Pane> },

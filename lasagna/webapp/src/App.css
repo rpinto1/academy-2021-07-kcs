@@ -47,6 +47,14 @@ header {
     color: rgb(180, 20, 100);
 }
 
+.positive{
+    color: rgb(20, 180, 100);
+}
+
+.negative{
+    color: rgb(180, 20, 100);
+}
+
 .gainlose-data {
     display: flex;
     align-self:center;
