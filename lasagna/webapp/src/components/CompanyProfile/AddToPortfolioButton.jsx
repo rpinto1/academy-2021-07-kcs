@@ -1,48 +1,84 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import axios from 'axios';
 import { Button, Icon } from 'semantic-ui-react';
-import { userId, headersWithoutCookies } from '../UserManager';
+import { headersWithoutCookies } from '../UserManager';
 import { urlGetPortofolios } from '../PortfolioManager';
+import Portfolio from './Portfolio';
+import $ from 'jquery';
 
 
 export default function AddToPortfolioButton() {
 
     const [clicked, setClicked] = useState(false);
+    const [portfolios, setPortfolios] = useState([])
 
-    const handleClick = () => axios.get(urlGetPortofolios, headersWithoutCookies)
+    useEffect(() => axios.get(urlGetPortofolios, headersWithoutCookies)
     .then(res => {
-        console.log(res);
+            setPortfolios(res.data.result)
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log(error)), [])
 
+
+    const handleClick = () => {
+        setClicked(!clicked)     
+    };
+
+    useEffect(() => {
+        if (clicked === true) {
+            $("#portfolio_list").show()
+        } else {
+            $("#portfolio_list").hide()
+        }
+    }, [clicked])
 
     return (
-        <Button 
-        icon labelPosition ='left' 
-        size='tiny' 
-        floated='right'
-        onClick = {handleClick}>
-             
-                                   
+        <>
+       
+            <Button 
+            className = "ui pointing dropdown link item"
+            icon labelPosition ='left' 
+            size='tiny' 
+            floated='right'
+            onClick = {handleClick}>
+                <span> Add to your portfolio</span>
+                                        
         {
-            clicked && 
-            <>
+            clicked &&           
             <Icon 
                 name='heart' 
-                color='pink'/>
-            
-                 
-                <p> hola</p>
-
-
-            </>
-
+                color='pink'/>          
         }
             <Icon 
                 name='heart outline' 
                 color='black'/>
-                              Add to your portfolio
-      
-        </Button> 
+            </Button>
+     
+    
+        {    (portfolios.length > 0) &&
+
+                
+                (<div className="ui raised fluid text segment" id="portfolio_list" > 
+                    <div class="menu">
+                    <div class="header">Portfolios</div>         
+    
+       { 
+       portfolios.map((portfolio, index) => 
+       <>
+       <div className= 'item'> <Portfolio key={index} portfolio={portfolio} /></div>
+       <div class="divider" id= {index}></div>
+       </>)
+       
+       }
+
+        </div>
+        </div>)
+
+       
+
+        }
+         
+        </>
+
+    
     )
 }
