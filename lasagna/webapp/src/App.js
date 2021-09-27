@@ -39,7 +39,8 @@ function App() {
                 <Route path= '/user/profile/edit' component = {EditUserView} />
                 <Route path= '/recover/:user/:email' component = {RecoverPasswordView} /> 
                 <Route path= '/user/homepage' component = {HomepageUserView} /> 
-                <Route path= '/user/portfolio/edit/:id' component = {EditPortfolio} />
+                <Route path= '/user/portfolio/edit/:id' component = {EditPortfolio} /> 
+
             </Switch>  
            
            

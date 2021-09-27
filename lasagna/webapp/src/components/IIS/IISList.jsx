@@ -84,8 +84,9 @@ const handlePageNext = (operator)=>{
             if(response.ok){
                 console.log(response);
             return response.json();
-            }else{
-                 history.push('signin');
+            }
+            else{
+                  history.push('signin');
             }
             
             
