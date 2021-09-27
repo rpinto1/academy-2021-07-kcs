@@ -13,11 +13,16 @@ export default function UserProfileView() {
     const [activePortfolio, setActivePortfolio] = useState(0);
     const [activeCompany, setActiveCompany] = useState(0);
 
+    const [score, setScore] = useState(0.0);
+
+    const [activeCompanyResponse, setActiveCompanyResponse] = useState([]);
     const [activeCompanyValues, setActiveCompanyValues] = useState([]);
 
     const [finishedLoading, setFinishedLoading] = useState(false)
     const [noPortfolioInfo, setNoPortfolioInfo] = useState(false);
     const [noCompanies, setNoCompanies] = useState(false);
+
+    const [userName, setUserName] = useState("")
 
     const userId = localStorage.getItem("id");
 
@@ -37,7 +42,7 @@ export default function UserProfileView() {
 
                 if (data != null) {
                     setterFunc(() => data.result);
-                    console.log("fetched data: ", data.result)
+
                 }
 
             } catch (e) {
@@ -47,14 +52,16 @@ export default function UserProfileView() {
     }
 
 
+
     useEffect(() => {
 
         (() => {
             fetchAndSet(url, setData);
 
             if (data.length === 0) {
+
                 setNoPortfolioInfo(() => true);
-            } else if (data[activePortfolio].portfolioCompanies.length === 0) {
+            } else if (data["values"][activePortfolio].portfolioCompanies.length === 0) {
                 setNoCompanies(() => true);
             }
 
@@ -74,7 +81,19 @@ export default function UserProfileView() {
 
     const handleCompanyChange = (e, { index }) => {
         setActiveCompany(index);
-        setActiveCompanyValues(() => fetchAndSet(`http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${data[activePortfolio].portfolioCompanies[index].ticker}`, setActiveCompanyValues));
+
+        setActiveCompanyValues([]);
+
+        
+        (async () => {
+            fetchAndSet(`http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${data[activePortfolio].portfolioCompanies[index].ticker}`, setActiveCompanyResponse);
+            setScore(() => activeCompanyResponse["score"]);
+            setActiveCompanyValues(() => activeCompanyResponse["values"]);
+            
+
+        })()
+
+
     };
 
 
@@ -100,7 +119,7 @@ export default function UserProfileView() {
                 </article>
 
                 <article>
-                    <h1>Hello, (UserName)!</h1>
+                    <h1>Hello{userName === ""? "!" : `, ${userName}!` }</h1>
                     <Link to='/user/profile/edit'>Edit my profile</Link>
                 </article>
             </section>
@@ -113,7 +132,7 @@ export default function UserProfileView() {
             placeholder={data.length > 0 ? 'Select Portfolio' : (noPortfolioInfo ? 'No Portfolios' : 'Loading data...')}
             fluid
             selection
-            loading={finishedLoading ? false : true}
+            loading={!finishedLoading}
             options={dropdownOptions()}
             onChange={handlePortfolioChange}
 
@@ -161,7 +180,7 @@ export default function UserProfileView() {
 
     }
 
-    const createNewPortfolio = (e) => {
+    const createNewPortfolio = async (e) => {
 
         const requestBody = {
             name: e.target[0].value,
@@ -178,19 +197,14 @@ export default function UserProfileView() {
         }
 
 
-        let request;
+        let request = await fetch("http://localhost:3010/api/Portfolios/createPortfolio", options)
 
-        (async () => {
-            request = await fetch("http://localhost:3010/api/Portfolios/createPortfolio", options)
-            console.log(request)
-
-            if (request.ok) {
-                fetchAndSet(url, setData);
-            }
-        })()
+        if (request.ok) {
+            await fetchAndSet(url, setData);
+            setFinishedLoading(true);
+        }
 
 
-        //console.log(options);
     };
 
 
@@ -198,12 +212,19 @@ export default function UserProfileView() {
 
         const [formField, setFormField] = useState("");
 
+        const handleSubmit = (e) => {
+            createNewPortfolio(e);
+            setFormField("");
+            setFinishedLoading(false);
+        };
+
         return (
-            <Form onSubmit={createNewPortfolio} loading={finishedLoading? false : true}>
+            <Form onSubmit={handleSubmit} loading={!finishedLoading}>
                 <Form.Field>
                     <input
                         type="text"
                         placeholder="New Portfolio Name"
+                        disabled={!finishedLoading}
                         value={formField}
                         onChange={({ target: { value } }) => setFormField(value)}
                     />
@@ -217,7 +238,7 @@ export default function UserProfileView() {
     return (
 
         <div>
-            <UserHeader />
+            <UserHeader setUserName={setUserName} />
             <Container className="profile">
 
                 <Greeting />
@@ -243,7 +264,7 @@ export default function UserProfileView() {
                     </section>
 
                     <section className="portfolio-item-detail">
-                        <PortfolioDetails data={activeCompanyValues} className="detail-table" />
+                        <PortfolioDetails score={score} data={activeCompanyValues} className="detail-table" />
                     </section>
 
                 </section>

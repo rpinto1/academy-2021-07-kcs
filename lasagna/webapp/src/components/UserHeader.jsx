@@ -6,7 +6,7 @@ import SearchBar from './SearchBar/SearchBar';
 import { urlGetUser } from './UserManager';
 
 
-export default function UserHeader() {
+export default function UserHeader(props) {
 
     const [firstName, setFirstName] = useState('');
 
@@ -27,6 +27,9 @@ useEffect(() =>
     }).then(res => res.json())
        .then(data => {
         setFirstName(data.result.firstName)
+
+        if(props.setUserName !== null) props.setUserName(data.result.firstName);
+
       })
       .catch(error => console.log(error)), []);
 
