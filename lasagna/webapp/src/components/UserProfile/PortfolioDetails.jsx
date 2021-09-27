@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import DrawGraph from './DrawGraph';
 import { Tab, Placeholder, Header } from 'semantic-ui-react'
 
-export default function PortfolioDetails({ data, score }) {
+export default function PortfolioDetails({ data, score, name, ticker }) {
+
+
 
     const [doneLoading, setDoneLoading] = useState(false);
 
@@ -12,7 +14,7 @@ export default function PortfolioDetails({ data, score }) {
                 data.length > 0
 
                     ? (<DrawGraph data={data} dataKey={dataKey} />)
-                    : (<p>No Company Loaded</p>)
+                    : (<p>No Company data</p>)
 
             )
             : (
@@ -35,7 +37,12 @@ export default function PortfolioDetails({ data, score }) {
 
 
     const panes = [
-        { menuItem: 'Summary', render: () => <Tab.Pane> <h1> Score: <span className={score < 0 ? 'negative' : 'positive'}>{Number(score).toFixed(2)}%</span> </h1> </Tab.Pane> },
+        { menuItem: 'Summary', render: () => (
+            <Tab.Pane> 
+                { (name !== '' || ticker !== '' ) &&  <h3>{`${ticker} | ${name}`}</h3>}
+                {data.length > 0 ? <h1> Score: <span className={score < 0 ? 'negative' : 'positive'}>{Number(score).toFixed(2)}%</span> </h1> : <h1>No data</h1>}
+            </Tab.Pane>
+        )},
         { menuItem: 'ROIC', render: () => <Tab.Pane> <Graph dataKey="roic" /> </Tab.Pane> },
         { menuItem: 'Equity', render: () => <Tab.Pane> <Graph dataKey="equity" /> </Tab.Pane> },
         { menuItem: 'EPS', render: () => <Tab.Pane> <Graph dataKey="eps" /> </Tab.Pane> },

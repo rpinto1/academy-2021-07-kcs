@@ -255,6 +255,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
                 var toReturn = new PortfolioCompanyPoco()
                 {
+                    Ticker = ticker,
                     Score = score,
                     Values = list
                 };

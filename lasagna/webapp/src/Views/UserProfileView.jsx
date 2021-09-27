@@ -14,6 +14,8 @@ export default function UserProfileView() {
     const [data, setData] = useState([]);
     const [activePortfolio, setActivePortfolio] = useState(0);
     const [activeCompany, setActiveCompany] = useState(0);
+    const [activeCompanyName, setActiveCompanyName] = useState('');
+    const [activeCompanyTicker, setActiveCompanyTicker] = useState('');
 
     const [score, setScore] = useState(0.0);
 
@@ -26,13 +28,16 @@ export default function UserProfileView() {
 
     const [userName, setUserName] = useState("")
 
+
     const userId = localStorage.getItem("id");
 
     const url = `http://localhost:3010/api/Portfolios/portfolio?userId=${userId}`;
 
 
 
-    const fetchAndSet = (url, setterFunc) => {
+    const fetchAndSet = (url, setterFunc, setterFuncs, index) => {
+
+        setFinishedLoading(false);
 
         (async function () {
             try {
@@ -42,6 +47,13 @@ export default function UserProfileView() {
 
                 if (data != null) {
                     setterFunc(() => data.result);
+                    setFinishedLoading(true);
+
+                    if(setterFuncs && index) {
+                        for(let func in setterFuncs){
+                            func(data.result[index]);
+                        }
+                    }
 
                 }
 
@@ -60,12 +72,10 @@ export default function UserProfileView() {
 
             if (data.length === 0) {
 
-                setNoPortfolioInfo(() => true);
+                setNoPortfolioInfo(true);
             } else if (data["values"][activePortfolio].portfolioCompanies.length === 0) {
-                setNoCompanies(() => true);
+                setNoCompanies(true);
             }
-
-            setFinishedLoading(() => true);
 
         })();
 
@@ -76,23 +86,26 @@ export default function UserProfileView() {
     const handlePortfolioChange = (e, { value }) => {
         setActivePortfolio(value);
         setActiveCompany(0);
+
+        if(data[activePortfolio].portfolioCompanies.length > 0) handleCompanyChange(null, 0);
     };
 
 
     const handleCompanyChange = (e, { index }) => {
         setActiveCompany(index);
+        console.log('index ', index);
 
         setActiveCompanyValues([]);
 
-        
+
         (async () => {
-            fetchAndSet(`http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${data[activePortfolio].portfolioCompanies[index].ticker}`, setActiveCompanyResponse);
+            fetchAndSet(`http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${data[activePortfolio].portfolioCompanies[activeCompany].ticker}`, setActiveCompanyResponse, []);
             setScore(() => activeCompanyResponse["score"]);
             setActiveCompanyValues(() => activeCompanyResponse["values"]);
-            
+            setActiveCompanyName(() => activeCompanyResponse["name"]);
+            setActiveCompanyTicker(() => activeCompanyResponse["ticker"]);
 
         })()
-
 
     };
 
@@ -119,12 +132,14 @@ export default function UserProfileView() {
                 </article>
 
                 <article>
-                    <h1>Hello{userName === ""? "!" : `, ${userName}!` }</h1>
+                    <h1>Hello{userName === "" ? "!" : `, ${userName}!`}</h1>
                     <Link to='/user/profile/edit'>Edit my profile</Link>
                 </article>
             </section>
         );
     }
+
+
 
 
     const PortfolioDropdown = () => (
@@ -140,45 +155,44 @@ export default function UserProfileView() {
     );
 
 
-    const PortfolioCompanies = () => {
+    const PortfolioCompanies = () => (
+        <Menu secondary vertical>
+            {data.length > 0
 
-        return (
-            <Menu secondary vertical>
-                {data.length > 0
+                ?
+                data[activePortfolio].portfolioCompanies.length > 0
 
                     ?
-                    data[activePortfolio].portfolioCompanies.length > 0
-
-                        ?
-                        data[activePortfolio].portfolioCompanies.map((item, i) => {
-                            return (
-                                <Menu.Item
-                                    name={(item.name)}
-                                    active={activeCompany === i}
-                                    key={i}
-                                    index={i}
-                                    onClick={handleCompanyChange} />
-                            );
-                        })
-
-                        :
-                        <Menu.Item
-                            name={finishedLoading ? "No Companies" : "Loading..."}
-                            active={true}
-                            index={1}
-                        />
+                    data[activePortfolio].portfolioCompanies.map((item, i) => {
+                        return (
+                            <Menu.Item
+                                name={`${item.ticker} ${item.name}`}
+                                content={`${item.ticker} | ${item.name}`}
+                                active={activeCompany === i}
+                                key={i}
+                                index={i}
+                                onClick={handleCompanyChange} />
+                        );
+                    })
 
                     :
                     <Menu.Item
-                        name={noPortfolioInfo ? "No Portfolios" : "Loading..."}
+                        name={finishedLoading ? "No Companies" : "Loading..."}
                         active={true}
                         index={1}
-                    />}
-            </Menu>
-        );
+                    />
+
+                :
+                <Menu.Item
+                    name={noPortfolioInfo ? "No Portfolios" : "Loading..."}
+                    active={true}
+                    index={1}
+                />}
+        </Menu>
+    );
 
 
-    }
+
 
     const createNewPortfolio = async (e) => {
 
@@ -264,7 +278,12 @@ export default function UserProfileView() {
                     </section>
 
                     <section className="portfolio-item-detail">
-                        <PortfolioDetails score={score} data={activeCompanyValues} className="detail-table" />
+                        <PortfolioDetails 
+                        score={score} 
+                        data={activeCompanyValues} 
+                        name={activeCompanyName} 
+                        ticker={activeCompanyTicker}
+                        className="detail-table" />
                     </section>
 
                 </section>
