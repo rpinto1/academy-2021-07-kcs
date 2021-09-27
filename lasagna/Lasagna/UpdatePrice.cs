@@ -24,7 +24,8 @@ namespace Lasagna
             var genericDao = new GenericDAO();
             var searchDao = new SearchDAO();
 
-            var companyJson = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\listQFSUpdate.json");
+            var companyJson = File.ReadAllText(@"..\..\..\listQFSUpdate.json");
+
             var companyBD1 = JsonConvert.DeserializeObject<List<Company>>(companyJson);
             var companyBD = genericDao.GetAll<Company>();
             var companyDaily = genericDao.GetAll<DailyInfo>();
@@ -141,7 +142,7 @@ namespace Lasagna
 
 
 
-            var companyJson = File.ReadAllText(@"C:\Users\User01\source\repos\rpinto1\academy-2021-07-kcs\lasagna\Lasagna\listQFSUpdate.json");
+            var companyJson = File.ReadAllText(@"..\..\..\listQFSUpdate.json");
             var companyBD = JsonConvert.DeserializeObject<List<Company>>(companyJson);
             var companyDaily = genericDao.GetAll<DailyInfo>();
             var counting = 0;

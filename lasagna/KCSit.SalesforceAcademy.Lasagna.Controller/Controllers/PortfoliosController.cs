@@ -1,4 +1,6 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+﻿using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -30,30 +32,79 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         public async Task<IActionResult> GetPortfolios(Guid userId)
         {
 
-            var genericReturn = await _portfoliosBO.GetPortfolios(userId);
+            cacheKey = "portfolios" + userId;
 
-            return Ok(genericReturn);
+            if (!_memoryCache.TryGetValue(cacheKey, out GenericReturn<List<PortfolioPoco>> poco))
+            {
+                poco = await _portfoliosBO.GetPortfolios(userId);
+
+                var cacheExpiryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.Now.AddMinutes(10),
+                    Priority = CacheItemPriority.High,
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _memoryCache.Set(cacheKey, poco, cacheExpiryOptions);
+
+            }
+            return Ok(poco);
+
         }
 
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
+        
         [HttpGet("portfolioCompanies")]
         public async Task<IActionResult> GetCompaniesByPortfolio(Guid portfolioId)
         {
 
-            //var genericReturn = await _portfoliosBO.GetCompaniesByPortfolio(portfolioId);
-            var genericReturn = await _portfoliosBO.GetPortfolioWithCompanies(portfolioId);
+            cacheKey = "companiesByPortfolio" + portfolioId;
 
-            return Ok(genericReturn);
+            if (!_memoryCache.TryGetValue(cacheKey, out GenericReturn<PortfolioPoco> poco))
+            {
+                //poco = await _portfoliosBO.GetCompaniesByPortfolio(portfolioId);
+                poco = await _portfoliosBO.GetPortfolioWithCompanies(portfolioId);
+
+                var cacheExpiryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.Now.AddMinutes(10),
+                    Priority = CacheItemPriority.High,
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _memoryCache.Set(cacheKey, poco, cacheExpiryOptions);
+
+            }
+            return Ok(poco);
+
+
         }
 
-        [ResponseCache(Duration = 200, Location = ResponseCacheLocation.None, NoStore = true)]
+        
         [HttpGet("portfolioCompanyValues")]
         public async Task<IActionResult> GetCompanyValuesByTicker(string ticker)
         {
-            var genericReturn = await _portfoliosBO.GetCompanyValuesByTicker(ticker);
 
-            return Ok(genericReturn);
+            cacheKey = "companyValuesByTicker" + ticker;
+
+            if (!_memoryCache.TryGetValue(cacheKey, out GenericReturn<PortfolioCompanyPoco> poco))
+            {
+                poco = await _portfoliosBO.GetValuesAndScoreByTicker(ticker);
+
+                var cacheExpiryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.Now.AddMinutes(10),
+                    Priority = CacheItemPriority.High,
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _memoryCache.Set(cacheKey, poco, cacheExpiryOptions);
+
+            }
+            return Ok(poco);
+
         }
+
+
 
 
         [HttpPost("createPortfolio")]
@@ -93,29 +144,44 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         public async Task<IActionResult> GetPortfolio(Guid Id)
         {
 
-            var genericReturn = await _portfoliosBO.GetPortfolio(Id);
+            cacheKey = "portfolioByUuid" + Id;
 
-            return Ok(genericReturn);
+            if (!_memoryCache.TryGetValue(cacheKey, out GenericReturn<List<PortfolioCompanyPoco>> poco))
+            {
+                poco = await _portfoliosBO.GetPortfolio(Id);
+
+                var cacheExpiryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.Now.AddMinutes(10),
+                    Priority = CacheItemPriority.High,
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _memoryCache.Set(cacheKey, poco, cacheExpiryOptions);
+
+            }
+            return Ok(poco);
+
+
         }
 
         // api/companies/deleteportfolio/{id}
         [HttpDelete("deleteportfolio/{id}")]
         public async Task<IActionResult> DeletePortfolio(Guid id)
         {
-            _portfoliosBO.DeletePortfolio(id);
+            var result = await _portfoliosBO.DeletePortfolio(id);
 
-            return Ok();
+            return ReturnResult(result);
         }
 
         [HttpPost("updateportfolio")]
-        public async Task<IActionResult> UpdatePortfolio( Guid Uuid,  List<string> Tickers,  String PortfolioName)
+        public async Task<IActionResult> UpdatePortfolio([FromBody] PortfolioUpdatePoco data)
         {
-            _portfoliosBO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
+            
+            var result = await _portfoliosBO.UpdatePortfolioId(Guid.Parse(data.Uuid),data.Tickers,data.PortfolioName);
 
-            return Ok();
+            return ReturnResult(result);
         }
-
-
 
     }
 }

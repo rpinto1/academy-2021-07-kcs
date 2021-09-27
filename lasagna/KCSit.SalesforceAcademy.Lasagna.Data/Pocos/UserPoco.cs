@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
+namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 {
     public class UserPoco
     {

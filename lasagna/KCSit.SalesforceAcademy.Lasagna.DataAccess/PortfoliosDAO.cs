@@ -58,51 +58,46 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-        public async Task<PortfolioPoco> GetPortfolioWithCompanies(Guid portfolioUuid)
+        public async Task<PortfolioPoco> GetPortfolioWithoutCompanies(Guid portfolioUuid)
         {
             using (var context = new lasagnakcsContext())
             {
                 var companies = await GetCompaniesByPortfolio(portfolioUuid);
 
                 var query = await (from portfolio in context.Portfolios
-                                       //join portfolioCompany in context.PortfolioCompanies
-                                       //on portfolio.Id equals portfolioCompany.PortfolioId
-                                       //join company in context.Companies
-                                       //on portfolioCompany.CompanyId equals company.Id
-                                       //into portfolioCompanies
 
-                                       where portfolio.Uuid == portfolioUuid
+                                   where portfolio.Uuid == portfolioUuid
 
-                                       select new PortfolioPoco
-                                       {
-                                           PortfolioId = portfolio.Uuid,
-                                           PortfolioName = portfolio.Name,
-                                           
-                                       })
+                                   select new PortfolioPoco
+                                   {
+                                       PortfolioId = portfolio.Uuid,
+                                       PortfolioName = portfolio.Name,
+
+                                   })
                                        .SingleOrDefaultAsync();
 
                 query.PortfolioCompanies = companies;
 
                 return query;
-                
+
 
             }
 
 
         }
 
-        public void DeletePortfolioId(Guid Uuid)
+        public async Task DeletePortfolioId(Guid Uuid)
         {
             using (var context = new lasagnakcsContext())
             {
-                var remove = (from portfolio in context.Portfolios
+                var remove = await (from portfolio in context.Portfolios
                               join portfolioCompany in context.PortfolioCompanies
                               on portfolio.Id equals portfolioCompany.PortfolioId
 
                               where portfolio.Uuid == Uuid
 
                               select portfolioCompany
-                              ).ToList();
+                              ).ToListAsync();
 
                 if (remove != null)
                 {
@@ -111,12 +106,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
                 }
 
-                var removep = (from portfolio in context.Portfolios
+                var removep = await (from portfolio in context.Portfolios
 
                                where portfolio.Uuid == Uuid
 
                                select portfolio
-                              ).FirstOrDefault();
+                              ).FirstOrDefaultAsync();
                 if (removep != null)
                 {
                     context.Portfolios.Remove(removep);
@@ -125,18 +120,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             }
         }
 
-        public void UpdatePortfolioId( Guid Uuid, List<string> Tickers, String PortfolioName)
+        public async Task UpdatePortfolioId( Guid Uuid, List<string> Tickers, String PortfolioName)
         {
             using (var context = new lasagnakcsContext())
             {
-                var remove = (from portfolio in context.Portfolios
+                var remove = await (from portfolio in context.Portfolios
                               join portfolioCompany in context.PortfolioCompanies
                               on portfolio.Id equals portfolioCompany.PortfolioId
                               join companies in (context.Companies.Where(c => Tickers.Contains(c.Ticker)).AsEnumerable())
                               on portfolioCompany.CompanyId equals companies.Id
                               where portfolio.Uuid == Uuid
                               select portfolioCompany
-                              ).ToList();
+                              ).ToListAsync();
 
                 if (remove != null)
                 {
@@ -146,12 +141,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                 }
 
 
-                var update = (from portfolio in context.Portfolios
+                var update = await (from portfolio in context.Portfolios
 
                               where portfolio.Uuid == Uuid
 
                               select portfolio
-                              ).FirstOrDefault();
+                              ).FirstOrDefaultAsync();
                 if (update != null)
                 {
                     update.Name = PortfolioName;

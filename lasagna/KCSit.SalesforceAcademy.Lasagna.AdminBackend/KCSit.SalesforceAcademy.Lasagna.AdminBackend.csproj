@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <StartupObject>KCSit.SalesforceAcademy.Lasagna.Rule1.Program</StartupObject>
-    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>02c3be5d-7f31-4b5e-bd81-ce217117469d</UserSecretsId>
+    <StartupObject>KCSit.SalesforceAcademy.Lasagna.AdminBackend.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.Business\KCSit.SalesforceAcademy.Lasagna.Business.csproj" />
     <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.Controller\KCSit.SalesforceAcademy.Lasagna.Controller.csproj" />
-    <ProjectReference Include="..\KCSit.SalesforceAcademy.Lasagna.DataAccess\KCSit.SalesforceAcademy.Lasagna.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

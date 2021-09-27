@@ -13,6 +13,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<IEnumerable> GetCompanies();
 
         Task<IEnumerable<CompanyPoco>> GetCompaniesByBulk(int skip, int take);
+        
+        Task<IEnumerable<string>> GetTickersByBulk(int skip, int take);
+
+        Task<IEnumerable<CompanyPoco>> GetCompaniesByTickerList(List<string> tickers);
 
         Task<IEnumerable<KeyRatiosPoco>> GetKeyRatios(string ticker);
 
@@ -35,7 +39,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
 
         Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
 
-        Task<CompanyScorePoco> GetInfo(AdminRule1Parameters parameters);
+        Task<AdminRule1PocoList> GetInfo(string queryString);
 
     }
 }
