@@ -58,33 +58,28 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-        public async Task<PortfolioPoco> GetPortfolioWithCompanies(Guid portfolioUuid)
+        public async Task<PortfolioPoco> GetPortfolioWithoutCompanies(Guid portfolioUuid)
         {
             using (var context = new lasagnakcsContext())
             {
                 var companies = await GetCompaniesByPortfolio(portfolioUuid);
 
                 var query = await (from portfolio in context.Portfolios
-                                       //join portfolioCompany in context.PortfolioCompanies
-                                       //on portfolio.Id equals portfolioCompany.PortfolioId
-                                       //join company in context.Companies
-                                       //on portfolioCompany.CompanyId equals company.Id
-                                       //into portfolioCompanies
 
-                                       where portfolio.Uuid == portfolioUuid
+                                   where portfolio.Uuid == portfolioUuid
 
-                                       select new PortfolioPoco
-                                       {
-                                           PortfolioId = portfolio.Uuid,
-                                           PortfolioName = portfolio.Name,
-                                           
-                                       })
+                                   select new PortfolioPoco
+                                   {
+                                       PortfolioId = portfolio.Uuid,
+                                       PortfolioName = portfolio.Name,
+
+                                   })
                                        .SingleOrDefaultAsync();
 
                 query.PortfolioCompanies = companies;
 
                 return query;
-                
+
 
             }
 

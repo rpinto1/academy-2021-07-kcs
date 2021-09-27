@@ -7,8 +7,8 @@ export default function DrawGraph({data, dataKey}) {
     return (
         <div>
             <LineChart
-                width={700}
-                height={500}
+                width={500}
+                height={350}
                 data={data}
                 margin={{
                     top: 100,
@@ -19,7 +19,7 @@ export default function DrawGraph({data, dataKey}) {
                 <Line type="monotone" dataKey={dataKey} stroke="#001ff8" /> 
                 <CartesianGrid stroke="#ccc" />
                 <XAxis dataKey="year" />
-                <YAxis type="number"  />
+                <YAxis type="number" />
                 <Tooltip />
                 <Legend />
             </LineChart>

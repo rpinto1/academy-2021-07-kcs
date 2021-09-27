@@ -7,7 +7,7 @@ import SearchBar from './SearchBar/SearchBar';
 import { urlGetUser, headers} from './UserManager';
 
 
-export default function UserHeader() {
+export default function UserHeader(props) {
 
     const [firstName, setFirstName] = useState('');
 
