@@ -13,8 +13,7 @@ import dataProvider from './DataProvider';
 const AdminComp = () => (
     <Admin dataProvider={dataProvider}>
         <Resource name="Users" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon} />
-        <Resource name="Rule1" label="ttt" list={Rule1List} icon={Rule1Icon} />
-        {/* <Resource name="scores" list={scoreList} edit={scoreEdit} create={scoreCreate} icon={scoreIcon} /> */}
+        <Resource name="Rule1" list={Rule1List} icon={Rule1Icon} />
     </Admin>
     );
 
