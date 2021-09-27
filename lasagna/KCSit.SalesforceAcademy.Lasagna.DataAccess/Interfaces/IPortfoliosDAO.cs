@@ -16,9 +16,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
 
         Task<int> GetPortfolioId(Guid portfolioUuid);
 
-        void DeletePortfolioId(Guid Uuid);
+        Task DeletePortfolioId(Guid Uuid);
 
-        void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
+        Task UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
 
     }
 }

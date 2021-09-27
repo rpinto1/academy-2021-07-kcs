@@ -4,6 +4,7 @@ export const token = ((localStorage.getItem('token')) ? localStorage.getItem('to
 
 export const urlGetUser = `http://localhost:3010/api/Users/${userId}`;
 export const urlUpdateUser = `http://localhost:3010/api/Update?userId=${userId}`;
+export const headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
 
 export const cookiesArray = document.cookie.split(";").map((cookie) => cookie.trim());
 export const cookiesHashmap = cookiesArray.reduce((all, cookie) => {
@@ -13,7 +14,7 @@ export const cookiesHashmap = cookiesArray.reduce((all, cookie) => {
     ...all,
   };
 }, {});
-
+ 
 
 
 

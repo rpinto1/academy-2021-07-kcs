@@ -136,15 +136,23 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
         }
 
-        public void DeletePortfolio(Guid Id)
+        public async Task<GenericReturn> DeletePortfolio(Guid Id)
+
         {
-            _portfoliosDAO.DeletePortfolioId(Id);
+            return await _genericBusiness.GenericTransaction(async () =>
+            {
+                await _portfoliosDAO.DeletePortfolioId(Id);
+            });
         }
 
 
-        public void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
+        public async Task<GenericReturn> UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName)
         {
-            _portfoliosDAO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
+            
+            return await _genericBusiness.GenericTransaction(async () =>
+            {
+                await _portfoliosDAO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
+            });
         }
 
         public async Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker)

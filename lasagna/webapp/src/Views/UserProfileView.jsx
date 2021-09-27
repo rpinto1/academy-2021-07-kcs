@@ -3,8 +3,10 @@ import { Container, Dropdown, Menu, Input, Form, Message, Button } from 'semanti
 //import data from "./testData/data.json";
 import { Link } from 'react-router-dom';
 import UserHeader from '../components/UserHeader';
+import UserGreeting from '../components/UserProfile/UserGreeting';
 import PortfolioDetails from '../components/UserProfile/PortfolioDetails';
 import Footer from '../components/Footer';
+import { userId, token } from '../components/UserManager';
 
 
 export default function UserProfileView() {
@@ -25,8 +27,6 @@ export default function UserProfileView() {
     const [userName, setUserName] = useState("")
 
     const userId = localStorage.getItem("id");
-
-    const token = localStorage.getItem("token");
 
     const url = `http://localhost:3010/api/Portfolios/portfolio?userId=${userId}`;
 
@@ -241,7 +241,7 @@ export default function UserProfileView() {
             <UserHeader setUserName={setUserName} />
             <Container className="profile">
 
-                <Greeting />
+                <UserGreeting />
 
                 <section className="portfolio-section five-vw-margin-lr">
                     <section className="portfolio-list">

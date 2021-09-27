@@ -27,8 +27,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id);    //RAúl
 
-        void DeletePortfolio(Guid Id);
+        Task<GenericReturn> DeletePortfolio(Guid Id);
 
-        void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
+        Task<GenericReturn> UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
     }
 }

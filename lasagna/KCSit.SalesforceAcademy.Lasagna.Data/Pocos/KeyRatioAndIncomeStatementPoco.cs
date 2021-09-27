@@ -22,9 +22,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
 
         public decimal? OperatingMargin { get; set; }
 
-        //earnings je don't saber
+        public decimal? EarningsPerShare { get; set; }
 
-        //eps growth same
+        public decimal? EPSGrowth { get; set; }
 
         public decimal? DividendsPerShare { get; set; }
 
