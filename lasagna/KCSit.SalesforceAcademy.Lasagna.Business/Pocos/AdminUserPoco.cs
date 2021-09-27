@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KCSit.SalesforceAcademy.Lasagna.Business.Services
+namespace KCSit.SalesforceAcademy.Lasagna.Business.Pocos
 {
-    public class Filter
+    public class AdminUserPoco
     {
         public string firstName { get; set; }
 

@@ -272,6 +272,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                   GrossMargin = (decimal?)keyRatio.GrossMargin ?? 0,
                                   OperatingProfit = (decimal?)incomeStatement.OperatingProfit ?? 0,
                                   OperatingMargin = (decimal?)keyRatio.OperatingMargin ?? 0,
+                                  EarningsPerShare = (decimal?)keyRatio.DilutedSharesGrowth ?? 0,
+                                  EPSGrowth = (decimal?)keyRatio.DilutedEpsgrowth ?? 0,
                                   //earnings
                                   //eps
                                   DividendsPerShare = (decimal?)keyRatio.DividendsPerShare ?? 0,

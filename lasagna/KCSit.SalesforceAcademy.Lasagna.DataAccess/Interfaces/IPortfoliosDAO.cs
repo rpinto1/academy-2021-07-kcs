@@ -12,13 +12,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
 
         Task<List<PortfolioCompanyPoco>> GetCompaniesByPortfolio(Guid portfolioId);
 
-        Task<PortfolioPoco> GetPortfolioWithCompanies(Guid portfolioUuid);
+        Task<PortfolioPoco> GetPortfolioWithoutCompanies(Guid portfolioUuid);
 
         Task<int> GetPortfolioId(Guid portfolioUuid);
 
-        void DeletePortfolioId(Guid Uuid);
+        Task DeletePortfolioId(Guid Uuid);
 
-        void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
+        Task UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
 
     }
 }

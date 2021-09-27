@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
+using System;
+using System.Web;
+using System.Text.Json;
 
 namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 {
@@ -42,6 +45,37 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 
                         .Skip(skip)
                         .Take(take)
+                        .ToListAsync();
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetTickersByBulk(int skip, int take)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await (from company in context.Companies
+                              select company.Ticker)
+
+                        .Skip(skip)
+                        .Take(take)
+                        .ToListAsync();
+            }
+        }
+
+
+        public async Task<IEnumerable<CompanyPoco>> GetCompaniesByTickerList(List<string> tickers)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await (from company in context.Companies.Where(c => tickers.Contains(c.Ticker))
+
+                              select new CompanyPoco
+                              {
+                                  Id = company.Id,
+                                  Ticker = company.Ticker,
+                                  Name = company.Name
+                              })
+
                         .ToListAsync();
             }
         }
@@ -268,11 +302,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             using (var context = new lasagnakcsContext())
             {
                 return await ((from company in context.Companies
-                                       join score in context.Scores
-                                       on company.Id equals score.CompanyId
-                                       where company.Ticker.Equals(ticker) &&
-                                           score.ScoringMethodId == scoringMethodId
-                                       select score.Score1).SingleOrDefaultAsync()) ?? 0;
+                               join score in context.Scores
+                               on company.Id equals score.CompanyId
+                               where company.Ticker.Equals(ticker) &&
+                                   score.ScoringMethodId == scoringMethodId
+                               select score.Score1).SingleOrDefaultAsync()) ?? 0;
             }
         }
 
@@ -295,41 +329,133 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-        public async Task<CompanyScorePoco> GetInfo(AdminRule1Parameters parameters)
+        public async Task<AdminRule1PocoList> GetInfo(string queryString)
         {
             using (var context = new lasagnakcsContext())
             {
+
+                if (String.IsNullOrEmpty(queryString))
+                {
+                    queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22score%22%2C%22ASC%22%5D";
+                }
+
+                var filterStr = HttpUtility.ParseQueryString(queryString).Get("filter");
+
+                var filter = new AdminRule1Parameters();
+                if (filterStr != null)
+                {
+                    filter = JsonSerializer.Deserialize<AdminRule1Parameters>(filterStr);
+                    filter.id ??= "";
+                    filter.name ??= "";
+                    filter.country ??= "";
+                    filter.exchange ??= "";
+                    filter.sector ??= "";
+                    filter.industry ??= "";
+                    filter.currency ??= "";
+                }
+
+                // [0, 9],  [10, 19],  [20, 25] ...
+                var skip = 0;
+                var take = 0;
+                var rangeStr = HttpUtility.ParseQueryString(queryString).Get("range");
+                if (rangeStr != null)
+                {
+                    var first = int.Parse(rangeStr.Substring(1, rangeStr.IndexOf(",") - rangeStr.IndexOf("[") - 1));
+                    var last = int.Parse(rangeStr.Substring(rangeStr.IndexOf(",") + 1, rangeStr.IndexOf("]") - rangeStr.IndexOf(",") - 1));
+                    skip = first;
+                    take = last - first + 1;
+                }
+
+                // sort=["id","ASC"]"
+                var orderByField = "";
+                var orderByDirection = "Ascending";
+                var sortStr = HttpUtility.ParseQueryString(queryString).Get("sort");
+                if (sortStr != null)
+                {
+                    orderByField = sortStr.Split("\"")[1];
+                    orderByField = orderByField.ToUpper().ElementAt(0) + orderByField.Substring(1);
+                    orderByDirection = sortStr.Contains("ASC") ? "Ascending" : "Descending";
+                }
+
+
                 var query = (from company in context.Companies
-                             join country in (context.Countries.Where(c => parameters.Countries.Contains(c.Name)).AsEnumerable())
+                             join country in context.Countries
                              on company.CountryId equals country.Id
+                             join exchage in context.Exchanges
+                             on company.ExchangeId equals exchage.Id
                              join dailyInfo in context.DailyInfos
                              on company.DailyInfoId equals dailyInfo.Id into LJDI
+
                              from dailyInfo in LJDI.DefaultIfEmpty()
                              join companyIndice in context.CompanyIndices
                              on company.Id equals companyIndice.CompanyId into LJCI
+
                              from companyIndex in LJCI.DefaultIfEmpty()
                              join indice in context.Indices
                              on companyIndex.IndexId equals indice.Id into LJI
+
                              from index in LJI.DefaultIfEmpty()
                              join score in context.Scores
                              on company.Id equals score.CompanyId into LJS
+
                              from score in LJS.DefaultIfEmpty()
                              join sector in context.Sectors
                              on company.SectorId equals sector.Id
                              join industry in context.Industries
                              on company.IndustryId equals industry.Id
-                             where index.Name.ToLower().Contains(parameters.IndexName.ToLower()) &&
-                             sector.Name.ToLower().Contains(parameters.SectorName.ToLower()) &&
-                             industry.Name.ToLower().Contains(parameters.IndustryName.ToLower())
-                             && score.ScoringMethodId == 1
-                             group company by new CompanyPocoAuthenticated { Name = company.Name, Ticker = company.Ticker, Price = dailyInfo.StockPrice, Score = score.Score1, StickerPrice = score.StickerPrice, MarginSafety = score.MarginOfSafety } into companies
-                             orderby companies.Key.Score descending
-                             select new CompanyPocoAuthenticated { Name = companies.Key.Name, Ticker = companies.Key.Ticker, Price = companies.Key.Price, Score = companies.Key.Score, StickerPrice = companies.Key.StickerPrice, MarginSafety = companies.Key.MarginSafety });
+
+                             where
+                                company.Ticker.ToLower().Contains(filter.id.ToLower()) &&
+                                company.Name.ToLower().Contains(filter.name.ToLower()) &&
+                                country.FullName.ToLower().Contains(filter.country.ToLower()) &&
+                                exchage.Name.ToLower().Contains(filter.exchange.ToLower()) &&
+                                sector.Name.ToLower().Contains(filter.sector.ToLower()) &&
+                                industry.Name.ToLower().Contains(filter.industry.ToLower()) &&
+                                company.Currency.ToLower().Contains(filter.currency) &&
+                                score.ScoringMethodId == 1
+
+                             group company by new AdminRule1Poco
+                             {
+                                 Id = company.Ticker,
+                                 Name = company.Name,
+                                 Country = country.FullName,
+                                 Exchange = exchage.Name,
+                                 Sector = sector.Name,
+                                 Industry = industry.Name,
+                                 Price = dailyInfo.StockPrice,
+                                 Currency = company.Currency,
+                                 Score = score.Score1,
+                                 StickerPrice = score.StickerPrice,
+                                 MarginSafety = score.MarginOfSafety,
+                                 UpdatedOn = score.UpdatedOn,
+                             } into companies
+
+                             select new AdminRule1Poco
+                             {
+                                 Id = companies.Key.Id,
+                                 Name = companies.Key.Name,
+                                 Country = companies.Key.Country,
+                                 Exchange = companies.Key.Exchange,
+                                 Sector = companies.Key.Sector,
+                                 Industry = companies.Key.Industry,
+                                 Price = companies.Key.Price,
+                                 Currency = companies.Key.Currency,
+                                 Score = companies.Key.Score,
+                                 StickerPrice = companies.Key.StickerPrice,
+                                 MarginSafety = companies.Key.MarginSafety,
+                                 UpdatedOn = companies.Key.UpdatedOn,
+                             });
+
+                var results = await query
+                    .OrderBy(orderByField ?? "Score", orderByDirection ?? "DESC")
+                    .Skip(skip)
+                    .Take(take)
+                    .ToListAsync();
 
                 var countResults = await query.CountAsync();
-                //var results = await query.Skip(parameters.Take * (parameters.Skip - 1)).Take(parameters.Take).ToListAsync();
-                var results = await query.Skip(parameters.Skip).Take(parameters.Take).ToListAsync();
-                var objectok = new CompanyScorePoco { CompanyPocosAuthenticated = results, Count = countResults };
+
+                var objectok = new AdminRule1PocoList { Result = results, Total = countResults };
+
                 return objectok;
             }
         }

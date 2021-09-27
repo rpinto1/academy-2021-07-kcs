@@ -129,7 +129,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             var operatingMargin = (from krIncStat in keyRatiosAndIncomeStatementList
                                select krIncStat.OperatingMargin).ToList();
 
-            var dividendPerShare = (from krIncStat in keyRatiosAndIncomeStatementList
+            var earningsPerShare = (from krIncStat in keyRatiosAndIncomeStatementList
+                                    select krIncStat.DividendsPerShare).ToList();
+
+            var EPSGrowth = (from krIncStat in keyRatiosAndIncomeStatementList
+                             select krIncStat.EPSGrowth).ToList();
+
+                var dividendPerShare = (from krIncStat in keyRatiosAndIncomeStatementList
                                select krIncStat.DividendsPerShare).ToList();
 
             var returnOnAssets = (from krIncStat in keyRatiosAndIncomeStatementList
@@ -155,6 +161,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                         GrossMargin = grossMargin.ElementAt(i),
                         OperatingProfit = operatingProfit.ElementAt(i),
                         OperatingMargin = operatingMargin.ElementAt(i),
+                        EarningsPerShare = earningsPerShare.ElementAt(i),
+                        EPSGrowth = EPSGrowth.ElementAt(i),
                         DividendsPerShare = dividendPerShare.ElementAt(i),
                         ReturnOnAssets = returnOnAssets.ElementAt(i),
                         ReturnOnEquity = returnOnEquity.ElementAt(i),

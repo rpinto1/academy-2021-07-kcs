@@ -17,14 +17,18 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<List<PortfolioCompanyValuesPoco>>> GetCompanyValuesByTicker(string ticker);
 
+        Task<GenericReturn<PortfolioCompanyPoco>> GetValuesAndScoreByTicker(string ticker);
+
+        Task<GenericReturn<double>> GetScoreByTicker(string ticker);
+
         Task<GenericReturn<Portfolio>> CreatePortfolio(string userId, string portfolioName);
 
         Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker);
 
         Task<GenericReturn<List<PortfolioCompanyPoco>>> GetPortfolio(Guid Id);    //RAúl
 
-        void DeletePortfolio(Guid Id);
+        Task<GenericReturn> DeletePortfolio(Guid Id);
 
-        void UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
+        Task<GenericReturn> UpdatePortfolioId(Guid Uuid, List<string> Tickers, String PortfolioName);
     }
 }

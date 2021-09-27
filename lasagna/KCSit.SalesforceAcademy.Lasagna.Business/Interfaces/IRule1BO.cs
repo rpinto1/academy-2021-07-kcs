@@ -10,11 +10,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 {
     public interface IRule1BO
     {
-        Task<GenericReturn> GetRule1Info(AdminRule1Parameters parameters);
+        Task<GenericReturn> GetRule1Info(string queryString);
+
+        Task<GenericReturn> UpdateOneScore(string ticker);
+
+        Task<GenericReturn<List<string>>> UpdateManyScores(string tickersStr);
 
         Task<GenericReturn> UpdateAllScores();
 
-        Task<GenericReturn> UpdateScore(string ticker);
 
     }
 }

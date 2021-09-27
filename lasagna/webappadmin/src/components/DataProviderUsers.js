@@ -1,7 +1,7 @@
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
 
-const apiUrl = 'http://localhost:3010/api';
+const apiUrl = 'http://localhost:3011/api/Admin';
 const httpClient = fetchUtils.fetchJson;
 
 export default {
@@ -20,10 +20,13 @@ export default {
 
         const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-        return httpClient(url).then(({ headers, json }) => ({
-            data: json.result.users,
-            total: json.result.total
-        }));
+        return httpClient(url).then(({ headers, json }) => {
+            // console.log("GetList Result: " + JSON.stringify(json.result))
+            return {
+                data: json.result.users,
+                total: json.result.total
+            }
+        });
     },
 
     getOne: (resource, params) => {
@@ -65,7 +68,7 @@ export default {
 
     update: (resource, params) => {
         // console.log("UPDATE Params: " + JSON.stringify(params.data));
-        return httpClient(`${apiUrl}/AdminUpdate?userId=${params.id}`, {
+        return httpClient(`${apiUrl}/UpdateUser?userId=${params.id}`, {
             method: 'PUT',
             body: JSON.stringify(params.data),
         }).then(({ json }) => {
@@ -86,7 +89,7 @@ export default {
 
     create: (resource, params) =>
         {
-            return httpClient(`${apiUrl}/AdminCreate`, {
+            return httpClient(`${apiUrl}/CreateUser`, {
             method: 'POST',
             body: JSON.stringify({...params.data}),
         }).then(({ json }) => ({ data: json.result }))
