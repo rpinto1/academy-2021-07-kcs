@@ -1,4 +1,5 @@
 ﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -102,20 +103,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Controller.Controllers
         [HttpDelete("deleteportfolio/{id}")]
         public async Task<IActionResult> DeletePortfolio(Guid id)
         {
-            _portfoliosBO.DeletePortfolio(id);
+            var result = await _portfoliosBO.DeletePortfolio(id);
 
-            return Ok();
+            return ReturnResult(result);
         }
 
         [HttpPost("updateportfolio")]
-        public async Task<IActionResult> UpdatePortfolio( Guid Uuid,  List<string> Tickers,  String PortfolioName)
+        public async Task<IActionResult> UpdatePortfolio([FromBody] PortfolioUpdatePoco data)
         {
-            _portfoliosBO.UpdatePortfolioId(Uuid, Tickers, PortfolioName);
+            
+            var result = await _portfoliosBO.UpdatePortfolioId(Guid.Parse(data.Uuid),data.Tickers,data.PortfolioName);
 
-            return Ok();
+            return ReturnResult(result);
         }
-
-
 
     }
 }

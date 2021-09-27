@@ -6,6 +6,7 @@ import Pagination from './Pagination'
 import TableHeaderAuth from './TableHeaderAuth'
 import { token } from '../UserManager';
 import TableHeaderNormal from './TableHeaderNormal'
+import { Redirect, useHistory } from 'react-router'
 
 
 
@@ -25,6 +26,7 @@ const [currentPage, setcurrentPage] = useState(1)
 const [companies, setcompanies] = useState([])
 const countriesPicked = useSelector(state => state.countries)
 //const [token, setToken] = useState("")
+const history = useHistory();
 
 const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
     key: x["name"],
@@ -47,22 +49,19 @@ const handlePageNext = (operator)=>{
     }
     )}
 
-    const headersToken = token===null ?  {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',    
-        "Authorization": `Bearer ${token}`
-    }
 
     const fetchCompanys = async (page = -1) => {
         console.log(token)
         const fetchUrl = token===null?  `http://localhost:3010/api/Companies/IIS`:`http://localhost:3010/api/Companies/authenticated`;
         const rawResponse =fetch(fetchUrl, {
             method: 'POST',
-            headers : headersToken,
-            credentials: 'same-origin',
+            headers :  { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+            ,
+            credentials: 'include',
+            redirect: 'manual',
             body: JSON.stringify({Sectorname : sectorValue,
                                 Indexname: indexValue,
                                 Industryname: industryValue,
@@ -81,13 +80,19 @@ const handlePageNext = (operator)=>{
 
 
         rawResponse.then(response => {
+
             if(response.ok){
                 console.log(response);
             return response.json();
+            }else{
+                 history.push('signin');
             }
-            return [];  
+            
             
         }).then(data => {
+            if(data == null){
+                return;
+            }
             const dataToUse = token===null? data["result"]["companyPocos"] : data.result.companyPocosAuthenticated
             setcompanies(dataToUse)
             setcompanyCount(data.result.count)
