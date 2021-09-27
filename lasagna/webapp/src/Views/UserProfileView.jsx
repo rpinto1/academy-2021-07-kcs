@@ -9,10 +9,18 @@ import PortfolioDetails from '../components/UserProfile/PortfolioDetails';
 import Footer from '../components/Footer';
 import { userId, token, headers } from '../components/UserManager';
 
+import { portfolioAdd, portfolioDelete, portfolioAddBulk } from '../redux/portfoliosReducer';
+import { useDispatch, useSelector } from 'react-redux'
+
+
 
 export default function UserProfileView() {
 
-    const [data, setData] = useState([{ portfolioCompanies: [{ ticker: '' }] }]);
+    const data = useSelector(state => state.portfolios);
+    console.log('data debug ', data);
+    const dispatch = useDispatch();
+
+    //const [data, setData] = useState([{ portfolioCompanies: [{ ticker: '' }] }]);
 
     //consider using an object with these two properties
     const [activePortfolio, setActivePortfolio] = useState(0);
@@ -37,25 +45,36 @@ export default function UserProfileView() {
     const refreshPortfolios = () => {
         setFinishedLoading(false);
 
-        (() => axios.get(url, headers)
+        
+
+
+        if(data[0].portfolioCompanies[0].portfolioId === undefined){
+
+            (() => axios.get(url, headers)
             .then(res => {
 
-                console.log('Response - On mount: ', res.data);
+                console.log('Response - On mount: ', res.data.result);
 
-                setData(res.data.result);
+                dispatch(portfolioAddBulk(res.data.result));
+                
+                console.log('redux data INSIDE refreshPf: ', data);
 
-                if (data.length === 0) {
+                if (res.data.result.length === 0) {
                     setNoPortfolioInfo(true);
-                } else if (data["values"][activePortfolio] !== undefined) {
-                    if(data["values"][activePortfolio].portfolioCompanies.length === 0) setNoCompanies(true);
+                } else if (res.data.result["values"][activePortfolio] !== undefined) {
+                    if(res.data.result["values"][activePortfolio].portfolioCompanies.length === 0) setNoCompanies(true);
                 }
 
                 setFinishedLoading(true);
 
             })
             .catch(error => console.log(error)))();
+        }
+
+       
     }
 
+    console.log('redux data: ', data);
 
     useEffect(() => {
 
@@ -237,7 +256,12 @@ export default function UserProfileView() {
         let request = await fetch("http://localhost:3010/api/Portfolios/createPortfolio", options)
 
         if (request.ok) {
-            refreshPortfolios();
+            //refreshPortfolios();
+
+            request
+            .then(res => res.json())
+            .then(data => dispatch(portfolioAdd(data)));
+            
         }
 
 
