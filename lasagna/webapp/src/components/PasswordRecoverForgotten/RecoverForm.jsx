@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect } from 'react-router';
 import { Button, Container, Form, Modal } from 'semantic-ui-react';
+
 export default function RecoverForm({user, email}) {
 
     const [samePassword, setSamePassword] = useState(true);
@@ -19,8 +20,9 @@ export default function RecoverForm({user, email}) {
             [id]: value     
         }));
     };
+
     const handleSubmit = () => {
-        if(newPassword.Password != newPassword.ConfirmPassword){
+        if(newPassword.Password !== newPassword.ConfirmPassword){
             setSamePassword(false)
         }else{
                 fetch(`http://localhost:3010/api/recover`, {

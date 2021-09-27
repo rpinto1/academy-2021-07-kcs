@@ -10,7 +10,7 @@ function Article({ article }) {
         <section className='news-container'>
         
 
-            <a href={url} target='_blank' id='underlined'> {title}</a>
+            <a href={url} target='_blank' id='underlined' rel="noreferrer"> {title}</a>
         </section>
 
     );

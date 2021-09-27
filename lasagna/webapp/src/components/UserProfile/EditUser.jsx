@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Form, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import { token, urlGetUser, urlUpdateUser } from '../UserManager';
+import { urlGetUser, urlUpdateUser } from '../UserManager';
  
 
 export default function EditUser() {
@@ -44,18 +44,20 @@ export default function EditUser() {
       
 
     const handleEditUpdate = () => {
-        if (passwordsMatch){
-        fetch(urlUpdateUser, {
-        method: 'PUT',
-        headers: {
+        if(localStorage.getItem('id') !== null || sessionStorage.getItem('id') !== null ){ 
+            if (passwordsMatch){
+            fetch(urlUpdateUser, {
+            method: 'PUT',
+            headers: {
             "Accept": "application/json",
             "Content-Type": "application/json"
 
         },
+        credentials: 'include',
         body: JSON.stringify(dbUserInfo)
        }).then(res => res.json())
       .catch(error => console.log(error))
-    }
+    }}
   };
 
     const handleChange = (event) => {

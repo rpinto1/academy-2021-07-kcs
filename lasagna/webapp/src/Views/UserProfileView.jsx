@@ -37,6 +37,7 @@ export default function UserProfileView() {
                 if (data != null) {
                     setterFunc(() => data.result);
                     console.log("fetched data: ", data.result)
+                    console.log(url)
                 }
 
             } catch (e) {
