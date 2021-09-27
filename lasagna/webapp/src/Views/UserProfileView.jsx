@@ -1,114 +1,157 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Dropdown, Menu, Input, Form, Message, Button } from 'semantic-ui-react'
-//import data from "./testData/data.json";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Container, Dropdown, Menu, Input, Form, Message, Button } from 'semantic-ui-react'
+
 import UserHeader from '../components/UserHeader';
 import UserGreeting from '../components/UserProfile/UserGreeting';
 import PortfolioDetails from '../components/UserProfile/PortfolioDetails';
 import Footer from '../components/Footer';
-import { userId, token } from '../components/UserManager';
+import { userId, token, headers } from '../components/UserManager';
+
+import { portfolioAdd, portfolioDelete, portfolioAddBulk } from '../redux/portfoliosReducer';
+import { useDispatch, useSelector } from 'react-redux'
+
 
 
 export default function UserProfileView() {
 
-    const [data, setData] = useState([]);
+    const data = useSelector(state => state.portfolios);
+    console.log('data debug ', data);
+    const dispatch = useDispatch();
+
+    //const [data, setData] = useState([{ portfolioCompanies: [{ ticker: '' }] }]);
+
+    //consider using an object with these two properties
     const [activePortfolio, setActivePortfolio] = useState(0);
     const [activeCompany, setActiveCompany] = useState(0);
-    const [activeCompanyName, setActiveCompanyName] = useState('');
+
     const [activeCompanyTicker, setActiveCompanyTicker] = useState('');
 
     const [score, setScore] = useState(0.0);
 
-    const [activeCompanyResponse, setActiveCompanyResponse] = useState([]);
     const [activeCompanyValues, setActiveCompanyValues] = useState([]);
 
-    const [finishedLoading, setFinishedLoading] = useState(false)
+    const [finishedLoading, setFinishedLoading] = useState(false);
     const [noPortfolioInfo, setNoPortfolioInfo] = useState(false);
     const [noCompanies, setNoCompanies] = useState(false);
 
     const [userName, setUserName] = useState("")
 
 
-    const userId = localStorage.getItem("id");
-
     const url = `http://localhost:3010/api/Portfolios/portfolio?userId=${userId}`;
 
 
-
-    const fetchAndSet = (url, setterFunc, setterFuncs, index) => {
-
+    const refreshPortfolios = () => {
         setFinishedLoading(false);
 
-        (async function () {
-            try {
-                const response = await fetch(url)
+        
 
-                const data = await response.json();
 
-                if (data != null) {
-                    setterFunc(() => data.result);
-                    console.log("fetched data: ", data.result)
-                    console.log(url)
-                    setFinishedLoading(true);
+        if(data[0].portfolioCompanies[0].portfolioId === undefined){
 
-                    if(setterFuncs && index) {
-                        for(let func in setterFuncs){
-                            func(data.result[index]);
-                        }
-                    }
+            (() => axios.get(url, headers)
+            .then(res => {
 
+                console.log('Response - On mount: ', res.data.result);
+
+                dispatch(portfolioAddBulk(res.data.result));
+                
+                console.log('redux data INSIDE refreshPf: ', data);
+
+                if (res.data.result.length === 0) {
+                    setNoPortfolioInfo(true);
+                } else if (res.data.result["values"][activePortfolio] !== undefined) {
+                    if(res.data.result["values"][activePortfolio].portfolioCompanies.length === 0) setNoCompanies(true);
                 }
 
-            } catch (e) {
-                console.error("Error while fetching: ", e);
-            }
-        })()
+                setFinishedLoading(true);
+
+            })
+            .catch(error => console.log(error)))();
+        }
+
+       
     }
 
+    console.log('redux data: ', data);
+
+    useEffect(() => {
+
+        refreshPortfolios();
+    }, []);
 
 
     useEffect(() => {
 
-        (() => {
-            fetchAndSet(url, setData);
+        //reset values
+        setActiveCompany(0);
+        setActiveCompanyValues([]);
+        setActiveCompanyTicker('');
+        refreshPortfolios();
+    }, [activePortfolio]);
 
-            if (data.length === 0) {
+    useEffect(() => {
 
-                setNoPortfolioInfo(true);
-            } else if (data["values"][activePortfolio].portfolioCompanies.length === 0) {
-                setNoCompanies(true);
-            }
-
-        })();
-
-    }, []);
+        updateCompanyValues();
+    }, [activeCompany]);
 
 
+    const updateCompanyValues = () => {
+
+        //reset values
+        setActiveCompanyValues([]);
+        setActiveCompanyTicker('');
+
+        setFinishedLoading(false);
+
+        if (data[activePortfolio].portfolioCompanies.length > 0) {
+
+            console.log('indices ', activePortfolio, activeCompany);
+
+            let ticker = 
+                data[activePortfolio].portfolioCompanies[activeCompany].ticker
+                //"MSFT:US"
+            ;
+
+            console.log('test ticker ', ticker);
+
+            const companyDataEndpoint = `http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${ticker}`;
+
+            (() => axios.get(companyDataEndpoint, headers)
+                .then(res => {
+
+                    if (res.data) {
+
+                        console.log('Response - Company change: ', res.data);
+
+                        setFinishedLoading(true);
+                        setScore(() => res.data.result["score"]);
+                        setActiveCompanyValues(() => res.data.result["values"] || []);
+                        setActiveCompanyTicker(() => res.data.result["ticker"] || 'No data');
+
+                    }
+                })
+                .catch(error => console.log(error)))();
+        }
+    }
+
+
+    
 
     const handlePortfolioChange = (e, { value }) => {
+
         setActivePortfolio(value);
         setActiveCompany(0);
-
-        if(data[activePortfolio].portfolioCompanies.length > 0) handleCompanyChange(null, 0);
+        updateCompanyValues();
     };
 
 
+
     const handleCompanyChange = (e, { index }) => {
+
         setActiveCompany(index);
-        console.log('index ', index);
-
-        setActiveCompanyValues([]);
-
-
-        (async () => {
-            fetchAndSet(`http://localhost:3010/api/Portfolios/portfolioCompanyValues/?ticker=${data[activePortfolio].portfolioCompanies[activeCompany].ticker}`, setActiveCompanyResponse, []);
-            setScore(() => activeCompanyResponse["score"]);
-            setActiveCompanyValues(() => activeCompanyResponse["values"]);
-            setActiveCompanyName(() => activeCompanyResponse["name"]);
-            setActiveCompanyTicker(() => activeCompanyResponse["ticker"]);
-
-        })()
-
+        console.log('company index ', index);
     };
 
 
@@ -122,11 +165,10 @@ export default function UserProfileView() {
         }
 
         return [{ index: 0, text: 'Loading data...', value: 0, disabled: true }];
-
     }
 
 
-    const Greeting = () => {
+    /* const Greeting = () => {
         return (
             <section className="greeting">
                 <article className="avatar">
@@ -139,9 +181,7 @@ export default function UserProfileView() {
                 </article>
             </section>
         );
-    }
-
-
+    } */
 
 
     const PortfolioDropdown = () => (
@@ -216,8 +256,12 @@ export default function UserProfileView() {
         let request = await fetch("http://localhost:3010/api/Portfolios/createPortfolio", options)
 
         if (request.ok) {
-            await fetchAndSet(url, setData);
-            setFinishedLoading(true);
+            //refreshPortfolios();
+
+            request
+            .then(res => res.json())
+            .then(data => dispatch(portfolioAdd(data)));
+            
         }
 
 
@@ -280,12 +324,12 @@ export default function UserProfileView() {
                     </section>
 
                     <section className="portfolio-item-detail">
-                        <PortfolioDetails 
-                        score={score} 
-                        data={activeCompanyValues} 
-                        name={activeCompanyName} 
-                        ticker={activeCompanyTicker}
-                        className="detail-table" />
+                        <PortfolioDetails
+                            score={score}
+                            data={activeCompanyValues}
+                            ticker={activeCompanyTicker}
+                            loading={!finishedLoading}
+                            className="detail-table" />
                     </section>
 
                 </section>
