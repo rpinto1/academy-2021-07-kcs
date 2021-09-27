@@ -15,8 +15,6 @@ export default function EditPortfolio() {
 
   const [toDelete, setToDelete] = useState([]);
 
-  const [toDeleteTest, setToDeleteTest] = useState([]);
-
   const id = useParams();
 
 
@@ -140,7 +138,10 @@ console.log(body)
   const handleRemoveItem = (e, { companyTicker }) => {
 
     setCompanies(() => companies.filter(item => item.ticker !== companyTicker));
-    setToDelete(() => [...toDelete, companyTicker]);
+    if(!toDelete.includes(companyTicker)){
+      setToDelete(() => [...toDelete, companyTicker]);
+    }
+
 
     //console.log('companies: ', companies, 'to delete: ', toDelete)
 
@@ -150,7 +151,7 @@ console.log(body)
 
     setPortfolio((prevState) => ({...prevState, portfolioName : e.target.value}));
   }
-
+  console.log(toDelete)
  
   return (<>
 
@@ -180,7 +181,7 @@ console.log(body)
                   <List.Content>
                     <List.Header>{item.ticker}</List.Header>
                     <p>{item.name}</p>
-                    <Checkbox label='Selected' onChange={handleCheckbox} companyTicker={item.ticker} />
+                    <Checkbox label='Selected' onChange={handleCheckbox} companyTicker={item.ticker} checked={toDelete.includes(item.ticker)} />
                   </List.Content>
                 </List.Item>
               )}
