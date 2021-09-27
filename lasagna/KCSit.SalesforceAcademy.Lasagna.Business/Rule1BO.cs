@@ -60,11 +60,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
 
 
-        public async Task<GenericReturn> UpdateOneScore(string ticker)
+        public async Task<GenericReturn> UpdateOneScore(string tickerStr)
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                Console.WriteLine(DateTime.Now + "   Ticker: " + ticker);
+                var ticker = JsonSerializer.Deserialize<string>(tickerStr);
 
                 var companyId = _searchDAO.Get(ticker);
 
@@ -111,7 +111,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                     StickerPrice = Math.Truncate(stickerPrice * 100) / 100,
                     MarginOfSafety = Math.Truncate(marginOfSafety * 100) / 100,
                     Uuid = Guid.NewGuid(),
-                    UpdatedOn = DateTime.Now
+                    UpdatedOn = DateTime.Parse(String.Format("{0:G}", DateTime.Now)),
                 };
 
                 _genericDao.Update<Score>(newScore);

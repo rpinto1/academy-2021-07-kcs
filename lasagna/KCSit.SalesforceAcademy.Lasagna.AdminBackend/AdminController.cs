@@ -172,11 +172,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
         }
 
 
-        [Route("api/Admin/Rule1/UpdateAllScores")]
+        [Route("api/Admin/Rule1/UpdateOneScore")]
         [HttpGet]
-        public async Task<IActionResult> UpdateAllScores()
+        public async Task<IActionResult> UpdateOneScore(string ticker)
         {
-            var result = await _rule1BO.UpdateAllScores();
+            var result = await _rule1BO.UpdateOneScore(ticker);
 
             return ReturnResult(result);
         }
@@ -190,6 +190,20 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
 
             return ReturnResult(result);
         }
+
+
+
+        [Route("api/Admin/Rule1/UpdateAllScores")]
+        [HttpGet]
+        public async Task<IActionResult> UpdateAllScores()
+        {
+            var result = await _rule1BO.UpdateAllScores();
+
+            return ReturnResult(result);
+        }
+
+
+
 
 
     }
