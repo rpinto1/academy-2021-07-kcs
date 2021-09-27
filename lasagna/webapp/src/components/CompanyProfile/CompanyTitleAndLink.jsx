@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header, Segment, Icon, Button, Container, Grid } from 'semantic-ui-react';
+import AddToPortfolioButton from './AddToPortfolioButton';
 
 export default function CompanyTitleAndLink({ companyInfo }) {
 
@@ -25,10 +26,7 @@ export default function CompanyTitleAndLink({ companyInfo }) {
                              <Icon disabled name='bell outline' color='black'/>
                               Create alarm
                         </Button>
-                        <Button icon labelPosition ='left' size='tiny' floated='right'>
-                             <Icon disabled name='heart outline' color='black'/>
-                              Add to your portfolio
-                        </Button>                
+                    <AddToPortfolioButton />            
                     </Grid.Column>
                 </Grid>
             </Segment>

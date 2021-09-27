@@ -22,6 +22,7 @@ export default function UserHeader(props) {
     .then(res => {
         const userInfo = res.data.result;
         setFirstName(userInfo.firstName);
+        
     })
     .catch(error => console.log(error)),[firstName])
 
