@@ -54,7 +54,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                return await _rule1DAO.GetInfo(queryString);
+                const int scoringMethod = 1;
+
+                return await _rule1DAO.GetInfo(queryString, scoringMethod);
             });
         }
 
@@ -64,6 +66,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
+                const int scoringMethod = 1;
+
                 var ticker = JsonSerializer.Deserialize<string>(tickerStr);
 
                 var companyId = _searchDAO.Get(ticker);
@@ -93,9 +97,11 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
 
 
-                var dailyInfo = await _rule1DAO.GetDailyInfo(ticker);
+                var PriceToEarnings = (from kr in KeyRatiosList
+                                       where kr.Ticker.Equals(ticker)
+                                       select kr.PriceToEarnings).ToList();
 
-                var stickerPrice = CalculateStickerPrice(dailyInfo);
+                var stickerPrice = CalculateStickerPrice(PriceToEarnings.ElementAt(0), eps.ElementAt(0));
 
                 var marginOfSafety = stickerPrice / 2;
 
@@ -105,7 +111,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var newScore = new Score
                 {
                     Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
-                    ScoringMethodId = 1,
+                    ScoringMethodId = scoringMethod,
                     CompanyId = companyId,
                     Score1 = (double)(Math.Truncate(score * 100) / 100),
                     StickerPrice = Math.Truncate(stickerPrice * 100) / 100,
@@ -206,8 +212,17 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                             where bs.Ticker.Equals(company.Ticker)
                             select bs.Cash).ToList();
 
-                var score = CalculateScore(roic, equity, eps, sales, cash);
+                // Clean all values between -0.01 to 0.01 to zero to avoid big numbers after divisions
+                const decimal treshold = 0.01M;
+                var filteredRoic = roic.Select(r => Math.Abs(r) <= treshold ? 0 : r).ToList();
+                var filteredEquity = equity.Select(r => Math.Abs(r/1000000) <= treshold ? 0 : r).ToList();  // value displayed in Millions
+                var filteredEps = eps.Select(r => Math.Abs(r) <= treshold ? 0 : r).ToList();
+                var filteredSales = sales.Select(r => Math.Abs(r) <= treshold ? 0 : r).ToList();
+                var filteredCash = cash.Select(r => Math.Abs(r) <= treshold ? 0 : r).ToList();
 
+                const int minSamples = 5;
+                var score = (filteredRoic.Count >= minSamples && filteredEquity.Count >= minSamples && filteredEps.Count >= minSamples) ? 
+                    CalculateScore(filteredRoic, filteredEquity, filteredEps, filteredSales, filteredCash) : 0;
 
                 var PriceToEarnings = (from kr in keyRatiosByBulk
                                        where kr.Ticker.Equals(company.Ticker)
@@ -268,12 +283,19 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             var salesAggregate = CalculateAggregate(salesDelta, salesYearWeight);
             var cashAggregate = CalculateAggregate(cashDelta, cashYearWeight);
 
+            // Calculate the standard deviation for each indicator
+            var roicStd = CalculateStdDeviation(roic);
+            var equityStd = CalculateStdDeviation(equityDelta);
+            var epsStd = CalculateStdDeviation(epsDelta);
+            var salesStd = CalculateStdDeviation(salesDelta);
+            var cashStd = CalculateStdDeviation(cashDelta);
+
             // Calculate the partial score for each indicator
-            var roicPartialScore = CalculatePartialScores(roicAggregate, roicTreshold, roicWeight);
-            var equityPartialScore = CalculatePartialScores(equityAggregate, equityTreshold, equityWeight);
-            var epsPartialScore = CalculatePartialScores(epsAggregate, epsTreshold, epsWeight);
-            var salesPartialScore = CalculatePartialScores(salesAggregate, salesTreshold, salesWeight);
-            var cashPartialScore = CalculatePartialScores(cashAggregate, cashTreshold, cashWeight);
+            var roicPartialScore = CalculatePartialScores(roicAggregate, roicTreshold, roicWeight, roicStd);
+            var equityPartialScore = CalculatePartialScores(equityAggregate, equityTreshold, equityWeight, equityStd);
+            var epsPartialScore = CalculatePartialScores(epsAggregate, epsTreshold, epsWeight, epsStd);
+            var salesPartialScore = CalculatePartialScores(salesAggregate, salesTreshold, salesWeight, salesStd);
+            var cashPartialScore = CalculatePartialScores(cashAggregate, cashTreshold, cashWeight, cashStd);
 
             var score = (roicPartialScore + equityPartialScore + epsPartialScore + salesPartialScore + cashPartialScore) * 100;
 
@@ -282,17 +304,24 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
         private List<decimal> CalculateDelta(List<decimal> indicator)
         {
+            var treshold = 0.01M;
+
             var result = new List<decimal>();
 
             for (int i = 0; i < indicator.Count - 1; i++)
             {
-                if (indicator[i + 1] == 0)
+                var final = indicator[i];
+                var initial = indicator[i + 1];
+
+                if (initial < treshold)
                 {
                     result.Add(0);
                     continue;
                 }
 
-                result.Add((indicator[i] - indicator[i + 1]) / indicator[i + 1]);
+                var delta = ((final - initial) / initial) * Math.Sign(initial);
+
+                result.Add(delta);
             }
 
             return result;
@@ -342,23 +371,46 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             return result;
         }
 
-        private decimal CalculatePartialScores(decimal aggregate, decimal treshold, decimal weight)
+        private decimal CalculateStdDeviation(List<decimal> indicator)
         {
-            return aggregate / treshold * weight;
+            double result = 0;
+
+            var indicatorDouble = new List<double>();
+
+            foreach (decimal d in indicator)
+            {
+                indicatorDouble.Add((double)d);
+            }
+
+
+            if (indicator.Any())
+            {
+                double average = indicatorDouble.Average();
+                double sum = indicatorDouble.Sum(d => Math.Pow(d - average, 2));
+                result = Math.Sqrt((sum) / (indicatorDouble.Count()));
+            }
+
+            if(result == 0)
+            {
+                result = 1; // this is to avoid subsequent division by zero
+            }
+
+            return (decimal)result;
         }
 
-        private decimal CalculateStickerPrice(DailyInfoPoco dailyInfo)
+
+        private decimal CalculatePartialScores(decimal aggregate, decimal treshold, decimal weight, decimal std)
         {
-            var epsTTM = dailyInfo?.EpsTTM == null ? 0 : dailyInfo.EpsTTM;
+            var result = aggregate / treshold * weight;
 
-            var forwardPE = dailyInfo?.ForwardPe == null ? 0 : dailyInfo.ForwardPe;
+            if (std != 0)
+            {
+                result /= std;
+            }
 
-            decimal feps = epsTTM * (decimal)(Math.Pow(((double)(1 + rate)), (double)nper));
-
-            decimal fv = feps * forwardPE;
-
-            return fv / (decimal)(Math.Pow((double)(1 + rate), (double)nper));
+            return result;
         }
+
 
         private decimal CalculateStickerPrice(decimal pe, decimal epsFY0)
         {

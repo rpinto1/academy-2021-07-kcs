@@ -329,11 +329,10 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-        public async Task<AdminRule1PocoList> GetInfo(string queryString)
+        public async Task<AdminRule1PocoList> GetInfo(string queryString, int scoringMethod)
         {
             using (var context = new lasagnakcsContext())
             {
-
                 if (String.IsNullOrEmpty(queryString))
                 {
                     queryString = "?filter=%7B%7D&range=%5B0%2C9%5D&sort=%5B%22score%22%2C%22ASC%22%5D";
@@ -412,7 +411,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                 sector.Name.ToLower().Contains(filter.sector.ToLower()) &&
                                 industry.Name.ToLower().Contains(filter.industry.ToLower()) &&
                                 company.Currency.ToLower().Contains(filter.currency) &&
-                                score.ScoringMethodId == 1
+                                score.ScoringMethodId == scoringMethod
 
                              group company by new AdminRule1Poco
                              {
