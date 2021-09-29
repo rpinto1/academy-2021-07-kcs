@@ -1,21 +1,28 @@
 ﻿import React from 'react';
 import UserHeader from '../components/UserHeader';
-import { userId } from '../components/UserManager';
+// import { cookiesArray } from '../components/UserManager';
+import Body from '../components/Body';
+import Footer from '../components/Footer';
 
 
 export default function HomepageUser() {
     
 
     return (
-        <div>
-            
+        <div className= 'everything'>
+                    <div>
             <UserHeader />
            <h1> User HomePage </h1>
-           <p>minha cookie é: {} </p>
-         
-        
+           {//<p>minha cookie é: {cookiesArray} </p>
+}
+           <Body />
          
         </div>
+
+        <div>
+            <Footer />
+        </div>
+    </div>
     )
 }
 

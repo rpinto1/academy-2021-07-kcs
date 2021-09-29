@@ -1,24 +1,26 @@
 import React, { useState, useEffect} from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-export default function RuleOnegraph( { selected } ) {
+export default function RuleOnegraph( { label, ticker} ) {
 
-  const {ticker, label} = selected;
   const [data, setData] = useState([]);
 
 
-useEffect (() => fetch(`http://localhost:3010/api/Companies/search/${ticker}`).then(result => {
-  if (result.status !== 200) {
-      console.log("error");
-      return;
-  }
-  result.json().then(data => {
-      if (data != null) {
-        setData(data.result);
-        console.log(data.result)
-      }
-  })
-}), [ticker]);
+useEffect (() => fetch(`http://localhost:3010/api/Companies/search/${ticker}`)
+                .then(result => {
+                              if (result.status !== 200) {
+                                    console.log("error");
+                                       return;
+                                  }
+                return result.json()})
+                .then(data => {
+                        if (data != null) {
+                        setData(data.result);
+                        console.log('dentro do data fetch: ----- ')
+                        console.log( data.result)
+                        }
+                  })
+              , [ticker]);
 
 
 function camelCase(str) {
@@ -31,8 +33,7 @@ function camelCase(str) {
 const labelCamelCased = camelCase(label);
 
 console.log(ticker);
-
-
+//console.log(data)
 const userSelection = ()=>{
   return(
           <Line 

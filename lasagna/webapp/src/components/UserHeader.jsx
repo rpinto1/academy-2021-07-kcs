@@ -10,13 +10,15 @@ import { urlGetUser, headers} from './UserManager';
 export default function UserHeader(props) {
 
     const [firstName, setFirstName] = useState('');
-
+ //removes all items saved at the time
     const handleLogOut = ()=>{
     if(sessionStorage.getItem('id') != null || sessionStorage.getItem('token') != null) {
-        //removes all items saved at the time
         sessionStorage.clear();
         }
-    }   
+    if(localStorage.getItem('id') != null || localStorage.getItem('token') != null) {
+            localStorage.clear();
+    }
+    };  
 
     useEffect(() => axios.get(urlGetUser, headers)
     .then(res => {
