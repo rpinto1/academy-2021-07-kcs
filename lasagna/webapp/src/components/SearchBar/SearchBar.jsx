@@ -25,13 +25,18 @@ function SearchBar() {
             result.json().then(data => {
                 if (data != null) {
                     setNameTicker(data.result);
+                    console.log(data.result);
                 }
             })
         })
     }, [pattern,pageIndex]);
 
     useEffect(() => {
-        if(pattern == '') {
+        // var val = Document.getElementById('search_list').value;
+        // if (r) {
+        //  window.location.href  = "/about/" + val;
+        // }    
+        if(pattern == '' ) {
             $("#search_list").hide();
         } else {
             $("#search_list").show();
@@ -39,7 +44,7 @@ function SearchBar() {
     }, [pattern]);
 
     const handleSearchBar = () => {
-            $("#search_list").hide();
+            $("#search_list").show();
     };
 
     
@@ -71,10 +76,19 @@ function SearchBar() {
                        { 
                        nameTickers.map((nameTicker, index) => <NameTicker key={index} nameTicker={nameTicker} />)}
 
-                   
-                   
-                        <Button circular icon='arrow left' size='tiny' onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}/>
-                        <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/>
+                        {console.log("aqui"+nameTickers.length)}
+                        {
+                            pageIndex > 0 &&(
+                                <Button circular icon='arrow left' size='tiny' onClick={() => { setPageIndex(prevState => prevState - 1) }}/>
+                            )
+                        }
+                        {
+                            nameTickers.length === 30 &&(
+                                <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/>
+                            )
+                        }
+                        {/* <Button circular icon='arrow left' size='tiny' onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}/>
+                        <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/> */}
  
                     
                 </div>)
