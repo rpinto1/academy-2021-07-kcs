@@ -85,7 +85,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             });
         }
 
-        public async Task<GenericReturn<Portfolio>> CreatePortfolio(string userId, string portfolioName)
+        public async Task<GenericReturn<PortfolioPoco>> CreatePortfolio(string userId, string portfolioName)
         {
 
             return await _genericBusiness.GenericTransaction(
@@ -102,7 +102,13 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
                 var result = await _genericDAO.AddAsync(toInsert);
 
-                return result;
+                var toReturn = new PortfolioPoco
+                {
+                    PortfolioName = toInsert.Name,
+                    PortfolioId = toInsert.Uuid
+                };
+
+                return toReturn;
 
             });
         }

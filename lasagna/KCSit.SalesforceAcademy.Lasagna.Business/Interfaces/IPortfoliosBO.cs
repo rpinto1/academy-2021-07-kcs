@@ -21,7 +21,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn<double>> GetScoreByTicker(string ticker);
 
-        Task<GenericReturn<Portfolio>> CreatePortfolio(string userId, string portfolioName);
+        Task<GenericReturn<PortfolioPoco>> CreatePortfolio(string userId, string portfolioName);
 
         Task<GenericReturn> AddCompanyToPortfolio(Guid portfolioId, string ticker);
 
