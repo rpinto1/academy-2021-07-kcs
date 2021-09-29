@@ -8,7 +8,8 @@ export const Company = ({company, portfolios}) => {
   const [authenticated, setAuthenticated] = useState(false)
   const [options, setOptions] = useState([{key: "", text: "Please Log In First", value: ""}])
 
-  const turnIntoOptions = (data) => {return data.map(x=>({
+  const turnIntoOptions = () => {
+    return portfolios.map(x=>({
     key: x["portfolioId"],
     text: x["portfolioName"],
     value: x["portfolioId"],
@@ -16,7 +17,7 @@ export const Company = ({company, portfolios}) => {
 
   useEffect(() => {
     if(userId != null){
-      setOptions(turnIntoOptions(portfolios))
+      setOptions(turnIntoOptions)
     }else{
       setOptions([{key: "", text: "Please Log In First", value: ""}])
     }
@@ -30,6 +31,11 @@ export const Company = ({company, portfolios}) => {
       setAuthenticated(false)
     }
   }, [company])
+
+  const handleLabelClick = (e,data) => {
+    console.log(data.value);
+  }
+
 
   const url = '/company/details/' + company.ticker +"/"+company.name;
     return (
@@ -53,7 +59,7 @@ export const Company = ({company, portfolios}) => {
           <Table.Cell>{company["marginSafety"]}</Table.Cell>// Margin of safety
         }
          <Table.Cell>{company.price == null? "Unavailable":company.price }</Table.Cell>
-        <Table.Cell><Dropdown  floating options={options} text='Profile' /></Table.Cell>
+        <Table.Cell><Dropdown  onChange={handleLabelClick} floating options={options} text='Profile' /></Table.Cell>
       </Table.Row>
     )
 }
