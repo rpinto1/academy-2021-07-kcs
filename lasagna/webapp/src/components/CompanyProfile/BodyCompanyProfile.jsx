@@ -10,14 +10,12 @@ export default function BodyCompanyProfile({companyInfo}) {
     const { ticker, name } = companyInfo;
 
     const [selected, setSelected] = useState({
-        ticker,
         option: 'ROIC',
         label: 'Return on Invested Capital'
-    })
+    }) 
     
     useEffect(() => {
         setSelected({
-            ticker,
             option: 'ROIC',
             label: 'Return on Invested Capital'
         })
@@ -30,7 +28,7 @@ export default function BodyCompanyProfile({companyInfo}) {
         });
     };
 
-    
+    console.log(selected)
 
     const options = [{label:'Return on Invested Capital', value: 'ROIC'},
                      {label:'Dividends per Share', value: 'DPS'},
@@ -73,7 +71,7 @@ export default function BodyCompanyProfile({companyInfo}) {
                         </Form>
                     </Table.Cell>
                     <Table.Cell>
-                        <RuleOnegraph selected={selected}/>
+                        <RuleOnegraph ticker={ticker} label={selected.label}/>
                      </Table.Cell>
                 </Table.Row>
             </Table.Body>

@@ -38,9 +38,7 @@ function SearchBar() {
         }
     }, [pattern]);
 
-    const handleSearchBar = () => {
-            $("#search_list").hide();
-    };
+  
 
     
 
@@ -64,7 +62,6 @@ function SearchBar() {
                 (<div className="ui raised fluid text segment" 
                 //please, do not erase id. thx!
                             id='search_list' 
-                            onClick={handleSearchBar}
                 >       
                     
                 
@@ -74,7 +71,7 @@ function SearchBar() {
                    
                    
                         <Button circular icon='arrow left' size='tiny' onClick={() => { if (pageIndex > 0) { setPageIndex(prevState => prevState - 1) } }}/>
-                        <Button circular icon='arrow right' size='tiny' circular onClick={() => setPageIndex(prevState => prevState + 1)}/>
+                        <Button circular icon='arrow right' size='tiny'  onClick={() => setPageIndex(prevState => prevState + 1)}/>
  
                     
                 </div>)
