@@ -73,7 +73,7 @@ export default function SignUpForm() {
     };
     
     const verifyPasswords = () => {
-        if(newUser.Password == newUser.ConfirmPassword){
+        if(newUser.Password === newUser.ConfirmPassword){
             setPasswordsMatch({showMessage: false, match: true});
         } 
         else {
