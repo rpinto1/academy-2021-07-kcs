@@ -6,9 +6,6 @@ function ArticleList() {
 
     const [articles, setArticles] = useState([]);
 
-    const [location, setLocation] = useState('us'); 
-
-
     useEffect(() => {
         const fetchArticles = async () => {
             try {

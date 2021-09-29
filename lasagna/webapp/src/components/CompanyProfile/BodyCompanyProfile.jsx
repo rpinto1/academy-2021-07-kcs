@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Radio, Container, Form, Table } from 'semantic-ui-react';
 import CompanyTitleAndLink from './CompanyTitleAndLink';
 import RuleOnegraph from './RuleOnegraph';
@@ -7,20 +7,43 @@ import RuleOnegraph from './RuleOnegraph';
 
 export default function BodyCompanyProfile({companyInfo}) {
 
-    const ticker = companyInfo;
+    const { ticker, name } = companyInfo;
 
     const [selected, setSelected] = useState({
-        ticker: ticker,
-        option: 'ROIC'
+        ticker,
+        option: 'ROIC',
+        label: 'Return on Invested Capital'
     })
-          
-    const handleChange = (event, {value}) => {
+    
+    useEffect(() => {
         setSelected({
+            ticker,
+            option: 'ROIC',
+            label: 'Return on Invested Capital'
+        })
+    }, [ticker])
+
+    const handleChange = (event, {value, label}) => {
+        setSelected({
+            label: label, 
             option : value
         });
     };
 
-  
+    
+
+    const options = [{label:'Return on Invested Capital', value: 'ROIC'},
+                     {label:'Dividends per Share', value: 'DPS'},
+                     {label:'Earnings per Share', value: 'EPS'},
+                     {label:'Earnings per Share Growth', value: 'EPSG'},                     
+                     {label:'Gross Margin', value: 'GM'},
+                     {label:'Gross Profit', value: 'GS'},
+                     {label:'Operating Margin', value: 'OM'},
+                     {label:'Operating Profit', value: 'OP'},
+                     {label:'Return on Assets', value: 'ROA'},
+                     {label:'Return on Equity', value: 'ROE'},
+                     {label:'Revenue', value: 'R'},
+                     {label:'Revenue Growth', value: 'RG'}]
 
     return (
         <>
@@ -35,77 +58,17 @@ export default function BodyCompanyProfile({companyInfo}) {
                     
                         <Form className = 'ui list' id="checkboxes-list" >
 
+                        {options.map((o,i) => 
                             <Form.Field>
                                 <Radio 
                                 name='aspect'
-                                label='Return on Invested Capital'
-                                value= 'ROIC' 
-                                checked = {selected.option == 'ROIC'}
+                                label= {o.label}
+                                value= {o.value}
+                                checked = {selected.option === o.value}
+                                id={i}
                                 onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Dividends per Share' 
-                                value='DPS'
-                                checked = {selected.option == 'DPS'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Gross Margin' 
-                                value='GM'
-                                checked = {selected.option == 'GM'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Gross Profit' 
-                                value='GP'
-                                checked = {selected.option == 'GP'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Operating Margin' 
-                                value='OM'
-                                checked = {selected.option == 'OM'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Operating profit' 
-                                value='OP'
-                                checked = {selected.option == 'OP'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Return on Assets' 
-                                value='ROA'
-                                checked = {selected.option == 'ROA'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Return on Equity' 
-                                value='ROE'
-                                checked = {selected.option == 'ROE'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Revenue'
-                                value='R'
-                                checked = {selected.option == 'R'}
-                                onChange={handleChange}/>
-                            </Form.Field>
-                            <Form.Field>
-                                <Radio name='aspect'
-                                label='Revenue Growth' 
-                                value= 'RG'
-                                checked = {selected.option == 'RG'}
-                                onChange={handleChange}/>
-                            </Form.Field>
+                        </Form.Field>                       
+                        )}
                 
                         </Form>
                     </Table.Cell>

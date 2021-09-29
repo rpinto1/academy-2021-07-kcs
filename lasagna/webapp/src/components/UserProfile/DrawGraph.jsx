@@ -7,8 +7,8 @@ export default function DrawGraph({data, dataKey}) {
     return (
         <div>
             <LineChart
-                width={700}
-                height={500}
+                width={500}
+                height={350}
                 data={data}
                 margin={{
                     top: 100,

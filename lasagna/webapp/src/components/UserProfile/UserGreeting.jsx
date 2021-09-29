@@ -5,8 +5,8 @@ import { urlGetUser, headers } from '../UserManager';
 
 export default function UserGreeting() {
 
-    const [firstName, setFirstName] = useState('user');
-    var creatingCode= '';
+    const [firstName, setFirstName] = useState('User');
+    
 
     useEffect(() => axios.get(urlGetUser, headers)
     .then(res => {
@@ -14,20 +14,6 @@ export default function UserGreeting() {
         setFirstName(userInfo.firstName);
     })
     .catch(error => console.log(error)),[firstName])
-   
-    //not real guid, just creates a buch of random chars so people cannot access the edit page directly format so people cannot access the page 
-    function createCodeForuser(){
-        for(var i = 0; i < 177 ; i++)
-        creatingCode += Math.floor(Math.random() * 0xF).toString(0xF)
-        return creatingCode;
-    }
-
-    const [url, setUrl] = useState("");
-
-    useEffect(() => {
-        createCodeForuser();
-         setUrl('/user/profile/edit/' + creatingCode)
-    }, []);
    
 
     return (
@@ -38,7 +24,7 @@ export default function UserGreeting() {
 
                 <article>
                     <h1>Hello, {firstName}!</h1>
-                    <Link to= {url} >Edit my profile</Link>
+                    <Link to= '/user/profile/edit' >Edit my profile</Link>
                 </article>
             </section>
     )

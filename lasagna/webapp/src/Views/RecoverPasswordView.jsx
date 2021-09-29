@@ -11,7 +11,7 @@ export default function RecoverPasswordView() {
         <div>
         <Header />
        
-       <RecoverForm user = {user} email={email} />
+            <RecoverForm user = {user} email={email} />
 
         </div>
     )
