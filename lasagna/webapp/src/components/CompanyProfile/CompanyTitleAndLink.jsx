@@ -22,11 +22,12 @@ export default function CompanyTitleAndLink({ companyInfo }) {
                          Annual investors' page: <a href={append} >{ticker}</a>
                     </Grid.Column>
                     <Grid.Column>
-                    <Button icon labelPosition ='left' size='tiny' floated='right'>
+                     <Button icon labelPosition ='left' size='tiny' floated='right'>
                              <Icon disabled name='bell outline' color='black'/>
                               Create alarm
                         </Button>
-                    <AddToPortfolioButton />            
+                     <AddToPortfolioButton ticker={ticker} />
+                                   
                     </Grid.Column>
                 </Grid>
             </Segment>

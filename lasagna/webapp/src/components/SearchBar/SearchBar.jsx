@@ -69,7 +69,6 @@ function SearchBar() {
                 (<div className="ui raised fluid text segment" 
                 //please, do not erase id. thx!
                             id='search_list' 
-                            onClick={handleSearchBar}
                 >       
                     
                 

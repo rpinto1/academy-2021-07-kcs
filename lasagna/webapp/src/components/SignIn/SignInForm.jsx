@@ -46,29 +46,6 @@ export default function SignInForm() {
       sessionStorage.setItem('token', loggedUser.token.toString());
   };
 
- /*  const handleSubmit = () => {
-      fetch(`http://localhost:3010/api/SignIn`, {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-      credentials: 'include',
-      body: JSON.stringify(user)
-     }).then(res =>{
-      // console.log(res)
-       //console.log(res.headers.get('Set-Cookie'))
-      res.json()
-     } )
-     .then(data => {
-       console.log(data)
-      setLoggedUser(data.response)
-      setRedirect(true)
-    })
-    .catch(error => console.log(error))
-    
-};   */
-
     
     const handleSubmit = () => axios.post(`http://localhost:3010/api/SignIn`, user, headers)
                         .then(res => {

@@ -15,11 +15,11 @@ header {
     z-index: 3;
 }
 
-/*#search-list {
+#portfolio_list {
    overflow:auto;
-   position: relative;
-   z-index: 2;
-}*/
+   position: absolute;
+   z-index: 3;
+}
 
 
 .content {
@@ -182,4 +182,10 @@ footer {
     font-weight: normal;
     color: red
 
+}
+
+.non-button{
+    background-color: transparent;
+    border: 0;
+    padding: 0;
 }

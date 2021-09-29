@@ -252,7 +252,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
                 foreach (PortfolioPoco portfolio in portfolios)
                 {
-                    _portfoliosDAO.DeletePortfolioId(portfolio.PortfolioId);
+                    await _portfoliosDAO.DeletePortfolioId(portfolio.PortfolioId);
                 }
 
                 var result = await _userManager.DeleteAsync(user);
@@ -354,16 +354,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             });
         }
-
-
-
-
-        // -------------------------------------------------------- Rule1 --------------------------------------------------------
-
-
-
-
-
 
 
 
