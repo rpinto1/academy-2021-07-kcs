@@ -39,7 +39,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
 
         Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
 
-        Task<AdminRule1PocoList> GetInfo(string queryString);
+        Task<AdminRule1PocoList> GetInfo(string queryString, int scoringMethod);
 
     }
 }
