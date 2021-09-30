@@ -151,7 +151,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
             {
 
                 var query = (from company in context.Companies
-                             join country in (context.Countries.Where(c => countries.Contains(c.Name)).AsEnumerable())
+                             join country in context.Countries
                              on company.CountryId equals country.Id
                              join dailyInfo in context.DailyInfos
                              on company.DailyInfoId equals dailyInfo.Id into LJDI
@@ -170,6 +170,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                              join industry in context.Industries
                              on company.IndustryId equals industry.Id
                              where index.Name.ToLower().Contains(indexName.ToLower()) &&
+                             countries.Contains(country.Name) &&
                              sector.Name.ToLower().Contains(sectorName.ToLower()) &&
                              industry.Name.ToLower().Contains(industryName.ToLower())
                              && score.ScoringMethodId == 1

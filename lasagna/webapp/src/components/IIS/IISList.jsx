@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Dropdown, Segment, Table ,Menu, Icon, Header} from 'semantic-ui-react'
 import { Company } from './Company'
 import Pagination from './Pagination'
 import TableHeaderAuth from './TableHeaderAuth'
-import { token } from '../UserManager';
+import { token , userId , headers } from '../UserManager';
 import TableHeaderNormal from './TableHeaderNormal'
-import { Redirect, useHistory } from 'react-router'
-
+import {  useHistory } from 'react-router';
+import axios from 'axios';
+import {portfolioAddBulk } from '../../redux/portfoliosReducer';
 
 
 
@@ -24,10 +25,11 @@ const [industryValue, setindustryValue] = useState("")
 const [companyCount, setcompanyCount] = useState(0)
 const [currentPage, setcurrentPage] = useState(1)
 const [companies, setcompanies] = useState([])
-const countriesPicked = useSelector(state => state.countries)
+const countriesPicked = useSelector(state => state.countries);
+const portfolios = useSelector(state => state.portfolios);
 //const [token, setToken] = useState("")
 const history = useHistory();
-
+const dispatch = useDispatch();
 const turnIntoOptions = (data,type,type2) => {return data[type][type2].map(x=>({
     key: x["name"],
     text: x["name"],
@@ -51,7 +53,7 @@ const handlePageNext = (operator)=>{
 
 
     const fetchCompanys = async (page = -1) => {
-        console.log(token)
+
         const fetchUrl = token===null?  `http://localhost:3010/api/Companies/IIS`:`http://localhost:3010/api/Companies/authenticated`;
         const rawResponse =fetch(fetchUrl, {
             method: 'POST',
@@ -128,7 +130,7 @@ const handlePageNext = (operator)=>{
             return(
                 <Table.Body className="table">
                 {
-                    companies.map((x,i)=> <Company company={x} key={i}/>)
+                    companies.map((x,i)=> <Company portfolios={portfolios} company={x} key={i}/>)
                 }
                 </Table.Body>
             )
@@ -171,13 +173,27 @@ const handlePageNext = (operator)=>{
         }, [sectorValue]);
 
         useEffect(() => {
-        /*     let sessionToken = sessionStorage.getItem("token");
-            let localToken = localStorage.getItem("token");
-            if(sessionToken == null){
-                setToken(localToken);
-            }else{
-                setToken(sessionToken);
-            } */
+
+            const url = `http://localhost:3010/api/Portfolios/portfolio?userId=${userId}`;
+            console.log(portfolios)
+            if(userId!==null){
+                if(portfolios[0].portfolioCompanies[0] !== undefined ){
+                    if(portfolios[0].portfolioCompanies[0].portfolioId === undefined ){
+                       
+                            (() => axios.get(url, headers)
+                            .then(res => {
+                                if(res.data.result.length !== 0){
+                                    dispatch(portfolioAddBulk(res.data.result));
+                                }
+                                console.log(portfolios)
+                            })
+                            .catch(error => console.log(error)))();
+                    
+                            }
+                }       }
+                
+             
+    
             try { 
                 var data = fetch(`http://localhost:3010/api/Companies/indexSector`)
                 .then(response => response.json());

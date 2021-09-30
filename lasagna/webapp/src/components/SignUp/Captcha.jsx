@@ -16,19 +16,7 @@ export default function Captcha() {
                    <div></div>
                    <div className="col mt-3">
                        <LoadCanvasTemplate />
-                   </div>
-
-                   {/* <div className="col mt-3">
-                   <div></div>
-                       <div>   
-                           <input 
-                           placeholder="Enter Captcha Value" 
-                           name="user_captcha_input" 
-                           type="text">
-                            </input>
-                        </div>
-
-                   </div> */}                
+                   </div>             
 
                </div>
 

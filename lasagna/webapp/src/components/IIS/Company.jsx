@@ -1,10 +1,29 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Table, Dropdown } from 'semantic-ui-react'
+import { userId } from '../UserManager'
 
-export const Company = ({company}) => {
+export const Company = ({company, portfolios}) => {
 
   const [authenticated, setAuthenticated] = useState(false)
-  
+  const [options, setOptions] = useState([{key: "", text: "Please Log In First", value: ""}])
+
+  const turnIntoOptions = () => {
+    return portfolios.map(x=>({
+    key: x["portfolioId"],
+    text: x["portfolioName"],
+    value: x["portfolioId"],
+})) }
+
+  useEffect(() => {
+    if(userId != null){
+      setOptions(turnIntoOptions)
+    }else{
+      setOptions([{key: "", text: "Please Log In First", value: ""}])
+    }
+    
+  }, [authenticated])
+
   useEffect(() => {
     if(company["score"] !== undefined){
       setAuthenticated(true)
@@ -13,11 +32,18 @@ export const Company = ({company}) => {
     }
   }, [company])
 
+  const handleLabelClick = (e,data) => {
+    console.log(data.value);
+  }
 
+
+  const url = '/company/details/' + company.ticker +"/"+company.name;
     return (
     <Table.Row textAlign="center">
         <Table.Cell>
-          {company.ticker}
+    <Link to={url}>
+        <p>{company.ticker}</p>
+    </Link>
         </Table.Cell>
         <Table.Cell>
           {company["name"]}
@@ -33,7 +59,7 @@ export const Company = ({company}) => {
           <Table.Cell>{company["marginSafety"]}</Table.Cell>// Margin of safety
         }
          <Table.Cell>{company.price == null? "Unavailable":company.price }</Table.Cell>
-        <Table.Cell><Dropdown  floating options={[{key: "", text: "Please Log In First", value: ""}]} text='Profile' /></Table.Cell>
+        <Table.Cell><Dropdown  onChange={handleLabelClick} floating options={options} text='Profile' /></Table.Cell>
       </Table.Row>
     )
 }

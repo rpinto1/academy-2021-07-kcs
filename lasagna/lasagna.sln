@@ -11,15 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Las
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rui", "Rui\Rui.csproj", "{13E906A5-4BE2-4E48-8EE6-20C19546A31B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raul", "Raul\Raul.csproj", "{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Lasagna.Business", "KCSit.SalesforceAcademy.Lasagna.Business\KCSit.SalesforceAcademy.Lasagna.Business.csproj", "{B8CA0B4C-9AEF-4258-A657-60707E5647EE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Lasagna.Controller", "KCSit.SalesforceAcademy.Lasagna.Controller\KCSit.SalesforceAcademy.Lasagna.Controller.csproj", "{BD1FF611-BD27-41C3-9206-EF4D7C548529}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Lasagna.EmailService", "KCSit.SalesforceAcademy.Lasagna.EmailService\KCSit.SalesforceAcademy.Lasagna.EmailService.csproj", "{FDFCFD31-D467-49B9-8908-13C99C224564}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Lasagna.AdminBackend", "KCSit.SalesforceAcademy.Lasagna.AdminBackend\KCSit.SalesforceAcademy.Lasagna.AdminBackend.csproj", "{5DF78CA3-7184-418A-8EA9-68193F9AD46B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Lasagna.AdminBackend", "KCSit.SalesforceAcademy.Lasagna.AdminBackend\KCSit.SalesforceAcademy.Lasagna.AdminBackend.csproj", "{5DF78CA3-7184-418A-8EA9-68193F9AD46B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +41,6 @@ Global
 		{13E906A5-4BE2-4E48-8EE6-20C19546A31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13E906A5-4BE2-4E48-8EE6-20C19546A31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13E906A5-4BE2-4E48-8EE6-20C19546A31B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A65A8070-0FEF-48F7-8BF0-8F8F4914C0E7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8CA0B4C-9AEF-4258-A657-60707E5647EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
