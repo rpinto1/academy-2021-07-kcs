@@ -66,7 +66,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         {
             return await _genericBusinessLogic.GenericTransaction(async () =>
             {
-                const int scoringMethod = 1;
+                const int scoringMethodId = 1;
 
                 var ticker = JsonSerializer.Deserialize<string>(tickerStr);
 
@@ -111,7 +111,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 var newScore = new Score
                 {
                     Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
-                    ScoringMethodId = scoringMethod,
+                    ScoringMethodId = scoringMethodId,
                     CompanyId = companyId,
                     Score1 = (double)(Math.Truncate(score * 100) / 100),
                     StickerPrice = Math.Truncate(stickerPrice * 100) / 100,
@@ -122,6 +122,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
                 _genericDao.Update<Score>(newScore);
 
+                await UpdateRankings();
 
                 Console.WriteLine("\tScore: " + score.ToString("n2") + "      Sticker Price: " + stickerPrice + "\n");
 
@@ -133,7 +134,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             //return await _genericBusinessLogic.GenericTransaction(async () =>
             //{
 
-            const int scoringMethod = 1;
+            const int scoringMethodId = 1;
 
             var tickerStr = HttpUtility.ParseQueryString(tickersQueryStr).Get("tickers");
 
@@ -147,10 +148,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
                 var tickersBulk = tickers.Skip(updatedTickersCounter).Take(bulkSize);
 
-                var updatedTickers = await UpdateScoresByBulk(tickersBulk.ToList(), scoringMethod);
+                var updatedTickers = await UpdateScoresByBulk(tickersBulk.ToList(), scoringMethodId);
 
                 result.AddRange(updatedTickers);
             }
+
+            await UpdateRankings();
 
             return new GenericReturn<List<string>> { Succeeded = true, Result = result };
             //});
@@ -160,7 +163,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         {
             //return await _genericBusinessLogic.GenericTransaction(async () =>
             //{
-            const int scoringMethod = 1;
+            const int scoringMethodId = 1;
 
             var bulkSize = 200;
 
@@ -170,13 +173,16 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
             {
                 var tickersBulk = await _rule1DAO.GetTickersByBulk(updatedCompaniesCounter, bulkSize);
 
-                await UpdateScoresByBulk(tickersBulk.ToList(), scoringMethod);
+                await UpdateScoresByBulk(tickersBulk.ToList(), scoringMethodId);
             }
             //});
+
+            await UpdateRankings();
+
             return new GenericReturn { Succeeded = true, Message = "ok" };
         }
 
-        private async Task<List<string>> UpdateScoresByBulk(List<string> tickersBulk, int scoringMethod)
+        private async Task<List<string>> UpdateScoresByBulk(List<string> tickersBulk, int scoringMethodId)
         {
             var companiesBulk = await _rule1DAO.GetCompaniesByTickerList(tickersBulk);
 
@@ -186,7 +192,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
 
             var incomeStatementByBulk = await _rule1DAO.GetIncomeStatementByBulk(tickersBulk);
 
-            var ScoreByBulk = await _rule1DAO.GetScoreByBulk(tickersBulk, scoringMethod);
+            var ScoreByBulk = await _rule1DAO.GetScoreByBulk(tickersBulk, scoringMethodId);
 
             var scoresResult = new List<Score>();
 
@@ -237,7 +243,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
                 scoresResult.Add(new Score
                 {
                     Id = scoreInfo?.ScoreId == null ? 0 : scoreInfo.ScoreId,
-                    ScoringMethodId = scoringMethod,
+                    ScoringMethodId = scoringMethodId,
                     CompanyId = company.Id,
                     Score1 = (double)(Math.Truncate(score * 100) / 100),
                     StickerPrice = Math.Truncate(stickerPrice * 100) / 100,
@@ -256,7 +262,40 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business
         }
 
 
+        public async Task<GenericReturn> UpdateRankings()
+        {
+            //////return await _genericBusinessLogic.GenericTransaction(async () =>
+            //////{
+            var bulkSize = 200;
 
+            const int scoringMethodId = 1;
+
+            var scores = await _rule1DAO.GetScoresByDescindingOrder(scoringMethodId);
+
+            for (int updatedCompaniesCounter = 0; updatedCompaniesCounter < scores.Count(); updatedCompaniesCounter += bulkSize)
+            {
+                var tickersBulk = scores.Skip(updatedCompaniesCounter).Take(bulkSize).ToList();
+
+                var updatedScoresList = new List<Score>();
+
+                for (int i = 0; i < tickersBulk.Count(); i++)
+                {
+                    var currentScore = tickersBulk[i];
+
+                    currentScore.Ranking = updatedCompaniesCounter + i + 1;
+
+                    updatedScoresList.Add(currentScore);
+                }
+
+                await _genericBusinessLogic.GenericTransaction(async () =>
+                {
+                    _genericDao.UpdateRange<Score>(updatedScoresList);
+                });
+            }
+
+            //////});
+            return new GenericReturn { Succeeded = true, Message = "ok" };
+        }
 
 
 

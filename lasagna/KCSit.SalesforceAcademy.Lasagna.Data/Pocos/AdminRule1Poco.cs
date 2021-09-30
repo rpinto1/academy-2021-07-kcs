@@ -17,6 +17,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Data.Pocos
         public double? Score { get; set; }
         public Decimal? StickerPrice { get; set; }
         public Decimal? MarginSafety { get; set; }
+        public int Ranking { get; set; }
         public DateTime UpdatedOn { get; set; }
 
     }

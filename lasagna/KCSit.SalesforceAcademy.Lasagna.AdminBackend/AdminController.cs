@@ -203,7 +203,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
         }
 
 
+        [Route("api/Admin/Rule1/UpdateRankings")]
+        [HttpGet]
+        public async Task<IActionResult> UpdateRankings()
+        {
+            var result = await _rule1BO.UpdateRankings();
 
+            return ReturnResult(result);
+        }
 
 
     }

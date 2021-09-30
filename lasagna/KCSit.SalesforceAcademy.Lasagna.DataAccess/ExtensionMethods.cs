@@ -10,9 +10,9 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
 {
     public static class ExtensionMethods
     {
-        public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string orderByProperty, string asc)
+        public static IQueryable<T> OrderBy<T>(this IQueryable<T> source, string orderByProperty, string order)
         {
-            string command = asc.Equals("Ascending") ? "OrderBy" : "OrderByDescending";
+            string command = order.ToLower().Contains("asc") ? "OrderBy" : "OrderByDescending";
 
             var type = typeof(T);
             var property = type.GetProperty(orderByProperty);

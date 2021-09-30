@@ -329,7 +329,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-        public async Task<AdminRule1PocoList> GetInfo(string queryString, int scoringMethod)
+        public async Task<AdminRule1PocoList> GetInfo(string queryString, int scoringMethodId)
         {
             using (var context = new lasagnakcsContext())
             {
@@ -411,7 +411,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                 sector.Name.ToLower().Contains(filter.sector.ToLower()) &&
                                 industry.Name.ToLower().Contains(filter.industry.ToLower()) &&
                                 company.Currency.ToLower().Contains(filter.currency) &&
-                                score.ScoringMethodId == scoringMethod
+                                score.ScoringMethodId == scoringMethodId
 
                              group company by new AdminRule1Poco
                              {
@@ -426,6 +426,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                  Score = score.Score1,
                                  StickerPrice = score.StickerPrice,
                                  MarginSafety = score.MarginOfSafety,
+                                 Ranking = score.Ranking,
                                  UpdatedOn = score.UpdatedOn,
                              } into companies
 
@@ -442,6 +443,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
                                  Score = companies.Key.Score,
                                  StickerPrice = companies.Key.StickerPrice,
                                  MarginSafety = companies.Key.MarginSafety,
+                                 Ranking = companies.Key.Ranking,
                                  UpdatedOn = companies.Key.UpdatedOn,
                              });
 
@@ -460,5 +462,26 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess
         }
 
 
-    }
+
+        public async Task<IEnumerable<Score>> GetScoresByDescindingOrder(int scoringMethodId)
+        {
+            using (var context = new lasagnakcsContext())
+            {
+                return await context.Set<Score>()
+                    .Where(s => s.ScoringMethodId == scoringMethodId)
+                    .OrderBy("Score1", "DESC")
+                    .ToListAsync();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+}
 }

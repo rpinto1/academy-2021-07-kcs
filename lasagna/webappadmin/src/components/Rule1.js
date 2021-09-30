@@ -57,6 +57,7 @@ export const Rule1List = props => (
             <TextField source="score" />
             <TextField source="stickerPrice" />
             <TextField source="marginSafety" />
+            <TextField source="ranking" />
             <TextField source="updatedOn" />
         </Datagrid>
     </List>

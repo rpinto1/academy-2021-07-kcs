@@ -1,4 +1,5 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
+﻿using KCSit.SalesforceAcademy.Lasagna.Data;
+using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,6 +41,8 @@ namespace KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces
         Task<IEnumerable<ScorePoco>> GetScoreByBulk(List<string> tickers, int scoringMethodId);
 
         Task<AdminRule1PocoList> GetInfo(string queryString, int scoringMethod);
+
+        Task<IEnumerable<Score>> GetScoresByDescindingOrder(int scoringMethodId);
 
     }
 }

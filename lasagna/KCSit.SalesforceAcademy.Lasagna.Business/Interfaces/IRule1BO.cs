@@ -18,6 +18,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.Business.Interfaces
 
         Task<GenericReturn> UpdateAllScores();
 
+        Task<GenericReturn> UpdateRankings();
 
     }
 }
