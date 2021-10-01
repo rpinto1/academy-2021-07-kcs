@@ -1,8 +1,9 @@
-import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
+import { httpClient } from './UserManager';
+
 
 const apiUrl = 'http://localhost:3011/api/Admin/Rule1';
-const httpClient = fetchUtils.fetchJson;
+
 
 export default {
     getList: (resource, params) => {
@@ -27,6 +28,8 @@ export default {
                 total: json.result.total
             }
         });
+
+
     },
 
     getOne: (resource, params) => {
