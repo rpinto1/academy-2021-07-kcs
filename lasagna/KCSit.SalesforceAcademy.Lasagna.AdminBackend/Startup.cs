@@ -1,18 +1,17 @@
 using KCSit.SalesforceAcademy.Lasagna.Business;
 using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
-using KCSit.SalesforceAcademy.Lasagna.Business.Services;
 using KCSit.SalesforceAcademy.Lasagna.Controller.Controllers;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess;
 using KCSit.SalesforceAcademy.Lasagna.DataAccess.Interfaces;
-using KCSit.SalesforceAcademy.Lasagna.EmailService;
-using KCSit.SalesforceAcademy.Lasagna.EmailService.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
 {
@@ -34,9 +33,12 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
-                               .AllowAnyMethod()
-                               .AllowAnyHeader();
+                        builder
+                        //.AllowAnyOrigin()
+                        .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
                     });
             });
 
@@ -65,6 +67,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
                 options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
             });
 
+            // Cookie settings
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Unspecified;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.LoginPath = "/api/Admin/SignIn";
+            });
 
             services.AddScoped<IAdminBO, AdminBO>();
             services.AddScoped<IGenericBusinessLogic, GenericBusinessLogic>();
@@ -107,6 +117,7 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
             app.UseAuthorization();
             app.UseResponseCaching();
 
+            app.UseCookiePolicy(new CookiePolicyOptions {MinimumSameSitePolicy = SameSiteMode.None});
 
             app.UseEndpoints(endpoints =>
             {

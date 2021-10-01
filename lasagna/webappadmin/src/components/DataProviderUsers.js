@@ -1,8 +1,9 @@
-import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
+import { httpClient } from './UserManager';
+
 
 const apiUrl = 'http://localhost:3011/api/Admin';
-const httpClient = fetchUtils.fetchJson;
+
 
 export default {
     getList: (resource, params) => {
