@@ -1,4 +1,6 @@
-﻿using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+﻿using KCSit.SalesforceAcademy.Lasagna.Business;
+using KCSit.SalesforceAcademy.Lasagna.Business.Interfaces;
+using KCSit.SalesforceAcademy.Lasagna.Controller;
 using KCSit.SalesforceAcademy.Lasagna.Controller.Controllers;
 using KCSit.SalesforceAcademy.Lasagna.Data;
 using KCSit.SalesforceAcademy.Lasagna.Data.Pocos;
@@ -6,6 +8,7 @@ using KCSit.SalesforceAcademy.Lasagna.Data.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -19,11 +22,15 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
     {
         private readonly IAdminBO _adminBO;
         private readonly IRule1BO _rule1BO;
+        private readonly IMemoryCache _memoryCache;
+        private string _cacheKey;
 
-        public AdminController(IAdminBO adminBO, IRule1BO rule1BO )
+
+        public AdminController(IAdminBO adminBO, IRule1BO rule1BO, IMemoryCache memoryCache)
         {
             this._adminBO = adminBO;
             this._rule1BO = rule1BO;
+            this._memoryCache = memoryCache;
         }
 
 
@@ -59,29 +66,41 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
         }
 
 
-
         [Route("api/admin/users/{userId}")]
         [HttpGet]
         [Authorize(Policy = "ManagerPolicy")]
         //[Authorize(Policy = "AdminPolicy")]
-        public Task<IActionResult> GetUser(string userId)
+        public async Task<IActionResult> GetUser(string userId)
         {
-            var result = _adminBO.GetUser(userId);
+            _cacheKey = "user:" + userId;
+
+            if (!_memoryCache.TryGetValue(_cacheKey, out GenericReturn<UserPoco> result))
+            {
+                result = await _adminBO.GetUser(userId);
+
+                _memoryCache.Set(_cacheKey, result, new CacheExpiryOptions());
+            }
 
             return ReturnResult(result);
         }
 
 
-        /// http://localhost:3011/api/users?filter={}&range=[0,9]&sort=["id","DESC"]  
         [Route("api/admin/users")]
         [HttpGet]
         [Authorize(Policy = "ManagerPolicy")]
         //[Authorize(Policy = "AdminPolicy")]
-        public Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
             var queryString = HttpContext.Request.QueryString.Value;
 
-            var result = _adminBO.GetUsers(queryString);
+            _cacheKey = queryString;
+
+            if (!_memoryCache.TryGetValue(_cacheKey, out GenericReturn<UserPocoList> result))
+            {
+                result = await _adminBO.GetUsers(queryString);
+
+                _memoryCache.Set(_cacheKey, result, new CacheExpiryOptions());
+            }
 
             return ReturnResult(result);
         }
@@ -161,7 +180,6 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
         // -------------------------------------------------------- Rule1 --------------------------------------------------------
 
 
-
         [Route("api/Admin/Rule1/GetInfo")]
         [HttpGet]
         [Authorize(Policy = "ManagerPolicy")]
@@ -170,7 +188,14 @@ namespace KCSit.SalesforceAcademy.Lasagna.AdminBackend
         {
             var queryString = HttpContext.Request.QueryString.Value;
 
-            var result = await _rule1BO.GetRule1Info(queryString);
+            _cacheKey = "Rule1:" + queryString;
+
+            if (!_memoryCache.TryGetValue(_cacheKey, out GenericReturn result))
+            {
+                result = await _rule1BO.GetRule1Info(queryString);
+
+                _memoryCache.Set(_cacheKey, result, new CacheExpiryOptions());
+            }
 
             return ReturnResult(result);
         }
