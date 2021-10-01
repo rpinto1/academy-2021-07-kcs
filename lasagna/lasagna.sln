@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Las
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KCSit.SalesforceAcademy.Lasagna.AdminBackend", "KCSit.SalesforceAcademy.Lasagna.AdminBackend\KCSit.SalesforceAcademy.Lasagna.AdminBackend.csproj", "{5DF78CA3-7184-418A-8EA9-68193F9AD46B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KCSit.SalesforceAcademy.Lasagna.DailyUpdates", "KCSit.SalesforceAcademy.Lasagna.DailyUpdates\KCSit.SalesforceAcademy.Lasagna.DailyUpdates.csproj", "{3B8C2624-B1A2-4E23-B936-CF4643721B68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{5DF78CA3-7184-418A-8EA9-68193F9AD46B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DF78CA3-7184-418A-8EA9-68193F9AD46B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DF78CA3-7184-418A-8EA9-68193F9AD46B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B8C2624-B1A2-4E23-B936-CF4643721B68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B8C2624-B1A2-4E23-B936-CF4643721B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B8C2624-B1A2-4E23-B936-CF4643721B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B8C2624-B1A2-4E23-B936-CF4643721B68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
