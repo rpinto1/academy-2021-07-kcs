@@ -2,9 +2,7 @@ import * as React from "react";
 import { List, Datagrid, TextField, TextInput, Button, TopToolbar, ExportButton, BulkUpdateButton, Pagination, FilterButton, fetchUtils } from 'react-admin';
 import { Fragment } from 'react';
 import { stringify } from 'query-string';
-
-
-const httpClient = fetchUtils.fetchJson;
+import { httpClient } from './UserManager';
 
 
 const handleUpdateAll = () => {
