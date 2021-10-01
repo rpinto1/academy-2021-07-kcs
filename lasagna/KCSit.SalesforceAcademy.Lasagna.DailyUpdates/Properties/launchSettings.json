@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "KCSit.SalesforceAcademy.Lasagna.DailyUpdates": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
